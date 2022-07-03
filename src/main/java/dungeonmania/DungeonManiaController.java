@@ -1,6 +1,9 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.helpers.Config;
+import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Goal;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -11,6 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DungeonManiaController {
+    Config dungeonConfig;
+    DungeonMap dungeonMap;
+    Goal goals;
     public String getSkin() {
         return "default";
     }
@@ -37,6 +43,14 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
+        try {
+            dungeonConfig = new Config(configName);
+            dungeonMap = new DungeonMap();
+            dungeonMap.loads(dungeonName, dungeonConfig);
+            goals = new Goal(dungeonName);
+        } catch (IOException e) {
+            return null;
+        }
         return null;
     }
 
