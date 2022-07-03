@@ -19,7 +19,7 @@
 
 ## How to run?
 
-Firstly guarantee that the folder that you have opened is correct, you can see the default hierachy below, ensure that the name at the top says `project` if it doesn't you don't have the right folder opened :).
+Firstly guarantee that the folder that you have opened is correct, you can see the default hierachy below, ensure that the name at the top says `project` if it doesn't you don't have the right folder opened :).git
 
 ![image.png](./setup/vscode_hierachy.png)
 
