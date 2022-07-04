@@ -18,11 +18,7 @@ public abstract class Entity implements Observer{
     public String getEntityId() {
         return EntityId;
     }
-
-    public String getType() {
-        return type;
-    }
-
+    
     public void setLocation(int x, int y) {
         location =  new Location(x, y);
     }
@@ -47,6 +43,9 @@ public abstract class Entity implements Observer{
     public void update(Subject s) {
         // update(obj);
         // TODO: DO SOMETHING
+    }
+    public String getType() {
+        return "type";
     }
     // public static abstract Entity NewEntity(int x, int y, String type);
 }

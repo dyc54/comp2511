@@ -1,9 +1,9 @@
 package dungeonmania.helpers;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.json.*;
+
+import dungeonmania.util.FileLoader;
 public class Config {
     // public 
     public final int bomb_radius;
@@ -30,7 +30,7 @@ public class Config {
     public final int zombie_spawn_rat;
 
     public Config(String path) throws IOException {
-        String content = new String(Files.readAllBytes(Paths.get(path)));
+        String content = FileLoader.loadResourceFile(path);
         JSONObject json =  new JSONObject(content);
         bomb_radius = json.getInt("bomb_radius");
         bow_durability = json.getInt("bow_durability");

@@ -1,23 +1,22 @@
 package dungeonmania;
 
+import dungeonmania.Goals.Goal;
+import dungeonmania.Goals.GoalController;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
-import dungeonmania.helpers.Goal;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DungeonManiaController {
     Config dungeonConfig;
     DungeonMap dungeonMap;
-    Goal goals;
     Game game;
+    GoalController goals;
     public String getSkin() {
         return "default";
     }
@@ -48,7 +47,8 @@ public class DungeonManiaController {
             dungeonConfig = new Config(configName);
             dungeonMap = new DungeonMap();
             /* dungeonMap.loads(dungeonName, dungeonConfig); */
-            goals = new Goal(dungeonName);
+            dungeonMap.loads(dungeonName, dungeonConfig);
+            goals = new GoalController(dungeonName, dungeonConfig);
             game = new Game(dungeonName, dungeonConfig);
             return game.getDungeonResponse();
         } catch (IOException e) {
