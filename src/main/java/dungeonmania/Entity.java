@@ -22,5 +22,8 @@ public abstract class Entity implements Observer{
         // update(obj);
         // TODO: DO SOMETHING
     }
+    public String getType() {
+        return "type";
+    }
     // public static abstract Entity NewEntity(int x, int y, String type);
 }
