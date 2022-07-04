@@ -50,6 +50,8 @@ public class DungeonManiaController {
         } catch (IOException e) {
             return null;
         }
+        Entity a ; 
+        // a.setloction()
         return null;
     }
 
