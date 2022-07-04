@@ -16,6 +16,8 @@ import dungeonmania.Entity;
 import dungeonmania.EntityController;
 import dungeonmania.Observer;
 import dungeonmania.Subject;
+import dungeonmania.MovingEntities.MovingEntity;
+import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.util.FileLoader;
 /**
  * Observer Pattern       
@@ -56,7 +58,7 @@ public class DungeonMap{
      * @throws IOException
      */
     public void loads(String path, Config config) throws IOException {
-        String content = FileLoader.loadResourceFile(path);
+        String content = FileReader.LoadFile(path);
         JSONObject json =  new JSONObject(content);
         JSONArray entities = json.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
@@ -277,11 +279,51 @@ public class DungeonMap{
         Collection<Entity> entities = getAllEntities();
         entities.stream().map(function);
     }
+    /**
+     * Move all entities with their movement strategy
+     */
+    public void moveAllEntities() {
+        Collection<Entity> entities = getAllEntities();
+        entities.stream().forEach(entity -> {
+            if (entity instanceof MovingEntity) {
+                // TODO: do something
+            }
+        });
+    }
+    /**
+     * Update Entity position
+     * @param entity entity that has already move
+     */
+    public void UpdateEntity(Entity entity) {
+        removeEntity(entity.getEntityId());
+        addEntity(entity);
+    }
+
+    /**
+     * Move entity with given movement strategy
+     * @param entity
+     * @param movement
+     * @param location
+     */
+    public void moveEntity(Entity entity, MovementStrategy movement) {
+        // TODO: 
+
+    }
+
+    /**
+     * Move entity with its movement strategy
+     * @param entity
+     * @param movement
+     * @param location
+     */
+    public void moveEntity(Entity entity) {
+        // TODO: 
+
+    }
 
     @Override
     public String toString() {
         String output = String.format("*********** %s ***********\n", "DungonMap");
-        // for ()
         map.values()
             .stream()
             .forEach(hashset->{

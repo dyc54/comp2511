@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.FileReader;
 import dungeonmania.util.FileLoader;
 
 public class GoalController {
@@ -35,7 +36,7 @@ public class GoalController {
      */
     public GoalController(String path, Config config) throws IOException {
         this.config = config;
-        String content = FileLoader.loadResourceFile(path);
+        String content = FileReader.LoadFile(path);
         JSONObject json =  new JSONObject(content);
         root = loadNode(json).mapForAll(node -> node.getConfig(config));
     }
@@ -46,7 +47,6 @@ public class GoalController {
      * @return
      */
     public boolean hasAchieved(DungeonMap map) {
-        // TODO Auto-generated method stub
         root.mapForAll(node -> node.getMapData(map));
         return root.hasAchieved();
     }

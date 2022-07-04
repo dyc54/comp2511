@@ -25,7 +25,6 @@ import java.nio.file.Paths;
 public class DungeonManiaController {
     Config dungeonConfig;
     DungeonMap dungeonMap;
-    Game game;
     GoalController goals;
 
     //用于返回DungeonResponse
