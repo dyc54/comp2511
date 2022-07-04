@@ -5,6 +5,8 @@ import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Goal;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
@@ -43,6 +45,8 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
+        List<EntityResponse> entities = new ArrayList<>();
+        List<ItemResponse> inventory = new ArrayList<>();
         try {
             dungeonConfig = new Config(configName);
             dungeonMap = new DungeonMap();
