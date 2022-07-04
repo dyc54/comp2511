@@ -14,11 +14,8 @@ import org.json.*;
 
 import dungeonmania.Entity;
 import dungeonmania.EntityController;
-import dungeonmania.Observer;
-import dungeonmania.Subject;
 import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.Strategies.MovementStrategy;
-import dungeonmania.util.FileLoader;
 /**
  * Observer Pattern       
  * ! but not sure

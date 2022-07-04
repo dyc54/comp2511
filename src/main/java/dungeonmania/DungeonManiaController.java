@@ -1,6 +1,5 @@
 package dungeonmania;
 
-import dungeonmania.Goals.Goal;
 import dungeonmania.Goals.GoalController;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
