@@ -56,7 +56,7 @@ public class DungeonMap{
      * @throws IOException
      */
     public void loads(String path, Config config) throws IOException {
-        String content = FileLoader.loadResourceFile(path);
+        String content = FileReader.LoadFile(path);
         JSONObject json =  new JSONObject(content);
         JSONArray entities = json.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
