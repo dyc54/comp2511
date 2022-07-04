@@ -17,6 +17,7 @@ public class DungeonManiaController {
     Config dungeonConfig;
     DungeonMap dungeonMap;
     Goal goals;
+
     public String getSkin() {
         return "default";
     }
