@@ -17,6 +17,7 @@ public class DungeonManiaController {
     Config dungeonConfig;
     DungeonMap dungeonMap;
     Goal goals;
+    Game game;
     public String getSkin() {
         return "default";
     }
@@ -46,12 +47,13 @@ public class DungeonManiaController {
         try {
             dungeonConfig = new Config(configName);
             dungeonMap = new DungeonMap();
-            dungeonMap.loads(dungeonName, dungeonConfig);
+            /* dungeonMap.loads(dungeonName, dungeonConfig); */
             goals = new Goal(dungeonName);
+            game = new Game(dungeonName, dungeonConfig);
+            return game.getDungeonResponse();
         } catch (IOException e) {
             return null;
         }
-        return null;
     }
 
     /**
