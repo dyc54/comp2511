@@ -1,54 +1,67 @@
 package dungeonmania.helpers;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.json.*;
 
 import dungeonmania.Entity;
 import dungeonmania.EntityController;
-import dungeonmania.Observer;
-import dungeonmania.Subject;
+import dungeonmania.MovingEntities.MovingEntity;
+import dungeonmania.Strategies.MovementStrategy;
 /**
  * Observer Pattern       
  * ! but not sure
  * Wo bu hui ...
  * @author Shilong
  */
-public class DungeonMap implements Subject{
+public class DungeonMap{
     private TreeMap<Location, HashSet<Entity>> map; 
     private HashMap<String, Location> IdCollection;
+    private int initNumEnemies;
+    /**
+     * Return whether two types are same type or same category.
+     * @param EntityType
+     * @param GivenType
+     * @return
+     */
+    private static boolean isSameType(String EntityType, String GivenType) {
+        if (EntityType.equals(GivenType)) {
+            return true;
+        }
+        if (GivenType.toLowerCase().equals(new String("enemies"))) {
+            return Arrays.asList("Spider", "Zombie Toast", "Zombie", "Unbribed Mercenary").contains(EntityType);
+        }
+        // TODO: Add more if you want
+        return false;
+    }
+
     public DungeonMap() {
         map = new TreeMap<>();
         IdCollection = new HashMap<>();
+        initNumEnemies = 0;
     }
+
     /**
      * Load entities
      * @param path
      * @throws IOException
      */
     public void loads(String path, Config config) throws IOException {
-        String content = new String(Files.readAllBytes(Paths.get(path)));
+        String content = FileReader.LoadFile(path);
         JSONObject json =  new JSONObject(content);
         JSONArray entities = json.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
             JSONObject entity = entities.getJSONObject(i);
             addEntity(EntityController.newEntity(entity, config));
         }
-    }
-
-    public void attach(Observer observer) {
-        if (observer instanceof Entity) {
-            addEntity((Entity) observer);
-        }
-        
     }
 
     /**
@@ -64,7 +77,9 @@ public class DungeonMap implements Subject{
         if (map.containsKey(entity.getLocation())) {
             map.get(entity.getLocation()).add(entity);
         } else {
-            map.put(entity.getLocation(), new HashSet<>());
+            HashSet<Entity> sites = new HashSet<>();
+            sites.add(entity);
+            map.put(entity.getLocation(), sites);
         }
         return this;
     }
@@ -137,17 +152,21 @@ public class DungeonMap implements Subject{
         }
         return entities;
     }
-    public void detach(Observer observer) {
-        if (observer instanceof Entity) {
-            removeEntity(((Entity) observer).getEntityId());
-        }
+    /**
+     * Return a collection of entitis by given a entities type or category
+     * @param type e.g. "door" or "enemies"
+     * @return
+     */
+    public Collection<Entity> getEntities(String type) {
+        Collection<Entity> entities = new LinkedList<>();
+        getAllEntities().stream().forEach(entity -> {
+            if (DungeonMap.isSameType(entity.getType(), type)) {
+                entities.add(entity);
+            }
+        });
+        return entities;
     }
-    
-    public void notifyObserver() {
-        for (Observer obs: getAllEntities()) {
-            obs.update(this);
-        }
-    }
+
 
     /**
      * Remove a given entity
@@ -221,7 +240,7 @@ public class DungeonMap implements Subject{
     } 
 
     /**
-     * Return a Collection of nearby entities  of given location.
+     * Return a Collection of nearby entities of given location.
      * i.e. 
      * TopLeft      Top         TopRight
      * Left        (Current)    Right
@@ -244,17 +263,66 @@ public class DungeonMap implements Subject{
     public Collection<Entity> getEntities(Location location, int radius) {
         Collection<Entity> entities = new LinkedList<>();
         for (Location target: map.keySet()) {
-            if (location.distance(target) <= radius) {
+            if (location.distance(target) < radius + 1) {
                 entities.addAll(map.get(target));
             }
         }
         return entities;
     }
+    /**
+     * map a function for all entities
+     * @param <X>   Returnd type for function
+     * @param function
+     */
+    public <X> void mapToAllEntities(Function<Entity, X> function) {
+        Collection<Entity> entities = getAllEntities();
+        entities.stream().map(function);
+    }
+    /**
+     * Move all entities with their movement strategy
+     */
+    public void moveAllEntities() {
+        Collection<Entity> entities = getAllEntities();
+        entities.stream().forEach(entity -> {
+            if (entity instanceof MovingEntity) {
+                // TODO: do something
+            }
+        });
+    }
+    /**
+     * Update Entity position
+     * @param entity entity that has already move
+     */
+    public void UpdateEntity(Entity entity) {
+        removeEntity(entity.getEntityId());
+        addEntity(entity);
+    }
+
+    /**
+     * Move entity with given movement strategy
+     * @param entity
+     * @param movement
+     * @param location
+     */
+    public void moveEntity(Entity entity, MovementStrategy movement) {
+        // TODO: 
+
+    }
+
+    /**
+     * Move entity with its movement strategy
+     * @param entity
+     * @param movement
+     * @param location
+     */
+    public void moveEntity(Entity entity) {
+        // TODO: 
+
+    }
 
     @Override
     public String toString() {
         String output = String.format("*********** %s ***********\n", "DungonMap");
-        // for ()
         map.values()
             .stream()
             .forEach(hashset->{

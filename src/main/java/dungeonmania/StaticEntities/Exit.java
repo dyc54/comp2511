@@ -1,8 +1,12 @@
 package dungeonmania.StaticEntities;
 
-public class Exit extends StaticEntity {
-    public boolean checkPlayerPass() {
-        // Check if the position of exit is equal to position of player
-        return false;
+import dungeonmania.Entity;
+
+public class Exit extends Entity {
+    public Exit(String type, int x, int y) {
+        setType(type);
+        setLocation(x, y);
+        setEntityId("exit1");// 现在还不是唯一
     }
+
 }

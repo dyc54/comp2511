@@ -1,9 +1,8 @@
 package dungeonmania.helpers;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.json.*;
+
 public class Config {
     // public 
     public final int bomb_radius;
@@ -29,8 +28,8 @@ public class Config {
     public final int zombie_health;
     public final int zombie_spawn_rat;
 
-    public Config(String path) throws IOException {
-        String content = new String(Files.readAllBytes(Paths.get(path)));
+    public Config(String FileName) throws IOException {
+        String content = FileReader.LoadFile(String.format(FileName));
         JSONObject json =  new JSONObject(content);
         bomb_radius = json.getInt("bomb_radius");
         bow_durability = json.getInt("bow_durability");
@@ -53,6 +52,6 @@ public class Config {
         treasure_goal = json.getInt("treasure_goal");
         zombie_attack = json.getInt("zombie_attack");
         zombie_health = json.getInt("zombie_health");
-        zombie_spawn_rat = json.getInt("zombie_spawn_rat");
+        zombie_spawn_rat = json.getInt("zombie_spawn_rate");
     }
 }
