@@ -77,7 +77,9 @@ public class DungeonMap{
         if (map.containsKey(entity.getLocation())) {
             map.get(entity.getLocation()).add(entity);
         } else {
-            map.put(entity.getLocation(), new HashSet<>());
+            HashSet<Entity> sites = new HashSet<>();
+            sites.add(entity);
+            map.put(entity.getLocation(), sites);
         }
         return this;
     }

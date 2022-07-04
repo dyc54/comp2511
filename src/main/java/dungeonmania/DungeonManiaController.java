@@ -4,6 +4,7 @@ import dungeonmania.Goals.GoalController;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.FileReader;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -69,7 +70,7 @@ public class DungeonManiaController {
             dungeonConfig = new Config(configName);
             dungeonMap = new DungeonMap();
             dungeonMap.loads(dungeonName, dungeonConfig);
-            goals = new GoalController(dungeonName, dungeonConfig);
+            /* goals = new GoalController(dungeonName, dungeonConfig); */
             entitiesList = dungeonMap.getAllEntities();
             setGoalsString(dungeonName);
             setPlyer();
@@ -97,6 +98,7 @@ public class DungeonManiaController {
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
+        player.setLocation(movementDirection.getOffset());
         return getDungeonResponse();
     }
 
@@ -120,7 +122,7 @@ public class DungeonManiaController {
         setEntitiesResponse();
         setBattlesResponse();
         setBuildables();
-        setItemResponse();
+        /* setItemResponse(); */
         return new DungeonResponse(dungeonId, dungeonName,entities, inventory, battles, buildables, goalsString);
     }
 
@@ -147,14 +149,10 @@ public class DungeonManiaController {
      * @throws IOException
      */
     private void setGoalsString(String dungeonName) throws IOException {
-        String content = new String(Files.readAllBytes(Paths.get(dungeonName)));
+        String content = FileReader.LoadFile(dungeonName);
         JSONObject json =  new JSONObject(content);
-        JSONArray goals = json.getJSONArray("goal-condition");
-        if(goals.length() == 1){
-            this.goalsString = goals.getJSONObject(0).getString("goal");
-        }else{
-            this.goalsString = goals.getJSONObject(1).toString();
-        }
+        JSONObject goals = json.getJSONObject("goal-condition");
+        this.goalsString = goals.toString();
     }
 
 
