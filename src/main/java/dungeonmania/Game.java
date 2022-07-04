@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.*;
+import dungeonmania.util.Direction;
 
 public class Game {
     
@@ -36,6 +37,7 @@ public class Game {
     public Game (String path, Config dungeonConfig) throws IOException{
         String content = new String(Files.readAllBytes(Paths.get(path)));
         JSONObject json =  new JSONObject(content);
+
         //根据joson 文件创建实例，将实例添加到map 和 entitiesList
         JSONArray entities = json.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
@@ -43,14 +45,40 @@ public class Game {
             entitiesList.add(EntityController.newEntity(entity, dungeonConfig));
             dungeonMap.addEntity(EntityController.newEntity(entity, dungeonConfig));
         }
-
+        
+        //初始化goals （还需要根据测试修改）
+        JSONArray goals = json.getJSONArray("goal-condition");
+        if(goals.length() == 1){
+            this.goals = goals.getJSONObject(0).getString("goal");
+        }else{
+            this.goals = goals.getJSONObject(1).toString();
+        }
     }
 
 
-    public void setInventoryList(List<Entity> inventoryList) {
-        this.inventoryList = inventoryList;
+    public DungeonResponse moveAction(Direction movementDirection){
+
+
+        return getDungeonResponse();
     }
 
+    public DungeonResponse buildAction(String buildable){
+        return getDungeonResponse();
+    }
+
+
+
+    public DungeonResponse useAction(String itemUsedId){
+        return getDungeonResponse();
+    }
+
+
+    public void upDateEntitiesList() {
+
+    }
+
+    public void upDateInventoryList() {
+    }
 
     // 更新返回Response
     private void setEntities() {
