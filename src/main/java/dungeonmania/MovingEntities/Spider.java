@@ -28,48 +28,77 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
         Location initLocation = movingRecordList.get(0);
         Location pastLocation = movingRecordList.get(movingRecordList.size() - 1);
         Collection<Entity> entities = dungeonMap.getEightNearEntities(initLocation);
+        List<Entity> boulerList = new ArrayList<>();
         
-        // Clockwise
-        if (initLocation.equals(location)) {
-            setLocation(Location.getUp(initLocation));
-        } else if (location.equals(Location.getUp(initLocation))) {
-            setLocation(Location.getTopRight(initLocation));
-        } else if (location.equals(Location.getDown(initLocation))) {
-            setLocation(Location.getBottomLeft(initLocation));
-        } else if (location.equals(Location.getLeft(initLocation))) {
-            setLocation(Location.getTopLeft(initLocation));
-        } else if (location.equals(Location.getRight(initLocation))) {
-            setLocation(Location.getBottomRight(initLocation));
-        } else if (location.equals(Location.getTopLeft(initLocation))) {
-            setLocation(Location.getUp(initLocation));
-        } else if (location.equals(Location.getBottomLeft(initLocation))) {
-            setLocation(Location.getLeft(initLocation));
-        } else {
-            setLocation(Location.getDown(initLocation));
+        for (Entity entity : entities) {
+            if (entity.getType().equals("Boulder")) {
+                boulerList.add(entity);
+            }
         }
-
-        // Anti-clockwise
-        if (initLocation.equals(location)) {
-            setLocation(Location.getUp(initLocation));
-        } else if (location.equals(Location.getUp(initLocation))) {
-            setLocation(Location.getTopLeft(initLocation));
-        } else if (location.equals(Location.getDown(initLocation))) {
-            setLocation(Location.getBottomRight(initLocation));
-        } else if (location.equals(Location.getLeft(initLocation))) {
-            setLocation(Location.getBottomLeft(initLocation));
-        } else if (location.equals(Location.getRight(initLocation))) {
-            setLocation(Location.getTopRight(initLocation));
-        } else if (location.equals(Location.getTopLeft(initLocation))) {
-            setLocation(Location.getLeft(initLocation));
-        } else if (location.equals(Location.getBottomLeft(initLocation))) {
-            setLocation(Location.getDown(initLocation));
-        } else {
-            setLocation(Location.getRight(initLocation));
+        if (boulerList.isEmpty()) {
+            setLocation(clockwiseMove(initLocation));
+        } else if (is_clockwise(pastLocation, initLocation)) {
+            Location newLocation = clockwiseMove(initLocation);
+            for (Entity entity : boulerList) {
+                if (entity.getLocation().equals(newLocation)) {
+                    newLocation = anticlockwiseMove(initLocation);
+                    break;
+                }
+            }
+            setLocation(newLocation);
         }
         
+        dungeonMap.UpdateEntity(this);
         addToMovingList(location);
     }
+
+    public boolean is_clockwise(Location pastLocation, Location initLocation) {
+        return (location.equals(Location.getUp(pastLocation)) && (location.equals(Location.getLeft(initLocation)) || (location.equals(Location.getTopLeft(initLocation))))
+        || location.equals(Location.getDown(pastLocation)) && (location.equals(Location.getRight(initLocation)) || (location.equals(Location.getBottomRight(initLocation))))
+        || location.equals(Location.getLeft(pastLocation)) && (location.equals(Location.getDown(initLocation)) || (location.equals(Location.getBottomLeft(initLocation))))
+        || location.equals(Location.getRight(pastLocation)) && (location.equals(Location.getUp(initLocation)) || (location.equals(Location.getTopRight(initLocation)))));
+    }
     
+    public Location clockwiseMove(Location initLocation) {
+        if (initLocation.equals(location)) {
+            return Location.getUp(initLocation);
+        } else if (location.equals(Location.getUp(initLocation))) {
+            return Location.getTopRight(initLocation);
+        } else if (location.equals(Location.getDown(initLocation))) {
+            return Location.getBottomLeft(initLocation);
+        } else if (location.equals(Location.getLeft(initLocation))) {
+            return Location.getTopLeft(initLocation);
+        } else if (location.equals(Location.getRight(initLocation))) {
+            return Location.getBottomRight(initLocation);
+        } else if (location.equals(Location.getTopLeft(initLocation))) {
+            return Location.getUp(initLocation);
+        } else if (location.equals(Location.getBottomLeft(initLocation))) {
+            return Location.getLeft(initLocation);
+        } else {
+            return Location.getDown(initLocation);
+        }
+    }
+
+    public Location anticlockwiseMove(Location initLocation) {
+        if (initLocation.equals(location)) {
+            return Location.getUp(initLocation);
+        } else if (location.equals(Location.getUp(initLocation))) {
+            return Location.getTopLeft(initLocation);
+        } else if (location.equals(Location.getDown(initLocation))) {
+            return Location.getBottomRight(initLocation);
+        } else if (location.equals(Location.getLeft(initLocation))) {
+            return Location.getBottomLeft(initLocation);
+        } else if (location.equals(Location.getRight(initLocation))) {
+            return Location.getTopRight(initLocation);
+        } else if (location.equals(Location.getTopLeft(initLocation))) {
+            return Location.getLeft(initLocation);
+        } else if (location.equals(Location.getBottomLeft(initLocation))) {
+            return Location.getDown(initLocation);
+        } else {
+            return Location.getRight(initLocation);
+        }
+    }
+
     public void addToMovingList(Location location) {
         movingRecordList.add(location);
     }

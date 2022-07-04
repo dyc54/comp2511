@@ -7,6 +7,7 @@ public abstract class Entity implements Observer{
     Subject subject;
     private Location location;
     private String EntityId;
+    private String type;
     // public
     public Location getLocation() {
         return location;
