@@ -72,7 +72,7 @@ public class DungeonManiaController {
             /* goals = new GoalController(dungeonName, dungeonConfig); */
             entitiesList = dungeonMap.getAllEntities();
             setGoalsString(dungeonName);
-            setPlyer();
+            setPlayer();
             return getDungeonResponse();
         } catch (IOException e) {
             return null;
@@ -120,14 +120,14 @@ public class DungeonManiaController {
         setEntitiesResponse();
         setBattlesResponse();
         setBuildables();
-        /* setItemResponse(); */
+        setItemResponse();
         return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goalsString);
     }
 
     /**
      * Create a Response from a list of Battles
      */
-    private void setPlyer() {
+    private void setPlayer() {
         for (Entity entitie : entitiesList) {
             if (entitie.getType().equals("player")) {
                 this.player = (Player) entitie;

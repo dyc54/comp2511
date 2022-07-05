@@ -16,18 +16,22 @@ import dungeonmania.Entity;
 import dungeonmania.EntityController;
 import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.Strategies.MovementStrategy;
+
 /**
- * Observer Pattern       
+ * Observer Pattern
  * ! but not sure
  * Wo bu hui ...
+ * 
  * @author Shilong
  */
-public class DungeonMap{
-    private TreeMap<Location, HashSet<Entity>> map; 
+public class DungeonMap {
+    private TreeMap<Location, HashSet<Entity>> map;
     private HashMap<String, Location> IdCollection;
     private int initNumEnemies;
+
     /**
      * Return whether two types are same type or same category.
+     * 
      * @param EntityType
      * @param GivenType
      * @return
@@ -51,21 +55,23 @@ public class DungeonMap{
 
     /**
      * Load entities
+     * 
      * @param path
      * @throws IOException
      */
     public void loads(String path, Config config) throws IOException {
         String content = FileReader.LoadFile(path);
-        JSONObject json =  new JSONObject(content);
+        JSONObject json = new JSONObject(content);
         JSONArray entities = json.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
             JSONObject entity = entities.getJSONObject(i);
-            addEntity(EntityController.newEntity(entity, config));
+            addEntity(EntityController.newEntity(entity, config, this));
         }
     }
 
     /**
      * Add a Entity to Dungeon Map.
+     * 
      * @param entity
      * @return
      */
@@ -86,6 +92,7 @@ public class DungeonMap{
 
     /**
      * Return whether Dungeon contains given entity
+     * 
      * @param id entity id
      * @return
      */
@@ -95,6 +102,7 @@ public class DungeonMap{
 
     /**
      * Return whether Dungeon contains given entity
+     * 
      * @param entity
      * @return
      */
@@ -104,6 +112,7 @@ public class DungeonMap{
 
     /**
      * Return a Entity by given id.
+     * 
      * @param id Entity id.
      * @return null if id does not exist
      */
@@ -113,15 +122,17 @@ public class DungeonMap{
         }
         Location location = IdCollection.get(id);
         return map.get(location)
-                    .stream()
-                    .filter(entity ->  entity.getEntityId().equals(id))
-                    .collect(Collectors.toList()).get(0);
+                .stream()
+                .filter(entity -> entity.getEntityId().equals(id))
+                .collect(Collectors.toList()).get(0);
     }
 
     /**
      * Return a Collection of Entities at given location.
+     * 
      * @param location
-     * @return empyty Collection will be return if there is no entity at given location
+     * @return empyty Collection will be return if there is no entity at given
+     *         location
      */
     public Collection<Entity> getEntities(Location location) {
         if (map.containsKey(location)) {
@@ -133,9 +144,11 @@ public class DungeonMap{
 
     /**
      * Return a Collection of Entities at given location.
+     * 
      * @param x
      * @param y
-     * @return empyty Collection will be return if there is no entity at given location
+     * @return empyty Collection will be return if there is no entity at given
+     *         location
      */
     public Collection<Entity> getEntities(int x, int y) {
         return getEntities(Location.AsLocation(x, y));
@@ -143,17 +156,20 @@ public class DungeonMap{
 
     /**
      * Return a collection all entities in dungeon
+     * 
      * @return
      */
     public Collection<Entity> getAllEntities() {
         Collection<Entity> entities = new LinkedList<>();
-        for (HashSet<Entity> entities_set: map.values()) {
+        for (HashSet<Entity> entities_set : map.values()) {
             entities.addAll(entities_set);
         }
         return entities;
     }
+
     /**
      * Return a collection of entitis by given a entities type or category
+     * 
      * @param type e.g. "door" or "enemies"
      * @return
      */
@@ -167,49 +183,53 @@ public class DungeonMap{
         return entities;
     }
 
-
     /**
      * Remove a given entity
+     * 
      * @param id entity id
      * @return whether map successfully remove given entity
      */
     public boolean removeEntity(String id) {
-        // TODO  change to private if use observer pattern
+        // TODO change to private if use observer pattern
         if (!containsEntity(id)) {
             return false;
         }
         Location location = IdCollection.get(id);
         Collection<Entity> entities = getEntities(location);
         IdCollection.remove(id);
-        return entities.removeIf(entity ->  entity.getEntityId().equals(id));
+        return entities.removeIf(entity -> entity.getEntityId().equals(id));
     }
 
     /**
-     * Return a Collection of entities that located at top, bottom, left and right of given location
+     * Return a Collection of entities that located at top, bottom, left and right
+     * of given location
      * i.e.
-     *          Top
-     * Left     (Current)     Right
-     *          Bottom
+     * Top
+     * Left (Current) Right
+     * Bottom
+     * 
      * @param location
      * @apiNote Entities at current location will not be return.
      * @return
      */
     public Collection<Entity> getFourNearEntities(Location location) {
         Collection<Entity> entities = new LinkedList<>();
-        location.getFourNearPosition().stream().forEach(position->{
+        location.getFourNearPosition().stream().forEach(position -> {
             if (map.containsKey(position.apply(location))) {
                 entities.addAll(map.get(position.apply(location)));
             }
         });
         return entities;
-    } 
+    }
 
     /**
-     * Return a Collection of entities that located at top, bottom, left and right of given location
+     * Return a Collection of entities that located at top, bottom, left and right
+     * of given location
      * i.e.
-     *          Top
-     * Left     (Current)     Right
-     *          Bottom
+     * Top
+     * Left (Current) Right
+     * Bottom
+     * 
      * @param x
      * @param y
      * @apiNote Entities at current location will not be return.
@@ -217,34 +237,36 @@ public class DungeonMap{
      */
     public Collection<Entity> getFourNearEntities(int x, int y) {
         return getFourNearEntities(Location.AsLocation(x, y));
-    } 
+    }
 
     /**
-     * Return a Collection of nearby entities  of given location.
-     * i.e. 
-     * TopLeft      Top         TopRight
-     * Left        (Current)    Right
-     * BottomLeft   Bottom      BottomRight
+     * Return a Collection of nearby entities of given location.
+     * i.e.
+     * TopLeft Top TopRight
+     * Left (Current) Right
+     * BottomLeft Bottom BottomRight
+     * 
      * @param location
      * @apiNote Entities at current location will not be return.
      * @return
      */
     public Collection<Entity> getEightNearEntities(Location location) {
         Collection<Entity> entities = new LinkedList<>();
-        location.getEightNearPosition().stream().forEach(position->{
+        location.getEightNearPosition().stream().forEach(position -> {
             if (map.containsKey(position.apply(location))) {
                 entities.addAll(map.get(position.apply(location)));
             }
         });
         return entities;
-    } 
+    }
 
     /**
      * Return a Collection of nearby entities of given location.
-     * i.e. 
-     * TopLeft      Top         TopRight
-     * Left        (Current)    Right
-     * BottomLeft   Bottom      BottomRight
+     * i.e.
+     * TopLeft Top TopRight
+     * Left (Current) Right
+     * BottomLeft Bottom BottomRight
+     * 
      * @param x
      * @param y
      * @apiNote Entities at current location will not be return.
@@ -252,9 +274,11 @@ public class DungeonMap{
      */
     public Collection<Entity> getEightNearEntities(int x, int y) {
         return getEightNearEntities(Location.AsLocation(x, y));
-    } 
+    }
+
     /**
-     * Return a Collection of near entities 
+     * Return a Collection of near entities
+     * 
      * @param location
      * @param radius
      * @apiNote Entities at current location will be return.
@@ -262,22 +286,25 @@ public class DungeonMap{
      */
     public Collection<Entity> getEntities(Location location, int radius) {
         Collection<Entity> entities = new LinkedList<>();
-        for (Location target: map.keySet()) {
+        for (Location target : map.keySet()) {
             if (location.distance(target) < radius + 1) {
                 entities.addAll(map.get(target));
             }
         }
         return entities;
     }
+
     /**
      * map a function for all entities
-     * @param <X>   Returnd type for function
+     * 
+     * @param <X>      Returnd type for function
      * @param function
      */
     public <X> void mapToAllEntities(Function<Entity, X> function) {
         Collection<Entity> entities = getAllEntities();
         entities.stream().map(function);
     }
+
     /**
      * Move all entities with their movement strategy
      */
@@ -289,8 +316,10 @@ public class DungeonMap{
             }
         });
     }
+
     /**
      * Update Entity position
+     * 
      * @param entity entity that has already move
      */
     public void UpdateEntity(Entity entity) {
@@ -300,23 +329,25 @@ public class DungeonMap{
 
     /**
      * Move entity with given movement strategy
+     * 
      * @param entity
      * @param movement
      * @param location
      */
     public void moveEntity(Entity entity, MovementStrategy movement) {
-        // TODO: 
+        // TODO:
 
     }
 
     /**
      * Move entity with its movement strategy
+     * 
      * @param entity
      * @param movement
      * @param location
      */
     public void moveEntity(Entity entity) {
-        // TODO: 
+        // TODO:
 
     }
 
@@ -324,13 +355,13 @@ public class DungeonMap{
     public String toString() {
         String output = String.format("*********** %s ***********\n", "DungonMap");
         map.values()
-            .stream()
-            .forEach(hashset->{
-                hashset.stream()
-                        .forEach(entity ->{
-                            output.concat(String.format("%s\n", entity.toString()));
-                        });
-            });
+                .stream()
+                .forEach(hashset -> {
+                    hashset.stream()
+                            .forEach(entity -> {
+                                output.concat(String.format("%s\n", entity.toString()));
+                            });
+                });
         return output;
     }
 }

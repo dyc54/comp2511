@@ -1,8 +1,8 @@
 package dungeonmania.StaticEntities;
 
-public class Door extends StaticEntity {
+public class OpenedDoor extends StaticEntity {
 
-    public Door(String type, int x, int y) {
+    public OpenedDoor(String type, int x, int y) {
         setType(type);
         setLocation(x, y);
     }
