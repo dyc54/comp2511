@@ -75,12 +75,15 @@ public class Player extends Entity {
 
         // If there is a key
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("key"))) {
-            super.setLocation(x + p.getX(), y + p.getY());
             // Delete the key from the map
             map.removeEntity(map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("key"))
                     .findFirst().get().getEntityId());
             // Add into inventory
             this.addInventoryList(new Key("key", x, y));
+            // move
+            super.setLocation(x + p.getX(), y + p.getY());
+            this.x = x + p.getX();
+            this.y = y + p.getY();
             return;
         }
 
@@ -104,14 +107,16 @@ public class Player extends Entity {
                         .findFirst().get().setType("opened_door");
                 // move to the position of door
                 super.setLocation(x + p.getX(), y + p.getY());
+                this.x = x + p.getX();
+                this.y = y + p.getY();
             }
             // Don't have a key
             return;
         }
 
         super.setLocation(x + p.getX(), y + p.getY());
-        // this.x = x + p.getX();
-        // this.y = y + p.getY();
+        this.x = x + p.getX();
+        this.y = y + p.getY();
     }
 
 }

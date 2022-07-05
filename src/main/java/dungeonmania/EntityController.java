@@ -36,7 +36,6 @@ public class EntityController {
                 return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat);
             case "key":
                 return new Key(type, x, y);
-
             case "spider":
                 return new Spider(type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
             case "wall":
