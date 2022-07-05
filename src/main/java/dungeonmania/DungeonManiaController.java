@@ -1,11 +1,14 @@
 package dungeonmania;
 
 import dungeonmania.Goals.GoalController;
+import dungeonmania.MovingEntities.Spider;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.response.models.*;
@@ -73,6 +76,7 @@ public class DungeonManiaController {
             entitiesList = dungeonMap.getAllEntities();
             setGoalsString(dungeonName);
             setPlayer();
+            System.out.println(getDungeonResponse().getEntities().get(0).getType());
             return getDungeonResponse();
         } catch (IOException e) {
             return null;
@@ -98,6 +102,12 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         player.setLocation(movementDirection.getOffset());
+        for (Entity entity : entitiesList) {
+            if (entity.getType().equals("spider")) {
+                Spider spider = (Spider) entity;
+                spider.movement(dungeonMap);
+            }
+        }
         return getDungeonResponse();
     }
 

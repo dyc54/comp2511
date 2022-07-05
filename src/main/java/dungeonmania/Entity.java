@@ -10,8 +10,8 @@ public abstract class Entity implements Observer{
     private Location location;
     private String EntityId;
     private String type;
-
     // public
+
     public Location getLocation() {
         return location;
     }
@@ -32,7 +32,7 @@ public abstract class Entity implements Observer{
     }
 
     public EntityResponse getEntityResponse() {
-        return new EntityResponse( getEntityId(),type,new Position(getLocation().getX(),getLocation().getY()),false);
+        return new EntityResponse(getEntityId(), getType(), new Position(getLocation().getX(), getLocation().getY()), false);
     }
 
 

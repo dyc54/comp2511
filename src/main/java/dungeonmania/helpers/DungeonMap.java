@@ -87,6 +87,23 @@ public class DungeonMap {
             sites.add(entity);
             map.put(entity.getLocation(), sites);
         }
+        // if (!IdCollection.isEmpty()) {
+        //     if (!IdCollection.containsKey(entity.getEntityId())) {
+        //         IdCollection.put(entity.getEntityId(), entity.getLocation());
+        //     }
+        // } else if (IdCollection.isEmpty()) {
+        //     IdCollection.put(entity.getEntityId(), entity.getLocation());
+        // }
+
+        // if (!map.isEmpty()) {
+        //     if (map.containsKey(entity.getLocation())) {
+        //         map.get(entity.getLocation()).add(entity);
+        //     }
+        // } else {
+        //     HashSet<Entity> sites = new HashSet<>();
+        //     sites.add(entity);
+        //     map.put(entity.getLocation(), sites);
+        // }
         return this;
     }
 

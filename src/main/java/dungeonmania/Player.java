@@ -12,7 +12,7 @@ import dungeonmania.util.Position;
 
 import dungeonmania.helpers.DungeonMap;
 
-public class Player extends Entity implements MovementStrategy {
+public class Player extends Entity {
     private int attack;
     private int health;
     private List<Entity> inventoryList;

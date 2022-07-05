@@ -6,6 +6,11 @@ import dungeonmania.CollectableEntities.*;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.MovingEntities.Spider;
+import dungeonmania.StaticEntities.Exit;
+import dungeonmania.StaticEntities.Wall;
+import dungeonmania.helpers.Config;
+import dungeonmania.helpers.Location;
 
 public class EntityController {
     public static Entity newEntity(JSONObject entity, Config config, DungeonMap map) {
@@ -19,8 +24,6 @@ public class EntityController {
                 return new Player(type, x, y, config.player_attack, config.player_health, map);
             case "exit":
                 return new Exit(type, x, y);
-            case "wall":
-                return new Wall(type, x, y);
             case "boulder":
                 return new Boulder(type, x, y);
             case "door":
@@ -33,6 +36,11 @@ public class EntityController {
                 return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat);
             case "key":
                 return new Key(type, x, y);
+
+            case "spider":
+                return new Spider(type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
+            case "wall":
+                return new Wall(type, Location.AsLocation(x, y));
         }
         return null;
     }
