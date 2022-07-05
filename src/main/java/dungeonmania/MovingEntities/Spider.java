@@ -3,7 +3,6 @@ package dungeonmania.MovingEntities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 import dungeonmania.Entity;
 import dungeonmania.Strategies.BattleStrategy;
@@ -16,6 +15,13 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     private ArrayList<Location> movingRecordList = new ArrayList<>(); 
     private int spider_health;
     private int spider_attack;
+
+    /**
+     * Constructor for spider class
+     * @param location
+     * @param spider_attack
+     * @param spider_health
+     */
     public Spider(Location location, int spider_attack, int spider_health) {
         this.location = location;
         this.spider_attack = spider_attack;
@@ -52,6 +58,12 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
         addToMovingList(location);
     }
 
+    /**
+     * Using pastLocation and initLocation to judge the spider moving direction whether clockwise
+     * @param pastLocation
+     * @param initLocation
+     * @return boolean
+     */
     public boolean is_clockwise(Location pastLocation, Location initLocation) {
         return (location.equals(Location.getUp(pastLocation)) && (location.equals(Location.getLeft(initLocation)) || (location.equals(Location.getTopLeft(initLocation))))
         || location.equals(Location.getDown(pastLocation)) && (location.equals(Location.getRight(initLocation)) || (location.equals(Location.getBottomRight(initLocation))))
@@ -59,6 +71,11 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
         || location.equals(Location.getRight(pastLocation)) && (location.equals(Location.getUp(initLocation)) || (location.equals(Location.getTopRight(initLocation)))));
     }
     
+    /**
+     * Find the clockwise location for the spider
+     * @param initLocation
+     * @return Location
+     */
     public Location clockwiseMove(Location initLocation) {
         if (initLocation.equals(location)) {
             return Location.getUp(initLocation);
@@ -79,6 +96,11 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
         }
     }
 
+    /**
+     * Find the anticlockwise Location for the spider
+     * @param initLocation
+     * @return Location
+     */
     public Location anticlockwiseMove(Location initLocation) {
         if (initLocation.equals(location)) {
             return Location.getUp(initLocation);
