@@ -3,7 +3,6 @@ import java.io.IOException;
 
 import org.json.*;
 
-import dungeonmania.util.FileLoader;
 public class Config {
     // public 
     public final int bomb_radius;

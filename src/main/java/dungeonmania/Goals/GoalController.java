@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
-import dungeonmania.util.FileLoader;
 
 public class GoalController {
     GoalsTree root;

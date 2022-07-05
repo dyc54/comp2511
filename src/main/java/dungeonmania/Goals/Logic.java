@@ -1,10 +1,5 @@
 package dungeonmania.Goals;
 
-import javax.swing.text.Style;
-
-import dungeonmania.helpers.Config;
-import dungeonmania.helpers.DungeonMap;
-
 public class Logic {
 
     private String type;

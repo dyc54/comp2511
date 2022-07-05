@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.ArrayList;
 
-public class Location implements Comparator<Location> {
+public class Location implements Comparator<Location>, Comparable{
     private int x;
     private int y;
     public final static int X = 0;
@@ -267,5 +267,13 @@ public class Location implements Comparator<Location> {
         }
         Location location = (Location) obj;
         return location.x == x && location.y == y;
+    }
+    @Override
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        // if ()
+        Location location = (Location) o;
+        
+        return compare(this, location);
     }
 }

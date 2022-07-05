@@ -15,6 +15,7 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     private ArrayList<Location> movingRecordList = new ArrayList<>(); 
     private int spider_health;
     private int spider_attack;
+    private String type;
 
     /**
      * Constructor for spider class
@@ -22,10 +23,11 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
      * @param spider_attack
      * @param spider_health
      */
-    public Spider(Location location, int spider_attack, int spider_health) {
+    public Spider(String type, Location location, int spider_attack, int spider_health) {
         this.location = location;
         this.spider_attack = spider_attack;
         this.spider_health = spider_health;
+        this.type = type;
         addToMovingList(location);
     }
 
@@ -54,7 +56,7 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
             setLocation(newLocation);
         }
         
-        dungeonMap.UpdateEntity(this);
+        // dungeonMap.UpdateEntity(this);
         addToMovingList(location);
     }
 
@@ -89,6 +91,8 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
             return Location.getBottomRight(initLocation);
         } else if (location.equals(Location.getTopLeft(initLocation))) {
             return Location.getUp(initLocation);
+        } else if (location.equals(Location.getTopRight(initLocation))) {
+            return Location.getRight(initLocation);
         } else if (location.equals(Location.getBottomLeft(initLocation))) {
             return Location.getLeft(initLocation);
         } else {
@@ -114,6 +118,8 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
             return Location.getTopRight(initLocation);
         } else if (location.equals(Location.getTopLeft(initLocation))) {
             return Location.getLeft(initLocation);
+        } else if (location.equals(Location.getTopRight(initLocation))) {
+            return Location.getUp(initLocation);
         } else if (location.equals(Location.getBottomLeft(initLocation))) {
             return Location.getDown(initLocation);
         } else {
@@ -130,6 +136,10 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     }
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
