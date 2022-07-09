@@ -120,6 +120,35 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test movement of spiders with boulder")
+    public void spiderMovementWithBoulder() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_spiderTest_MovementWithBoulder", "c_spiderTest_basicMovement");
+        Position pos = getEntities(res, "spider").get(0).getPosition();
+        ArrayList<Position> movementTrajectory = new ArrayList<Position>();
+        int x = pos.getX();
+        int y = pos.getY();
+        int nextPositionElement = 0;
+        movementTrajectory.add(new Position(x, y - 1));
+        movementTrajectory.add(new Position(x + 1, y - 1));
+        movementTrajectory.add(new Position(x + 1, y));
+        movementTrajectory.add(new Position(x + 1, y + 1));
+        movementTrajectory.add(new Position(x + 1, y));
+        movementTrajectory.add(new Position(x + 1, y - 1));
+        movementTrajectory.add(new Position(x, y - 1));
+        movementTrajectory.add(new Position(x - 1, y - 1));
+        movementTrajectory.add(new Position(x, y - 1));
+        for (int i = 0; i <= 8; ++i) {
+            res = dmc.tick(Direction.UP);
+            assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
+
+            nextPositionElement++;
+            
+        }
+    }
+
+    @Test
     @DisplayName("Test surrounding entities are removed when placing a bomb next to an active switch with config file bomb radius set to 2")
     public void placeBombRadius2() {
         DungeonManiaController dmc;

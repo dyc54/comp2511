@@ -14,14 +14,14 @@ import java.util.Map;
 
 public class ZombieToast extends MovingEntity implements EnemyMovementStrategy, BattleStrategy {
     Location location;
-
-    public ZombieToast(Location location, int zombie_attack, int zombie_health) {
+    
+    public ZombieToast(String type, Location location, int zombie_attack, int zombie_health) {
         this.location = location;
+        setType(type);
     }
 
     @Override
     public void movement(DungeonMap dungeonMap) {
-        // TODO Auto-generated method stub
         Collection<Entity> fourNearEntities = dungeonMap.getFourNearEntities(location);
         Map<Integer, Entity> fourDirection = new HashMap<>();
         for (Entity entity : fourNearEntities) {
@@ -48,24 +48,24 @@ public class ZombieToast extends MovingEntity implements EnemyMovementStrategy, 
      */
     public void updateLocation(Map<Integer, Entity> fourDirection, int randomDirection) {
         if (randomDirection == 0
-                && !fourDirection.get(0).getType().equals("Wall")
-                && !fourDirection.get(0).getType().equals("Boulder")
-                && !fourDirection.get(0).getType().equals("Door")) {
+                && !fourDirection.get(0).getType().equals("wall")
+                && !fourDirection.get(0).getType().equals("boulder")
+                && !fourDirection.get(0).getType().equals("door")) {
             setLocation(Location.getUp(location));
         } else if (randomDirection == 1
-                && !fourDirection.get(1).getType().equals("Wall")
-                && !fourDirection.get(1).getType().equals("Boulder")
-                && !fourDirection.get(1).getType().equals("Door")) {
+                && !fourDirection.get(1).getType().equals("wall")
+                && !fourDirection.get(1).getType().equals("boulder")
+                && !fourDirection.get(1).getType().equals("door")) {
             setLocation(Location.getDown(location));
         } else if (randomDirection == 2
-                && !fourDirection.get(2).getType().equals("Wall")
-                && !fourDirection.get(2).getType().equals("Boulder")
-                && !fourDirection.get(2).getType().equals("Door")) {
+                && !fourDirection.get(2).getType().equals("wall")
+                && !fourDirection.get(2).getType().equals("boulder")
+                && !fourDirection.get(2).getType().equals("door")) {
             setLocation(Location.getLeft(location));
         } else if (randomDirection == 3
-                && !fourDirection.get(3).getType().equals("Wall")
-                && !fourDirection.get(3).getType().equals("Boulder")
-                && !fourDirection.get(3).getType().equals("Door")) {
+                && !fourDirection.get(3).getType().equals("wall")
+                && !fourDirection.get(3).getType().equals("boulder")
+                && !fourDirection.get(3).getType().equals("door")) {
             setLocation(Location.getRight(location));
         }
     }

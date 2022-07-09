@@ -23,6 +23,10 @@ public abstract class Entity implements Observer{
         location =  new Location(x, y);
     }
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     public void setEntityId(String EntityId) {
         this.EntityId = EntityId;
     }

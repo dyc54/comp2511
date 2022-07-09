@@ -8,7 +8,9 @@ import dungeonmania.CollectableEntities.*;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.MovingEntities.Mercenary;
 import dungeonmania.MovingEntities.Spider;
+import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.StaticEntities.Wall;
 import dungeonmania.helpers.Config;
@@ -58,6 +60,10 @@ public class EntityController {
                 return new Treasure(id,type, x, y);
             case "wood":
                 return new Wood(id,type, x, y,config.shield_durability);
+            case "zombie":
+                return new ZombieToast(type, Location.AsLocation(x, y), config.zombie_attack, config.zombie_health);
+            case "mercenary":
+                return new Mercenary(type, Location.AsLocation(x, y), config.mercenary_attack, config.mercenary_health);
         }
         return null;
     }

@@ -1,9 +1,11 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Key;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.Strategies.MovementStrategy;
@@ -13,6 +15,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Location;
 
 public class Player extends Entity implements PlayerMovementStrategy {
     private int attack;
@@ -21,12 +24,14 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private int x;
     private int y;
     private DungeonMap map;
+    private Location previousLocation;
 
     public Player(String id,String type, int x, int y, int attack, int health, DungeonMap map) {
         this.attack = attack;
         this.health = health;
         this.x = x;
         this.y = y;
+        previousLocation = Location.AsLocation(x, y);
         this.map = map;
         this.inventoryList = new ArrayList<Entity>();
         setType(type);
@@ -84,6 +89,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             // Add into inventory
             this.addInventoryList(new Key("key", x, y));
             // move
+            setPreviousLocation(Location.AsLocation(x, y));
             move(p);
             return;
         } */
@@ -99,8 +105,10 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("door"))
                         .findFirst().get().setType("opened_door");
                 // move to the position of door
+                setPreviousLocation(Location.AsLocation(x, y));
                 move(p);
             }
+            
             // Don't have a key
             return;
         }
@@ -113,6 +121,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
             Exit exit = (Exit) temp;
             exit.setPlayerExit(true);
         }
+        move(p);
+        pickUp();
     }
 
     public void move(Position p) {
@@ -121,9 +131,23 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.y = y + p.getY();
     }
 
-
-    public void pickUp(Position p) {
+    //player位置存在可收集实体则放入背包，并从map中删除
+    public void pickUp() {
+        Collection<Entity> currentPositionEntities = map.getEntities(x, y);
+        for(Entity currentPositionEntitie : currentPositionEntities){
+            if(currentPositionEntitie instanceof CollectableEntity){
+                addInventoryList(currentPositionEntitie);
+                map.removeEntity(currentPositionEntitie.getEntityId());
+            }
+        }
+    }
         
+    public Location getPreviousLocation() {
+        return previousLocation;
+    }
+
+    public void setPreviousLocation(Location previousLocation) {
+        this.previousLocation = previousLocation;
     }
 
 }
