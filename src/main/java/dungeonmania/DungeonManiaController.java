@@ -193,11 +193,11 @@ public class DungeonManiaController {
      * Create a buildables from a list of player inventoryList
      */
     private void setBuildables() {
-
+        
     }
 
     /**
-     * se tAnimations
+     * set Animations
      */
     private void setAnimations() {
 

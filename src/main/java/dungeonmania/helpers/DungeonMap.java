@@ -65,7 +65,7 @@ public class DungeonMap {
         JSONArray entities = json.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
             JSONObject entity = entities.getJSONObject(i);
-            addEntity(EntityController.newEntity(entity, config, this));
+            addEntity(new EntityController().newEntity(entity, config, this));
         }
     }
 

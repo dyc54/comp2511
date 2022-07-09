@@ -22,7 +22,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private int y;
     private DungeonMap map;
 
-    public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
+    public Player(String id,String type, int x, int y, int attack, int health, DungeonMap map) {
         this.attack = attack;
         this.health = health;
         this.x = x;
@@ -31,7 +31,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.inventoryList = new ArrayList<Entity>();
         setType(type);
         setLocation(x, y);
-        setEntityId("player1");// 现在还不是唯一
+        setEntityId(id);
     }
 
     public int getAttack() {
@@ -76,7 +76,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             return;
         }
 
-        // If there is a key
+        /* // If there is a key
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("key"))) {
             // Delete the key from the map
             map.removeEntity(map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("key"))
@@ -86,7 +86,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             // move
             move(p);
             return;
-        }
+        } */
 
         // If there is a door
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("door"))) {
@@ -119,6 +119,11 @@ public class Player extends Entity implements PlayerMovementStrategy {
         super.setLocation(x + p.getX(), y + p.getY());
         this.x = x + p.getX();
         this.y = y + p.getY();
+    }
+
+
+    public void pickUp(Position p) {
+        
     }
 
 }
