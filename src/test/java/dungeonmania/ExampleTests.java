@@ -48,6 +48,26 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test the player cannot pass a wall")
+    public void testWall() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_spiderTest_basicMovement",
+                "c_spiderTest_basicMovement");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1),
+                false);
+
+        // move player upward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.UP);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
@@ -96,6 +116,35 @@ public class ExampleTests {
             if (nextPositionElement == 8) {
                 nextPositionElement = 0;
             }
+        }
+    }
+
+    @Test
+    @DisplayName("Test movement of spiders with boulder")
+    public void spiderMovementWithBoulder() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_spiderTest_MovementWithBoulder", "c_spiderTest_basicMovement");
+        Position pos = getEntities(res, "spider").get(0).getPosition();
+        ArrayList<Position> movementTrajectory = new ArrayList<Position>();
+        int x = pos.getX();
+        int y = pos.getY();
+        int nextPositionElement = 0;
+        movementTrajectory.add(new Position(x, y - 1));
+        movementTrajectory.add(new Position(x + 1, y - 1));
+        movementTrajectory.add(new Position(x + 1, y));
+        movementTrajectory.add(new Position(x + 1, y + 1));
+        movementTrajectory.add(new Position(x + 1, y));
+        movementTrajectory.add(new Position(x + 1, y - 1));
+        movementTrajectory.add(new Position(x, y - 1));
+        movementTrajectory.add(new Position(x - 1, y - 1));
+        movementTrajectory.add(new Position(x, y - 1));
+        for (int i = 0; i <= 8; ++i) {
+            res = dmc.tick(Direction.UP);
+            assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
+
+            nextPositionElement++;
+            
         }
     }
 

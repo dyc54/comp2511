@@ -101,7 +101,7 @@ public class DungeonManiaController {
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
-        player.setLocation(movementDirection.getOffset());
+        player.movement(movementDirection.getOffset());
         for (Entity entity : entitiesList) {
             if (entity.getType().equals("spider")) {
                 Spider spider = (Spider) entity;

@@ -6,18 +6,20 @@ import java.util.List;
 
 import dungeonmania.Entity;
 import dungeonmania.Strategies.BattleStrategy;
+import dungeonmania.Strategies.EnemyMovementStrategy;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class Spider extends MovingEntity implements MovementStrategy, BattleStrategy{
+public class Spider extends MovingEntity implements EnemyMovementStrategy, BattleStrategy {
     private Location location;
-    private ArrayList<Location> movingRecordList = new ArrayList<>(); 
+    private ArrayList<Location> movingRecordList = new ArrayList<>();
     private int spider_health;
     private int spider_attack;
 
     /**
      * Constructor for spider class
+     * 
      * @param location
      * @param spider_attack
      * @param spider_health
@@ -33,54 +35,86 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     @Override
     public void movement(DungeonMap dungeonMap) {
         Location initLocation = movingRecordList.get(0);
-        Location pastLocation = movingRecordList.get(movingRecordList.size() - 1);
+        Location pastLocation;
+        if (movingRecordList.size() < 2) {
+            pastLocation = initLocation;
+        } else {
+            pastLocation = movingRecordList.get(movingRecordList.size() - 2);
+        }
         Collection<Entity> entities = dungeonMap.getEightNearEntities(initLocation);
-        List<Entity> boulerList = new ArrayList<>();
-        
+        List<Entity> boulderList = new ArrayList<>();
+
         for (Entity entity : entities) {
-            if (entity.getType().equals("Boulder")) {
-                boulerList.add(entity);
+            if (entity.getType().equals("boulder")) {
+                boulderList.add(entity);
             }
         }
-        if (boulerList.isEmpty()) {
+        if (initLocation.equals(location)) {
+            for (Entity boulder: boulderList) {
+                if (boulder.getLocation().equals(Location.getUp(location))) {
+                    setLocation(Location.getDown(initLocation));
+                }
+            }
+            if (location.equals(initLocation)) {
+                setLocation(Location.getUp(initLocation));
+            }
+            dungeonMap.UpdateEntity(this);
+            addToMovingList(location);
+            return;
+        }
+        if (boulderList.isEmpty()) {
             setLocation(clockwiseMove(initLocation));
         } else if (is_clockwise(pastLocation, initLocation)) {
             Location newLocation = clockwiseMove(initLocation);
-            for (Entity entity : boulerList) {
+            for (Entity entity : boulderList) {
                 if (entity.getLocation().equals(newLocation)) {
                     newLocation = anticlockwiseMove(initLocation);
                     break;
                 }
             }
             setLocation(newLocation);
+        } else if (!is_clockwise(pastLocation, initLocation)) {
+            Location newLocation = anticlockwiseMove(initLocation);
+            for (Entity entity : boulderList) {
+                if (entity.getLocation().equals(newLocation)) {
+                    newLocation = clockwiseMove(initLocation);
+                    break;
+                }
+            }
+            setLocation(newLocation);
         }
-        
         dungeonMap.UpdateEntity(this);
         addToMovingList(location);
     }
 
     /**
-     * Using pastLocation and initLocation to judge the spider moving direction whether clockwise
+     * Using pastLocation and initLocation to judge the spider moving direction
+     * whether clockwise
+     * 
      * @param pastLocation
      * @param initLocation
      * @return boolean
      */
     public boolean is_clockwise(Location pastLocation, Location initLocation) {
-        return (location.equals(Location.getUp(pastLocation)) && (location.equals(Location.getLeft(initLocation)) || (location.equals(Location.getTopLeft(initLocation))))
-        || location.equals(Location.getDown(pastLocation)) && (location.equals(Location.getRight(initLocation)) || (location.equals(Location.getBottomRight(initLocation))))
-        || location.equals(Location.getLeft(pastLocation)) && (location.equals(Location.getDown(initLocation)) || (location.equals(Location.getBottomLeft(initLocation))))
-        || location.equals(Location.getRight(pastLocation)) && (location.equals(Location.getUp(initLocation)) || (location.equals(Location.getTopRight(initLocation)))));
+        return ((location.equals(Location.getUp(pastLocation))
+                    && (location.equals(Location.getLeft(initLocation)) || (location.equals(Location.getTopLeft(initLocation)))))
+                || (location.equals(Location.getDown(pastLocation)) 
+                    && (location.equals(Location.getRight(initLocation)) || (location.equals(Location.getBottomRight(initLocation)))))
+                || (location.equals(Location.getLeft(pastLocation)) 
+                    && (location.equals(Location.getDown(initLocation)) || (location.equals(Location.getBottomLeft(initLocation)))))
+                || (location.equals(Location.getRight(pastLocation)) 
+                    && (location.equals(Location.getUp(initLocation)) || (location.equals(Location.getTopRight(initLocation)))))
+                || (pastLocation.equals(initLocation)));
     }
-    
+
     /**
      * Find the clockwise location for the spider
+     * 
      * @param initLocation
      * @return Location
      */
     public Location clockwiseMove(Location initLocation) {
-        if (initLocation.equals(location)) {
-            return Location.getUp(initLocation);
-        } else if (location.equals(Location.getUp(initLocation))) {
+        if (location.equals(Location.getUp(initLocation))) {
             return Location.getTopRight(initLocation);
         } else if (location.equals(Location.getDown(initLocation))) {
             return Location.getBottomLeft(initLocation);
@@ -101,13 +135,12 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
 
     /**
      * Find the anticlockwise Location for the spider
+     * 
      * @param initLocation
      * @return Location
      */
     public Location anticlockwiseMove(Location initLocation) {
-        if (initLocation.equals(location)) {
-            return Location.getUp(initLocation);
-        } else if (location.equals(Location.getUp(initLocation))) {
+        if (location.equals(Location.getUp(initLocation))) {
             return Location.getTopLeft(initLocation);
         } else if (location.equals(Location.getDown(initLocation))) {
             return Location.getBottomRight(initLocation);
@@ -129,10 +162,11 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     public void addToMovingList(Location location) {
         movingRecordList.add(location);
     }
-   
+
     public Location getLocation() {
         return location;
     }
+
     public void setLocation(Location location) {
         this.location = location;
     }
@@ -140,6 +174,6 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     @Override
     public void battle() {
         spider_health = spider_health - (1); // health = health - attacked
-        
+
     }
 }
