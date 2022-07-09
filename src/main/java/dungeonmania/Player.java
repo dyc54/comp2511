@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Key;
+import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
+import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.PlayerMovementStrategy;
 import dungeonmania.response.models.ItemResponse;
@@ -81,20 +83,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             return;
         }
 
-        /* // If there is a key
-        if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("key"))) {
-            // Delete the key from the map
-            map.removeEntity(map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("key"))
-                    .findFirst().get().getEntityId());
-            // Add into inventory
-            this.addInventoryList(new Key("key", x, y));
-            // move
-            setPreviousLocation(Location.AsLocation(x, y));
-            move(p);
-            return;
-        } */
-
-        // If there is a door
+        /* // If there is a door
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("door"))) {
             // If you have a key
             if (this.getInventoryList().stream().anyMatch(e -> e.getType().equals("key"))) {
@@ -111,7 +100,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             
             // Don't have a key
             return;
-        }
+        } */
 
         // If there is a Exit
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("exit"))) {
@@ -121,6 +110,27 @@ public class Player extends Entity implements PlayerMovementStrategy {
             Exit exit = (Exit) temp;
             exit.setPlayerExit(true);
         }
+
+        // If there is a boulder
+        if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("boulder"))) {
+            // If there is a boulder or a wall or a closed door after the boulder, you
+            // cannot move the boulder
+            Collection<Entity> entitiesAfterBoulder = map.getEntities(x + p.getX() + p.getX(), y + p.getY() + p.getY());
+            if (entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("boulder"))
+                    || entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("wall"))
+                    || entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("door"))) {
+                return;
+            } else {
+                // Else move the boulder to the next position
+                Entity temp = map.getEntities(x + p.getX(), y + p.getY()).stream()
+                        .filter(e -> e.getType().equals("boulder"))
+                        .findFirst().get();
+                Boulder boulder = (Boulder) temp;
+                boulder.moveBoulder(p, map);
+            }
+        }
+
+        // Move the player
         move(p);
         pickUp();
     }
