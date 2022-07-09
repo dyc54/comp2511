@@ -1,11 +1,14 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.CollectableEntities.Key;
+import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
+import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.PlayerMovementStrategy;
 import dungeonmania.response.models.ItemResponse;
@@ -84,8 +87,6 @@ public class Player extends Entity implements PlayerMovementStrategy {
             // Add into inventory
             this.addInventoryList(new Key("key", x, y));
             // move
-            move(p);
-            return;
         }
 
         // If there is a door
@@ -101,8 +102,6 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 // move to the position of door
                 move(p);
             }
-            // Don't have a key
-            return;
         }
 
         // If there is a Exit
@@ -113,6 +112,28 @@ public class Player extends Entity implements PlayerMovementStrategy {
             Exit exit = (Exit) temp;
             exit.setPlayerExit(true);
         }
+
+        // If there is a boulder
+        if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("boulder"))) {
+            // If there is a boulder or a wall or a closed door after the boulder, you
+            // cannot move the boulder
+            Collection<Entity> entitiesAfterBoulder = map.getEntities(x + p.getX() + p.getX(), y + p.getY() + p.getY());
+            if (entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("boulder"))
+                    || entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("wall"))
+                    || entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("door"))) {
+                return;
+            } else {
+                // Else move the boulder to the next position
+                Entity temp = map.getEntities(x + p.getX(), y + p.getY()).stream()
+                        .filter(e -> e.getType().equals("boulder"))
+                        .findFirst().get();
+                Boulder boulder = (Boulder) temp;
+                boulder.moveBoulder(p, map);
+            }
+        }
+
+        // Move the player
+        move(p);
     }
 
     public void move(Position p) {

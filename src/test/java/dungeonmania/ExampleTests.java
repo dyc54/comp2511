@@ -68,6 +68,53 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test the player can move a boulder")
+    public void testMoveBoulder() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_complexGoalsTest_andAll",
+                "c_complexGoalsTest_andAll");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 1),
+                false);
+
+        DungeonResponse actualDungonRes;
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert the position of boulder
+        Position boulderPosition = getEntities(actualDungonRes, "boulder").get(0).getPosition();
+        assertEquals(new Position(4, 1), boulderPosition);
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player cannot move a boulder if there are obstacle behind it")
+    public void testObstacleBehindBoulder() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_moveBoulderTest",
+                "c_moveBoulderTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1),
+                false);
+
+        DungeonResponse actualDungonRes;
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
@@ -82,7 +129,7 @@ public class ExampleTests {
 
         // walk through door and check key is gone
         res = dmc.tick(Direction.RIGHT);
-        // assertEquals(0, getInventory(res, "key").size());
+        assertEquals(0, getInventory(res, "key").size());
         assertNotEquals(pos, getEntities(res, "player").get(0).getPosition());
     }
 

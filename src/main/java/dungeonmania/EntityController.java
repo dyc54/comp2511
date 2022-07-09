@@ -40,6 +40,8 @@ public class EntityController {
                 return new Spider(type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
             case "wall":
                 return new Wall(type, Location.AsLocation(x, y));
+            case "treasure":
+                return new Treasure(type, x, y);
         }
         return null;
     }
