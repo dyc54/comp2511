@@ -3,14 +3,16 @@ package dungeonmania.MovingEntities;
 import java.util.Collection;
 
 import dungeonmania.Entity;
+import dungeonmania.Strategies.EnemyMovementStrategy;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class Mercenary extends MovingEntity implements MovementStrategy{
+public class Mercenary extends MovingEntity implements EnemyMovementStrategy {
     Location location;
     int mercenary_attack;
     int mercenary_health;
+
     public Mercenary(Location location, int mercenary_attack, int mercenary_health) {
         this.location = location;
         this.mercenary_attack = mercenary_attack;
@@ -32,5 +34,5 @@ public class Mercenary extends MovingEntity implements MovementStrategy{
     public void setLocation(Location location) {
         this.location = location;
     }
-    
+
 }

@@ -2,6 +2,7 @@ package dungeonmania.MovingEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.Strategies.BattleStrategy;
+import dungeonmania.Strategies.EnemyMovementStrategy;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
@@ -11,9 +12,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ZombieToast extends MovingEntity implements MovementStrategy, BattleStrategy{
+public class ZombieToast extends MovingEntity implements EnemyMovementStrategy, BattleStrategy {
     Location location;
-    
+
     public ZombieToast(Location location, int zombie_attack, int zombie_health) {
         this.location = location;
     }
@@ -41,29 +42,30 @@ public class ZombieToast extends MovingEntity implements MovementStrategy, Battl
 
     /**
      * update the zombie location
+     * 
      * @param fourDirection
      * @param randomDirection
      */
     public void updateLocation(Map<Integer, Entity> fourDirection, int randomDirection) {
-        if (randomDirection == 0 
-        && !fourDirection.get(0).getType().equals("Wall") 
-        && !fourDirection.get(0).getType().equals("Boulder") 
-        && !fourDirection.get(0).getType().equals("Door")) {
+        if (randomDirection == 0
+                && !fourDirection.get(0).getType().equals("Wall")
+                && !fourDirection.get(0).getType().equals("Boulder")
+                && !fourDirection.get(0).getType().equals("Door")) {
             setLocation(Location.getUp(location));
-        } else if (randomDirection == 1 
-        && !fourDirection.get(1).getType().equals("Wall") 
-        && !fourDirection.get(1).getType().equals("Boulder") 
-        && !fourDirection.get(1).getType().equals("Door")) {
+        } else if (randomDirection == 1
+                && !fourDirection.get(1).getType().equals("Wall")
+                && !fourDirection.get(1).getType().equals("Boulder")
+                && !fourDirection.get(1).getType().equals("Door")) {
             setLocation(Location.getDown(location));
-        } else if (randomDirection == 2 
-        && !fourDirection.get(2).getType().equals("Wall") 
-        && !fourDirection.get(2).getType().equals("Boulder") 
-        && !fourDirection.get(2).getType().equals("Door")) {
+        } else if (randomDirection == 2
+                && !fourDirection.get(2).getType().equals("Wall")
+                && !fourDirection.get(2).getType().equals("Boulder")
+                && !fourDirection.get(2).getType().equals("Door")) {
             setLocation(Location.getLeft(location));
-        } else if (randomDirection == 3 
-        && !fourDirection.get(3).getType().equals("Wall") 
-        && !fourDirection.get(3).getType().equals("Boulder") 
-        && !fourDirection.get(3).getType().equals("Door")){
+        } else if (randomDirection == 3
+                && !fourDirection.get(3).getType().equals("Wall")
+                && !fourDirection.get(3).getType().equals("Boulder")
+                && !fourDirection.get(3).getType().equals("Door")) {
             setLocation(Location.getRight(location));
         }
     }
@@ -79,7 +81,7 @@ public class ZombieToast extends MovingEntity implements MovementStrategy, Battl
     @Override
     public void battle() {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
 }

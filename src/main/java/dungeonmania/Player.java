@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.CollectableEntities.Key;
+import dungeonmania.StaticEntities.Exit;
 import dungeonmania.Strategies.MovementStrategy;
+import dungeonmania.Strategies.PlayerMovementStrategy;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import dungeonmania.helpers.DungeonMap;
 
-public class Player extends Entity {
+public class Player extends Entity implements PlayerMovementStrategy {
     private int attack;
     private int health;
     private List<Entity> inventoryList;
@@ -67,7 +69,8 @@ public class Player extends Entity {
         return inventory;
     }
 
-    public void setLocation(Position p) {
+    @Override
+    public void movement(Position p) {
         // If there is a wall, don't move
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("wall"))) {
             return;
@@ -81,9 +84,7 @@ public class Player extends Entity {
             // Add into inventory
             this.addInventoryList(new Key("key", x, y));
             // move
-            super.setLocation(x + p.getX(), y + p.getY());
-            this.x = x + p.getX();
-            this.y = y + p.getY();
+            move(p);
             return;
         }
 
@@ -92,28 +93,29 @@ public class Player extends Entity {
             // If you have a key
             if (this.getInventoryList().stream().anyMatch(e -> e.getType().equals("key"))) {
                 // remove key from the bag
-                /*
-                 * for (Entity e : this.inventoryList) {
-                 * if (e.getType().equals("key")) {
-                 * this.removeInventoryList(e);
-                 * break;
-                 * }
-                 * }
-                 */
                 this.removeInventoryList(
                         this.getInventoryList().stream().filter(e -> e.getType().equals("key")).findFirst().get());
                 // open the door
                 map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("door"))
                         .findFirst().get().setType("opened_door");
                 // move to the position of door
-                super.setLocation(x + p.getX(), y + p.getY());
-                this.x = x + p.getX();
-                this.y = y + p.getY();
+                move(p);
             }
             // Don't have a key
             return;
         }
 
+        // If there is a Exit
+        if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("exit"))) {
+            move(p);
+            Entity temp = map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("exit"))
+                    .findFirst().get();
+            Exit exit = (Exit) temp;
+            exit.setPlayerExit(true);
+        }
+    }
+
+    public void move(Position p) {
         super.setLocation(x + p.getX(), y + p.getY());
         this.x = x + p.getX();
         this.y = y + p.getY();

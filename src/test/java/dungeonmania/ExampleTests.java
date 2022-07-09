@@ -48,6 +48,26 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test the player cannot pass a wall")
+    public void testWall() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_spiderTest_basicMovement",
+                "c_spiderTest_basicMovement");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1),
+                false);
+
+        // move player upward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.UP);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
