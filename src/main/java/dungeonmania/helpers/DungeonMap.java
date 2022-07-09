@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -340,7 +341,7 @@ public class DungeonMap {
      * @param entity entity that has already move
      */
     public void UpdateEntity(Entity entity) {
-        removeEntity(entity.getEntityId());
+        //removeEntity(entity.getEntityId());
         addEntity(entity);
     }
 

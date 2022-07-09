@@ -15,7 +15,6 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     private ArrayList<Location> movingRecordList = new ArrayList<>(); 
     private int spider_health;
     private int spider_attack;
-    private String type;
 
     /**
      * Constructor for spider class
@@ -27,7 +26,7 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
         this.location = location;
         this.spider_attack = spider_attack;
         this.spider_health = spider_health;
-        this.type = type;
+        setType(type);
         addToMovingList(location);
     }
 
@@ -56,7 +55,7 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
             setLocation(newLocation);
         }
         
-        // dungeonMap.UpdateEntity(this);
+        dungeonMap.UpdateEntity(this);
         addToMovingList(location);
     }
 
@@ -136,10 +135,6 @@ public class Spider extends MovingEntity implements MovementStrategy, BattleStra
     }
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public String getType() {
-        return type;
     }
 
     @Override

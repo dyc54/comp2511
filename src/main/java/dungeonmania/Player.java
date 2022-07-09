@@ -11,6 +11,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Location;
 
 public class Player extends Entity {
     private int attack;
@@ -19,12 +20,14 @@ public class Player extends Entity {
     private int x;
     private int y;
     private DungeonMap map;
+    private Location previousLocation;
 
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         this.attack = attack;
         this.health = health;
         this.x = x;
         this.y = y;
+        previousLocation = Location.AsLocation(x, y);
         this.map = map;
         this.inventoryList = new ArrayList<Entity>();
         setType(type);
@@ -81,6 +84,7 @@ public class Player extends Entity {
             // Add into inventory
             this.addInventoryList(new Key("key", x, y));
             // move
+            setPreviousLocation(Location.AsLocation(x, y));
             super.setLocation(x + p.getX(), y + p.getY());
             this.x = x + p.getX();
             this.y = y + p.getY();
@@ -106,6 +110,7 @@ public class Player extends Entity {
                 map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("door"))
                         .findFirst().get().setType("opened_door");
                 // move to the position of door
+                setPreviousLocation(Location.AsLocation(x, y));
                 super.setLocation(x + p.getX(), y + p.getY());
                 this.x = x + p.getX();
                 this.y = y + p.getY();
@@ -117,6 +122,14 @@ public class Player extends Entity {
         super.setLocation(x + p.getX(), y + p.getY());
         this.x = x + p.getX();
         this.y = y + p.getY();
+    }
+
+    public Location getPreviousLocation() {
+        return previousLocation;
+    }
+
+    public void setPreviousLocation(Location previousLocation) {
+        this.previousLocation = previousLocation;
     }
 
 }

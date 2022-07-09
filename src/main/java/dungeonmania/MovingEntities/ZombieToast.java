@@ -14,13 +14,13 @@ import java.util.Map;
 public class ZombieToast extends MovingEntity implements MovementStrategy, BattleStrategy{
     Location location;
     
-    public ZombieToast(Location location, int zombie_attack, int zombie_health) {
+    public ZombieToast(String type, Location location, int zombie_attack, int zombie_health) {
         this.location = location;
+        setType(type);
     }
 
     @Override
     public void movement(DungeonMap dungeonMap) {
-        // TODO Auto-generated method stub
         Collection<Entity> fourNearEntities = dungeonMap.getFourNearEntities(location);
         Map<Integer, Entity> fourDirection = new HashMap<>();
         for (Entity entity : fourNearEntities) {
