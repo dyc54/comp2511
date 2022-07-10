@@ -1,16 +1,16 @@
 package dungeonmania.StaticEntities;
 
 public class Portal extends StaticEntity {
-    String color;
+    String colour;
 
-    public Portal(String type, int x, int y) {
+    public Portal(String type, int x, int y, String colour) {
         setType(type);
         setLocation(x, y);
-        this.color = color;
+        this.colour = colour;
     }
-    /*
-     * public String getColor() {
-     * return this.color;
-     * }
-     */
+
+    public String getColour() {
+        return this.colour;
+    }
+
 }

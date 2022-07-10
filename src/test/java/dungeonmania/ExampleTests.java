@@ -115,6 +115,69 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test the player can move through a portal")
+    public void testMoveThroughPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 3),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player can't move through a portal if there is a wall behind it")
+    public void testObstacleBehindPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 0),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.RIGHT);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test advanced portal")
+    public void testAdvancedPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 5),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
@@ -191,7 +254,7 @@ public class ExampleTests {
             assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
 
             nextPositionElement++;
-            
+
         }
     }
 
