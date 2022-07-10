@@ -39,7 +39,8 @@ public class EntityController {
             case "switch":
                 return new FloorSwitch(type, x, y);
             case "zombie_toast_spawner":
-                return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat);
+                return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat, config.zombie_attack,
+                        config.zombie_health, map);
             case "key":
                 return new Key(id, type, x, y);
             case "spider":

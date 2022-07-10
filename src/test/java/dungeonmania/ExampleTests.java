@@ -178,6 +178,18 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test zombie spwaner")
+    public void testZombieSpwaner() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_zombieSpwaner",
+                "c_zombieSpwaner");
+
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
+        assertEquals(true, actualDungonRes.getEntities().stream().anyMatch(e -> e.getType().equals("zombie")));
+
+    }
+
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;

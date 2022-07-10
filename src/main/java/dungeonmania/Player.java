@@ -169,45 +169,9 @@ public class Player extends Entity implements PlayerMovementStrategy {
                             .filter(e -> e.getType().equals("portal"))
                             .findFirst().get();
                     Portal portalConnected = (Portal) temp;
-                    // Edge case: If the colour is same, check the position after the
-                    // portalconnected
-                    /*
-                     * if (portalConnected.getColour().equals(colour)) {
-                     * Collection<Entity> entitiesAfterPortalConnected = map.getEntities(
-                     * portalConnected.getLocation().getX() + p.getX(),
-                     * portalConnected.getLocation().getY() + p.getY());
-                     * if (entitiesAfterPortalConnected.stream().anyMatch(e ->
-                     * e.getType().equals("boulder"))
-                     * || entitiesAfterPortalConnected.stream().anyMatch(e ->
-                     * e.getType().equals("wall"))
-                     * || entitiesAfterPortalConnected.stream().anyMatch(e ->
-                     * e.getType().equals("door"))) {
-                     * return;
-                     * } else if (entitiesAfterPortalConnected.stream().anyMatch(e ->
-                     * e.getType().equals("portal"))) {
-                     * Entity temp2 = map.getEntities(portalConnected.getLocation().getX() +
-                     * p.getX(),
-                     * portalConnected.getLocation().getY() + p.getY()).stream()
-                     * .filter(e -> e.getType().equals("portal"))
-                     * .findFirst().get();
-                     * Portal portalConnected2 = (Portal) temp2;
-                     * teleport(p, portalConnected.getLocation().getX() + p.getX(),
-                     * portalConnected.getLocation().getY() + p.getY(),
-                     * portalConnected2);
-                     * return;
-                     * } else {
-                     * super.setLocation(portalConnected.getLocation().getX() + p.getX(),
-                     * portalConnected.getLocation().getY() + p.getY());
-                     * this.x = portalConnected.getLocation().getX() + p.getX();
-                     * this.y = portalConnected.getLocation().getY() + p.getY();
-                     * return;
-                     * }
-                     * } else {
-                     */
                     teleport(p, currentPortal.getLocation().getX() + p.getX(),
                             currentPortal.getLocation().getY() + p.getY(),
                             portalConnected);
-
                     // }
                     return;
                 } else {

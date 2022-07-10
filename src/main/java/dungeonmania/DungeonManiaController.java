@@ -2,6 +2,7 @@ package dungeonmania;
 
 import dungeonmania.Goals.GoalController;
 import dungeonmania.MovingEntities.Spider;
+import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
@@ -108,6 +109,12 @@ public class DungeonManiaController {
                 spider.movement(dungeonMap);
             }
         }
+        for (Entity entity : entitiesList) {
+            if (entity.getType().equals("zombie_toast_spawner")) {
+                ZombieToastSpawner zts = (ZombieToastSpawner) entity;
+                zts.ZombieToastSpwanCheck();
+            }
+        }
         return getDungeonResponse();
     }
 
@@ -193,7 +200,7 @@ public class DungeonManiaController {
      * Create a buildables from a list of player inventoryList
      */
     private void setBuildables() {
-        
+
     }
 
     /**
