@@ -30,5 +30,8 @@ public class GettingExit implements Goal{
         // TODO Auto-generated method stub
         return this;
     }
-    
+    @Override
+    public String toString() {
+        return new String("getting to an exit");
+    }
 }

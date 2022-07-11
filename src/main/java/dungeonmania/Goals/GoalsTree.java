@@ -98,4 +98,19 @@ public class GoalsTree {
         }
         return this;
     }
+    public String toStringAtRoot() {
+        if (left == null || right == null) {
+            return goal.toString();
+        } else {
+            return logic.toString(this, false);
+        }
+    }
+    @Override
+    public String toString() {
+        if (left == null || right == null) {
+            return goal.toString();
+        } else {
+            return logic.toString(this, true);
+        }
+    }
 }

@@ -27,5 +27,8 @@ public class Boulders implements Goal {
         return this;
         
     }
-    
+    @Override
+    public String toString() {
+        return new String("having a boulder on all floor switches");
+    }
 }

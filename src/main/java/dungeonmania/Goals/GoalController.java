@@ -68,6 +68,10 @@ public class GoalController {
                 return null;
         }
     }
-
+    @Override
+    public String toString() {
+        String goal = root.toStringAtRoot();
+        return goal;
+    }
   
 }

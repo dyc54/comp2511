@@ -28,5 +28,8 @@ public class Treasures implements Goal{
         TargetNum = config.treasure_goal;
         return this;
     }
-    
+    @Override
+    public String toString() {
+        return new String("collecting a certain number of treasure items");
+    }
 }

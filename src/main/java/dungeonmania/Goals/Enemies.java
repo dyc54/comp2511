@@ -5,6 +5,7 @@ import dungeonmania.helpers.DungeonMap;
 
 public class Enemies implements Goal {
     private int TargetNum;
+    private boolean hasspawners;
     public Enemies() {
         TargetNum = 0;
     }
@@ -26,5 +27,11 @@ public class Enemies implements Goal {
         TargetNum = config.enemy_goal;
         return this;
     }
-    
+    @Override
+    public String toString() {
+        if (hasspawners) {
+            return new String("destroying a certain number of enemies AND all spawners");
+        }
+        return new String("destroying a certain number of enemies");
+    }
 }
