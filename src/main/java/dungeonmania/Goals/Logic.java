@@ -42,5 +42,19 @@ public class Logic {
             return hasAchieved(goalNode.toGoalA(), goalNode.toGoalB());
         }
     }
-    
+    public String toString(GoalsTree node, boolean bracket) {
+        if (bracket){
+            return String.format("(%s %s %s)", node.toGoalA().toString(), toString(), node.toGoalB().toString());
+        } else {
+            return String.format("%s %s %s", node.toGoalA().toString(), toString(), node.toGoalB().toString());
+            
+        }
+    }
+    @Override
+    public String toString() {
+        if (!type.equals(supergoal)) {
+            return type;
+        }
+        return new String();
+    }
 }
