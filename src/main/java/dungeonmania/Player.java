@@ -25,7 +25,7 @@ import dungeonmania.helpers.Location;
 public class Player extends Entity implements PlayerMovementStrategy {
     private int attack;
     private int health;
-    private Inventory inventory;
+    private Inventory inventory = new Inventory();
     private int x;
     private int y;
     private DungeonMap map;
