@@ -4,3 +4,9 @@ portal,5,5,red
 portal,5,5,red 
 wall,2,3
 player,12,12
+
+g, goal
+s, AND, goal1, goal2
+c, TEMP_GOAL1, AND, goal3, goal 3
+c, TEMP_GOAL2, OR, goal4, goal5
+m, AND, TEMP_GOAL1, TEMP_GOAL2
