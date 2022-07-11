@@ -24,7 +24,7 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
      * @param spider_attack
      * @param spider_health
      */
-    public Spider(String type, Location location, int spider_attack, int spider_health) {
+    public Spider(String id, String type, Location location, int spider_attack, int spider_health) {
         this.location = location;
         this.spider_attack = spider_attack;
         this.spider_health = spider_health;

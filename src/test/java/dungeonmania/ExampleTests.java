@@ -178,15 +178,15 @@ public class ExampleTests {
     }
 
     @Test
-    @DisplayName("Test zombie spwaner")
+    @DisplayName("Test zombie toast spwaner")
     public void testZombieSpwaner() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("d_zombieSpwaner",
+        DungeonResponse res = dmc.newGame("d_zombieSpwaner",
                 "c_zombieSpwaner");
 
         DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
-        assertEquals(true, actualDungonRes.getEntities().stream().anyMatch(e -> e.getType().equals("zombie")));
-
+        assertEquals(true, actualDungonRes.getEntities().stream().anyMatch(e -> e.getType().equals("zombie_toast_spawner")));
+        assertEquals(1, getEntities(res, "zombie_toast").size());
     }
 
     @Test
@@ -268,6 +268,23 @@ public class ExampleTests {
             nextPositionElement++;
 
         }
+    }
+
+    @Test
+    @DisplayName("Test zombie toast random movement")
+    public void zombieMovement() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieTest_randomMove", "c_spiderTest_basicMovement");
+
+        for (int i = 0; i <= 20; i++) {
+            res = dmc.tick(Direction.DOWN);
+            System.out.println(getEntities(res, "zombie_toast").get(0).getPosition());
+            assertNotEquals(new Position(5,4), getEntities(res, "zombie_toast").get(0).getPosition());
+            assertNotEquals(new Position(5,6), getEntities(res, "zombie_toast").get(0).getPosition());
+            assertNotEquals(new Position(6,5), getEntities(res, "zombie_toast").get(0).getPosition());
+        }
+        
     }
 
     @Test

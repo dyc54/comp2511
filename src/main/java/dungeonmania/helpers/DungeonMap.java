@@ -207,15 +207,15 @@ public class DungeonMap {
      * @param id entity id
      * @return whether map successfully remove given entity
      */
-    public boolean removeEntity(String id) {
+    public void removeEntity(String id) {
         // TODO change to private if use observer pattern
         if (!containsEntity(id)) {
-            return false;
+            return;
         }
-        Location location = IdCollection.get(id);
-        Collection<Entity> entities = getEntities(location);
+        //Location location = IdCollection.get(id);
+        //Collection<Entity> entities = getEntities(location);
         IdCollection.remove(id);
-        return entities.removeIf(entity -> entity.getEntityId().equals(id));
+        //entities.removeIf(entity -> entity.getEntityId().equals(id));
     }
 
     /**
@@ -341,8 +341,10 @@ public class DungeonMap {
      * @param entity entity that has already move
      */
     public void UpdateEntity(Entity entity) {
-        //removeEntity(entity.getEntityId());
+        removeEntity(entity.getEntityId());
         addEntity(entity);
+        System.out.println("---" + entity.getType());
+        System.out.println("map" + IdCollection.get(entity.getEntityId()).toString());
     }
 
     /**

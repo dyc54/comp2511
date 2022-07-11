@@ -23,7 +23,7 @@ public class EntityController {
 
     public Entity newEntity(JSONObject entity, Config config, DungeonMap map) {
         String type = entity.getString("type");
-        String id = creatId(type);
+        String id = createId(type);
         int x = entity.getInt("x");
         int y = entity.getInt("y");
         // TODO: Add create entities.
@@ -47,7 +47,7 @@ public class EntityController {
             case "key":
                 return new Key(id, type, x, y);
             case "spider":
-                return new Spider(type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
+                return new Spider(id, type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
             case "wall":
                 return new Wall(type, Location.AsLocation(x, y));
             case "arrow":
@@ -64,15 +64,15 @@ public class EntityController {
                 return new Treasure(id, type, x, y);
             case "wood":
                 return new Wood(id, type, x, y, config.shield_durability, config.shield_defence);
-            case "zombie":
-                return new ZombieToast(type, Location.AsLocation(x, y), config.zombie_attack, config.zombie_health);
+            case "zombie_toast":
+                return new ZombieToast(id, type, Location.AsLocation(x, y), config.zombie_attack, config.zombie_health);
             case "mercenary":
                 return new Mercenary(type, Location.AsLocation(x, y), config.mercenary_attack, config.mercenary_health);
         }
         return null;
     }
 
-    private String creatId(String type) {
+    public static String createId(String type) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
         return type + sdf.format(System.currentTimeMillis());
     }
