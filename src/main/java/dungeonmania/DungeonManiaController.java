@@ -95,6 +95,7 @@ public class DungeonManiaController {
      * /game/tick/item
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
+        player.useItem(itemUsedId);
         return getDungeonResponse();
     }
 
@@ -122,6 +123,7 @@ public class DungeonManiaController {
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
+        player.build(buildable);
         return getDungeonResponse();
     }
 

@@ -1,14 +1,12 @@
-package dungeonmania.BuildableEntities;
+package dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities;
 
-public class Shield extends BuildableEntity{
+import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
+
+public class Shield extends DurabilityEntity{
     private int shield_defence;
 
     public Shield(String id, String type, int shield_defence, int shield_durability) {
         super(id, type, shield_durability);
-        this.shield_defence = shield_defence;
-    }
-    
-    public void setShield_defence(int shield_defence) {
         this.shield_defence = shield_defence;
     }
 

@@ -4,7 +4,8 @@ public class Arrows extends CollectableEntity{
     private int Bow_durability;
 
     public Arrows(String id, String type, int x, int y, int Bow_durability) {
-        super(id, type, x, y);
+        super(id, type);
+        setLocation(x, y);
         this.Bow_durability = Bow_durability;
     }
 

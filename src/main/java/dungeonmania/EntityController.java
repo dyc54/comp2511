@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import org.json.JSONObject;
 
 import dungeonmania.CollectableEntities.*;
+import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
+import dungeonmania.CollectableEntities.DurabilityEntities.InvisibilityPotion;
+import dungeonmania.CollectableEntities.DurabilityEntities.Sword;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
@@ -47,7 +50,7 @@ public class EntityController {
                 return new Spider(type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
             case "wall":
                 return new Wall(type, Location.AsLocation(x, y));
-            case "arrows":
+            case "arrow":
                 return new Arrows(id, type, x, y, config.bow_durability);
             case "bomb":
                 return new Bomb(id, type, x, y, config.bomb_radius);
@@ -60,7 +63,7 @@ public class EntityController {
             case "treasure":
                 return new Treasure(id, type, x, y);
             case "wood":
-                return new Wood(id, type, x, y, config.shield_durability);
+                return new Wood(id, type, x, y, config.shield_durability, config.shield_defence);
             case "zombie":
                 return new ZombieToast(type, Location.AsLocation(x, y), config.zombie_attack, config.zombie_health);
             case "mercenary":

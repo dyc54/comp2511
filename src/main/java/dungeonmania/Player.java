@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Key;
+import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
+import dungeonmania.Inventories.Inventory;
 import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.StaticEntities.FloorSwitch;
@@ -23,7 +25,7 @@ import dungeonmania.helpers.Location;
 public class Player extends Entity implements PlayerMovementStrategy {
     private int attack;
     private int health;
-    private List<Entity> inventoryList;
+    private Inventory inventory;
     private int x;
     private int y;
     private DungeonMap map;
@@ -36,7 +38,6 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.y = y;
         previousLocation = Location.AsLocation(x, y);
         this.map = map;
-        this.inventoryList = new ArrayList<Entity>();
         setType(type);
         setLocation(x, y);
         setEntityId(id);
@@ -51,15 +52,15 @@ public class Player extends Entity implements PlayerMovementStrategy {
     }
 
     public List<Entity> getInventoryList() {
-        return inventoryList;
+        return inventory.getInventoryList();
     }
 
     public void addInventoryList(Entity item) {
-        inventoryList.add(item);
+        inventory.addToInventoryList(item);
     }
 
     public void removeInventoryList(Entity item) {
-        inventoryList.remove(item);
+        inventory.removeFromInventoryList(item);
     }
 
     public void setHealth(int health) {
@@ -73,7 +74,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
          * inventory.add(new ItemResponse(item.getEntityId(), item.getType()));
          * }
          */
-        inventoryList.stream().forEach(item -> inventory.add(new ItemResponse(item.getEntityId(), item.getType())));
+        getInventoryList().stream().forEach(item -> inventory.add(new ItemResponse(item.getEntityId(), item.getType())));
         return inventory;
     }
 
@@ -197,11 +198,28 @@ public class Player extends Entity implements PlayerMovementStrategy {
         Collection<Entity> currentPositionEntities = map.getEntities(x, y);
         for (Entity currentPositionEntitie : currentPositionEntities) {
             if (currentPositionEntitie instanceof CollectableEntity) {
-                addInventoryList(currentPositionEntitie);
+                inventory.addToInventoryList(currentPositionEntitie);
                 map.removeEntity(currentPositionEntitie.getEntityId());
             }
         }
     }
+
+    //player 查询背包物品进行建造
+    public String build(String buildable){
+        return inventory.build(buildable);
+    }
+
+
+    //player 使用物品
+    public void useItem(String itemUsedId){
+        inventory.useItem(itemUsedId);
+    }
+
+    //查询player状态，无敌还是隐身，还是都有
+    public List<String> checkPlayerStatus(){
+        return inventory.checkPlayerStatus();
+    }
+
 
     public Location getPreviousLocation() {
         return previousLocation;

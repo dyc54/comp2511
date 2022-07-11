@@ -5,9 +5,8 @@ import dungeonmania.response.models.ItemResponse;
 
 public abstract class CollectableEntity extends Entity{
 
-    public CollectableEntity(String id,String type, int x, int y){
+    public CollectableEntity(String id,String type){
         setType(type);
-        setLocation(x, y);
         setEntityId(id);
     }
     
