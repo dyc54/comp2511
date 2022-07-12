@@ -1,5 +1,6 @@
 package dungeonmania.Goals;
 
+import dungeonmania.Player;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 
@@ -13,8 +14,7 @@ public class Treasures implements Goal{
     @Override
     public boolean hasAchieved() {
         // TODO Auto-generated method stub
-        return true;
-        // return GoldNum >= TargetNum;
+        return GoldNum >= TargetNum;
     }
 
     @Override
@@ -36,5 +36,11 @@ public class Treasures implements Goal{
         } else {
             return "";
         }
+    }
+    @Override
+    public Goal getMapData(Player player) {
+        // TODO Auto-generated method stub
+        GoldNum = player.getInventory().getItems("treasure").size();
+        return this;
     }
 }

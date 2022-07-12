@@ -14,9 +14,9 @@ public abstract class PotionEntity extends DurabilityEntity{
     }
 
     public String getEffect() {
-        if(inUsing){
+        if (inUsing) {
             return Effect;
-        }else{
+        } else {
             return null;
         }
     }

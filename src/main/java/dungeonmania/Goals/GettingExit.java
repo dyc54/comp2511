@@ -3,6 +3,7 @@ package dungeonmania.Goals;
 import java.util.Collection;
 
 import dungeonmania.Entity;
+import dungeonmania.Player;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
@@ -15,8 +16,8 @@ public class GettingExit implements Goal{
     }
     @Override
     public boolean hasAchieved() {
-        return true;
-        // return exits.stream().anyMatch(entity -> entity.getLocation().equals(playerLocation));
+        // return true;
+        return exits.stream().anyMatch(entity -> entity.getLocation().equals(playerLocation));
     }
 
     @Override
@@ -38,5 +39,11 @@ public class GettingExit implements Goal{
         } else {
             return "";
         }
+    }
+    @Override
+    public Goal getMapData(Player player) {
+        // TODO Auto-generated method stub
+        playerLocation = player.getLocation();
+        return this;
     }
 }

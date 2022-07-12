@@ -26,7 +26,7 @@ public class EntityFactory {
         int x = entity.getInt("x");
         int y = entity.getInt("y");
         // TODO: Add create entities.
-        String key = null;
+        int key = 0;
         switch (type) {
             case "player":
                 return new Player(type, x, y, config.player_attack, config.player_health, map);
@@ -35,7 +35,7 @@ public class EntityFactory {
             case "boulder":
                 return new Boulder(type, x, y);
             case "door":
-                key = entity.getString("key");
+                key = entity.getInt("key");
                 return new Door(type, x, y, key);
             case "portal":
                 String colour = entity.getString("colour");
@@ -46,14 +46,14 @@ public class EntityFactory {
                 return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat, config.zombie_attack,
                         config.zombie_health, map);
             case "key":
-                key = entity.getString("key");
+                key = entity.getInt("key");
                 return new Key(type, x, y, key);
             case "spider":
                 return new Spider(type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
             case "wall":
                 return new Wall(type, Location.AsLocation(x, y));
             case "arrow":
-                return new Arrows(type, x, y, config.bow_durability);
+                return new Arrows(type, x, y);
             case "bomb":
                 return new Bomb(type, x, y, config.bomb_radius);
             case "invincibility_potion":
@@ -65,7 +65,7 @@ public class EntityFactory {
             case "treasure":
                 return new Treasure(type, x, y);
             case "wood":
-                return new Wood(type, x, y, config.shield_durability, config.shield_defence);
+                return new Wood(type, x, y);
             case "zombie_toast":
                 return new ZombieToast(type, Location.AsLocation(x, y), config.zombie_attack, config.zombie_health);
             case "mercenary":

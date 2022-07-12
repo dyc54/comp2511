@@ -53,6 +53,7 @@ public class DungeonMap {
         map = new TreeMap<>();
         IdCollection = new HashMap<>();
         EnemiesDestroiedCounter = 0;
+        
     }
 
     /**
@@ -62,6 +63,7 @@ public class DungeonMap {
      * @throws IOException
      */
     public void loads(String path, Config config) throws IOException {
+        
         String content = FileReader.LoadFile(path);
         JSONObject json = new JSONObject(content);
         JSONArray entities = json.getJSONArray("entities");
@@ -80,7 +82,7 @@ public class DungeonMap {
     public DungeonMap addEntity(Entity entity) {
         // TODO: change to private if use observer pattern
         if (!IdCollection.containsKey(entity.getEntityId())) {
-            IdCollection.put(entity.getEntityId(), entity.getLocation());
+            IdCollection.put(entity.getEntityId(), entity.getLocation().clone());
         }
         if (map.containsKey(entity.getLocation())) {
             map.get(entity.getLocation()).add(entity);
@@ -89,6 +91,7 @@ public class DungeonMap {
             sites.add(entity);
             map.put(entity.getLocation().clone(), sites);
         }
+        
         return this;
     }
 
@@ -119,14 +122,18 @@ public class DungeonMap {
      * @return null if id does not exist
      */
     public Entity getEntity(String id) {
+        // !
         if (!containsEntity(id)) {
             return null;
         }
         Location location = IdCollection.get(id);
+        map.keySet().stream().forEach(entity -> System.out.println(entity + ":"+ location.toString()+entity.equals(location.toString())));
         return map.get(location)
                 .stream()
-                .filter(entity -> entity.getEntityId().equals(id))
+                .filter(entity -> {System.out.println(entity.toString()); 
+                    return entity.getEntityId().equals(id);})
                 .collect(Collectors.toList()).get(0);
+        // return null;
     }
 
     /**
@@ -196,10 +203,14 @@ public class DungeonMap {
         if (!containsEntity(id)) {
             return;
         }
-        //Location location = IdCollection.get(id);
-        //Collection<Entity> entities = getEntities(location);
+        Location location = IdCollection.get(id);
+        Collection<Entity> entities = getEntities(location);
+        Entity temp = getEntity(id);
+        if (isSameType(temp.getEntityId(), "enemies")) {
+            EnemiesDestroiedCounter -= 1;
+        }
+        entities.remove(temp);
         IdCollection.remove(id);
-        //entities.removeIf(entity -> entity.getEntityId().equals(id));
     }
 
     /**
@@ -356,6 +367,9 @@ public class DungeonMap {
 
     }
 
+    public int getDestoriedCounter() {
+        return EnemiesDestroiedCounter;
+    }
     @Override
     public String toString() {
         String output = String.format("*********** %s ***********\n", "DungonMap");

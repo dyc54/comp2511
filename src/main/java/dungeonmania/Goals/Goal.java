@@ -1,5 +1,6 @@
 package dungeonmania.Goals;
 
+import dungeonmania.Player;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 
@@ -16,7 +17,8 @@ public interface Goal {
      */
     public Goal getMapData(DungeonMap map);
     // TODO: waiting player
-    // public Goal getMapData(Player player);
+    
+    public Goal getMapData(Player player);
     
     /**
      * Load config from congis to goal

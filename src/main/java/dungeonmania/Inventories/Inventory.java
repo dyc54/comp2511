@@ -2,6 +2,7 @@ package dungeonmania.Inventories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -13,6 +14,7 @@ import dungeonmania.CollectableEntities.DurabilityEntities.InvisibilityPotion;
 import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Bow;
 import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shield;
+import dungeonmania.helpers.Config;
 
 public class Inventory {
     private HashMap<String, List<Entity>> inventory = new HashMap<>(); //key 是实体的类型
@@ -160,14 +162,14 @@ public class Inventory {
      * 
      * @return String
      */
-    public String build(String buildable){
+    public String build(String buildable, Config config){
         if(buildable.equals("bow") && checkBowMaterial()){
-            buildBow();
+            buildBow(config);
             return "bow";
         }
         
         if(buildable.equals("shield") && checkShieldMaterial()!= null){
-            buildShield(checkShieldMaterial());
+            buildShield(checkShieldMaterial(), config);
             return "shield";
         }
         return null;
@@ -177,10 +179,9 @@ public class Inventory {
      * build Bow add to inventory and remove wood and arrow
      * 
      */
-    private void buildBow(){
+    private void buildBow(Config config){
        Arrows arrows = (Arrows) inventory.get("arrow").get(0);
-       int Bow_durability = arrows.getBow_durability();
-       addToInventoryList(new Bow("bow", Bow_durability));
+       addToInventoryList(new Bow("bow", config.bow_durability));
        for (int i = 0; i < 3; i++) {
             inventory.get("arrow").remove(i);
             if(i == 0){
@@ -193,12 +194,10 @@ public class Inventory {
      * build Shield add to inventory and remove wood and key or reasure
      * 
      */
-    private void buildShield(String str){
+    private void buildShield(String str, Config config){
         if(str != null){
             Wood wood = (Wood) inventory.get("wood").get(0);
-            int shield_durability = wood.getShield_durability();
-            int shield_defence = wood.getShield_defence();
-            addToInventoryList(new Shield("shield", shield_defence, shield_durability));
+            addToInventoryList(new Shield("shield", config.shield_defence, config.bow_durability));
             if(str.equals("key")){
                 for (int i = 0; i < 2; i++) {
                     inventory.get("wood").remove(i);
@@ -206,7 +205,7 @@ public class Inventory {
                         inventory.get("key").remove(i);
                     }
                 }
-            }else{
+            } else {
                 for (int i = 0; i < 2; i++) {
                     inventory.get("wood").remove(i);
                     if(i == 0){
@@ -252,5 +251,12 @@ public class Inventory {
        return null;
     }
 
+    public List<Entity> getItems(String type) {
+        List<Entity> items = inventory.get(type);
+        if (items == null) {
+            return new LinkedList<>();
+        }
+        return items;
+    } 
 
 }

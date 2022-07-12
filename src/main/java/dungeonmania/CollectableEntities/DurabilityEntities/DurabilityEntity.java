@@ -1,7 +1,6 @@
 package dungeonmania.CollectableEntities.DurabilityEntities;
 
 import dungeonmania.CollectableEntities.CollectableEntity;
-import dungeonmania.helpers.Location;
 
 public abstract class DurabilityEntity extends CollectableEntity{
     private int durability;

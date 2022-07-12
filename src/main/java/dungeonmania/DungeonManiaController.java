@@ -76,8 +76,9 @@ public class DungeonManiaController {
             dungeonMap.loads(dungeonName, dungeonConfig);
             goals = new GoalController(dungeonName, dungeonConfig);
             entitiesList = dungeonMap.getAllEntities();
-            // setGoalsString(dungeonName);
             setPlayer();
+            goals.hasAchieved(dungeonMap, player);
+            // setGoalsString(dungeonName);
             // System.out.println(getDungeonResponse().getEntities().get(0).getType());
             return getDungeonResponse();
         } catch (IOException e) {
@@ -127,7 +128,7 @@ public class DungeonManiaController {
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        player.build(buildable);
+        player.build(buildable, dungeonConfig);
         return getDungeonResponse();
     }
 

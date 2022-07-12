@@ -22,7 +22,7 @@ import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
-
+import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
@@ -63,7 +63,9 @@ public class Player extends Entity implements PlayerMovementStrategy {
     public List<Entity> getInventoryList() {
         return inventory.getInventoryList();
     }
-
+    public Inventory getInventory() {
+        return inventory;
+    }
     public void addInventoryList(Entity item) {
         inventory.addToInventoryList(item);
     }
@@ -216,8 +218,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
     }
 
     //player 查询背包物品进行建造
-    public String build(String buildable){
-        return inventory.build(buildable);
+    public String build(String buildable, Config config){
+        return inventory.build(buildable, config);
     }
 
 

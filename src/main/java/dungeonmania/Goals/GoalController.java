@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dungeonmania.Player;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
@@ -45,8 +46,8 @@ public class GoalController {
      * @param player waiting 
      * @return
      */
-    public boolean hasAchieved(DungeonMap map) {
-        root.mapForAll(node -> node.getMapData(map));
+    public boolean hasAchieved(DungeonMap map, Player player) {
+        root.mapForAll(node -> node.getMapData(map).getMapData(player));
         return root.hasAchieved();
     }
     /**

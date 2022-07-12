@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.ArrayList;
 
-public class Location implements Comparator<Location>, Comparable{
+public class Location implements Comparator<Location>, Comparable<Location>{
     private int x;
     private int y;
     public final static int X = 0;
@@ -322,6 +322,11 @@ public class Location implements Comparator<Location>, Comparable{
     public static Location AsLocation(int x, int y) {
         return new Location(x, y);
     }
+    public static Location AsLocation(String string) {
+        String temp = string.subSequence(1, string.length() - 1).toString();
+        String[] location = temp.replaceAll(" ", "").split(",");
+        return new Location(Integer.parseInt(location[0]), Integer.parseInt(location[1]));
+    }
     /**
      * Return a location
      * @param location
@@ -355,12 +360,14 @@ public class Location implements Comparator<Location>, Comparable{
         Location location = (Location) obj;
         return location.x == x && location.y == y;
     }
+    
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(Location o) {
         // TODO Auto-generated method stub
-        // if ()
-        Location location = (Location) o;
-        
-        return compare(this, location);
+        return compare(this, o);
+    }
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(x).hashCode() + Integer.valueOf(y).hashCode();
     }
 }

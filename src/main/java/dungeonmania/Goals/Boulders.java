@@ -1,18 +1,24 @@
 package dungeonmania.Goals;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 import dungeonmania.Entity;
+import dungeonmania.Player;
+import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 
 public class Boulders implements Goal {
     Collection<Entity> switchs;
+    public Boulders() {
+        switchs = new LinkedList<>();
+    }
     @Override
     public boolean hasAchieved() {
         // TODO 
-        return true;
-        // return switchs.stream().map(ele -> ele = (Entity) ele).anyMatch(switcher->switcher.);
+        // return true;
+        return switchs.stream().map(ele ->  {return (FloorSwitch) ele;}).allMatch(switcher->switcher.getTrigger());
         // return false;
     }
 
@@ -35,5 +41,11 @@ public class Boulders implements Goal {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public Goal getMapData(Player player) {
+        // TODO Auto-generated method stub
+        return this;
     }
 }

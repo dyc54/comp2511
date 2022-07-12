@@ -103,7 +103,7 @@ def main():
             if (arg[0] == "portal"):
                 entity['colour'] = arg[3]
             elif (arg[0] in ['door', 'key']):
-                entity['key'] = arg[3]
+                entity['key'] = int(arg[3])
             entities.append(entity)
         except (ValueError, EOFError, KeyboardInterrupt):
             break
