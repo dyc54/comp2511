@@ -115,6 +115,81 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test the player can move through a portal")
+    public void testMoveThroughPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 3),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player can't move through a portal if there is a wall behind it")
+    public void testObstacleBehindPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 0),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.RIGHT);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test advanced portal")
+    public void testAdvancedPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 5),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test zombie toast spwaner")
+    public void testZombieSpwaner() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieSpwaner",
+                "c_zombieSpwaner");
+
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
+        assertEquals(true, actualDungonRes.getEntities().stream().anyMatch(e -> e.getType().equals("zombie_toast_spawner")));
+        assertEquals(1, getEntities(res, "zombie_toast").size());
+    }
+
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
@@ -191,8 +266,25 @@ public class ExampleTests {
             assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
 
             nextPositionElement++;
-            
+
         }
+    }
+
+    @Test
+    @DisplayName("Test zombie toast random movement")
+    public void zombieMovement() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieTest_randomMove", "c_spiderTest_basicMovement");
+
+        for (int i = 0; i <= 20; i++) {
+            res = dmc.tick(Direction.DOWN);
+            System.out.println(getEntities(res, "zombie_toast").get(0).getPosition());
+            assertNotEquals(new Position(5,4), getEntities(res, "zombie_toast").get(0).getPosition());
+            assertNotEquals(new Position(5,6), getEntities(res, "zombie_toast").get(0).getPosition());
+            assertNotEquals(new Position(6,5), getEntities(res, "zombie_toast").get(0).getPosition());
+        }
+        
     }
 
     @Test

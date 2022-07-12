@@ -7,9 +7,12 @@ import java.util.stream.Collectors;
 
 import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Key;
+import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
+import dungeonmania.Inventories.Inventory;
 import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.StaticEntities.FloorSwitch;
+import dungeonmania.StaticEntities.Portal;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.PlayerMovementStrategy;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
@@ -28,7 +31,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private AttackStrayegy attack;
     private DefenceStrategy defence;
     private double health;
-    private List<Entity> inventoryList;
+    private Inventory inventory = new Inventory();
     private int x;
     private int y;
     private DungeonMap map;
@@ -43,7 +46,6 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.y = y;
         previousLocation = Location.AsLocation(x, y);
         this.map = map;
-        this.inventoryList = new ArrayList<Entity>();
     }
 
     public AttackStrayegy getAttackStrayegy() {
@@ -59,15 +61,15 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.health -= health;
     }
     public List<Entity> getInventoryList() {
-        return inventoryList;
+        return inventory.getInventoryList();
     }
 
     public void addInventoryList(Entity item) {
-        inventoryList.add(item);
+        inventory.addToInventoryList(item);
     }
 
     public void removeInventoryList(Entity item) {
-        inventoryList.remove(item);
+        inventory.removeFromInventoryList(item);
     }
 
     public void setHealth(double health) {
@@ -83,7 +85,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
          * inventory.add(new ItemResponse(item.getEntityId(), item.getType()));
          * }
          */
-        inventoryList.stream().forEach(item -> inventory.add(new ItemResponse(item.getEntityId(), item.getType())));
+        getInventoryList().stream().forEach(item -> inventory.add(new ItemResponse(item.getEntityId(), item.getType())));
         return inventory;
     }
 
@@ -94,7 +96,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             return;
         }
 
-        /* // If there is a door
+        // If there is a door
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("door"))) {
             // If you have a key
             if (this.getInventoryList().stream().anyMatch(e -> e.getType().equals("key"))) {
@@ -108,10 +110,10 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 setPreviousLocation(Location.AsLocation(x, y));
                 move(p);
             }
-            
+
             // Don't have a key
             return;
-        } */
+        }
 
         // If there is a Exit
         if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("exit"))) {
@@ -141,9 +143,59 @@ public class Player extends Entity implements PlayerMovementStrategy {
             }
         }
 
+        // If there is a portal
+        if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e -> e.getType().equals("portal"))) {
+            // Get the portal
+            Entity temp = map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e -> e.getType().equals("portal"))
+                    .findFirst().get();
+            Portal portal = (Portal) temp;
+            teleport(p, x + p.getX(), y + p.getY(), portal);
+            return;
+        }
         // Move the player
         move(p);
         pickUp();
+    }
+
+    private void teleport(Position p, int currentX, int currentY, Portal portal) {
+        String colour = portal.getColour();
+        // Find another portal
+        for (Entity entity : map.getEntities("portal")) {
+            Portal currentPortal = (Portal) entity;
+            // Find another portal with the same colour
+            if (currentPortal.getColour().equals(colour)
+                    && currentPortal.getLocation().getX() != currentX
+                    && currentPortal.getLocation().getY() != currentY) {
+                Collection<Entity> entitiesAfterPortal = map.getEntities(
+                        currentPortal.getLocation().getX() + p.getX(),
+                        currentPortal.getLocation().getY() + p.getY());
+                // If there is a obstacle, don't move
+                if (entitiesAfterPortal.stream().anyMatch(e -> e.getType().equals("boulder"))
+                        || entitiesAfterPortal.stream().anyMatch(e -> e.getType().equals("wall"))
+                        || entitiesAfterPortal.stream().anyMatch(e -> e.getType().equals("door"))) {
+                    return;
+                } else if (entitiesAfterPortal.stream().anyMatch(e -> e.getType().equals("portal"))) {
+                    // Else if there is another teleport
+                    Entity temp = map.getEntities(currentPortal.getLocation().getX() + p.getX(),
+                            currentPortal.getLocation().getY() + p.getY()).stream()
+                            .filter(e -> e.getType().equals("portal"))
+                            .findFirst().get();
+                    Portal portalConnected = (Portal) temp;
+                    teleport(p, currentPortal.getLocation().getX() + p.getX(),
+                            currentPortal.getLocation().getY() + p.getY(),
+                            portalConnected);
+                    // }
+                    return;
+                } else {
+                    // Else move to the related position after the portal
+                    super.setLocation(currentPortal.getLocation().getX() + p.getX(),
+                            currentPortal.getLocation().getY() + p.getY());
+                    this.x = currentPortal.getLocation().getX() + p.getX();
+                    this.y = currentPortal.getLocation().getY() + p.getY();
+                    return;
+                }
+            }
+        }
     }
 
     public void move(Position p) {
@@ -152,17 +204,34 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.y = y + p.getY();
     }
 
-    //player位置存在可收集实体则放入背包，并从map中删除
+    // player位置存在可收集实体则放入背包，并从map中删除
     public void pickUp() {
         Collection<Entity> currentPositionEntities = map.getEntities(x, y);
-        for(Entity currentPositionEntitie : currentPositionEntities){
-            if(currentPositionEntitie instanceof CollectableEntity){
-                addInventoryList(currentPositionEntitie);
+        for (Entity currentPositionEntitie : currentPositionEntities) {
+            if (currentPositionEntitie instanceof CollectableEntity) {
+                inventory.addToInventoryList(currentPositionEntitie);
                 map.removeEntity(currentPositionEntitie.getEntityId());
             }
         }
     }
-        
+
+    //player 查询背包物品进行建造
+    public String build(String buildable){
+        return inventory.build(buildable);
+    }
+
+
+    //player 使用物品
+    public void useItem(String itemUsedId){
+        inventory.useItem(itemUsedId);
+    }
+
+    //查询player状态，无敌还是隐身，还是都有
+    public List<String> checkPlayerStatus(){
+        return inventory.checkPlayerStatus();
+    }
+
+
     public Location getPreviousLocation() {
         return previousLocation;
     }

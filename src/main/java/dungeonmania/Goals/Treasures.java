@@ -13,7 +13,8 @@ public class Treasures implements Goal{
     @Override
     public boolean hasAchieved() {
         // TODO Auto-generated method stub
-        return GoldNum >= TargetNum;
+        return true;
+        // return GoldNum >= TargetNum;
     }
 
     @Override

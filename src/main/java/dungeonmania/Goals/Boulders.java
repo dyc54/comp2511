@@ -11,8 +11,9 @@ public class Boulders implements Goal {
     @Override
     public boolean hasAchieved() {
         // TODO 
+        return true;
         // return switchs.stream().map(ele -> ele = (Entity) ele).anyMatch(switcher->switcher.);
-        return false;
+        // return false;
     }
 
     @Override

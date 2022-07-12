@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import org.json.JSONObject;
 
 import dungeonmania.CollectableEntities.*;
+import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
+import dungeonmania.CollectableEntities.DurabilityEntities.InvisibilityPotion;
+import dungeonmania.CollectableEntities.DurabilityEntities.Sword;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
@@ -40,7 +43,8 @@ public class EntityFactory {
             case "switch":
                 return new FloorSwitch(type, x, y);
             case "zombie_toast_spawner":
-                return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat);
+                return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat, config.zombie_attack,
+                        config.zombie_health, map);
             case "key":
                 key = entity.getString("key");
                 return new Key(type, x, y, key);
@@ -48,21 +52,21 @@ public class EntityFactory {
                 return new Spider(type, Location.AsLocation(x, y), config.spider_attack, config.spider_health);
             case "wall":
                 return new Wall(type, Location.AsLocation(x, y));
-            case "arrows":
-                return new Arrows(type, x, y,config.bow_durability);
+            case "arrow":
+                return new Arrows(type, x, y, config.bow_durability);
             case "bomb":
-                return new Bomb(type, x, y,config.bomb_radius);
+                return new Bomb(type, x, y, config.bomb_radius);
             case "invincibility_potion":
-                return new InvincibilityPotion(type, x, y,config.invincibility_potion_duration);
+                return new InvincibilityPotion(type, x, y, config.invincibility_potion_duration);
             case "invisibility_potion":
                 return new InvisibilityPotion(type, x, y, config.invisibility_potion_duration);
             case "sword":
-                return new Sword(type, x, y,config.sword_attack, config.sword_durability);
+                return new Sword(type, x, y, config.sword_attack, config.sword_durability);
             case "treasure":
                 return new Treasure(type, x, y);
             case "wood":
-                return new Wood(type, x, y,config.shield_durability);
-            case "zombie":
+                return new Wood(type, x, y, config.shield_durability, config.shield_defence);
+            case "zombie_toast":
                 return new ZombieToast(type, Location.AsLocation(x, y), config.zombie_attack, config.zombie_health);
             case "mercenary":
                 return new Mercenary(type, Location.AsLocation(x, y), config.mercenary_attack, config.mercenary_health);

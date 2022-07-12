@@ -15,7 +15,8 @@ public class GettingExit implements Goal{
     }
     @Override
     public boolean hasAchieved() {
-        return exits.stream().anyMatch(entity -> entity.getLocation().equals(playerLocation));
+        return true;
+        // return exits.stream().anyMatch(entity -> entity.getLocation().equals(playerLocation));
     }
 
     @Override

@@ -7,9 +7,9 @@ public class Portal extends StaticEntity {
         super(type, x, y);
         this.color = color;
     }
-    /*
-     * public String getColor() {
-     * return this.color;
-     * }
-     */
+
+    public String getColour() {
+        return this.color;
+    }
+
 }

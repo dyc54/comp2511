@@ -12,7 +12,7 @@ public class Enemies implements Goal {
     @Override
     public boolean hasAchieved() {
         // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override

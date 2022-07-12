@@ -11,8 +11,10 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 import java.util.Random;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
@@ -20,8 +22,6 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     
     public ZombieToast(String type, Location location, int zombie_attack, double zombie_health) {
         super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack), new RandomMovement());
-        // this.location = location;
-        setType(type);
     }
 
     private String nextPossibleLocation(DungeonMap dungeonMap) {

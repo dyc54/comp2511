@@ -2,6 +2,8 @@ package dungeonmania;
 
 import dungeonmania.Goals.GoalController;
 import dungeonmania.MovingEntities.Spider;
+import dungeonmania.MovingEntities.ZombieToast;
+import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
@@ -27,7 +29,7 @@ import java.nio.file.Paths;
 
 public class DungeonManiaController {
     Config dungeonConfig;
-    DungeonMap dungeonMap;
+    DungeonMap dungeonMap = new DungeonMap();
     GoalController goals;
 
     // 用于返回DungeonResponse
@@ -70,7 +72,7 @@ public class DungeonManiaController {
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         try {
             dungeonConfig = new Config(configName);
-            dungeonMap = new DungeonMap();
+            //dungeonMap = new DungeonMap();
             dungeonMap.loads(dungeonName, dungeonConfig);
             goals = new GoalController(dungeonName, dungeonConfig);
             entitiesList = dungeonMap.getAllEntities();
@@ -94,6 +96,7 @@ public class DungeonManiaController {
      * /game/tick/item
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
+        player.useItem(itemUsedId);
         return getDungeonResponse();
     }
 
@@ -106,6 +109,15 @@ public class DungeonManiaController {
             if (entity.getType().equals("spider")) {
                 Spider spider = (Spider) entity;
                 spider.movement(dungeonMap);
+            } 
+            if (entity.getType().equals("zombie_toast")) {
+                ZombieToast zombie = (ZombieToast) entity;
+                zombie.movement(dungeonMap);
+            } 
+            if (entity.getType().equals("zombie_toast_spawner")) {
+                ZombieToastSpawner zts = (ZombieToastSpawner) entity;
+                zts.ZombieToastSpwanCheck();
+                System.out.println("number"+dungeonMap.getEntities("zombie_toast").size());
             }
         }
         return getDungeonResponse();
@@ -115,6 +127,7 @@ public class DungeonManiaController {
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
+        player.build(buildable);
         return getDungeonResponse();
     }
 
@@ -194,7 +207,7 @@ public class DungeonManiaController {
      * Create a buildables from a list of player inventoryList
      */
     private void setBuildables() {
-        
+
     }
 
     /**
