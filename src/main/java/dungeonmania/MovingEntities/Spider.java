@@ -8,6 +8,8 @@ import dungeonmania.Entity;
 import dungeonmania.Strategies.BattleStrategy;
 import dungeonmania.Strategies.EnemyMovementStrategy;
 import dungeonmania.Strategies.MovementStrategy;
+import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
+import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
@@ -15,7 +17,8 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
     private Location location;
     private ArrayList<Location> movingRecordList = new ArrayList<>();
     private int spider_health;
-    private int spider_attack;
+    // private int spider_attack;
+    // private AttackStrayegy spider_attack;
 
     /**
      * Constructor for spider class
@@ -25,8 +28,9 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
      * @param spider_health
      */
     public Spider(String type, Location location, int spider_attack, int spider_health) {
+        super(new BaseAttackStrategy(spider_attack));
         this.location = location;
-        this.spider_attack = spider_attack;
+        // this.spider_attack = new BaseAttackStrategy(spider_attack);
         this.spider_health = spider_health;
         setType(type);
         addToMovingList(location);
@@ -170,6 +174,7 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
     public void setLocation(Location location) {
         this.location = location;
     }
+
 
     @Override
     public void battle() {

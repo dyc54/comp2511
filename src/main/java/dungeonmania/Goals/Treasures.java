@@ -30,6 +30,6 @@ public class Treasures implements Goal{
     }
     @Override
     public String toString() {
-        return new String("collecting a certain number of treasure items");
+        return new String(":treasure");
     }
 }

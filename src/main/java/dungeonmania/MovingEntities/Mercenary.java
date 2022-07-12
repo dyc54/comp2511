@@ -8,14 +8,16 @@ import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.Strategies.EnemyMovementStrategy;
 import dungeonmania.Strategies.MovementStrategy;
+import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class Mercenary extends MovingEntity implements EnemyMovementStrategy {
     Location location;
-    int mercenary_attack;
-    int mercenary_health;
-    public Mercenary(String type, Location location, int mercenary_attack, int mercenary_health) {
+    double mercenary_attack;
+    double mercenary_health;
+    public Mercenary(String type, Location location, double mercenary_attack, double mercenary_health) {
+        super(new BaseAttackStrategy(mercenary_attack));
         this.location = location;
         this.mercenary_attack = mercenary_attack;
         this.mercenary_health = mercenary_health;

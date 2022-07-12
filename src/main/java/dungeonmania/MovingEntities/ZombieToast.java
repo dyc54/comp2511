@@ -4,6 +4,7 @@ import dungeonmania.Entity;
 import dungeonmania.Strategies.BattleStrategy;
 import dungeonmania.Strategies.EnemyMovementStrategy;
 import dungeonmania.Strategies.MovementStrategy;
+import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
@@ -16,6 +17,7 @@ public class ZombieToast extends MovingEntity implements EnemyMovementStrategy, 
     Location location;
     
     public ZombieToast(String type, Location location, int zombie_attack, int zombie_health) {
+        super(new BaseAttackStrategy(zombie_attack));
         this.location = location;
         setType(type);
     }

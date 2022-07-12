@@ -29,9 +29,6 @@ public class Enemies implements Goal {
     }
     @Override
     public String toString() {
-        if (hasspawners) {
-            return new String("destroying a certain number of enemies AND all spawners");
-        }
-        return new String("destroying a certain number of enemies");
+        return new String(":enemies");
     }
 }

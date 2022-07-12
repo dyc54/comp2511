@@ -12,6 +12,10 @@ import dungeonmania.StaticEntities.Exit;
 import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.PlayerMovementStrategy;
+import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
+import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;
+import dungeonmania.Strategies.DefenceStrategies.ArmorableStrategy;
+import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -20,8 +24,10 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class Player extends Entity implements PlayerMovementStrategy {
-    private int attack;
-    private int health;
+    // private int attack;
+    private AttackStrayegy attack;
+    private DefenceStrategy defence;
+    private double health;
     private List<Entity> inventoryList;
     private int x;
     private int y;
@@ -29,7 +35,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private Location previousLocation;
 
     public Player(String id,String type, int x, int y, int attack, int health, DungeonMap map) {
-        this.attack = attack;
+        this.attack = new WeaponableAttackStrategy(attack);
+        this.defence = new ArmorableStrategy(0);
         this.health = health;
         this.x = x;
         this.y = y;
@@ -41,14 +48,18 @@ public class Player extends Entity implements PlayerMovementStrategy {
         setEntityId(id);
     }
 
-    public int getAttack() {
+    public AttackStrayegy getAttackStrayegy() {
         return attack;
     }
-
-    public int getHealth() {
+    public DefenceStrategy getDefenceStrayegy() {
+        return defence;
+    }
+    public double getHealth() {
         return health;
     }
-
+    public void subHealth(double health) {
+        this.health -= health;
+    }
     public List<Entity> getInventoryList() {
         return inventoryList;
     }
@@ -61,9 +72,11 @@ public class Player extends Entity implements PlayerMovementStrategy {
         inventoryList.remove(item);
     }
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
+
+
 
     public List<ItemResponse> getItemResponse() {
         List<ItemResponse> inventory = new ArrayList<>();
@@ -159,5 +172,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation = previousLocation;
     }
+    // TODO: if player have sword, bow or bribed mercenary, attack has to be added. 
+    // TODO: e.g. attack.bonusDamage(sward)
 
+    // 
 }

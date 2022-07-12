@@ -32,6 +32,6 @@ public class GettingExit implements Goal{
     }
     @Override
     public String toString() {
-        return new String("getting to an exit");
+        return new String(":exit");
     }
 }

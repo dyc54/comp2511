@@ -4,7 +4,6 @@ import random
 import string
 import time
 
-from requests import delete
 
 
 def print_input(func):
