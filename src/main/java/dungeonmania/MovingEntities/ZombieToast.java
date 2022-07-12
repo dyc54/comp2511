@@ -3,18 +3,12 @@ package dungeonmania.MovingEntities;
 import dungeonmania.Entity;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {

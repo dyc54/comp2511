@@ -5,6 +5,8 @@ import org.json.*;
 
 public class Config {
     // public 
+    public final int ally_attack;
+    public final int ally_defence;
     public final int bomb_radius;
     public final int bow_durability;
     public final int bribe_amount;
@@ -31,6 +33,8 @@ public class Config {
     public Config(String FileName) throws IOException {
         String content = FileReader.LoadFile(String.format(FileName));
         JSONObject json =  new JSONObject(content);
+        ally_attack = json.getInt("ally_attack");
+        ally_defence = json.getInt("ally_defence");
         bomb_radius = json.getInt("bomb_radius");
         bow_durability = json.getInt("bow_durability");
         bribe_amount = json.getInt("bribe_amount");

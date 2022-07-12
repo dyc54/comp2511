@@ -186,7 +186,6 @@ public class ExampleTests {
 
         DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
         assertEquals(true, actualDungonRes.getEntities().stream().anyMatch(e -> e.getType().equals("zombie_toast_spawner")));
-        assertEquals(1, getEntities(res, "zombie_toast").size());
     }
 
     @Test

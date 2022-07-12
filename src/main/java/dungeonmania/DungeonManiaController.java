@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.Goals.GoalController;
+import dungeonmania.MovingEntities.Mercenary;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
@@ -106,6 +107,7 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         player.movement(movementDirection.getOffset());
+        entitiesList = dungeonMap.getAllEntities();
         for (Entity entity : entitiesList) {
             if (entity.getType().equals("spider")) {
                 Spider spider = (Spider) entity;
@@ -136,6 +138,13 @@ public class DungeonManiaController {
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        Entity entity = dungeonMap.getEntity(entityId);
+        if (entity.getType().equals("mercenary")) {
+            Mercenary mercenary = (Mercenary) entity;
+            if (!mercenary.interact(player, dungeonMap)) {
+                throw new InvalidActionException("invaild action");
+            }
+        }
         return getDungeonResponse();
     }
 

@@ -13,7 +13,6 @@ import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.StaticEntities.Portal;
-import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.PlayerMovementStrategy;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
 import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;

@@ -17,7 +17,7 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Player;
 import dungeonmania.MovingEntities.MovingEntity;
-import dungeonmania.Strategies.MovementStrategy;
+import dungeonmania.Strategies.MovementStrategies.*;
 
 /**
  * Observer Pattern

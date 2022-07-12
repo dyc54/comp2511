@@ -6,7 +6,6 @@ public class FollowingMovement implements MovementStrategy{
 
     @Override
     public Location nextLocation(Location location) {
-        // TODO Auto-generated method stub
         return location;
     }
 

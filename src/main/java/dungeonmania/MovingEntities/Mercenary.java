@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import dungeonmania.Entity;
+import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
@@ -13,26 +14,33 @@ import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class Mercenary extends MovingEntity implements EnemyMovement {
+public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
     // Location location;
     double mercenary_attack;
     double mercenary_health;
-    public Mercenary(String type, Location location, double mercenary_attack, double mercenary_health) {
+    int bribe_amount;
+    int bribe_radius;
+    public Mercenary(String type, Location location, double mercenary_attack, double mercenary_health, int bribe_amount, int bribe_radius) {
         super(type, location, mercenary_health, new BaseAttackStrategy(mercenary_attack), new ChaseMovement(location));
         this.mercenary_attack = mercenary_attack;
         this.mercenary_health = mercenary_health;
+        this.bribe_amount = bribe_amount;
+        this.bribe_radius = bribe_radius;
     }
 
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        return true;
         // MovementStrategy strategy = super.getMove();
         // Location playerLocation = new Location();
+        // Location playerPreLocation = new Location();
         // Collection<Entity> player = dungeonMap.getEntities("player");
         // for (Entity entity: player) {
-        //     playerLocation = entity.getLocation();
+        //     Player p = (Player) entity;
+        //     playerLocation = p.getLocation();
+        //     playerPreLocation = p.getPreviousLocation();
         // }
-        // Location next = strategy.nextLocation(playerLocation);
+        // Location next = strategy.nextLocation(playerPreLocation);
+        return true;
         // Collection<Entity> walls = dungeonMap.getEntities("wall");
         // Collection<Entity> doors = dungeonMap.getEntities("door");
         // List<Location> wallAndDoorList = new ArrayList<>();
@@ -77,9 +85,18 @@ public class Mercenary extends MovingEntity implements EnemyMovement {
         // dungeonMap.UpdateEntity(this);
     }
 
-    public void followPlayer(Entity player) {
-        Location location = ((Player) player).getPreviousLocation();
-        setLocation(location);
+    
+    @Override
+    public boolean interact(Player player, DungeonMap dungeonMap) {
+        Collection<Entity> entities = dungeonMap.getEntities(player.getLocation(), this.bribe_radius);
+        if (entities.stream().anyMatch(entity -> entity.getType().equals("mercenary"))) {
+             
+            if (player.getInventory().removeFromInventoryList("treasure", this.bribe_amount)) {
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
     // public Location getLocation() {
