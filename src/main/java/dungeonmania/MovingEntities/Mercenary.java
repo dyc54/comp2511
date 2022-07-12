@@ -30,16 +30,7 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
 
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        // MovementStrategy strategy = super.getMove();
-        // Location playerLocation = new Location();
-        // Location playerPreLocation = new Location();
-        // Collection<Entity> player = dungeonMap.getEntities("player");
-        // for (Entity entity: player) {
-        //     Player p = (Player) entity;
-        //     playerLocation = p.getLocation();
-        //     playerPreLocation = p.getPreviousLocation();
-        // }
-        // Location next = strategy.nextLocation(playerPreLocation);
+        
         return true;
         // Collection<Entity> walls = dungeonMap.getEntities("wall");
         // Collection<Entity> doors = dungeonMap.getEntities("door");
@@ -85,13 +76,14 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
         // dungeonMap.UpdateEntity(this);
     }
 
-    
     @Override
     public boolean interact(Player player, DungeonMap dungeonMap) {
         Collection<Entity> entities = dungeonMap.getEntities(player.getLocation(), this.bribe_radius);
         if (entities.stream().anyMatch(entity -> entity.getType().equals("mercenary"))) {
              
             if (player.getInventory().removeFromInventoryList("treasure", this.bribe_amount)) {
+                setType("ally");
+                dungeonMap.UpdateEntity(this);
                 return true;
             }
             return false;
