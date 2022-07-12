@@ -15,6 +15,7 @@ import org.json.*;
 
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
+import dungeonmania.Player;
 import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.Strategies.MovementStrategy;
 
@@ -28,7 +29,7 @@ import dungeonmania.Strategies.MovementStrategy;
 public class DungeonMap {
     private TreeMap<Location, HashSet<Entity>> map;
     private HashMap<String, Location> IdCollection;
-    private int initNumEnemies;
+    private int EnemiesDestroiedCounter;
 
     /**
      * Return whether two types are same type or same category.
@@ -37,21 +38,21 @@ public class DungeonMap {
      * @param GivenType
      * @return
      */
-    private static boolean isSameType(String EntityType, String GivenType) {
-        if (EntityType.equals(GivenType)) {
+    private static <X, Y> boolean isSameType(String EntityType, String givenType) {
+        if (EntityType.equals(givenType)) {
             return true;
         }
-        if (GivenType.toLowerCase().equals(new String("enemies"))) {
+        if (givenType.toLowerCase().equals(new String("enemies"))) {
             return Arrays.asList("Spider", "Zombie Toast", "Zombie", "Unbribed Mercenary").contains(EntityType);
         }
-        // TODO: Add more if you want
+        
         return false;
     }
 
     public DungeonMap() {
         map = new TreeMap<>();
         IdCollection = new HashMap<>();
-        initNumEnemies = 0;
+        EnemiesDestroiedCounter = 0;
     }
 
     /**
@@ -86,25 +87,8 @@ public class DungeonMap {
         } else {
             HashSet<Entity> sites = new HashSet<>();
             sites.add(entity);
-            map.put(entity.getLocation(), sites);
+            map.put(entity.getLocation().clone(), sites);
         }
-        // if (!IdCollection.isEmpty()) {
-        //     if (!IdCollection.containsKey(entity.getEntityId())) {
-        //         IdCollection.put(entity.getEntityId(), entity.getLocation());
-        //     }
-        // } else if (IdCollection.isEmpty()) {
-        //     IdCollection.put(entity.getEntityId(), entity.getLocation());
-        // }
-
-        // if (!map.isEmpty()) {
-        //     if (map.containsKey(entity.getLocation())) {
-        //         map.get(entity.getLocation()).add(entity);
-        //     }
-        // } else {
-        //     HashSet<Entity> sites = new HashSet<>();
-        //     sites.add(entity);
-        //     map.put(entity.getLocation(), sites);
-        // }
         return this;
     }
 
@@ -305,7 +289,7 @@ public class DungeonMap {
     public Collection<Entity> getEntities(Location location, int radius) {
         Collection<Entity> entities = new LinkedList<>();
         for (Location target : map.keySet()) {
-            if (location.distance(target) < radius + 1) {
+            if (location.distance(target) <= radius) {
                 entities.addAll(map.get(target));
             }
         }
@@ -341,7 +325,7 @@ public class DungeonMap {
      * @param entity entity that has already move
      */
     public void UpdateEntity(Entity entity) {
-        //removeEntity(entity.getEntityId());
+        removeEntity(entity.getEntityId());
         addEntity(entity);
     }
 

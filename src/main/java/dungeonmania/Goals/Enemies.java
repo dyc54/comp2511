@@ -29,6 +29,10 @@ public class Enemies implements Goal {
     }
     @Override
     public String toString() {
-        return new String(":enemies");
+        if (hasAchieved()) {
+            return new String(":enemies");
+        } else {
+            return "";
+        }
     }
 }

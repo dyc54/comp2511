@@ -142,7 +142,8 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public double distance(Location location) {
-        return Math.sqrt(Math.pow(location.x - this.x, 2) + Math.pow(location.y - this.y, 2));
+        return Math.max(location.x - this.x, location.y - this.y);
+        // return Math.sqrt(Math.pow(location.x - this.x, 2) + Math.pow(location.y - this.y, 2));
     }
     /**
      * Return the distance from given location
@@ -217,6 +218,21 @@ public class Location implements Comparator<Location>, Comparable{
      */
     public Location getBottomRight() {
         return this.add(1, 1);
+    }
+
+    public Location getLocation(double degree, int radius) {
+        double deltaX = Math.cos(Math.toRadians(degree)) * radius;
+        double deltaY = Math.sin(Math.toRadians(degree)) * radius;
+        return add((int) Math.floor(deltaX) , (int) Math.floor(deltaY));
+    }
+    public Location getLocation(int deltaX, int deltaY) {
+        return add(deltaX, deltaY);
+    }
+    public Location diff(Location location) {
+        return new Location(location.getX() - x, location.getY() - y);
+    }
+    public Location clone() {
+        return new Location(x, y);
     }
     /**
      * Get the location of the top of given location

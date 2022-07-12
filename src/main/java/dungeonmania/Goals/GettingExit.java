@@ -32,6 +32,10 @@ public class GettingExit implements Goal{
     }
     @Override
     public String toString() {
-        return new String(":exit");
+        if (hasAchieved()) {
+            return new String(":exit");
+        } else {
+            return "";
+        }
     }
 }

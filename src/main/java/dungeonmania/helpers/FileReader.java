@@ -42,7 +42,7 @@ public class FileReader {
         return entitiesList;
     }
     private static File searchFile(File file, String search) {
-        System.out.println(file.getAbsolutePath());
+        // System.out.println(file.getAbsolutePath());
         if (file.isDirectory()) {
             File[] arr = file.listFiles();
             for (File f : arr) {
@@ -53,7 +53,7 @@ public class FileReader {
             }
         } else {
             if (file.getName().equals(search)) {
-                // System.out.println("FOUND\n->"+file.getAbsolutePath());
+                System.out.println("FILE FOUND\n->"+file.getAbsolutePath());
                 return file;
             }
         }

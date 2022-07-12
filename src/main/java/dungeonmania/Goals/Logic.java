@@ -10,8 +10,9 @@ public class Logic {
     public Logic(String type) {
         if (type.equals(and) || type.equals(or)) {
             this.type = type;
+        } else {
+            this.type = supergoal;
         }
-        this.type = supergoal;
     }
     /**
      * Return whether a and b have achieved with given logic
@@ -43,18 +44,23 @@ public class Logic {
         }
     }
     public String toString(GoalsTree node, boolean bracket) {
-        if (bracket){
-            return String.format("(%s %s %s)", node.toGoalA().toString(), toString(), node.toGoalB().toString());
+        if (type.equals(supergoal)) {
+            return node.getGoal().toString();
         } else {
-            return String.format("%s %s %s", node.toGoalA().toString(), toString(), node.toGoalB().toString());
-            
+            if (bracket) {
+                return String.format("(%s %s %s)", node.toGoalA().toString(), toString(), node.toGoalB().toString());
+            } else {
+                return String.format("%s %s %s", node.toGoalA().toString(), toString(), node.toGoalB().toString());
+                
+            }
         }
+        
     }
     @Override
     public String toString() {
         if (!type.equals(supergoal)) {
             return type;
         }
-        return new String();
+        return "";
     }
 }

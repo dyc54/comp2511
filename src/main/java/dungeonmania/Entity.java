@@ -35,11 +35,11 @@ public abstract class Entity{
     }
     
     public void setLocation(int x, int y) {
-        location =  new Location(x, y);
+        setLocation(Location.AsLocation(x, y));
     }
 
     public void setLocation(Location location) {
-        this.location = location;
+        this.location.setLocation(location);
     }
 
     public void setEntityId(String EntityId) {

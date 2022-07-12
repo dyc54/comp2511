@@ -37,7 +37,7 @@ public class GoalController {
         this.config = config;
         String content = FileReader.LoadFile(path);
         JSONObject json =  new JSONObject(content);
-        root = loadNode(json).mapForAll(node -> node.getConfig(config));
+        root = loadNode(json.getJSONObject("goal-condition")).mapForAll(node -> node.getConfig(config));
     }
     /**
      * Return whether goal has achieved
@@ -71,6 +71,7 @@ public class GoalController {
     @Override
     public String toString() {
         String goal = root.toStringAtRoot();
+        System.out.println(goal);
         return goal;
     }
   

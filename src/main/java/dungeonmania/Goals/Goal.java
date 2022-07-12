@@ -25,6 +25,5 @@ public interface Goal {
      */
     public Goal getConfig(Config config);
 
-    @Override
-    public String toString();
+
 }

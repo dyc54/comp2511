@@ -30,6 +30,10 @@ public class Treasures implements Goal{
     }
     @Override
     public String toString() {
-        return new String(":treasure");
+        if (hasAchieved()) {
+            return new String(":treasure");
+        } else {
+            return "";
+        }
     }
 }

@@ -29,6 +29,10 @@ public class Boulders implements Goal {
     }
     @Override
     public String toString() {
-        return new String(":boulder");
+        if (hasAchieved()) {
+            return new String(":boulders");
+        } else {
+            return "";
+        }
     }
 }

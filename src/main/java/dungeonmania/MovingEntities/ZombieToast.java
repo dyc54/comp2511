@@ -2,10 +2,11 @@ package dungeonmania.MovingEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.Battle.Enemy;
-import dungeonmania.Strategies.EnemyMovementStrategy;
+import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
+import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
@@ -14,33 +15,44 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ZombieToast extends MovingEntity implements EnemyMovementStrategy, Enemy {
+public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     // Location location;
     
     public ZombieToast(String type, Location location, int zombie_attack, double zombie_health) {
-        super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack));
+        super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack), new RandomMovement());
         // this.location = location;
         setType(type);
     }
 
+    private String nextPossibleLocation(DungeonMap dungeonMap) {
+        return "udrl";
+    }
     @Override
-    public void movement(DungeonMap dungeonMap) {
-        Collection<Entity> fourNearEntities = dungeonMap.getFourNearEntities(getLocation());
-        Map<Integer, Entity> fourDirection = new HashMap<>();
-        for (Entity entity : fourNearEntities) {
-            if (entity.getLocation().equals(getLocation().getUp())) {
-                fourDirection.put(0, entity);
-            } else if (entity.getLocation().equals(getLocation().getDown())) {
-                fourDirection.put(1, entity);
-            } else if (entity.getLocation().equals(getLocation().getLeft())) {
-                fourDirection.put(2, entity);
-            } else {
-                fourDirection.put(3, entity);
-            }
+    public boolean movement(DungeonMap dungeonMap) {
+
+        String choice = nextPossibleLocation(dungeonMap);
+        Location next = getMove().MoveOptions(choice).nextLocation(getLocation());
+        if (next.equals(getLocation())) {
+            return false;
+        } else {
+            dungeonMap.UpdateEntity(this);
+            return true;
         }
-        int randomDirection = new Random().nextInt(4);
-        updateLocation(fourDirection, randomDirection);
-        dungeonMap.UpdateEntity(this);
+        // Collection<Entity> fourNearEntities = dungeonMap.getFourNearEntities(getLocation());
+        // Map<Integer, Entity> fourDirection = new HashMap<>();
+        // for (Entity entity : fourNearEntities) {
+        //     if (entity.getLocation().equals(getLocation().getUp())) {
+        //         fourDirection.put(0, entity);
+        //     } else if (entity.getLocation().equals(getLocation().getDown())) {
+        //         fourDirection.put(1, entity);
+        //     } else if (entity.getLocation().equals(getLocation().getLeft())) {
+        //         fourDirection.put(2, entity);
+        //     } else {
+        //         fourDirection.put(3, entity);
+        //     }
+        // }
+        // int randomDirection = new Random().nextInt(4);
+        // updateLocation(fourDirection, randomDirection);
     }
 
     /**
