@@ -25,55 +25,56 @@ public class Mercenary extends MovingEntity implements EnemyMovement {
 
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        MovementStrategy strategy = super.getMove();
-        Location playerLocation = new Location();
-        Collection<Entity> player = dungeonMap.getEntities("player");
-        for (Entity entity: player) {
-            playerLocation = entity.getLocation();
-        }
-        Location next = strategy.nextLocation(playerLocation);
-        Collection<Entity> walls = dungeonMap.getEntities("wall");
-        Collection<Entity> doors = dungeonMap.getEntities("door");
-        List<Location> wallAndDoorList = new ArrayList<>();
-        walls.stream().forEach(wall -> wallAndDoorList.add(wall.getLocation()));
-        doors.stream().forEach(door-> wallAndDoorList.add(door.getLocation()));
-        double presentDistance = playerLocation.distance(getLocation());
-        boolean hasMove = false;
-        if (getLocation().getUp().distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(getLocation().getUp())) {
-                setLocation(getLocation().getUp());
-                hasMove = true;
-            }
-        }else if (!hasMove && getLocation().getDown().distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(getLocation().getDown())) {
-                setLocation(getLocation().getDown());
-                hasMove = true;
-            }
-        } else if (!hasMove && getLocation().getLeft().distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(getLocation().getLeft())) {
-                setLocation(getLocation().getLeft());
-                hasMove = true;
-            }
-        } else if (!hasMove && getLocation().getRight().distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(getLocation().getRight())) {
-                setLocation(getLocation().getRight());
-                hasMove = true;
-            }
-        }
+        return true;
+        // MovementStrategy strategy = super.getMove();
+        // Location playerLocation = new Location();
+        // Collection<Entity> player = dungeonMap.getEntities("player");
+        // for (Entity entity: player) {
+        //     playerLocation = entity.getLocation();
+        // }
+        // Location next = strategy.nextLocation(playerLocation);
+        // Collection<Entity> walls = dungeonMap.getEntities("wall");
+        // Collection<Entity> doors = dungeonMap.getEntities("door");
+        // List<Location> wallAndDoorList = new ArrayList<>();
+        // walls.stream().forEach(wall -> wallAndDoorList.add(wall.getLocation()));
+        // doors.stream().forEach(door-> wallAndDoorList.add(door.getLocation()));
+        // double presentDistance = playerLocation.distance(getLocation());
+        // boolean hasMove = false;
+        // if (getLocation().getUp().distance(playerLocation) <= presentDistance) {
+        //     if (!wallAndDoorList.contains(getLocation().getUp())) {
+        //         setLocation(getLocation().getUp());
+        //         hasMove = true;
+        //     }
+        // }else if (!hasMove && getLocation().getDown().distance(playerLocation) <= presentDistance) {
+        //     if (!wallAndDoorList.contains(getLocation().getDown())) {
+        //         setLocation(getLocation().getDown());
+        //         hasMove = true;
+        //     }
+        // } else if (!hasMove && getLocation().getLeft().distance(playerLocation) <= presentDistance) {
+        //     if (!wallAndDoorList.contains(getLocation().getLeft())) {
+        //         setLocation(getLocation().getLeft());
+        //         hasMove = true;
+        //     }
+        // } else if (!hasMove && getLocation().getRight().distance(playerLocation) <= presentDistance) {
+        //     if (!wallAndDoorList.contains(getLocation().getRight())) {
+        //         setLocation(getLocation().getRight());
+        //         hasMove = true;
+        //     }
+        // }
     
-        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-            setLocation(getLocation().getRight());
-        } 
-        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-            setLocation(getLocation().getRight());
-        }
-        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-            setLocation(getLocation().getRight());
-        }
-        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-            setLocation(getLocation().getRight());
-        }
-        dungeonMap.UpdateEntity(this);
+        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+        //     setLocation(getLocation().getRight());
+        // } 
+        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+        //     setLocation(getLocation().getRight());
+        // }
+        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+        //     setLocation(getLocation().getRight());
+        // }
+        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+        //     setLocation(getLocation().getRight());
+        // }
+        // dungeonMap.UpdateEntity(this);
     }
 
     public void followPlayer(Entity player) {

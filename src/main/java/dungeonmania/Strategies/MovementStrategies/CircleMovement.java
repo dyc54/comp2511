@@ -9,7 +9,8 @@ public class CircleMovement implements MovementStrategy {
     private int direction;
     private final double speed = 45;
     public CircleMovement(Location center, boolean isClockWise) {
-        this.center = center;
+        System.out.println("Center at" + center.toString());
+        this.center = center.clone();
         this.current = 90;
         if (isClockWise) {
             this.direction = -1;
@@ -23,13 +24,16 @@ public class CircleMovement implements MovementStrategy {
         if (curr.equals(center)) {
             return center.getUp();
         }
-        return center.getLocation(this.current + this.speed * direction, 1);
+        this.current += this.speed * direction;
+        return center.getLocation(this.current, 1);
     }
 
     @Override
     public MovementStrategy MoveOptions(String string) {
         switch (string) {
             case "CHANGE_DIRECTION": 
+                // System.out.println("reverse");
+                this.current -= this.speed * direction;
                 direction *= -1;
                 break;
             default:

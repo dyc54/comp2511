@@ -132,6 +132,7 @@ public class DungeonManiaController {
         setBuildables();
         setItemResponse();
         return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals.toString());
+        // return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, "goal");
     }
 
     /**

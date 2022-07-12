@@ -313,8 +313,9 @@ public class DungeonMap {
     public void moveAllEntities() {
         Collection<Entity> entities = getAllEntities();
         entities.stream().forEach(entity -> {
-            if (entity instanceof MovingEntity) {
+            if (entity instanceof MovementStrategy) {
                 // TODO: do something
+                MovementStrategy a;
             }
         });
     }

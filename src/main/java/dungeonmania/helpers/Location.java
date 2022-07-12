@@ -219,11 +219,17 @@ public class Location implements Comparator<Location>, Comparable{
     public Location getBottomRight() {
         return this.add(1, 1);
     }
-
+    private int round(double num) {
+        if (num >= -0.001 && num <= 0.001) {
+            return 0;
+        }
+        return ((int) (num > 0 ? Math.ceil(num) : Math.floor(num)));
+    }
     public Location getLocation(double degree, int radius) {
         double deltaX = Math.cos(Math.toRadians(degree)) * radius;
         double deltaY = Math.sin(Math.toRadians(degree)) * radius;
-        return add((int) Math.floor(deltaX) , (int) Math.floor(deltaY));
+        System.out.println(String.format("%f: %d + %d(%f), %d + %d(%f) = %s", degree, x, round(deltaX), deltaX, y, round(deltaY) * -1, deltaY, add(round(deltaX) , round(deltaY) * -1).toString()));
+        return add(round(deltaX) , round(deltaY) * -1);
     }
     public Location getLocation(int deltaX, int deltaY) {
         return add(deltaX, deltaY);

@@ -36,16 +36,25 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
         // setType(type);
         // addToMovingList(location);
     }
+    private boolean checkhasBoulder(DungeonMap dungeonMap, Location next) {
+        return dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("boulder"));
 
+    }
     @Override
     public boolean movement(DungeonMap dungeonMap) {
         Location current = getLocation();
+        System.out.println("current:" + current.toString());
         MovementStrategy strategy = super.getMove();
         Location next = strategy.nextLocation(current);
-        boolean hasboulder = dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("boulder"));
-        if (hasboulder) {
+        if (checkhasBoulder(dungeonMap, next)) {
             Location temp = strategy.MoveOptions("CHANGE_DIRECTION").nextLocation(current);
             // TODO: check temp and next accessbility.
+            if (checkhasBoulder(dungeonMap, temp)) {
+                return false;
+            } else {
+                System.out.println("reverse next");
+                next = temp;
+            }
             // if (!temp.equals(next)) {
             //     next = temp;
             // } else {
@@ -53,6 +62,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
             // }
         }
         setLocation(next);
+        System.out.println("Set:" + next.toString());
         dungeonMap.UpdateEntity(this);
         return true;
         
