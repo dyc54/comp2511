@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.json.*;
 
 import dungeonmania.Entity;
-import dungeonmania.EntityController;
+import dungeonmania.EntityFactory;
 import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.Strategies.MovementStrategy;
 
@@ -66,7 +66,7 @@ public class DungeonMap {
         JSONArray entities = json.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
             JSONObject entity = entities.getJSONObject(i);
-            addEntity(new EntityController().newEntity(entity, config, this));
+            addEntity(EntityFactory.newEntity(entity, config, this));
         }
     }
 

@@ -4,8 +4,8 @@ public class InvisibilityPotion extends CollectableEntity{
 
     private int Invisibility_potion_duration;
 
-    public InvisibilityPotion(String id, String type, int x, int y, int Invisibility_potion_duration) {
-        super(id, type, x, y);
+    public InvisibilityPotion(String type, int x, int y, int Invisibility_potion_duration) {
+        super(type, x, y);
         this.Invisibility_potion_duration = Invisibility_potion_duration;
     }
     

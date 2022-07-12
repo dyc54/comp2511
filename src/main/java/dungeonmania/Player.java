@@ -34,7 +34,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private DungeonMap map;
     private Location previousLocation;
 
-    public Player(String id,String type, int x, int y, int attack, int health, DungeonMap map) {
+    public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
+        super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
         this.defence = new ArmorableStrategy(0);
         this.health = health;
@@ -43,9 +44,6 @@ public class Player extends Entity implements PlayerMovementStrategy {
         previousLocation = Location.AsLocation(x, y);
         this.map = map;
         this.inventoryList = new ArrayList<Entity>();
-        setType(type);
-        setLocation(x, y);
-        setEntityId(id);
     }
 
     public AttackStrayegy getAttackStrayegy() {

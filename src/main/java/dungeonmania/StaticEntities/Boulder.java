@@ -7,8 +7,7 @@ import dungeonmania.util.Position;
 
 public class Boulder extends StaticEntity {
     public Boulder(String type, int x, int y) {
-        setType(type);
-        setLocation(x, y);
+        super(type, x, y);
     }
 
     /**

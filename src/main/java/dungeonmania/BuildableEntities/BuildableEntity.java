@@ -6,9 +6,8 @@ import dungeonmania.response.models.ItemResponse;
 public abstract class BuildableEntity extends Entity{
     private int durability;
 
-    public BuildableEntity(String id,String type,int durability){
-        setType(type);
-        setEntityId(id);
+    public BuildableEntity(String type,int durability) {
+        super(type);
         this.durability = durability;
     }
 

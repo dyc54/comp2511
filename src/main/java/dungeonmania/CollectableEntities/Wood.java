@@ -4,8 +4,8 @@ public class Wood extends CollectableEntity{
 
     private int shield_durability;
 
-    public Wood(String id, String type, int x, int y, int shield_durability) {
-        super(id, type, x, y);
+    public Wood(String type, int x, int y, int shield_durability) {
+        super(type, x, y);
         this.shield_durability = shield_durability;
     }
     

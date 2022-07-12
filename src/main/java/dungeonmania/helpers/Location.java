@@ -53,10 +53,10 @@ public class Location implements Comparator<Location>, Comparable{
      */
     public List<Function<Location, Location>> getFourNearPosition() {
         List<Function<Location, Location>> functions = new ArrayList<>();
-        functions.add(Location::getUp);
-        functions.add(Location::getDown);
-        functions.add(Location::getLeft);
-        functions.add(Location::getRight);
+        functions.add(location -> Location.getUp(location));
+        functions.add(location -> Location.getDown(location));
+        functions.add(location -> Location.getLeft(location));
+        functions.add(location -> Location.getRight(location));
         return functions;
     }
     /**
@@ -70,10 +70,10 @@ public class Location implements Comparator<Location>, Comparable{
     public List<Function<Location, Location>> getEightNearPosition() {
         List<Function<Location, Location>> functions = new ArrayList<>();
         functions.addAll(getFourNearPosition());
-        functions.add(Location::getTopLeft);
-        functions.add(Location::getTopRight);
-        functions.add(Location::getBottomLeft);
-        functions.add(Location::getBottomRight);
+        functions.add(location -> Location.getTopLeft(location));
+        functions.add(location -> Location.getTopRight(location));
+        functions.add(location -> Location.getBottomLeft(location));
+        functions.add(location -> Location.getBottomRight(location));
         return functions;
     }
     /**
@@ -153,13 +153,78 @@ public class Location implements Comparator<Location>, Comparable{
     public double distance(int x, int y) {
         return distance(Location.AsLocation(x, y));
     }
+
+    /**
+     * Get the location of the top of current location
+     * @param location
+     * @return
+     */
+    public Location getUp() {
+        return this.add(0, -1);
+    }
+    /**
+     * Get the location of the bottom of current location
+     * @param location
+     * @return
+     */
+    public Location getDown() {
+        return this.add(0, 1);
+    }
+    /**
+     * Get the location of the left of current location
+     * @param location
+     * @return
+     */
+    public Location getLeft() {
+        return this.add(-1, 0);
+    }
+    /**
+     * Get the location of the right of current location
+     * @param location
+     * @return
+     */
+    public Location getRight() {
+        return this.add(1, 0);
+    }
+    /**
+     * Get the location of the top left of current location
+     * @param location
+     * @return
+     */
+    public Location getTopLeft() {
+        return this.add(-1, -1);
+    }
+    /**
+     * Get the location of the top right of current location
+     * @param location
+     * @return
+     */
+    public Location getTopRight() {
+        return this.add(1, -1);
+    }
+    /**
+     * Get the location of the botto, left of current location
+     * @param location
+     * @return
+     */
+    public Location getBottomLeft() {
+        return this.add(-1, 1);
+    }
+    /**
+     * Get the location of the bottom right of current location
+     * @param location
+     * @return
+     */
+    public Location getBottomRight() {
+        return this.add(1, 1);
+    }
     /**
      * Get the location of the top of given location
      * @param location
      * @return
      */
     public static Location getUp(Location location) {
-        return location.add(0, -1);
+        return location.getUp();
     }
     /**
      * Get the location of the bottom of given location
@@ -167,7 +232,7 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public static Location getDown(Location location) {
-        return location.add(0, 1);
+        return location.getDown();
     }
     /**
      * Get the location of the left of given location
@@ -175,7 +240,7 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public static Location getLeft(Location location) {
-        return location.add(-1, 0);
+        return location.getLeft();
     }
     /**
      * Get the location of the right of given location
@@ -183,7 +248,7 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public static Location getRight(Location location) {
-        return location.add(1, 0);
+        return location.getRight();
     }
     /**
      * Get the location of the top left of given location
@@ -191,7 +256,7 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public static Location getTopLeft(Location location) {
-        return location.add(-1, -1);
+        return location.getTopLeft();
     }
     /**
      * Get the location of the top right of given location
@@ -199,7 +264,7 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public static Location getTopRight(Location location) {
-        return location.add(1, -1);
+        return location.getTopRight();
     }
     /**
      * Get the location of the botto, left of given location
@@ -207,7 +272,7 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public static Location getBottomLeft(Location location) {
-        return location.add(-1, 1);
+        return location.getBottomLeft();
     }
     /**
      * Get the location of the bottom right of given location
@@ -215,7 +280,7 @@ public class Location implements Comparator<Location>, Comparable{
      * @return
      */
     public static Location getBottomRight(Location location) {
-        return location.add(1, 1);
+        return location.getBottomRight();
     }
     /**
      * Convert a location to an array.
@@ -246,7 +311,7 @@ public class Location implements Comparator<Location>, Comparable{
 
     @Override
     public String toString() {
-        return String.format("Location: (%d, %d)", x, y);
+        return String.format("<%d, %d>", x, y);
     }
 
     @Override

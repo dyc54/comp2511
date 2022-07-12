@@ -6,8 +6,7 @@ public class Exit extends StaticEntity {
     private boolean playerExit;
 
     public Exit(String type, int x, int y) {
-        setType(type);
-        setLocation(x, y);
+        super(type, x, y);
         this.playerExit = false;
     }
 

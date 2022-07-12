@@ -4,8 +4,8 @@ public class Sword extends CollectableEntity implements BonusDamageAdd {
     private final double sword_attack;
     private int sword_durability;
 
-    public Sword(String id, String type, int x, int y, double sword_attack, int sword_durability) {
-        super(id, type, x, y);
+    public Sword(String type, int x, int y, double sword_attack, int sword_durability) {
+        super(type, x, y);
         this.sword_attack = sword_attack;
         this.sword_durability = sword_durability;
     }

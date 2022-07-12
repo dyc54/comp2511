@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import dungeonmania.Entity;
-import dungeonmania.Strategies.BattleStrategy;
+import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovementStrategy;
 import dungeonmania.Strategies.MovementStrategy;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
@@ -13,10 +13,10 @@ import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class Spider extends MovingEntity implements EnemyMovementStrategy, BattleStrategy {
-    private Location location;
+public class Spider extends MovingEntity implements EnemyMovementStrategy, Enemy {
+    // private Location location;
     private ArrayList<Location> movingRecordList = new ArrayList<>();
-    private int spider_health;
+    // private int spider_health;
     // private int spider_attack;
     // private AttackStrayegy spider_attack;
 
@@ -28,10 +28,10 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
      * @param spider_health
      */
     public Spider(String type, Location location, int spider_attack, int spider_health) {
-        super(new BaseAttackStrategy(spider_attack));
-        this.location = location;
+        super(type, location, spider_health, new BaseAttackStrategy(spider_attack));
+        // this.location = location;
         // this.spider_attack = new BaseAttackStrategy(spider_attack);
-        this.spider_health = spider_health;
+        // this.spider_health = spider_health;
         setType(type);
         addToMovingList(location);
     }
@@ -53,17 +53,17 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
                 boulderList.add(entity);
             }
         }
-        if (initLocation.equals(location)) {
+        if (initLocation.equals(getLocation())) {
             for (Entity boulder: boulderList) {
-                if (boulder.getLocation().equals(Location.getUp(location))) {
-                    setLocation(Location.getDown(initLocation));
+                if (boulder.getLocation().equals(getLocation().getUp())) {
+                    setLocation(initLocation.getDown());
                 }
             }
-            if (location.equals(initLocation)) {
+            if (getLocation().equals(initLocation)) {
                 setLocation(Location.getUp(initLocation));
             }
             dungeonMap.UpdateEntity(this);
-            addToMovingList(location);
+            addToMovingList(getLocation());
             return;
         }
         if (boulderList.isEmpty()) {
@@ -88,7 +88,7 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
             setLocation(newLocation);
         }
         dungeonMap.UpdateEntity(this);
-        addToMovingList(location);
+        addToMovingList(getLocation());
     }
 
     /**
@@ -100,14 +100,14 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
      * @return boolean
      */
     public boolean is_clockwise(Location pastLocation, Location initLocation) {
-        return ((location.equals(Location.getUp(pastLocation))
-                    && (location.equals(Location.getLeft(initLocation)) || (location.equals(Location.getTopLeft(initLocation)))))
-                || (location.equals(Location.getDown(pastLocation)) 
-                    && (location.equals(Location.getRight(initLocation)) || (location.equals(Location.getBottomRight(initLocation)))))
-                || (location.equals(Location.getLeft(pastLocation)) 
-                    && (location.equals(Location.getDown(initLocation)) || (location.equals(Location.getBottomLeft(initLocation)))))
-                || (location.equals(Location.getRight(pastLocation)) 
-                    && (location.equals(Location.getUp(initLocation)) || (location.equals(Location.getTopRight(initLocation)))))
+        return ((getLocation().equals(Location.getUp(pastLocation))
+                    && (getLocation().equals(Location.getLeft(initLocation)) || (getLocation().equals(Location.getTopLeft(initLocation)))))
+                || (getLocation().equals(Location.getDown(pastLocation)) 
+                    && (getLocation().equals(Location.getRight(initLocation)) || (getLocation().equals(Location.getBottomRight(initLocation)))))
+                || (getLocation().equals(Location.getLeft(pastLocation)) 
+                    && (getLocation().equals(Location.getDown(initLocation)) || (getLocation().equals(Location.getBottomLeft(initLocation)))))
+                || (getLocation().equals(Location.getRight(pastLocation)) 
+                    && (getLocation().equals(Location.getUp(initLocation)) || (getLocation().equals(Location.getTopRight(initLocation)))))
                 || (pastLocation.equals(initLocation)));
     }
 
@@ -118,19 +118,19 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
      * @return Location
      */
     public Location clockwiseMove(Location initLocation) {
-        if (location.equals(Location.getUp(initLocation))) {
+        if (getLocation().equals(Location.getUp(initLocation))) {
             return Location.getTopRight(initLocation);
-        } else if (location.equals(Location.getDown(initLocation))) {
+        } else if (getLocation().equals(Location.getDown(initLocation))) {
             return Location.getBottomLeft(initLocation);
-        } else if (location.equals(Location.getLeft(initLocation))) {
+        } else if (getLocation().equals(Location.getLeft(initLocation))) {
             return Location.getTopLeft(initLocation);
-        } else if (location.equals(Location.getRight(initLocation))) {
+        } else if (getLocation().equals(Location.getRight(initLocation))) {
             return Location.getBottomRight(initLocation);
-        } else if (location.equals(Location.getTopLeft(initLocation))) {
+        } else if (getLocation().equals(Location.getTopLeft(initLocation))) {
             return Location.getUp(initLocation);
-        } else if (location.equals(Location.getTopRight(initLocation))) {
+        } else if (getLocation().equals(Location.getTopRight(initLocation))) {
             return Location.getRight(initLocation);
-        } else if (location.equals(Location.getBottomLeft(initLocation))) {
+        } else if (getLocation().equals(Location.getBottomLeft(initLocation))) {
             return Location.getLeft(initLocation);
         } else {
             return Location.getDown(initLocation);
@@ -144,19 +144,19 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
      * @return Location
      */
     public Location anticlockwiseMove(Location initLocation) {
-        if (location.equals(Location.getUp(initLocation))) {
+        if (getLocation().equals(Location.getUp(initLocation))) {
             return Location.getTopLeft(initLocation);
-        } else if (location.equals(Location.getDown(initLocation))) {
+        } else if (getLocation().equals(Location.getDown(initLocation))) {
             return Location.getBottomRight(initLocation);
-        } else if (location.equals(Location.getLeft(initLocation))) {
+        } else if (getLocation().equals(Location.getLeft(initLocation))) {
             return Location.getBottomLeft(initLocation);
-        } else if (location.equals(Location.getRight(initLocation))) {
+        } else if (getLocation().equals(Location.getRight(initLocation))) {
             return Location.getTopRight(initLocation);
-        } else if (location.equals(Location.getTopLeft(initLocation))) {
+        } else if (getLocation().equals(Location.getTopLeft(initLocation))) {
             return Location.getLeft(initLocation);
-        } else if (location.equals(Location.getTopRight(initLocation))) {
+        } else if (getLocation().equals(Location.getTopRight(initLocation))) {
             return Location.getUp(initLocation);
-        } else if (location.equals(Location.getBottomLeft(initLocation))) {
+        } else if (getLocation().equals(Location.getBottomLeft(initLocation))) {
             return Location.getDown(initLocation);
         } else {
             return Location.getRight(initLocation);
@@ -167,18 +167,23 @@ public class Spider extends MovingEntity implements EnemyMovementStrategy, Battl
         movingRecordList.add(location);
     }
 
-    public Location getLocation() {
-        return location;
+    @Override
+    public AttackStrayegy getAttackStrayegy() {
+        // TODO Auto-generated method stub
+        return super.getAttack();
     }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
 
     @Override
-    public void battle() {
-        spider_health = spider_health - (1); // health = health - attacked
-
+    public double getHealth() {
+        // TODO Auto-generated method stub
+        return super.getHealth();
     }
+
+    @Override
+    public String getEnemyId() {
+        // TODO Auto-generated method stub
+        return getEntityId();
+    }
+
+
 }

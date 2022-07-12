@@ -13,15 +13,15 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class Mercenary extends MovingEntity implements EnemyMovementStrategy {
-    Location location;
+    // Location location;
     double mercenary_attack;
     double mercenary_health;
     public Mercenary(String type, Location location, double mercenary_attack, double mercenary_health) {
-        super(new BaseAttackStrategy(mercenary_attack));
-        this.location = location;
+        super(type, location, mercenary_health, new BaseAttackStrategy(mercenary_attack));
+        // this.location = location;
         this.mercenary_attack = mercenary_attack;
         this.mercenary_health = mercenary_health;
-        setType(type);
+        // setType(type);
     }
 
     @Override
@@ -39,39 +39,39 @@ public class Mercenary extends MovingEntity implements EnemyMovementStrategy {
         doors.stream().forEach(door-> wallAndDoorList.add(door.getLocation()));
         double presentDistance = playerLocation.distance(getLocation());
         boolean hasMove = false;
-        if (Location.getUp(location).distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(Location.getUp(location))) {
-                setLocation(Location.getUp(location));
+        if (getLocation().getUp().distance(playerLocation) <= presentDistance) {
+            if (!wallAndDoorList.contains(getLocation().getUp())) {
+                setLocation(getLocation().getUp());
                 hasMove = true;
             }
-        }else if (!hasMove && Location.getDown(location).distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(Location.getDown(location))) {
-                setLocation(Location.getDown(location));
+        }else if (!hasMove && getLocation().getDown().distance(playerLocation) <= presentDistance) {
+            if (!wallAndDoorList.contains(getLocation().getDown())) {
+                setLocation(getLocation().getDown());
                 hasMove = true;
             }
-        } else if (!hasMove && Location.getLeft(location).distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(Location.getLeft(location))) {
-                setLocation(Location.getLeft(location));
+        } else if (!hasMove && getLocation().getLeft().distance(playerLocation) <= presentDistance) {
+            if (!wallAndDoorList.contains(getLocation().getLeft())) {
+                setLocation(getLocation().getLeft());
                 hasMove = true;
             }
-        } else if (!hasMove && Location.getRight(location).distance(playerLocation) <= presentDistance) {
-            if (!wallAndDoorList.contains(Location.getRight(location))) {
-                setLocation(Location.getRight(location));
+        } else if (!hasMove && getLocation().getRight().distance(playerLocation) <= presentDistance) {
+            if (!wallAndDoorList.contains(getLocation().getRight())) {
+                setLocation(getLocation().getRight());
                 hasMove = true;
             }
         }
     
-        if (!hasMove && !wallAndDoorList.contains(Location.getRight(location))) {
-            setLocation(Location.getRight(location));
+        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+            setLocation(getLocation().getRight());
         } 
-        if (!hasMove && !wallAndDoorList.contains(Location.getRight(location))) {
-            setLocation(Location.getRight(location));
+        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+            setLocation(getLocation().getRight());
         }
-        if (!hasMove && !wallAndDoorList.contains(Location.getRight(location))) {
-            setLocation(Location.getRight(location));
+        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+            setLocation(getLocation().getRight());
         }
-        if (!hasMove && !wallAndDoorList.contains(Location.getRight(location))) {
-            setLocation(Location.getRight(location));
+        if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
+            setLocation(getLocation().getRight());
         }
         dungeonMap.UpdateEntity(this);
     }
@@ -81,12 +81,12 @@ public class Mercenary extends MovingEntity implements EnemyMovementStrategy {
         setLocation(location);
     }
 
-    public Location getLocation() {
-        return location;
-    }
+    // public Location getLocation() {
+    //     return location;
+    // }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+    // public void setLocation(Location location) {
+    //     this.location = location;
+    // }
 
 }

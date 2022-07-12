@@ -4,8 +4,7 @@ public class ZombieToastSpawner extends StaticEntity {
     private int zombieSpawnRate;
 
     public ZombieToastSpawner(String type, int x, int y, int zombieSpawnRate) {
-        setType(type);
-        setLocation(x, y);
+        super(type, x, y);
         this.zombieSpawnRate = zombieSpawnRate;
     }
 

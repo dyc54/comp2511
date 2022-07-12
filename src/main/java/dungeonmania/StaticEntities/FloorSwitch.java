@@ -7,8 +7,7 @@ public class FloorSwitch extends StaticEntity {
     private boolean trigger;
 
     public FloorSwitch(String type, int x, int y) {
-        setType(type);
-        setLocation(x, y);
+        super(type, x, y);
         this.trigger = false;
     }
 
