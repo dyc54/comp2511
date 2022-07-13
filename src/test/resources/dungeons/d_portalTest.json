@@ -1,0 +1,70 @@
+{
+    "entities": [
+        {
+            "x": 3,
+            "y": 0,
+            "type": "player"
+        },
+        {
+            "x": 3,
+            "y": 1,
+            "type": "portal",
+            "colour": "BLUE"
+        },
+        {
+            "x": 1,
+            "y": 2,
+            "type": "portal",
+            "colour": "BLUE"
+        },
+        {
+            "x": 4,
+            "y": 0,
+            "type": "portal",
+            "colour": "RED"
+        },
+        {
+            "x": 6,
+            "y": 6,
+            "type": "portal",
+            "colour": "RED"
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "type": "portal",
+            "colour": "YELLOW"
+        },
+        {
+            "x": 4,
+            "y": 4,
+            "type": "portal",
+            "colour": "YELLOW"
+        },
+        {
+            "x": 3,
+            "y": 4,
+            "type": "portal",
+            "colour": "GREEN"
+        },
+        {
+            "x": 2,
+            "y": 5,
+            "type": "portal",
+            "colour": "GREEN"
+        },
+        {
+            "type" : "wall",
+            "x" : 7,
+            "y" : 6
+        },
+        {
+            "x": 7,
+            "y": 7,
+            "type": "exit"
+        }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
