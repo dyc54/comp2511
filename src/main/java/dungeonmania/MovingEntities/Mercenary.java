@@ -55,44 +55,6 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
         }
         dungeonMap.UpdateEntity(this);
         return true;
-
-        // double presentDistance = playerLocation.distance(getLocation());
-        // boolean hasMove = false;
-        // if (getLocation().getUp().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getUp())) {
-        //         setLocation(getLocation().getUp());
-        //         hasMove = true;
-        //     }
-        // }else if (!hasMove && getLocation().getDown().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getDown())) {
-        //         setLocation(getLocation().getDown());
-        //         hasMove = true;
-        //     }
-        // } else if (!hasMove && getLocation().getLeft().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getLeft())) {
-        //         setLocation(getLocation().getLeft());
-        //         hasMove = true;
-        //     }
-        // } else if (!hasMove && getLocation().getRight().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getRight())) {
-        //         setLocation(getLocation().getRight());
-        //         hasMove = true;
-        //     }
-        // }
-    
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // } 
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // }
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // }
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // }
-        // dungeonMap.UpdateEntity(this);
     }
 
     @Override
@@ -102,6 +64,7 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
              
             if (player.getInventory().removeFromInventoryList("treasure", this.bribe_amount)) {
                 setType("ally");
+                System.out.println("-------");
                 dungeonMap.UpdateEntity(this);
                 return true;
             }
@@ -109,13 +72,4 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
         }
         return false;
     }
-
-    // public Location getLocation() {
-    //     return location;
-    // }
-
-    // public void setLocation(Location location) {
-    //     this.location = location;
-    // }
-
 }

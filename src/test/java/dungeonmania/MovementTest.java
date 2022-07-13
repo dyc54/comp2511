@@ -18,6 +18,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -106,13 +107,55 @@ public class MovementTest {
     @Test
     @DisplayName("The following state for mercenary movement")
     public void mercenaryFollowing() {
-        
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_mercenaryTest_follow", "c_spiderTest_basicMovement");
+        Position pos = getEntities(res, "player").get(0).getPosition();
+        int x = pos.getX();
+        int y = pos.getY();
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(new Position(x, y), getEntities(res, "ally").get(0).getPosition());
     }
 
     @Test
-    @DisplayName("The mercenary is birbed by the player")
-    public void mercenaryBirbe() {
-        
+    @DisplayName("The mercenary is bribed by the player-success")
+    public void mercenaryBribe() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_mercenaryTest_bribe", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "treasure").size());
+        try {
+            res = dmc.interact(getEntities(res, "mercenary").get(0).getId());
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvalidActionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        assertEquals(0, getInventory(res, "treasure").size());
+        assertEquals("ally", getEntities(res, "ally").get(0).getType());
     }
     
+    @Test
+    @DisplayName("The mercenary is bribed by the player-fail")
+    public void mercenaryBirbeFail1() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_mercenaryTest_birbeFail", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "treasure").size());
+        try {
+            res = dmc.interact(getEntities(res, "mercenary").get(0).getId());
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvalidActionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        assertEquals(0, getInventory(res, "treasure").size());
+        assertEquals("ally", getEntities(res, "ally").get(0).getType());
+    }
 }

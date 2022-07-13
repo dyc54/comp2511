@@ -2,6 +2,7 @@ package dungeonmania;
 
 import dungeonmania.Goals.GoalController;
 import dungeonmania.MovingEntities.Mercenary;
+import dungeonmania.MovingEntities.MercenaryAlly;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
@@ -125,6 +126,10 @@ public class DungeonManiaController {
             if (entity.getType().equals("mercenary")) {
                 Mercenary mercenary = (Mercenary) entity;
                 mercenary.movement(dungeonMap);
+            } 
+            if (entity.getType().equals("ally")) {
+                MercenaryAlly mercenaryAlly = (MercenaryAlly) entity;
+                mercenaryAlly.movement(dungeonMap);
             } 
         }
         return getDungeonResponse();
