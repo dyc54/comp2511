@@ -209,7 +209,7 @@ public class DungeonManiaController {
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         Entity entity = dungeonMap.getEntity(entityId);
         if (entity == null) {
-            throw new IllegalArgumentException("IllegalArgument");
+            throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
         if (entity.getType().equals("zombie_toast_spawner")) {
             ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;

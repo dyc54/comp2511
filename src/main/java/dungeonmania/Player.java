@@ -24,6 +24,7 @@ import dungeonmania.Strategies.AttackStrategies.BonusDamageStrategy;
 import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;
 import dungeonmania.Strategies.DefenceStrategies.ArmorableStrategy;
 import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Position;
 import dungeonmania.helpers.Config;
@@ -299,13 +300,15 @@ public class Player extends Entity implements PlayerMovementStrategy {
     }
 
     //player 查询背包物品进行建造
-    public String build(String buildable, Config config) {
+    public String build(String buildable, Config config) throws IllegalArgumentException, InvalidActionException {
         switch (buildable) {
             case "bow":
                 boolean wood_b = inventory.hasItem("wood", 1);
                 boolean arrow = inventory.hasItem("arrows", 3);
                 if (wood_b && arrow) {
                     inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                } else {
+                    throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
                 inventory.removeFromInventoryList("wood", 1);
                 inventory.removeFromInventoryList("arrows", 3);
@@ -316,6 +319,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 boolean key  = inventory.hasItem("key ", 1);
                 if (wood_s && (treasure || key)) {
                     inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                } else {
+                    throw new InvalidActionException("buildable is not one of bow, shield");
                 }
                 inventory.removeFromInventoryList("wood", 2);
                 if (treasure) {
@@ -325,15 +330,19 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 }
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("buildable is not one of bow, shield");
+                // break;
         }
         return "";
     }
 
 
     //player 使用物品
-    public void useItem(String itemUsedId){
+    public void useItem(String itemUsedId) throws InvalidActionException, IllegalArgumentException{
         Entity entity = inventory.getItem(itemUsedId);
+        if (entity == null) {
+            throw new InvalidActionException("itemUsed is not in the player's inventory");
+        }
         if (entity instanceof PotionEntity) {
             addeffect((PotionEntity) entity);
             inventory.removeFromInventoryList(entity);
@@ -343,7 +352,9 @@ public class Player extends Entity implements PlayerMovementStrategy {
             bomb.put(getLocation());
             map.addEntity(bomb);
             inventory.removeFromInventoryList(entity);
-        } 
+        } else {
+            throw new IllegalArgumentException("itemUsed is not a bomb, invincibility_potion, or an invisibility_potion");
+        }
 
         // inventory.useItem(itemUsedId);
     }

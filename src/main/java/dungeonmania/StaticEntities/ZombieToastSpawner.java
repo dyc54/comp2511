@@ -114,10 +114,12 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
         System.out.println(player.getLocation());
         if (!dungeonMap.getFourNearEntities(getLocation()).contains(player)) {
             System.out.println("\\\\\\");
+            return false;
         }
         player.getInventory();
         if (player.getInventory().hasWeapons()) {
             dungeonMap.removeEntity(getEntityId());
+            return true;
         }
         return false;
     }
