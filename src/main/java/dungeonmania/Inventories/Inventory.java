@@ -17,7 +17,7 @@ import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shi
 import dungeonmania.helpers.Config;
 
 public class Inventory {
-    private HashMap<String, List<Entity>> inventory = new HashMap<>(); //key 是实体的类型
+    private final HashMap<String, List<Entity>> inventory = new HashMap<>(); //key 是实体的类型
     private List<Entity> BattleInventoryList = new ArrayList<>();
 
     /**
@@ -26,6 +26,7 @@ public class Inventory {
      * @param Entity item
      */
     public void addToInventoryList(Entity item) {
+        System.out.println(String.format("%s has been picked up", item.getType()));
         if(inventory.containsKey(item.getType())){
             inventory.get(item.getType()).add(item);
         }else{
@@ -33,6 +34,8 @@ public class Inventory {
             itemList.add(item);
             inventory.put(item.getType(), itemList);
         }
+        inventory.keySet().stream().forEach(str -> System.out.println(str));
+
     }
 
     /**
@@ -56,6 +59,8 @@ public class Inventory {
                 for(Entity item : entry.getValue()){
                     if(item.getEntityId().equals(itemId)){
                         inventory.get(entry.getKey()).remove(item);
+                        System.out.println(String.format("%s has been remove from inventory", item.getType()));
+
                     }
                 }
           }     
@@ -252,7 +257,9 @@ public class Inventory {
     }
 
     public List<Entity> getItems(String type) {
+        inventory.keySet().stream().forEach(str -> System.out.println(str));
         List<Entity> items = inventory.get(type);
+        System.out.println(items == null);
         if (items == null) {
             return new LinkedList<>();
         }

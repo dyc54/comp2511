@@ -3,7 +3,7 @@ package dungeonmania.MovingEntities;
 import dungeonmania.Entity;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.MovementStrategy;
+import dungeonmania.Strategies.Movement;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.RandomMovement;
@@ -25,7 +25,7 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     }
 
     private String nextPossibleLocation(DungeonMap dungeonMap) {
-        return "udrl";
+        return MovingEntity.getPossibleNextDirection(dungeonMap, this);
     }
     @Override
     public boolean movement(DungeonMap dungeonMap) {
@@ -98,5 +98,8 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     public double getHealth() {
         return super.getHealth();
     }
-
+    @Override
+    public String getEnemyType() {
+        return getType();
+    }
 }

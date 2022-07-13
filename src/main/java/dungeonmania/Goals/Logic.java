@@ -47,12 +47,19 @@ public class Logic {
         if (type.equals(supergoal)) {
             return node.getGoal().toString();
         } else {
-            if (bracket) {
-                return String.format("(%s %s %s)", node.toGoalA().toString(), toString(), node.toGoalB().toString());
+
+            String left = node.toGoalA().toString();
+            String right = node.toGoalB().toString();
+            String output;
+            String format;
+            if (left.equals("") || right.equals("")) {
+                output = String.format("%s%s", left, right);
+                format = "%s";
             } else {
-                return String.format("%s %s %s", node.toGoalA().toString(), toString(), node.toGoalB().toString());
-                
+                output = String.format("%s %s %s", node.toGoalA().toString(), toString(), node.toGoalB().toString());
+                format = bracket? "(%s)": "%s";
             }
+            return String.format(format, output);
         }
         
     }

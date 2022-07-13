@@ -43,7 +43,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
     @Override
     public boolean movement(DungeonMap dungeonMap) {
         Location current = getLocation();
-        System.out.println("current:" + current.toString());
+        // System.out.println("current:" + current.toString());
         MovementStrategy strategy = super.getMove();
         Location next = strategy.nextLocation(current);
         if (checkhasBoulder(dungeonMap, next)) {
@@ -62,7 +62,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
             // }
         }
         setLocation(next);
-        System.out.println("Set:" + next.toString());
+        // System.out.println("Set:" + next.toString());
         dungeonMap.UpdateEntity(this);
         return true;
         
@@ -217,6 +217,11 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
     public String getEnemyId() {
         // TODO Auto-generated method stub
         return getEntityId();
+    }
+    @Override
+    public String getEnemyType() {
+        // TODO Auto-generated method stub
+        return getType();
     }
 
 

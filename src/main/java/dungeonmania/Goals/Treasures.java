@@ -14,6 +14,7 @@ public class Treasures implements Goal{
     @Override
     public boolean hasAchieved() {
         // TODO Auto-generated method stub
+        System.out.println(String.format("Gold %d/%d", GoldNum, TargetNum));
         return GoldNum >= TargetNum;
     }
 
@@ -31,7 +32,7 @@ public class Treasures implements Goal{
     }
     @Override
     public String toString() {
-        if (hasAchieved()) {
+        if (!hasAchieved()) {
             return new String(":treasure");
         } else {
             return "";

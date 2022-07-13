@@ -3,6 +3,7 @@ package dungeonmania.MovingEntities;
 import dungeonmania.Entity;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public abstract class MovingEntity extends Entity {
@@ -34,4 +35,14 @@ public abstract class MovingEntity extends Entity {
         this.move.MoveOptions(options);
         return move;
     }
+    public static String getPossibleNextDirection(DungeonMap map, MovingEntity entity) {
+        String possible = "";
+
+        possible += DungeonMap.isaccessible(map, entity.getLocation().getUp(), entity) ? "u": "";
+        possible += DungeonMap.isaccessible(map, entity.getLocation().getDown(), entity) ? "d": "";
+        possible += DungeonMap.isaccessible(map, entity.getLocation().getLeft(), entity) ? "f": "";
+        possible += DungeonMap.isaccessible(map, entity.getLocation().getRight(), entity) ? "r": "";
+        return possible;
+    }
+
 }

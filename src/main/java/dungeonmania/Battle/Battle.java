@@ -1,14 +1,19 @@
 package dungeonmania.Battle;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
+import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
 import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
 
 public class Battle {
@@ -45,6 +50,7 @@ public class Battle {
         this.enemy = enemy;
         this.initPlayerHealth = player.getHealth();
         this.initEnemyHealth = enemy.getHealth();
+        System.out.println(String.format("Set Battle: \nPlayer %f\nEnemy %s, %f", initPlayerHealth, enemy.getEnemyType(), initEnemyHealth));
         return this;
     }
     public String startBattle() {
@@ -52,19 +58,29 @@ public class Battle {
         double currEnemyHealth = initEnemyHealth;
         double playerdamage = playerDamage();;
         double enemydamage = enemyDamage();
+        List<ItemResponse> items= player.getInventory()
+                                    .getBattleInventoryList()
+                                    .stream().map(mapper -> (CollectableEntity) mapper)
+                                    .map(item -> item.getItemResponse()).collect(Collectors.toList());
+        System.out.println(String.format("First Round P:%f - %f=%f\nE%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage
+                                                                                , currEnemyHealth, playerdamage, currEnemyHealth - playerdamage));
         currPlayerHealth -= enemydamage;
         currEnemyHealth -= playerdamage;
-        rounds.add(new RoundResponse(enemydamage, playerdamage, new ArrayList<>()));
+        rounds.add(new RoundResponse(enemydamage, playerdamage, items));
         // if ()
         // TODO: IF invincibility activity
-        while (currPlayerHealth > 0 || currEnemyHealth > 0) {
-            playerdamage = playerDamage();;
+        while (currPlayerHealth > 0 && currEnemyHealth > 0) {
+            playerdamage = playerDamage();
             enemydamage = enemyDamage();
+            System.out.println(String.format("First Round P:%f - %f=%f\nE%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage
+                                            , currEnemyHealth, playerdamage, currEnemyHealth - playerdamage));
             currPlayerHealth -= enemydamage;
             currEnemyHealth -= playerdamage;
-            rounds.add(new RoundResponse(enemydamage, playerdamage, new ArrayList<>()));
+            rounds.add(new RoundResponse(enemydamage, playerdamage, items));
         }
         if (currPlayerHealth <= 0 && currEnemyHealth <= 0) {
+            player.setHealth(0);
+
             return "Both";
         }
         if (currPlayerHealth <= 0) {
@@ -75,6 +91,6 @@ public class Battle {
         }
     }
     public BattleResponse toResponse() {
-        return null;
+        return new BattleResponse(enemy.getEnemyType(), rounds, initPlayerHealth, initEnemyHealth);
     }
 }
