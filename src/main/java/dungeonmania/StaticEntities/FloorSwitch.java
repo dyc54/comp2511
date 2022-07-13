@@ -1,5 +1,7 @@
 package dungeonmania.StaticEntities;
 
+import dungeonmania.Entity;
+import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class FloorSwitch extends StaticEntity {
@@ -32,4 +34,17 @@ public class FloorSwitch extends StaticEntity {
         return false;
     }
 
+    @Override
+    public boolean isAccessible(Entity entity) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+    @Override
+    public boolean interact(Entity entity, DungeonMap map) {
+       if (entity instanceof Boulder) {
+            setTrigger(true);
+       }
+       return false;
+    }
+    
 }

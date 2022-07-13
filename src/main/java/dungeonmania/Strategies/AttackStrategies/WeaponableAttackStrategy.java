@@ -28,12 +28,12 @@ public class WeaponableAttackStrategy implements AttackStrayegy{
         
     }
     @Override
-    public void removeAddBounus(BonusDamageAdd attack) {
-        base.removeAddBounus(attack);
+    public void removeBounus(BonusDamageAdd attack) {
+        base.removeBounus(attack);
         
     }
     @Override
-    public void removeMulBounus(BonusDamageMul attack) {
+    public void removeBounus(BonusDamageMul attack) {
         bonusdamages.remove(attack);
         
     } 

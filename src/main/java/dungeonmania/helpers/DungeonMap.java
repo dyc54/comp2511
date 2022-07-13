@@ -6,17 +6,24 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.json.*;
 
+import dungeonmania.Accessibility;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
+import dungeonmania.Interactability;
 import dungeonmania.Player;
+import dungeonmania.Battle.Enemy;
 import dungeonmania.MovingEntities.MovingEntity;
+import dungeonmania.Strategies.EnemyMovement;
+import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
 import dungeonmania.Strategies.MovementStrategies.*;
 
 /**
@@ -28,9 +35,9 @@ import dungeonmania.Strategies.MovementStrategies.*;
  */
 public class DungeonMap {
     private TreeMap<Location, HashSet<Entity>> map;
-    private HashMap<String, Location> IdCollection;
+    private final HashMap<String, Location> IdCollection;
     private int EnemiesDestroiedCounter;
-
+    Player player;
     /**
      * Return whether two types are same type or same category.
      * 
@@ -84,6 +91,11 @@ public class DungeonMap {
         if (!IdCollection.containsKey(entity.getEntityId())) {
             IdCollection.put(entity.getEntityId(), entity.getLocation().clone());
         }
+        if (entity instanceof Player) {
+            // System.out.println("Gett player");
+            this.player = (Player) entity;
+            // System.out.println(this.player.toString());
+        }
         if (map.containsKey(entity.getLocation())) {
             map.get(entity.getLocation()).add(entity);
         } else {
@@ -114,7 +126,9 @@ public class DungeonMap {
     public boolean containsEntity(Entity entity) {
         return containsEntity(entity.getEntityId());
     }
-
+    public Player getPlayer() {
+        return player;
+    }
     /**
      * Return a Entity by given id.
      * 
@@ -122,16 +136,14 @@ public class DungeonMap {
      * @return null if id does not exist
      */
     public Entity getEntity(String id) {
-        // !
         if (!containsEntity(id)) {
             return null;
         }
         Location location = IdCollection.get(id);
-        map.keySet().stream().forEach(entity -> System.out.println(entity + ":"+ location.toString()+entity.equals(location.toString())));
+        // map.keySet().stream().forEach(entity -> System.out.println(entity + ":"+ location.toString()+entity.equals(location.toString())));
         return map.get(location)
                 .stream()
-                .filter(entity -> {System.out.println(entity.toString()); 
-                    return entity.getEntityId().equals(id);})
+                .filter(entity -> entity.getEntityId().equals(id))
                 .collect(Collectors.toList()).get(0);
         // return null;
     }
@@ -171,7 +183,7 @@ public class DungeonMap {
     public Collection<Entity> getAllEntities() {
         Collection<Entity> entities = new LinkedList<>();
         for (HashSet<Entity> entities_set : map.values()) {
-            entities.addAll(entities_set);
+            entities.addAll(new LinkedList<>(entities_set));
         }
         return entities;
     }
@@ -183,10 +195,14 @@ public class DungeonMap {
      * @return
      */
     public Collection<Entity> getEntities(String type) {
+        if (type.equals("player")) {
+            return Arrays.asList(player);
+        }
         Collection<Entity> entities = new LinkedList<>();
         getAllEntities().stream().forEach(entity -> {
             if (DungeonMap.isSameType(entity.getType(), type)) {
                 entities.add(entity);
+                System.out.println(String.format("Get Entities by given type %s", entity.toString()));
             }
         });
         return entities;
@@ -206,11 +222,17 @@ public class DungeonMap {
         Location location = IdCollection.get(id);
         Collection<Entity> entities = getEntities(location);
         Entity temp = getEntity(id);
-        if (isSameType(temp.getEntityId(), "enemies")) {
-            EnemiesDestroiedCounter -= 1;
+        if (temp instanceof Enemy) {
+            System.out.println("cCounter++");
+            EnemiesDestroiedCounter += 1;
+
         }
+        // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
+        // System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
         entities.remove(temp);
         IdCollection.remove(id);
+        // IdCollection.
+        // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
     }
 
     /**
@@ -324,9 +346,11 @@ public class DungeonMap {
     public void moveAllEntities() {
         Collection<Entity> entities = getAllEntities();
         entities.stream().forEach(entity -> {
-            if (entity instanceof MovementStrategy) {
+            if (entity instanceof EnemyMovement) {
                 // TODO: do something
-                MovementStrategy a;
+                EnemyMovement movingEntity = (EnemyMovement) entity;
+                movingEntity.movement(this);
+                
             }
         });
     }
@@ -337,10 +361,13 @@ public class DungeonMap {
      * @param entity entity that has already move
      */
     public void UpdateEntity(Entity entity) {
+        int temp = EnemiesDestroiedCounter;
+        System.out.println(String.format("Update %s", entity.toString()));
         removeEntity(entity.getEntityId());
         addEntity(entity);
-        System.out.println("---" + entity.getType());
-        System.out.println("map" + IdCollection.get(entity.getEntityId()).toString());
+        EnemiesDestroiedCounter = temp;
+        // System.out.println("---" + entity.getType());
+        // System.out.println("map" + IdCollection.get(entity.getEntityId()).toString());
     }
 
     /**
@@ -370,17 +397,55 @@ public class DungeonMap {
     public int getDestoriedCounter() {
         return EnemiesDestroiedCounter;
     }
+    public void UpdateAllEntities() {
+        getAllEntities().stream().forEach(entity -> UpdateEntity(entity));
+    }
     @Override
     public String toString() {
-        String output = String.format("*********** %s ***********\n", "DungonMap");
-        map.values()
-                .stream()
-                .forEach(hashset -> {
-                    hashset.stream()
-                            .forEach(entity -> {
-                                output.concat(String.format("%s\n", entity.toString()));
-                            });
-                });
-        return output;
+        System.out.println("*********** MAP ***********\n");
+        // map.values()
+        //         .stream()
+        //         .forEach(hashset -> {
+        //             hashset.stream()
+        //                     .forEach(entity -> {
+        //                         output.concat(String.format("%s\n", entity.toString()));
+        //                     });
+        //         });
+        getAllEntities().stream().forEach(entity -> System.out.println(entity.toString()));
+        System.out.println("*********** MAP ***********\n");
+        return "output";
+    }
+    public static boolean isaccessible(DungeonMap map, Location location, Entity entity) {
+        List<Entity> list = DungeonMap.blockedEntities(map, location, entity);
+        System.out.println(String.format("For entity %s, unaccessable entities at %s are:", entity.toString(), location.toString()));
+        list.stream().forEach(e -> System.out.println(e.toString()));
+        return DungeonMap.blockedEntities(map, location, entity).size() == 0;
+        // return map.getEntities(location).stream().allMatch(element -> {
+        //     if (element instanceof Accessibility) {
+        //         Accessibility temp = (Accessibility) element;
+        //         return temp.isAccessible(entity); 
+        //     }
+        //     return true;
+        // });
+    }
+    public static List<Entity> blockedEntities(DungeonMap map, Location location, Entity entity) {
+        return map.getEntities(location).stream()
+            .filter(element ->  location.equals(element.getLocation()) && element instanceof Accessibility &&!((Accessibility) element).isAccessible(entity))
+            .collect(Collectors.toList());
+        
+    }
+    public static boolean hasInteractableEntity(DungeonMap map, Location location, Entity entity) {
+        
+        List<Entity> list =  DungeonMap.InteracyableEntities(map, location, entity);
+        System.out.println(String.format("For entity %s, Interacyable  entities at %s are:", entity.toString(), location.toString()));
+        list.stream().forEach(e -> System.out.println(e.toString()));
+        return DungeonMap.InteracyableEntities(map, location, entity).size() != 0;
+        // return map.getEntities(location).stream().anyMatch(element -> element.getLocation().equals(location) && element instanceof Interactability);
+    }
+
+    public static List<Entity> InteracyableEntities(DungeonMap map, Location location, Entity entity) {
+        return map.getEntities(location).stream()
+            .filter(element ->  location.equals(element.getLocation()) && element instanceof Interactability && ((Interactability) element).hasSideEffect(entity, map))
+            .collect(Collectors.toList());
     }
 }

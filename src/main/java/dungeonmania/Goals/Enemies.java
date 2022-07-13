@@ -14,7 +14,7 @@ public class Enemies implements Goal {
     @Override
     public boolean hasAchieved() {
         // TODO Auto-generated method stub
-        
+        System.out.println(String.format("enemies %d/%d, spawner count: %d", destroyed, TargetNum, spawners));
         return destroyed >= TargetNum && spawners == 0;
     }
 
@@ -34,7 +34,7 @@ public class Enemies implements Goal {
     }
     @Override
     public String toString() {
-        if (hasAchieved()) {
+        if (!hasAchieved()) {
             return new String(":enemies");
         } else {
             return "";

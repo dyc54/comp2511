@@ -2,6 +2,7 @@ package dungeonmania.StaticEntities;
 
 import java.util.Random;
 
+import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.helpers.Config;
@@ -97,5 +98,11 @@ public class ZombieToastSpawner extends StaticEntity {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean isAccessible(Entity entity) {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

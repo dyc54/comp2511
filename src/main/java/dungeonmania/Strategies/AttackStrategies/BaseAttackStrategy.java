@@ -30,13 +30,13 @@ public class BaseAttackStrategy implements AttackStrayegy{
     }
 
     @Override
-    public void removeAddBounus(BonusDamageAdd attack) {
+    public void removeBounus(BonusDamageAdd attack) {
         bonusdamages.remove(attack);
         
     }
 
     @Override
-    public void removeMulBounus(BonusDamageMul attack) {
+    public void removeBounus(BonusDamageMul attack) {
         // DO NOTHING
     }
 }

@@ -3,6 +3,9 @@ package dungeonmania.helpers;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+
+import dungeonmania.util.Position;
+
 import java.util.ArrayList;
 
 public class Location implements Comparator<Location>, Comparable<Location>{
@@ -228,7 +231,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public Location getLocation(double degree, int radius) {
         double deltaX = Math.cos(Math.toRadians(degree)) * radius;
         double deltaY = Math.sin(Math.toRadians(degree)) * radius;
-        System.out.println(String.format("%f: %d + %d(%f), %d + %d(%f) = %s", degree, x, round(deltaX), deltaX, y, round(deltaY) * -1, deltaY, add(round(deltaX) , round(deltaY) * -1).toString()));
+        // System.out.println(String.format("%f: %d + %d(%f), %d + %d(%f) = %s", degree, x, round(deltaX), deltaX, y, round(deltaY) * -1, deltaY, add(round(deltaX) , round(deltaY) * -1).toString()));
         return add(round(deltaX) , round(deltaY) * -1);
     }
     public Location getLocation(int deltaX, int deltaY) {
@@ -239,6 +242,9 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     }
     public Location clone() {
         return new Location(x, y);
+    }
+    public Location getLocation(Position p) {
+        return new Location(x + p.getX(), y + p.getY());
     }
     /**
      * Get the location of the top of given location
@@ -335,7 +341,10 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public static Location AsLocation(int[] location) {
         return new Location(location[Location.X], location[Location.Y]);
     }
-
+    public static Position getMoveDir(Location from, Location to) {
+        Location temp = from.diff(to);
+        return new Position(temp.getX(), temp.getY());
+    }
     @Override
     public String toString() {
         return String.format("<%d, %d>", x, y);
