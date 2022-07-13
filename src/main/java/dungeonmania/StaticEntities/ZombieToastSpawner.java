@@ -4,12 +4,14 @@ import java.util.Random;
 
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
+import dungeonmania.Interact;
+import dungeonmania.Player;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class ZombieToastSpawner extends StaticEntity {
+public class ZombieToastSpawner extends StaticEntity implements Interact {
     private int timer;
     private int zombieSpawnRate;
     private int zombie_attack;
@@ -103,6 +105,20 @@ public class ZombieToastSpawner extends StaticEntity {
     @Override
     public boolean isAccessible(Entity entity) {
         // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean interact(Player player, DungeonMap dungeonMap) {
+        System.out.println(getLocation());
+        System.out.println(player.getLocation());
+        if (!dungeonMap.getFourNearEntities(getLocation()).contains(player)) {
+            System.out.println("\\\\\\");
+        }
+        player.getInventory();
+        if (player.getInventory().hasWeapons()) {
+            dungeonMap.removeEntity(getEntityId());
+        }
         return false;
     }
 }

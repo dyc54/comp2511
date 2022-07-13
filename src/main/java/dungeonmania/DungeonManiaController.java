@@ -4,6 +4,7 @@ import dungeonmania.Battle.Battle;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Goals.GoalController;
 import dungeonmania.MovingEntities.Mercenary;
+import dungeonmania.MovingEntities.MercenaryAlly;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
@@ -113,6 +114,7 @@ public class DungeonManiaController {
     public DungeonResponse tick(Direction movementDirection) {
         System.out.println("************************ Tick ********************");
         player.movement(movementDirection.getOffset());
+        System.out.println("player:"+player.getLocation());
         dungeonMap.UpdateAllEntities();
         for (Entity entity : dungeonMap.getAllEntities()) {
         // entitiesList = dungeonMap.getAllEntities();
@@ -133,6 +135,10 @@ public class DungeonManiaController {
             if (entity.getType().equals("mercenary")) {
                 Mercenary mercenary = (Mercenary) entity;
                 mercenary.movement(dungeonMap);
+            } 
+            if (entity.getType().equals("ally")) {
+                MercenaryAlly mercenaryAlly = (MercenaryAlly) entity;
+                mercenaryAlly.movement(dungeonMap);
             } 
         }
         // Battle
@@ -202,10 +208,20 @@ public class DungeonManiaController {
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         Entity entity = dungeonMap.getEntity(entityId);
+        if (entity == null) {
+            throw new IllegalArgumentException("IllegalArgument");
+        }
+        if (entity.getType().equals("zombie_toast_spawner")) {
+            ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
+            System.out.println("+++++++++");
+            if (!zombieToastSpawner.interact(player, dungeonMap)) {
+                throw new InvalidActionException("Invaild action");
+            }
+        }
         if (entity.getType().equals("mercenary")) {
             Mercenary mercenary = (Mercenary) entity;
             if (!mercenary.interact(player, dungeonMap)) {
-                throw new InvalidActionException("invaild action");
+                throw new InvalidActionException("Invaild action");
             }
         }
         return getDungeonResponse();

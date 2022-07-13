@@ -23,12 +23,16 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact, 
     double mercenary_health;
     int bribe_amount;
     int bribe_radius;
-    public Mercenary(String type, Location location, double mercenary_attack, double mercenary_health, int bribe_amount, int bribe_radius) {
+    int ally_attack;
+    int ally_defence;
+    public Mercenary(String type, Location location, double mercenary_attack, double mercenary_health, int bribe_amount, int bribe_radius, int ally_attack, int ally_defence) {
         super(type, location, mercenary_health, new BaseAttackStrategy(mercenary_attack), new ChaseMovement(location));
         this.mercenary_attack = mercenary_attack;
         this.mercenary_health = mercenary_health;
         this.bribe_amount = bribe_amount;
         this.bribe_radius = bribe_radius;
+        this.ally_attack = ally_attack;
+        this.ally_defence = ally_defence;
     }
 
     private boolean checkMovement(DungeonMap dungeonMap, Location next) {
@@ -57,54 +61,17 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact, 
         }
         dungeonMap.UpdateEntity(this);
         return true;
-
-        // double presentDistance = playerLocation.distance(getLocation());
-        // boolean hasMove = false;
-        // if (getLocation().getUp().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getUp())) {
-        //         setLocation(getLocation().getUp());
-        //         hasMove = true;
-        //     }
-        // }else if (!hasMove && getLocation().getDown().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getDown())) {
-        //         setLocation(getLocation().getDown());
-        //         hasMove = true;
-        //     }
-        // } else if (!hasMove && getLocation().getLeft().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getLeft())) {
-        //         setLocation(getLocation().getLeft());
-        //         hasMove = true;
-        //     }
-        // } else if (!hasMove && getLocation().getRight().distance(playerLocation) <= presentDistance) {
-        //     if (!wallAndDoorList.contains(getLocation().getRight())) {
-        //         setLocation(getLocation().getRight());
-        //         hasMove = true;
-        //     }
-        // }
-    
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // } 
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // }
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // }
-        // if (!hasMove && !wallAndDoorList.contains(getLocation().getRight())) {
-        //     setLocation(getLocation().getRight());
-        // }
-        // dungeonMap.UpdateEntity(this);
     }
 
     @Override
     public boolean interact(Player player, DungeonMap dungeonMap) {
         Collection<Entity> entities = dungeonMap.getEntities(player.getLocation(), this.bribe_radius);
         if (entities.stream().anyMatch(entity -> entity.getType().equals("mercenary"))) {
-             
+
             if (player.getInventory().removeFromInventoryList("treasure", this.bribe_amount)) {
                 setType("ally");
-                dungeonMap.UpdateEntity(this);
+                dungeonMap.removeEntity(getEntityId());
+                dungeonMap.addEntity(new MercenaryAlly("ally", getLocation(), ally_attack, ally_defence));
                 return true;
             }
             return false;
