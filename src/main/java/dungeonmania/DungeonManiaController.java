@@ -122,6 +122,10 @@ public class DungeonManiaController {
                 zts.ZombieToastSpwanCheck();
                 System.out.println("number"+dungeonMap.getEntities("zombie_toast").size());
             }
+            if (entity.getType().equals("mercenary")) {
+                Mercenary mercenary = (Mercenary) entity;
+                mercenary.movement(dungeonMap);
+            } 
         }
         return getDungeonResponse();
     }

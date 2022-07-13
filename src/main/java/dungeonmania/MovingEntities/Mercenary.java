@@ -11,6 +11,7 @@ import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
@@ -28,15 +29,33 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
         this.bribe_radius = bribe_radius;
     }
 
+    private boolean checkMovement(DungeonMap dungeonMap, Location next) {
+        return dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
+    }
+
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        
+        MovementStrategy strategy = super.getMove();
+        Location playerLocation = new Location();
+        Collection<Entity> player = dungeonMap.getEntities("player");
+        for (Entity entity: player) {
+            Player p = (Player) entity;
+            playerLocation = p.getLocation();
+        }
+        Location next = strategy.nextLocation(playerLocation);
+        if (!checkMovement(dungeonMap, next)) {
+            setLocation(next);
+        } else {
+            next = strategy.moveWithWall(next, dungeonMap);
+            if (next.equals(getLocation())) {
+                return false;
+            } else {
+                setLocation(next);
+            }
+        }
+        dungeonMap.UpdateEntity(this);
         return true;
-        // Collection<Entity> walls = dungeonMap.getEntities("wall");
-        // Collection<Entity> doors = dungeonMap.getEntities("door");
-        // List<Location> wallAndDoorList = new ArrayList<>();
-        // walls.stream().forEach(wall -> wallAndDoorList.add(wall.getLocation()));
-        // doors.stream().forEach(door-> wallAndDoorList.add(door.getLocation()));
+
         // double presentDistance = playerLocation.distance(getLocation());
         // boolean hasMove = false;
         // if (getLocation().getUp().distance(playerLocation) <= presentDistance) {

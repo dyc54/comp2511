@@ -74,7 +74,33 @@ public class MovementTest {
     @Test
     @DisplayName("The movement for mercenary when they are not bribed") 
     public void mercenaryMovement() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_mercenaryTest", "c_spiderTest_basicMovement");
+        Position pos = getEntities(res, "mercenary").get(0).getPosition();
+        int x = pos.getX();
+        int y = pos.getY();
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(new Position(x - 1, y), getEntities(res, "mercenary").get(0).getPosition());
+        res = dmc.tick(Direction.UP);
+        assertEquals(new Position(x - 1, y - 1), getEntities(res, "mercenary").get(0).getPosition());
+        res = dmc.tick(Direction.LEFT);
+        assertEquals(new Position(x - 2, y - 1), getEntities(res, "mercenary").get(0).getPosition());
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(x - 2, y - 2), getEntities(res, "mercenary").get(0).getPosition());
+    }
 
+    @Test
+    @DisplayName("The movement for mercenary with wall when they are not bribed") 
+    public void mercenaryWithWall() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_mercenaryTest_wall", "c_spiderTest_basicMovement");
+        Position pos = getEntities(res, "mercenary").get(0).getPosition();
+        int x = pos.getX();
+        int y = pos.getY();
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(new Position(x, y + 1), getEntities(res, "mercenary").get(0).getPosition());
     }
 
     @Test
@@ -82,4 +108,11 @@ public class MovementTest {
     public void mercenaryFollowing() {
         
     }
+
+    @Test
+    @DisplayName("The mercenary is birbed by the player")
+    public void mercenaryBirbe() {
+        
+    }
+    
 }

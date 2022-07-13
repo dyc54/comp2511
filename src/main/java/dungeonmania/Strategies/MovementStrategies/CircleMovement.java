@@ -43,4 +43,10 @@ public class CircleMovement implements MovementStrategy {
         return this;
     }
 
+    @Override
+    public Location moveWithWall(Location location, DungeonMap dungeonMap) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
