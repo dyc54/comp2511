@@ -48,6 +48,9 @@ public class Inventory {
     }
 
     public boolean removeFromInventoryList(String type, int number) {
+        if (!inventory.containsKey(type)) {
+            return false;
+        }
         List<Entity> items = inventory.get(type);
         if (items.size() < number) {
             return false;

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
@@ -19,6 +20,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -186,6 +188,9 @@ public class ExampleTests {
 
         DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
         assertEquals(true, actualDungonRes.getEntities().stream().anyMatch(e -> e.getType().equals("zombie_toast_spawner")));
+        assertEquals(1, getEntities(actualDungonRes, "zombie_toast").size());
+        actualDungonRes = dmc.tick(Direction.LEFT);
+        assertEquals(2, getEntities(actualDungonRes, "zombie_toast").size());
     }
 
     @Test
@@ -367,4 +372,47 @@ public class ExampleTests {
         assertBattleCalculations("mercenary", battle, true, "c_battleTests_basicMercenaryMercenaryDies");
     }
 
+    @Test
+    @DisplayName("Test player distory zombie toast spawner-success")
+    public void distorySpawner() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_distorySpawner", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.DOWN); // pick up sword
+        assertEquals(1, getInventory(res, "sword").size());
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+        String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
+        res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+        assertEquals(0, getEntities(res, "zombie_toast_spawner").size());
+    }
+
+    @Test
+    @DisplayName("Test player distory zombie toast spawner-fail because the player is not around the spwaner")
+    public void distorySpawnerFail1() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_distorySpawner", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.DOWN); // pick up sword
+        assertEquals(1, getInventory(res, "sword").size());
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+        String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+    }
+
+    @Test
+    @DisplayName("Test player distory zombie toast spawner-fail because the play has not a weapon")
+    public void distorySpawnerFail2() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_distorySpawner", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.UP); 
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "sword").size());
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+        String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+    }
 }
