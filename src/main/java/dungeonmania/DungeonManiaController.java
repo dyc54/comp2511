@@ -154,6 +154,7 @@ public class DungeonManiaController {
             for (Entity entity: dungeonMap.getEntities(player.getLocation())) {
                 System.out.println(entity.toString());
                 if (entity instanceof Enemy) {
+                    System.out.println(String.format("%s at %s\n%s at %s", player.getEntityId().toString(), player.getLocation().toString(), entity.getEntityId().toString(), entity.getLocation().toString()));
                     Battle battle = new Battle();
                     String loser = battle.setBattle(player, (Enemy) entity).startBattle();
                     if (loser.equals("Both")) {
@@ -161,7 +162,8 @@ public class DungeonManiaController {
                         removed.add(player.getEntityId());
                         removed.add(entity.getEntityId());
                     } else {
-                        System.out.println("Loser");
+                        System.out.println(String.format("Loser %s", loser));
+                        // System.out.println(loser);
                         removed.add(loser);
                     }
                     battles.add(battle.toResponse());
