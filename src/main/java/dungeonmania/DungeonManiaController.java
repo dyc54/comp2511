@@ -3,6 +3,7 @@ package dungeonmania;
 import dungeonmania.Battle.Battle;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Goals.GoalController;
+import dungeonmania.MovingEntities.Mercenary;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
@@ -113,6 +114,8 @@ public class DungeonManiaController {
         player.movement(movementDirection.getOffset());
         dungeonMap.UpdateAllEntities();
         for (Entity entity : dungeonMap.getAllEntities()) {
+        // entitiesList = dungeonMap.getAllEntities();
+        // for (Entity entity : entitiesList) {
             if (entity.getType().equals("spider")) {
                 Spider spider = (Spider) entity;
                 spider.movement(dungeonMap);
@@ -126,6 +129,10 @@ public class DungeonManiaController {
                 zts.ZombieToastSpwanCheck();
                 System.out.println("number"+dungeonMap.getEntities("zombie_toast").size());
             }
+            if (entity.getType().equals("mercenary")) {
+                Mercenary mercenary = (Mercenary) entity;
+                mercenary.movement(dungeonMap);
+            } 
         }
         // Battle
         if (dungeonMap.getEntities(player.getLocation()).size() > 0) {
@@ -189,6 +196,13 @@ public class DungeonManiaController {
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        Entity entity = dungeonMap.getEntity(entityId);
+        if (entity.getType().equals("mercenary")) {
+            Mercenary mercenary = (Mercenary) entity;
+            if (!mercenary.interact(player, dungeonMap)) {
+                throw new InvalidActionException("invaild action");
+            }
+        }
         return getDungeonResponse();
     }
 

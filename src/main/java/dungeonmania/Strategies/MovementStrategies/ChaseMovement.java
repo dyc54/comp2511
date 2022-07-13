@@ -1,49 +1,69 @@
 package dungeonmania.Strategies.MovementStrategies;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
+import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class ChaseMovement implements MovementStrategy{
-    public Location location;
-    public boolean following;
+    private Location location;
+
     public ChaseMovement(Location location) {
         this.location = location;
     }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    private boolean checkMovement(DungeonMap dungeonMap, Location next) {
+        return dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
+    }
+
+    @Override
+    public Location moveWithWall(Location location, DungeonMap dungeonMap) {
+        Location next = new Location();
+        if (location.diff(getLocation()).getX() == getLocation().getX()) {
+            if (!checkMovement(dungeonMap, getLocation().getLeft()) && !checkMovement(dungeonMap, getLocation().getRight())) {
+                return location;
+            } else if (!checkMovement(dungeonMap, getLocation().getRight())) {
+                next = getLocation().getRight();
+            } else {
+                next = getLocation().getLeft();
+            }
+        } else {
+            if (!checkMovement(dungeonMap, getLocation().getUp()) && !checkMovement(dungeonMap, getLocation().getDown())) {
+                return location;
+            } else if (!checkMovement(dungeonMap, getLocation().getDown())) {
+                next = getLocation().getDown();
+            } else {
+                next = getLocation().getUp();
+            }
+        }
+        return next;
+    }
+
     @Override
     public Location nextLocation(Location location) {
-        // TODO Auto-generated method stub
-        
-        // Collection<Entity> entities = new LinkedList<>();
-        // location.getEightNearPosition().stream().forEach(position -> {
-        //     if (map.containsKey(position.apply(location))) {
-        //         entities.addAll(map.get(position.apply(location)));
-        //     }
-        // });
-
-        // location.getFourNearPosition().stream().forEach(position -> {
-
-        // });
-        List<Location> choices = new ArrayList<>(4);
-        Location diff = this.location.diff(location);
-        if (diff.getX() > 0) {
-            choices.add(location.getRight());
-        } else {
-            choices.add(location.getLeft());
+        double presentDistance = getLocation().distance(location);
+        double distance = presentDistance;
+        Location next = new Location();
+        if (getLocation().getUp().distance(location) <= presentDistance) {
+            next = getLocation().getUp();
+            distance = next.distance(location);
+        } 
+        if (getLocation().getDown().distance(location) <= distance) {
+            next = getLocation().getDown();
+            distance = next.distance(location);
         }
-        if (diff.getY() > 0) {
-            choices.add(location.getUp());
-        } else {
-            choices.add(location.getDown());
+        if (getLocation().getRight().distance(location) <= distance) {
+            next = getLocation().getRight();
+            distance = next.distance(location);
         }
-        if (choices.size() != 0) {
-            Random randomchoicer = new Random();
-            Location next = choices.get(randomchoicer.nextInt(choices.size()));
-            return next;
-        }
-        return location;
+        if (getLocation().getLeft().distance(location) <= distance) {
+            next = getLocation().getLeft();
+            distance = next.distance(location);
+        } 
+        return next;
     }
 
     @Override

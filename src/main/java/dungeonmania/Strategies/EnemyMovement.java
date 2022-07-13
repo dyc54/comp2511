@@ -2,6 +2,6 @@ package dungeonmania.Strategies;
 
 import dungeonmania.helpers.DungeonMap;
 
-public interface EnemyMovement extends Movement {
+public interface EnemyMovement  {
     public boolean movement(DungeonMap dungeonMap);
 }

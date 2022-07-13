@@ -47,6 +47,17 @@ public class Inventory {
         inventory.get(item.getType()).remove(item);
     }
 
+    public boolean removeFromInventoryList(String type, int number) {
+        List<Entity> items = inventory.get(type);
+        if (items.size() < number) {
+            return false;
+        } else {
+            for(int i = 0; i < number; i++) {
+                items.remove(0);
+            }
+        }
+        return true;
+    }
 
     /**
      * remove Entity from InventoryList by Entity id

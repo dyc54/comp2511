@@ -24,6 +24,7 @@ import dungeonmania.Battle.Enemy;
 import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.Strategies.MovementStrategies.*;
 
 /**
  * Observer Pattern
