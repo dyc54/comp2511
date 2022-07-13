@@ -87,8 +87,9 @@ public class DungeonManiaController {
             // System.out.println(getDungeonResponse().getEntities().get(0).getType());
             return getDungeonResponse();
         } catch (IOException e) {
-            return null;
+            throw new IllegalArgumentException("'configName' or 'dungeonName' is not a configuration/dungeon that exists");
         }
+        
     }
 
     /**
@@ -135,7 +136,11 @@ public class DungeonManiaController {
             } 
         }
         // Battle
-        if (dungeonMap.getEntities(player.getLocation()).size() > 0) {
+        String effect = "";
+        if (player.hasEffect()) {
+            effect = player.getCurrentEffect().applyEffect();
+        }
+        if (dungeonMap.getEntities(player.getLocation()).size() > 0 && !effect.equals("Invisibility")) {
             System.out.println("GetEntities");
             dungeonMap.getEntities(player.getLocation()).stream().forEach(entity -> System.out.println(entity.toString()));
             List<String> removed = new ArrayList<>();

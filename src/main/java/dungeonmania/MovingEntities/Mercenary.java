@@ -7,7 +7,9 @@ import java.util.List;
 import dungeonmania.Entity;
 import dungeonmania.Interact;
 import dungeonmania.Player;
+import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovement;
+import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
@@ -15,7 +17,7 @@ import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
+public class Mercenary extends MovingEntity implements EnemyMovement, Interact, Enemy {
     // Location location;
     double mercenary_attack;
     double mercenary_health;
@@ -110,6 +112,29 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact {
         return false;
     }
 
+    @Override
+    public AttackStrayegy getAttackStrayegy() {
+        // TODO Auto-generated method stub
+        return getAttack();
+    }
+
+    @Override
+    public String getEnemyId() {
+        // TODO Auto-generated method stub
+        return super.getEntityId();
+    }
+
+    @Override
+    public String getEnemyType() {
+        // TODO Auto-generated method stub
+        return getType();
+    }
+
+    @Override
+    public double getHealth() {
+        return super.getHealth();
+    }
+    
     // public Location getLocation() {
     //     return location;
     // }

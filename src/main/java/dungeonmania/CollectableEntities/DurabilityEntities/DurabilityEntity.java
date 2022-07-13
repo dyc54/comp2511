@@ -18,6 +18,6 @@ public abstract class DurabilityEntity extends CollectableEntity{
     }
 
     public boolean checkDurability(){
-        return durability == 0;
+        return durability < 0;
     }
 }

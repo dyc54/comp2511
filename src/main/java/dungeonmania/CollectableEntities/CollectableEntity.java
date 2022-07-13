@@ -28,10 +28,11 @@ public abstract class CollectableEntity extends Entity implements Interactabilit
         // TODO Auto-generated method stub
         if (entity instanceof Player) {
             Player player = (Player) entity;
-            player.pickup(this);
-            map.removeEntity(getEntityId());
-            if (DungeonMap.isaccessible(map, getLocation(), entity)) {
-                entity.setLocation(getLocation());
+            if (player.pickup(this)) {
+                map.removeEntity(getEntityId());
+                if (DungeonMap.isaccessible(map, getLocation(), entity)) {
+                    entity.setLocation(getLocation());
+                }
             }
         }
         return false;

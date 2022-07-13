@@ -50,33 +50,41 @@ public class Battle {
         this.enemy = enemy;
         this.initPlayerHealth = player.getHealth();
         this.initEnemyHealth = enemy.getHealth();
-        System.out.println(String.format("Set Battle: \nPlayer %f\nEnemy %s, %f", initPlayerHealth, enemy.getEnemyType(), initEnemyHealth));
+        System.out.println(String.format("Set Battle: \nPlayer HP:%f\nEnemy %s, HP:%f", initPlayerHealth, enemy.getEnemyType(), initEnemyHealth));
         return this;
     }
     public String startBattle() {
+        String effect = "";
+        if (player.hasEffect()) {
+            effect = player.getCurrentEffect().applyEffect();
+        }
         double currPlayerHealth = initPlayerHealth;
         double currEnemyHealth = initEnemyHealth;
         double playerdamage = playerDamage();;
         double enemydamage = enemyDamage();
-        List<ItemResponse> items= player.getInventory()
-                                    .getBattleInventoryList()
+        List<ItemResponse> items= player.getBattleUsage()
                                     .stream().map(mapper -> (CollectableEntity) mapper)
                                     .map(item -> item.getItemResponse()).collect(Collectors.toList());
         System.out.println(String.format("First Round P:%f - %f=%f\nE%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage
                                                                                 , currEnemyHealth, playerdamage, currEnemyHealth - playerdamage));
         currPlayerHealth -= enemydamage;
         currEnemyHealth -= playerdamage;
-        rounds.add(new RoundResponse(enemydamage, playerdamage, items));
-        // if ()
+        rounds.add(new RoundResponse(enemydamage * -1, playerdamage * -1, items));
+        if (currPlayerHealth > 0 && effect.equals("Invincibility")) {
+            return enemy.getEnemyId();
+        }
         // TODO: IF invincibility activity
         while (currPlayerHealth > 0 && currEnemyHealth > 0) {
             playerdamage = playerDamage();
             enemydamage = enemyDamage();
-            System.out.println(String.format("First Round P:%f - %f=%f\nE%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage
+            System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage
                                             , currEnemyHealth, playerdamage, currEnemyHealth - playerdamage));
             currPlayerHealth -= enemydamage;
             currEnemyHealth -= playerdamage;
-            rounds.add(new RoundResponse(enemydamage, playerdamage, items));
+            // RoundResponse response = new RoundResponse(enemydamage * -1.0, playerdamage * -1.0, items);
+            // System.out.println(response.getDeltaCharacterHealth());
+            // rounds.add(new RoundResponse(enemydamage * -1.0, playerdamage * -1.0, items));
+            rounds.add(new RoundResponse(enemydamage * -1, playerdamage * -1, items));
         }
         if (currPlayerHealth <= 0 && currEnemyHealth <= 0) {
             player.setHealth(0);

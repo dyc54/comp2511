@@ -1,21 +1,23 @@
 package dungeonmania.CollectableEntities.DurabilityEntities;
 
-public abstract class PotionEntity extends DurabilityEntity{
-    private String Effect;
+import dungeonmania.CollectableEntities.Effect;
+
+public abstract class PotionEntity extends DurabilityEntity implements Effect {
+    private String effect;
     private boolean inUsing = false;
 
-    public PotionEntity(String type, int durability, int x , int y, String Effect) {
+    public PotionEntity(String type, int durability, int x , int y, String effect) {
         super(type, durability, x, y);
-        this.Effect = Effect;
+        this.effect = effect;
     }
 
     public void setEffect(String effect) {
-        Effect = effect;
+        this.effect = effect;
     }
 
     public String getEffect() {
         if (inUsing) {
-            return Effect;
+            return effect;
         } else {
             return null;
         }

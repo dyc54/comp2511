@@ -35,7 +35,8 @@ import dungeonmania.Strategies.MovementStrategies.*;
  */
 public class DungeonMap {
     private TreeMap<Location, HashSet<Entity>> map;
-    private final HashMap<String, Location> IdCollection;
+    // private final HashMap<String, Location> IdCollection;
+    private final IdCollection<Location> idCollection;
     private int EnemiesDestroiedCounter;
     Player player;
     /**
@@ -58,7 +59,8 @@ public class DungeonMap {
 
     public DungeonMap() {
         map = new TreeMap<>();
-        IdCollection = new HashMap<>();
+        idCollection = new IdCollection<>();
+        // IdCollection = new HashMap<>();
         EnemiesDestroiedCounter = 0;
         
     }
@@ -88,8 +90,8 @@ public class DungeonMap {
      */
     public DungeonMap addEntity(Entity entity) {
         // TODO: change to private if use observer pattern
-        if (!IdCollection.containsKey(entity.getEntityId())) {
-            IdCollection.put(entity.getEntityId(), entity.getLocation().clone());
+        if (!idCollection.hasId(entity.getEntityId())) {
+            idCollection.put(entity.getEntityId(), entity.getLocation().clone());   
         }
         if (entity instanceof Player) {
             // System.out.println("Gett player");
@@ -114,7 +116,7 @@ public class DungeonMap {
      * @return
      */
     public boolean containsEntity(String id) {
-        return IdCollection.containsKey(id);
+        return idCollection.hasId(id);
     }
 
     /**
@@ -139,7 +141,7 @@ public class DungeonMap {
         if (!containsEntity(id)) {
             return null;
         }
-        Location location = IdCollection.get(id);
+        Location location = idCollection.get(id);
         // map.keySet().stream().forEach(entity -> System.out.println(entity + ":"+ location.toString()+entity.equals(location.toString())));
         return map.get(location)
                 .stream()
@@ -219,7 +221,7 @@ public class DungeonMap {
         if (!containsEntity(id)) {
             return;
         }
-        Location location = IdCollection.get(id);
+        Location location = idCollection.get(id);
         Collection<Entity> entities = getEntities(location);
         Entity temp = getEntity(id);
         if (temp instanceof Enemy) {
@@ -230,7 +232,7 @@ public class DungeonMap {
         // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
         // System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
         entities.remove(temp);
-        IdCollection.remove(id);
+        idCollection.remove(id);
         // IdCollection.
         // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
     }

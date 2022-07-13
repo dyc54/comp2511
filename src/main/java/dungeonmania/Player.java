@@ -1,11 +1,19 @@
 package dungeonmania;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
 
+import dungeonmania.CollectableEntities.Bomb;
 import dungeonmania.CollectableEntities.CollectableEntity;
+import dungeonmania.CollectableEntities.Effect;
+import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
+import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
 import dungeonmania.Inventories.Inventory;
 import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
@@ -33,7 +41,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private boolean stay;
     private DungeonMap map;
     private Location previousLocation;
-
+    private Queue<PotionEntity> effects;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -45,8 +53,11 @@ public class Player extends Entity implements PlayerMovementStrategy {
         inventory = new Inventory();
         this.map = map;
         stay = false;
+        effects = new ArrayDeque<>();
     }
-
+    public void addeffect(PotionEntity e) {
+        effects.add(e);
+    }
     public AttackStrayegy getAttackStrayegy() {
         return attack;
     }
@@ -60,15 +71,17 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.health -= health;
     }
     public List<Entity> getInventoryList() {
-        return inventory.getInventoryList();
+        return inventory.getAllInventory();
     }
     public Inventory getInventory() {
         return inventory;
     }
-    public void addInventoryList(Entity item) {
-        inventory.addToInventoryList(item);
-    }
+    // public void addInventoryList(Entity item) {
+    //     inventory.addToInventoryList(item);
+    // }
+    // public void useItem(String id) {
 
+    // }
     public void removeInventoryList(Entity item) {
         inventory.removeFromInventoryList(item);
     }
@@ -109,6 +122,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             }
         }
     }
+
     @Override
     public void movement(Position p) {
         // If there is a wall, don't move
@@ -279,34 +293,105 @@ public class Player extends Entity implements PlayerMovementStrategy {
     //     }
     // }
 
-    public void pickup(Entity entity) {
-        inventory.addToInventoryList(entity);
+    public boolean pickup(Entity entity) {
+        return inventory.addToInventoryList(entity, this);
 
     }
 
     //player 查询背包物品进行建造
-    public String build(String buildable, Config config){
-        return inventory.build(buildable, config);
+    public String build(String buildable, Config config) {
+        switch (buildable) {
+            case "bow":
+                boolean wood_b = inventory.hasItem("wood", 1);
+                boolean arrow = inventory.hasItem("arrows", 3);
+                if (wood_b && arrow) {
+                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                }
+                inventory.removeFromInventoryList("wood", 1);
+                inventory.removeFromInventoryList("arrows", 3);
+                break;
+            case "shield":
+                boolean wood_s = inventory.hasItem("wood", 2);
+                boolean treasure  = inventory.hasItem("treasure ", 1);
+                boolean key  = inventory.hasItem("key ", 1);
+                if (wood_s && (treasure || key)) {
+                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                }
+                inventory.removeFromInventoryList("wood", 2);
+                if (treasure) {
+                    inventory.removeFromInventoryList("treasure", 1);
+                } else {
+                    inventory.removeFromInventoryList("key", 1);
+                }
+                break;
+            default:
+                break;
+        }
+        return "";
     }
 
 
     //player 使用物品
     public void useItem(String itemUsedId){
-        inventory.useItem(itemUsedId);
+        Entity entity = inventory.getItem(itemUsedId);
+        if (entity instanceof PotionEntity) {
+            addeffect((PotionEntity) entity);
+            inventory.removeFromInventoryList(entity);
+        } else if (entity instanceof Bomb) {
+            Bomb bomb = (Bomb) entity;
+            // if (bom)
+            bomb.put(getLocation());
+            map.addEntity(bomb);
+            inventory.removeFromInventoryList(entity);
+        } 
+
+        // inventory.useItem(itemUsedId);
     }
 
-    //查询player状态，无敌还是隐身，还是都有
-    public List<String> checkPlayerStatus(){
-        return inventory.checkPlayerStatus();
+    // //查询player状态，无敌还是隐身，还是都有
+    // public List<String> checkPlayerStatus(){
+    //     return inventory.checkPlayerStatus();
+    // }
+    public PotionEntity getCurrentEffect() {
+        return effects.peek();
     }
-
-
+    public boolean hasEffect() {
+        return effects.size() != 0;
+    }
     public Location getPreviousLocation() {
         return previousLocation;
     }
 
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation = previousLocation;
+    }
+    public void update() {
+        PotionEntity entity = getCurrentEffect();
+        entity.setDurability();
+        if (!entity.checkDurability()) {
+            effects.poll();
+        }
+        // TODO: refactor
+        for(Iterator<Entity> iterator = inventory.getAllInventory().iterator(); iterator.hasNext();) {
+            Entity temp = iterator.next();
+            if (temp instanceof DurabilityEntity && ! (temp instanceof PotionEntity)) {
+                DurabilityEntity durabilityEntity = (DurabilityEntity) temp;
+                durabilityEntity.setDurability();
+                if (!entity.checkDurability()) {
+                    inventory.removeFromInventoryList(temp);
+                }
+            }
+        }
+
+    }
+    public List<Entity> getBattleUsage() {
+        List<Entity> list = new ArrayList<>();
+        if (hasEffect()) {
+            list.add(effects.peek());
+        }
+        List<Entity>invUsage = inventory.getAllInventory().stream().filter(temp -> temp instanceof DurabilityEntity && ! (temp instanceof PotionEntity)).collect(Collectors.toList());
+        list.addAll(invUsage);
+        return list;
     }
     // TODO: if player have sword, bow or bribed mercenary, attack has to be added. 
     // TODO: e.g. attack.bonusDamage(sward)
