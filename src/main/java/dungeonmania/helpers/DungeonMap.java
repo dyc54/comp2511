@@ -86,10 +86,24 @@ public class DungeonMap {
             JSONObject entity = entities.getJSONObject(i);
             addEntity(EntityFactory.newEntity(entity, config, this));
         }
+        setSpiderSpawnRate(config.spider_spawn_rate);
         toString();
         return this;
     }
+    
+    int timer = 0;
+    int rate;
+    public void setSpiderSpawnRate(int rate) {
+        this.rate =rate;
+    }
 
+    public int getSpiderSpawnRate() {
+        return rate;
+    }
+
+    public void timerAdd() {
+        timer++;
+    }
     /**
      * Add a Entity to Dungeon Map.
      * 

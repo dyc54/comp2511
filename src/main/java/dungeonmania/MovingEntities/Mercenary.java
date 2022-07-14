@@ -55,13 +55,11 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact, 
                 if (next.equals(getLocation())) {
                     return false;
                 }
-                
             }
-        }else if (isHasBribed()) {
+        }else if (isHasBribed() && dungeonMap.getFourNearEntities(p.getLocation()).contains(this)) {
             strategy = new FollowingMovement();
             Location playerPreLocation = p.getPreviousLocation();
             next = strategy.nextLocation(playerPreLocation);
-            
         } else {
             next = strategy.nextLocation(playerLocation);
             if (dungeonMap.checkMovement(next)) {

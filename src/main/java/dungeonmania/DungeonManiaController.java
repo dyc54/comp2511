@@ -47,8 +47,8 @@ public class DungeonManiaController {
     private String goalsString;
     private List<AnimationQueue> animations;
     // private Collection<Entity> entitiesList;
-    private Player player;
-
+    private Player player;  
+    int timer = 0;
     public String getSkin() {
         return "default";
     }
@@ -115,7 +115,7 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         System.out.println("************************ Tick movementDirection ********************");
-
+        dungeonMap.timerAdd();
         player.movement(movementDirection.getOffset());
         System.out.println("player:"+player.getLocation());
         dungeonMap.UpdateAllEntities();
@@ -140,10 +140,6 @@ public class DungeonManiaController {
                 Mercenary mercenary = (Mercenary) entity;
                 mercenary.movement(dungeonMap);
             } 
-            // if (entity.getType().equals("ally")) {
-            //     MercenaryAlly mercenaryAlly = (MercenaryAlly) entity;
-            //     mercenaryAlly.movement(dungeonMap);
-            // } 
         }
         // Battle
         dungeonMap.battleAll(battles);
