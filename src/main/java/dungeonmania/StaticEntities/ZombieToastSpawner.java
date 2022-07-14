@@ -48,7 +48,7 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
         TimerAdd();
         if (timer == zombieSpawnRate) {
             // int randomDirection = new Random().nextInt(4);
-            ZombieToast zombie = new ZombieToast("zombie_toast", getLocation(), zombie_attack, zombie_health);
+            ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack, zombie_health);
             zombie.movement(map);
             System.out.println("after:"+ zombie.getLocation());
             setTimer(0);

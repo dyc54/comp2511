@@ -25,6 +25,7 @@ import dungeonmania.Strategies.AttackStrategies.BonusDamageStrategy;
 import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;
 import dungeonmania.Strategies.DefenceStrategies.ArmorableStrategy;
 import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Position;
 import dungeonmania.helpers.Config;
@@ -85,17 +86,21 @@ public class Player extends Entity implements PlayerMovementStrategy {
         });
     }
     public void cleardisusableItem() {
+        System.out.println("******");
+        inventory.print();
         List<Entity> entities = new LinkedList<>();
         inventory.getAllInventory().forEach( entity ->{
-            if (entity instanceof DurabilityEntity && !((DurabilityEntity) entity).checkDurability()) {
+            System.out.println(entity.getType());
+            if (entity instanceof DurabilityEntity && ((DurabilityEntity) entity).checkDurability()) {
+                // System.out.println("");
                 entities.add(entity);
             }
         });
-        entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity));
-        if (!getCurrentEffect().checkDurability()) {
+        entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
+        if (hasEffect() && !getCurrentEffect().checkDurability()) {
             effects.poll();
         }
-        
+
     }
     // public void addInventoryList(Entity item) {
     //     inventory.addToInventoryList(item);
@@ -320,16 +325,20 @@ public class Player extends Entity implements PlayerMovementStrategy {
     }
 
     //player 查询背包物品进行建造
-    public String build(String buildable, Config config) {
+    public String build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         switch (buildable) {
             case "bow":
                 boolean wood_b = inventory.hasItem("wood", 1);
-                boolean arrow = inventory.hasItem("arrows", 3);
+                boolean arrow = inventory.hasItem("arrow", 3);
+                System.out.println(String.format("Building bow: wood %s %d/%d arrow %s %d/%d"
+                                                        , wood_b, inventory.getItems("wood").size(), 1, arrow, inventory.getItems("arrow").size(), 3));
                 if (wood_b && arrow) {
                     inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                } else {
+                    throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
                 inventory.removeFromInventoryList("wood", 1);
-                inventory.removeFromInventoryList("arrows", 3);
+                inventory.removeFromInventoryList("arrow", 3);
                 break;
             case "shield":
                 boolean wood_s = inventory.hasItem("wood", 2);
@@ -337,6 +346,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 boolean key  = inventory.hasItem("key ", 1);
                 if (wood_s && (treasure || key)) {
                     inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                } else {
+                    throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
                 inventory.removeFromInventoryList("wood", 2);
                 if (treasure) {
@@ -346,7 +357,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 }
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("buildable is not one of bow, shield");
         }
         return "";
     }
@@ -387,25 +398,25 @@ public class Player extends Entity implements PlayerMovementStrategy {
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation = previousLocation;
     }
-    public void update() {
-        PotionEntity entity = getCurrentEffect();
-        entity.setDurability();
-        if (!entity.checkDurability()) {
-            effects.poll();
-        }
-        // TODO: refactor
-        for(Iterator<Entity> iterator = inventory.getAllInventory().iterator(); iterator.hasNext();) {
-            Entity temp = iterator.next();
-            if (temp instanceof DurabilityEntity && ! (temp instanceof PotionEntity)) {
-                DurabilityEntity durabilityEntity = (DurabilityEntity) temp;
-                durabilityEntity.setDurability();
-                if (!entity.checkDurability()) {
-                    inventory.removeFromInventoryList(temp);
-                }
-            }
-        }
+    // public void update() {
+    //     PotionEntity entity = getCurrentEffect();
+    //     entity.setDurability();
+    //     if (!entity.checkDurability()) {
+    //         effects.poll();
+    //     }
+    //     // TODO: refactor
+    //     for(Iterator<Entity> iterator = inventory.getAllInventory().iterator(); iterator.hasNext();) {
+    //         Entity temp = iterator.next();
+    //         if (temp instanceof DurabilityEntity && ! (temp instanceof PotionEntity)) {
+    //             DurabilityEntity durabilityEntity = (DurabilityEntity) temp;
+    //             durabilityEntity.setDurability();
+    //             if (!entity.checkDurability()) {
+    //                 inventory.removeFromInventoryList(temp);
+    //             }
+    //         }
+    //     }
 
-    }
+    // }
     public List<Entity> getBattleUsage() {
         List<Entity> list = new ArrayList<>();
         if (hasEffect()) {

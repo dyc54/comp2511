@@ -119,6 +119,8 @@ public class Inventory {
                 player.getDefenceStrayegy().removeDefence((BonusDefenceAdd) item);
             }
             inventory.get(type).remove(item);
+            System.out.println(String.format("%s has remove from inventory", type));
+            
             return idCollection.remove(itemId);
         }
         return false;
@@ -354,5 +356,7 @@ public class Inventory {
         }
         return items;
     } 
-
+    public void print() {
+        idCollection.Keys().stream().forEach(key -> System.out.println(key));
+    }
 }

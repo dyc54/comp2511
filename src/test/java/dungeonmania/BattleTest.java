@@ -72,8 +72,8 @@ public class BattleTest {
             double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
             double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
             double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
-            double bowbonus = shield ? Double.parseDouble(getValueFromConfigFile("bow_attack", configFilePath)): 1;
-            double shieldbonus = bow ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
+            double bowbonus = bow ? 2 : 1;
+            double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
             // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus) < 0 ?  0 : enemyAttack - shieldbonus)/ 10));
@@ -146,7 +146,7 @@ public class BattleTest {
     @Test
     public void testBattleWithEnemyInvincibilityPotionWin() {
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithSpider4LQ3G1657779449.1987035.1987035", "c_BattleTest_playerweak");
+        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithSpider4LQ3G1657779449.1987035", "c_BattleTest_playerweak");
         String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
         assertDoesNotThrow( () -> {
             controller.tick(invincibility_potion_id);
@@ -225,22 +225,26 @@ public class BattleTest {
         DungeonResponse initialResponse = controller.newGame("testBattleSwordDOG901657792864.4144611", "c_BattleTest_playerweak");
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
-        controller.tick(Direction.RIGHT);
+        assertTrue(getInventory(initialResponse, "sword").size() == 1);
         assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak", true, false, false);
-        controller.tick(Direction.RIGHT);
+        DungeonResponse next = controller.tick(Direction.RIGHT);
+        assertTrue(getInventory(next, "sword").size() == 0);
+        // TODO: duration
         // assertBattleCalculations("spider", battle, false, "c_BattleTest_playerweak", true, false, false);
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
     }
     @Test
-    public void testBattleWithEnemySwordLost() {
+    public void testBattleWithEnemyBow() {
         DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
-    }
-    @Test
-    public void testBattleWithEnemyBowWin() {
-        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("testBattlewithBowYEKBM1657806630.6273608", "c_BattleTest_playerweak");
+        assertDoesNotThrow( () -> {
+            controller.build("bow");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak", false, false, true);
+        
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
     }

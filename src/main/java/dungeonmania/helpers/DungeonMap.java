@@ -451,8 +451,13 @@ public class DungeonMap {
                     battles.add(battle.toResponse());
                 }
             }
+            if (removed.size() != 0) {
+                // player.setBattleUsedDuration();
+            }
+            player.cleardisusableItem();
             removed.stream().forEach(id -> this.removeEntity(id));
             movements.stream().forEach(ent -> ent.movement(this));
+            
         }
         return this;
     }
