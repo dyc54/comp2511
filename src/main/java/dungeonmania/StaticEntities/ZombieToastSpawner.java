@@ -35,7 +35,7 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
     public int getTimer() {
         return this.timer;
     }
-    
+
     public void setTimer(int timer) {
         this.timer = timer;
     }
@@ -47,47 +47,17 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
     public void ZombieToastSpwanCheck() {
         TimerAdd();
         if (timer == zombieSpawnRate) {
-            // int randomDirection = new Random().nextInt(4);
-            ZombieToast zombie = new ZombieToast("zombie_toast", getLocation(), zombie_attack, zombie_health);
-            zombie.movement(map);
-            System.out.println("after:"+ zombie.getLocation());
-            setTimer(0);
-            // up
-            // if (randomDirection == 1) {
-            //     if (CheckOpenSpace(this.getLocation().getX(), this.getLocation().getY() - 1)) {
-            //         loc.setLocation(this.getLocation().getX(), this.getLocation().getY() - 1);
-            //         map.addEntity(new ZombieToast("zombie", loc, zombie_attack, zombie_health));
-            //         return;
-            //     }
-            // }
-
-            // // left
-            // if (randomDirection == 2) {
-            //     if (CheckOpenSpace(this.getLocation().getX() - 1, this.getLocation().getY())) {
-            //         loc.setLocation(this.getLocation().getX() - 1, this.getLocation().getY());
-            //         map.addEntity(new ZombieToast("zombie", loc, zombie_attack, zombie_health));
-            //         return;
-            //     }
-            // }
-
-            // // down
-            // if (randomDirection == 3) {
-            //     if (CheckOpenSpace(this.getLocation().getX(), this.getLocation().getY() + 1)) {
-            //         loc.setLocation(this.getLocation().getX(), this.getLocation().getY() + 1);
-            //         map.addEntity(new ZombieToast("zombie", loc, zombie_attack, zombie_health));
-            //         return;
-            //     }
-            // }
-
-            // // right
-            // if (randomDirection == 4) {
-            //     if (CheckOpenSpace(this.getLocation().getX() + 1, this.getLocation().getY())) {
-            //         loc.setLocation(this.getLocation().getX() + 1, this.getLocation().getY());
-            //         map.addEntity(new ZombieToast("zombie", loc, zombie_attack, zombie_health));
-            //         return;
-            //     }
-            // }
-
+            // If there are obstacles at all four cardinally adjacent position, don't spwan
+            if (getLocation().getFourNearPosition().stream()
+                    .allMatch(e -> (!CheckOpenSpace(e.apply(getLocation()).getX(), e.apply(getLocation()).getY())))) {
+                return;
+            } else {
+                // spawn
+                ZombieToast zombie = new ZombieToast("zombie_toast", getLocation(), zombie_attack, zombie_health);
+                zombie.movement(map);
+                System.out.println("after:" + zombie.getLocation());
+                setTimer(0);
+            }
         }
     }
 
@@ -98,7 +68,6 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
                 || map.getEntities(x, y).stream().anyMatch(e -> e.getType().equals("wall"))) {
             return false;
         }
-
         return true;
     }
 
