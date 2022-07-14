@@ -1,0 +1,4 @@
+player,0,0
+spider,1,1
+invincibility_potion,0,0
+g,exit

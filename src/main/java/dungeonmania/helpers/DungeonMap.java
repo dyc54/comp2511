@@ -1,6 +1,7 @@
 package dungeonmania.helpers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,10 +21,12 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Interactability;
 import dungeonmania.Player;
+import dungeonmania.Battle.Battle;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.response.models.BattleResponse;
 import dungeonmania.Strategies.MovementStrategies.*;
 
 /**
@@ -71,7 +74,7 @@ public class DungeonMap {
      * @param path
      * @throws IOException
      */
-    public void loads(String path, Config config) throws IOException {
+    public DungeonMap loads(String path, Config config) throws IOException {
         
         String content = FileReader.LoadFile(path);
         JSONObject json = new JSONObject(content);
@@ -80,6 +83,7 @@ public class DungeonMap {
             JSONObject entity = entities.getJSONObject(i);
             addEntity(EntityFactory.newEntity(entity, config, this));
         }
+        return this;
     }
 
     /**
@@ -402,6 +406,34 @@ public class DungeonMap {
     public void UpdateAllEntities() {
         getAllEntities().stream().forEach(entity -> UpdateEntity(entity));
     }
+    public DungeonMap interactAll() {
+        getAllEntities().stream().forEach(entity -> {
+            if (entity instanceof Interactability) {
+                ((Interactability) entity).interact(player, this);
+            }
+        });
+        return this;
+    }
+    public DungeonMap  battleAll(List<BattleResponse> battles) {
+        List<String> removed = new ArrayList<>();
+        for (Entity entity: getEntities(player.getLocation())) {
+            System.out.println(entity.toString());
+            if (entity instanceof Enemy) {
+                Battle battle = new Battle();
+                String loser = battle.setBattle(player, (Enemy) entity).startBattle();
+                if (loser.equals("Both")) {
+                    System.out.println("remove both");
+                    removed.add(player.getEntityId());
+                    removed.add(entity.getEntityId());
+                } else {
+                    System.out.println("Loser");
+                    removed.add(loser);
+                }
+                battles.add(battle.toResponse());
+            }
+        }
+        return this;
+    }
     @Override
     public String toString() {
         System.out.println("*********** MAP ***********\n");
@@ -450,4 +482,5 @@ public class DungeonMap {
             .filter(element ->  location.equals(element.getLocation()) && element instanceof Interactability && ((Interactability) element).hasSideEffect(entity, map))
             .collect(Collectors.toList());
     }
+    // public static void interact
 }

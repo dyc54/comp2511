@@ -71,7 +71,7 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact, 
             if (player.getInventory().removeFromInventoryList("treasure", this.bribe_amount)) {
                 setType("ally");
                 dungeonMap.removeEntity(getEntityId());
-                MercenaryAlly ally = new MercenaryAlly("ally", getLocation(), ally_attack, ally_defence, getHealth())
+                MercenaryAlly ally = new MercenaryAlly("ally", getLocation(), ally_attack, ally_defence, getHealth());
                 dungeonMap.addEntity(ally);
                 player.getAttackStrayegy().bonusDamage(ally);
                 player.getDefenceStrayegy().bonusDefence(ally);

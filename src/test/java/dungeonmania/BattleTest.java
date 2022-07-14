@@ -1,8 +1,8 @@
 package dungeonmania;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+// import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+// import static org.junit.jupiter.api.Assertions.assertFalse;
+// import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
@@ -43,16 +43,18 @@ public class BattleTest {
                 String configFilePath) {
             List<RoundResponse> rounds = battle.getRounds();
             double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
-            double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
+            double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
             double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
             double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
-
+            System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
-            assertEquals(round.getDeltaCharacterHealth(), enemyAttack / 10);
-            assertEquals(round.getDeltaEnemyHealth(), playerAttack / 5);
-            enemyHealth -= round.getDeltaEnemyHealth();
-            playerHealth -= round.getDeltaCharacterHealth();
+            assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
+            assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
+            enemyHealth += round.getDeltaEnemyHealth();
+            playerHealth += round.getDeltaCharacterHealth();
+            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
+        System.out.println(enemyHealth);
 
         if (enemyDies) {
             assertTrue(enemyHealth <= 0);
@@ -61,49 +63,65 @@ public class BattleTest {
         }
     }
     @Test
+    @DisplayName("Test the player can win battle with spider")
     public void testBattleWithSpiderWin() {
+        /**
+         * player [    ] 
+         * [    ] spider 
+         */
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("d_battleTest_basicMercenary", "c_battleTests_basicMercenaryPlayerDies");
+        DungeonResponse initialResponse = controller.newGame("battleWithSpiderWinVKQT81657768515.1290405", "c_Battletest_PlayerStrong");
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
-
-        assertBattleCalculations("spider",battle, true,"c_battleTests_basicMercenaryPlayerDies")
+        controller.tick(Direction.RIGHT);
+        assertBattleCalculations("spider", battle, true, "c_Battletest_PlayerStrong");
     }
     @Test
+    @DisplayName("Test the player can lose battle with spider")
     public void testBattleWithSpiderLost() {
         DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
+        DungeonResponse initialResponse = controller.newGame("battleWithSpiderWinVKQT81657768515.1290405", "c_BattleTest_playerweak");
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        controller.tick(Direction.RIGHT);
+        assertBattleCalculations("spider",battle, false, "c_BattleTest_playerweak");
     }
     @Test
+    @DisplayName("Test the player can lose battle with zombie")
     public void testBattleWithZombieWin() {
         DungeonManiaController controller = new DungeonManiaController();
+        //  player [    ] [    ] 
+        //  wall  zombie  wall
+        //  [    ]  wall  [    ]
+        
+        DungeonResponse initialResponse = controller.newGame("BattleWithZombieM6DU51657772152.1681082", "c_Battletest_PlayerStrong");
+        DungeonResponse postBattleResponse = controller.tick(Direction.DOWN);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        controller.tick(Direction.RIGHT);
+        assertBattleCalculations("zombie",battle, true, "c_Battletest_PlayerStrong");
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
     }
     @Test
     public void testBattleWithZombieLost() {
         DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
+        //  player  wall  [    ] 
+        //  [    ]  zombie  wall
+        //  [    ]  wall  [    ]
+        DungeonResponse initialResponse = controller.newGame("BattleWithZombieM6DU51657772152.1681082", "c_BattleTest_playerweak");
+        DungeonResponse postBattleResponse = controller.tick(Direction.DOWN);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        controller.tick(Direction.RIGHT);
+        assertBattleCalculations("zombie",battle, false, "c_BattleTest_playerweak");
     }
-    @Test
-    public void testBattleWithMerceariesWin() {
-        DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
-    }
-    @Test
-    public void testBattleWithMerceariesLost() {
-        DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
-    }
-    @Test
+
+    // @Test
     public void testBattleWithEnemyInvincibilityPotionWin() {
         DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
+        DungeonResponse initialResponse = controller.newGame("testinvincibility_potion4LQ3G1657779449.1987035", "c_BattleTest_playerweak");
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak");
     }
     @Test
     public void testBattleWithEnemyInvincibilityPotionLost() {

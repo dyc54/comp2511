@@ -16,6 +16,7 @@ public class RandomMovement implements MovementStrategy{
     @Override
     public Location nextLocation(Location location) {
         // TODO Auto-generated method stub
+        
         List<Location> choices = new ArrayList<>(4);
         for (char ch : possible.toCharArray()) {
             switch (ch) {
@@ -27,6 +28,7 @@ public class RandomMovement implements MovementStrategy{
                     break;
                 case 'l':
                     choices.add(location.getLeft());
+                    System.out.println(location.getLeft().toString());
                     break;
                 case 'r':
                     choices.add(location.getRight());
@@ -35,10 +37,13 @@ public class RandomMovement implements MovementStrategy{
                     break;
             }
         }
+        // System.out.println(choices.size() != 0);
+        choices.stream().forEach(lo -> System.out.println(lo.toString()));
         if (choices.size() != 0) {
             Random randomchoicer = new Random();
             Location next = choices.get(randomchoicer.nextInt(choices.size()));
-            return next;
+                    // System.out.println(next.getLeft().toString());
+                    return next;
         }
         return location;   
     }
@@ -47,7 +52,10 @@ public class RandomMovement implements MovementStrategy{
     public MovementStrategy MoveOptions(String string) {
         // TODO Auto-generated method stub
         // List<String> 
-        string.replaceAll("[udlr]", "");
+        // System.out.println(possible);
+        // possible = string.replaceAll("[udlr]", "");
+        possible = string;
+        // System.out.println(possible);
         return this;
     }
 

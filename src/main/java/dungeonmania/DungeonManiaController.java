@@ -76,14 +76,14 @@ public class DungeonManiaController {
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         try {
             dungeonConfig = new Config(configName);
+            battles = new ArrayList<>();
             //dungeonMap = new DungeonMap();
-            dungeonMap.loads(dungeonName, dungeonConfig);
+            dungeonMap.loads(dungeonName, dungeonConfig).interactAll().battleAll(battles);
             goals = new GoalController(dungeonName, dungeonConfig);
             // entitiesList = dungeonMap.getAllEntities();
             player = dungeonMap.getPlayer();
             // setPlayer();
             goals.hasAchieved(dungeonMap, player);
-            battles = new ArrayList<>();
             // setGoalsString(dungeonName);
             // System.out.println(getDungeonResponse().getEntities().get(0).getType());
             return getDungeonResponse();
@@ -113,6 +113,7 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         System.out.println("************************ Tick ********************");
+
         player.movement(movementDirection.getOffset());
         System.out.println("player:"+player.getLocation());
         dungeonMap.UpdateAllEntities();
@@ -126,6 +127,7 @@ public class DungeonManiaController {
             if (entity.getType().equals("zombie_toast")) {
                 ZombieToast zombie = (ZombieToast) entity;
                 zombie.movement(dungeonMap);
+                System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
             } 
             if (entity.getType().equals("zombie_toast_spawner")) {
                 ZombieToastSpawner zts = (ZombieToastSpawner) entity;

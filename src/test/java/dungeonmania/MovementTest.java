@@ -73,7 +73,7 @@ public class MovementTest {
         }
     }
 
-    @Test
+    // @Test
     @DisplayName("The movement for mercenary when they are not bribed") 
     public void mercenaryMovement() {
         DungeonManiaController dmc;
@@ -105,7 +105,7 @@ public class MovementTest {
         assertEquals(new Position(x, y + 1), getEntities(res, "mercenary").get(0).getPosition());
     }
 
-    @Test
+    // @Test
     @DisplayName("The following state for mercenary movement")
     public void mercenaryFollowing() {
         DungeonManiaController dmc;
@@ -134,7 +134,7 @@ public class MovementTest {
         assertEquals(1, getEntities(res, "ally").size());
     }
     
-    @Test
+    // @Test
     @DisplayName("The mercenary is bribed by the player-fail because player has not enough treasure")
     public void mercenaryBirbeFail1() {
         DungeonManiaController dmc;

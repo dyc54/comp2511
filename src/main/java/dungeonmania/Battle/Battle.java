@@ -58,6 +58,8 @@ public class Battle {
         if (player.hasEffect()) {
             effect = player.getCurrentEffect().applyEffect();
         }
+        
+        System.out.println(String.format("effect %s", effect));
         double currPlayerHealth = initPlayerHealth;
         double currEnemyHealth = initEnemyHealth;
         double playerdamage = playerDamage();;
