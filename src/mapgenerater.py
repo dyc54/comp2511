@@ -162,7 +162,7 @@ def main():
                 print("Error in input argument, lacking of 'color' in portal or 'key' in (door and key)")
                 continue
             entity = newEntities(arg[0], int(arg[1]), int(arg[2]))
-            addmap(int(arg[1]), int(arg[2]), map, arg[0])
+            addmap(int(arg[2]),int(arg[1]), map, arg[0])
             if (arg[0] == "portal"):
                 entity['colour'] = arg[3]
             elif (arg[0] in ['door', 'key']):
@@ -171,7 +171,7 @@ def main():
         except (ValueError, EOFError, KeyboardInterrupt):
             break
     temp = {}
-    goals = []
+    goals = {}
     print("Add Goal, format command, args, ..., crtl + c/d to next, __q__ to exit")
     while True:
         try:
@@ -185,13 +185,13 @@ def main():
             args = line.replace(" ", "").split(',')
             command = args[0]
             if (command == "g" and len(args) == 2):
-                goals.append(goal(args[1]))
+                goals = goal(args[1])
             elif (command == "s" and len(args) == 4):
-                goals.append(supergoal(args[1], args[2], args[3]))
+                goals = supergoal(args[1], args[2], args[3])
             elif (command == "c" and (len(args) == 3 or len(args) == 5)):
                 complexCreateGoal(temp, line)
             elif (command == "m" and len(args) == 4):
-                goals.append(complexMergeGoal(temp, line))
+                goals = complexMergeGoal(temp, line)
             else:
                 print("Error input, try again")
                 continue
@@ -202,6 +202,7 @@ def main():
         'goal-condition': goals,
     }
     printmap(map)
+    # print(goals)
     save(response, log, filename)
 
 
