@@ -26,10 +26,12 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     public boolean movement(DungeonMap dungeonMap) {
 
         String choice = nextPossibleLocation(dungeonMap);
+        System.out.println(choice);
         Location next = getMove().MoveOptions(choice).nextLocation(getLocation());
         if (next.equals(getLocation())) {
             return false;
         } else {
+            setLocation(next);
             dungeonMap.UpdateEntity(this);
             return true;
         }

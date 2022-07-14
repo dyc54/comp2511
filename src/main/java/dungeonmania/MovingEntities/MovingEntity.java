@@ -40,7 +40,7 @@ public abstract class MovingEntity extends Entity {
 
         possible += DungeonMap.isaccessible(map, entity.getLocation().getUp(), entity) ? "u": "";
         possible += DungeonMap.isaccessible(map, entity.getLocation().getDown(), entity) ? "d": "";
-        possible += DungeonMap.isaccessible(map, entity.getLocation().getLeft(), entity) ? "f": "";
+        possible += DungeonMap.isaccessible(map, entity.getLocation().getLeft(), entity) ? "l": "";
         possible += DungeonMap.isaccessible(map, entity.getLocation().getRight(), entity) ? "r": "";
         return possible;
     }

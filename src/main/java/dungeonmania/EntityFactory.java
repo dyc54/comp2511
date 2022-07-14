@@ -73,8 +73,8 @@ public class EntityFactory {
                 return new ZombieToast(type, Location.AsLocation(x, y), config.zombie_attack, config.zombie_health);
             case "mercenary":
                 return new Mercenary(type, Location.AsLocation(x, y), config.mercenary_attack, config.mercenary_health, config.bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence);
-            case "ally":
-                return new MercenaryAlly(type, Location.AsLocation(x, y), config.ally_attack, config.ally_defence);
+            // case "ally":
+            //     return new MercenaryAlly(type, Location.AsLocation(x, y), config.ally_attack, config.ally_defence, 0);
         }
         return null;
     }
