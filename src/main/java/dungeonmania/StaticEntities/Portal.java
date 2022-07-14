@@ -29,18 +29,20 @@ public class Portal extends StaticEntity {
         // TODO Auto-generated method stub
         return true;
     }
+
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
-        // DO nothing by defalut 
+        // DO nothing by defalut
         boolean hasChain = false;
         if (entity instanceof Player || entity instanceof Mercenary) {
+            // Get the target portal
             Location target = map.getEntities("portal")
-                                .stream()
-                                .filter(portal -> ((Portal) portal).getColour().equals(color) && !portal.equals(this))
-                                .collect(Collectors.toList()).get(0).getLocation();
+                    .stream()
+                    .filter(portal -> ((Portal) portal).getColour().equals(color) && !portal.equals(this))
+                    .collect(Collectors.toList()).get(0).getLocation();
+            System.out
+                    .println(String.format("portal: tp %s ->  %s", entity.getLocation().toString(), target.toString()));
 
-                System.out.println(String.format("portal: tp %s ->  %s", entity.getLocation().toString(), target.toString()));
-                
             Location entryLocation = entity.getLocation();
             Position p = Location.getMoveDir(entryLocation, getLocation());
             Location next = target.getLocation(p);
@@ -55,25 +57,16 @@ public class Portal extends StaticEntity {
                     } else if (entity instanceof Player) {
                         Player player = (Player) entity;
                         player.setStay(true);
-                    } 
+                    }
                 }
             }
-                // if (DungeonMap.isaccessible(map, target, entity) && ) {
-            //     System.out.println("DEST is accessible");
-            //     List<Function<Location, Location>> possible = target.getFourNearPosition().stream().filter(func -> DungeonMap.isaccessible(map, func.apply(target), entity)).collect(Collectors.toList());
-            //     if (possible.size() != 0) {
-            //         // Location next = possible.get(0).apply(target);
-            //         System.out.println("SET");
-            //         System.out.println(next.toString());
-            //         entity.setLocation(next);
-            //     } 
-            // }
         }
         return hasChain;
     }
+
     @Override
-    public boolean hasSideEffect(Entity entity, DungeonMap  map) {
-        // do nothing by defalut 
+    public boolean hasSideEffect(Entity entity, DungeonMap map) {
+        // do nothing by defalut
         return DungeonMap.isaccessible(map, getLocation(), entity);
     }
 }
