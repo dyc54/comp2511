@@ -35,10 +35,6 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact, 
         this.ally_defence = ally_defence;
     }
 
-    private boolean checkMovement(DungeonMap dungeonMap, Location next) {
-        return dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
-    }
-
     @Override
     public boolean movement(DungeonMap dungeonMap) {
         MovementStrategy strategy = super.getMove();
@@ -49,9 +45,10 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact, 
             playerLocation = p.getLocation();
         }
         Location next = strategy.nextLocation(playerLocation);
-        if (!checkMovement(dungeonMap, next)) {
+        if (!dungeonMap.checkMovement(next)) {
             setLocation(next);
         } else {
+            System.out.println("//////");
             next = strategy.moveWithWall(next, dungeonMap);
             if (next.equals(getLocation())) {
                 return false;
