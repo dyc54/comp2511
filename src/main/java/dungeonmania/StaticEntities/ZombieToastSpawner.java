@@ -35,7 +35,7 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
     public int getTimer() {
         return this.timer;
     }
-    
+
     public void setTimer(int timer) {
         this.timer = timer;
     }
@@ -47,11 +47,11 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
     public void ZombieToastSpwanCheck() {
         TimerAdd();
         if (timer == zombieSpawnRate) {
-            // int randomDirection = new Random().nextInt(4);
-            ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack, zombie_health);
-            zombie.movement(map);
-            System.out.println("after:"+ zombie.getLocation());
-            setTimer(0);
+        //     // int randomDirection = new Random().nextInt(4);
+        //     ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack, zombie_health);
+        //     zombie.movement(map);
+        //     System.out.println("after:"+ zombie.getLocation());
+        //     setTimer(0);
             // up
             // if (randomDirection == 1) {
             //     if (CheckOpenSpace(this.getLocation().getX(), this.getLocation().getY() - 1)) {
@@ -88,6 +88,17 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
             //     }
             // }
 
+            // If there are obstacles at all four cardinally adjacent position, don't spwan
+            if (getLocation().getFourNearPosition().stream() 
+                    .allMatch(e -> (!CheckOpenSpace(e.apply(getLocation()).getX(), e.apply(getLocation()).getY())))) {
+                return;
+            } else {
+                // spawn
+                ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack, zombie_health);
+                zombie.movement(map);
+                //System.out.println("after:" + zombie.getLocation());
+                setTimer(0);
+            }
         }
     }
 
@@ -98,7 +109,6 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
                 || map.getEntities(x, y).stream().anyMatch(e -> e.getType().equals("wall"))) {
             return false;
         }
-
         return true;
     }
 
@@ -116,7 +126,6 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
             System.out.println("\\\\\\");
             return false;
         }
-        player.getInventory();
         if (player.getInventory().hasWeapons()) {
             dungeonMap.removeEntity(getEntityId());
             return true;

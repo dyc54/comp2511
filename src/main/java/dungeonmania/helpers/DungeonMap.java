@@ -510,4 +510,7 @@ public class DungeonMap {
             .collect(Collectors.toList());
     }
     // public static void interact
+    public boolean checkMovement(Location location) {
+        return getEntities(location).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
+    }
 }

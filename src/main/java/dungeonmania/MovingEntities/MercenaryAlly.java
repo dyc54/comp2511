@@ -24,16 +24,16 @@ public class MercenaryAlly extends MovingEntity implements EnemyMovement, BonusD
 
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        MovementStrategy strategy = super.getMove();
-        Location playerPreLocation = new Location();
-        Collection<Entity> player = dungeonMap.getEntities("player");
-        for (Entity entity: player) {
-            Player p = (Player) entity;
-            playerPreLocation = p.getPreviousLocation();
-        }
-        Location next = strategy.nextLocation(playerPreLocation);
-        setLocation(next);
-        dungeonMap.UpdateEntity(this);
+        // MovementStrategy strategy = super.getMove();
+        // Location playerPreLocation = new Location();
+        // Collection<Entity> player = dungeonMap.getEntities("player");
+        // for (Entity entity: player) {
+        //     Player p = (Player) entity;
+        //     playerPreLocation = p.getPreviousLocation();
+        // }
+        // Location next = strategy.nextLocation(playerPreLocation);
+        // setLocation(next);
+        // dungeonMap.UpdateEntity(this);
         return true;
     }
 
