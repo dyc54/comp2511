@@ -72,6 +72,7 @@ public class Mercenary extends MovingEntity implements EnemyMovement, Interact, 
                 dungeonMap.addEntity(ally);
                 player.getAttackStrayegy().bonusDamage(ally);
                 player.getDefenceStrayegy().bonusDefence(ally);
+                // player.getInventory().r
                 return true;
             }
             return false;

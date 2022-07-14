@@ -51,11 +51,15 @@ public class Inventory {
         System.out.println(String.format("Inventory: %s has been picked up", item.getType()));
         // inventory.keySet().stream().forEach(str -> System.out.println(str));
         if (item instanceof BonusDamageAdd) {
+            
             player.getAttackStrayegy().bonusDamage((BonusDamageAdd) item);
+            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } else if (item instanceof BonusDamageMul) {
             player.getAttackStrayegy().bonusDamage((BonusDamageMul) item);
+            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } else if (item instanceof BonusDefenceAdd) {
             player.getDefenceStrayegy().bonusDefence((BonusDefenceAdd) item);
+            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         }
         return true;
     }
@@ -71,16 +75,19 @@ public class Inventory {
 
     public boolean removeFromInventoryList(String type, int number) {
         if (!inventory.containsKey(type)) {
+            String.format("%s does not exit", type);
             return false;
         }
         List<Entity> items = inventory.get(type);
         if (items.size() < number) {
+            String.format("%s does not have enough amount %d/%d", number, countItem(type));
             return false;
         } else {
             for(int i = 0; i < number; i++) {
                 items.remove(0);
             }
         }
+        System.out.println(String.format("%s has remove %d from inventory", type, number));
         return true;
     }
     public Entity getItem(String id) {

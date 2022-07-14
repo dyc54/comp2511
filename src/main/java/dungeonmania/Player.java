@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -84,6 +85,26 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     public Inventory getInventory() {
         return inventory;
+    }
+    public void setBattleUsedDuration() {
+        inventory.getAllInventory().forEach( entity ->{
+            if (entity instanceof DurabilityEntity) {
+                ((DurabilityEntity) entity).setDurability();
+            }
+        });
+    }
+    public void cleardisusableItem() {
+        List<Entity> entities = new LinkedList<>();
+        inventory.getAllInventory().forEach( entity ->{
+            if (entity instanceof DurabilityEntity && !((DurabilityEntity) entity).checkDurability()) {
+                entities.add(entity);
+            }
+        });
+        entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity));
+        if (!getCurrentEffect().checkDurability()) {
+            effects.poll();
+        }
+        
     }
     // public void addInventoryList(Entity item) {
     // inventory.addToInventoryList(item);
@@ -367,6 +388,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
         }
         if (entity instanceof PotionEntity) {
             addeffect((PotionEntity) entity);
+            // System.out.println(String.format("%s has been use", args));
             inventory.removeFromInventoryList(entity);
         } else if (entity instanceof Bomb) {
             Bomb bomb = (Bomb) entity;

@@ -1,0 +1,5 @@
+player,0,0
+spider,1,1
+sword,0,0
+
+g,exit

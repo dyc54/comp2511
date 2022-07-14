@@ -53,9 +53,9 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
                 return;
             } else {
                 // spawn
-                ZombieToast zombie = new ZombieToast("zombie_toast", getLocation(), zombie_attack, zombie_health);
+                ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack, zombie_health);
                 zombie.movement(map);
-                System.out.println("after:" + zombie.getLocation());
+                //System.out.println("after:" + zombie.getLocation());
                 setTimer(0);
             }
         }
@@ -85,7 +85,6 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
             System.out.println("\\\\\\");
             return false;
         }
-        player.getInventory();
         if (player.getInventory().hasWeapons()) {
             dungeonMap.removeEntity(getEntityId());
             return true;

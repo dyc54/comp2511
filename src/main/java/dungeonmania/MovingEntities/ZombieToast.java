@@ -94,4 +94,5 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     public String getEnemyType() {
         return getType();
     }
+   
 }
