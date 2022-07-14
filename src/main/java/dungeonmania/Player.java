@@ -86,8 +86,8 @@ public class Player extends Entity implements PlayerMovementStrategy {
         });
     }
     public void cleardisusableItem() {
-        System.out.println("******");
-        inventory.print();
+        // System.out.println("******");
+        // inventory.print();
         List<Entity> entities = new LinkedList<>();
         inventory.getAllInventory().forEach( entity ->{
             System.out.println(entity.getType());
@@ -342,8 +342,11 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 break;
             case "shield":
                 boolean wood_s = inventory.hasItem("wood", 2);
-                boolean treasure  = inventory.hasItem("treasure ", 1);
-                boolean key  = inventory.hasItem("key ", 1);
+                boolean treasure  = inventory.hasItem("treasure", 1);
+                boolean key  = inventory.hasItem("key", 1);
+                System.out.println(String.format("Building shield: wood %s %d/%d (arrow %s %d/%d or key %s %d/%d)"
+                                                        , wood_s, inventory.getItems("wood").size(), 2, treasure, inventory.getItems("treasure").size(), 1, key, inventory.getItems("key").size(), 1));
+
                 if (wood_s && (treasure || key)) {
                     inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
                 } else {
