@@ -184,8 +184,11 @@ public class MovementTest {
         assertEquals(1, getInventory(res, "treasure").size());
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
-        assertEquals(1, getEntities(res, "ally").size());
-        assertEquals(0, getEntities(res, "mercenary").size());
+        Position playerPosition = getEntities(res, "player").get(0).getPosition();
+        res = dmc.tick(Direction.UP);
+        assertEquals(0, getInventory(res, "treasure").size());
+        assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+
     }
 
     @Test

@@ -140,10 +140,10 @@ public class DungeonManiaController {
                 Mercenary mercenary = (Mercenary) entity;
                 mercenary.movement(dungeonMap);
             } 
-            if (entity.getType().equals("ally")) {
-                MercenaryAlly mercenaryAlly = (MercenaryAlly) entity;
-                mercenaryAlly.movement(dungeonMap);
-            } 
+            // if (entity.getType().equals("ally")) {
+            //     MercenaryAlly mercenaryAlly = (MercenaryAlly) entity;
+            //     mercenaryAlly.movement(dungeonMap);
+            // } 
         }
         // Battle
         dungeonMap.battleAll(battles);
@@ -217,8 +217,6 @@ public class DungeonManiaController {
         }
         if (entity.getType().equals("zombie_toast_spawner")) {
             ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
-            System.out.println("+++++++++");
-            
             if (!zombieToastSpawner.interact(player, dungeonMap)) {
                 throw new InvalidActionException("Invaild action");
             }

@@ -146,7 +146,7 @@ public class BattleTest {
     @Test
     public void testBattleWithEnemyInvincibilityPotionWin() {
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithSpider4LQ3G1657779449.1987035.1987035", "c_BattleTest_playerweak");
+        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithSpider4LQ3G1657779449.1987035", "c_BattleTest_playerweak");
         String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
         assertDoesNotThrow( () -> {
             controller.tick(invincibility_potion_id);
