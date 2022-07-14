@@ -21,6 +21,8 @@ public class BaseAttackStrategy implements AttackStrayegy{
     @Override
     public void bonusDamage(BonusDamageAdd attack) {
         bonusdamages.add(attack);
+        System.out.println(attack.damage());
+        System.out.println("*****");
         
     }
 
