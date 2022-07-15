@@ -1,4 +1,5 @@
 package dungeonmania;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,6 +25,7 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
+
 public class Goaltest {
     // @Test
     public void testSingleGoalExit() {
@@ -35,6 +37,7 @@ public class Goaltest {
         assertFalse(getGoals(initDungonRes).contains(":boulders"));
         assertFalse(getGoals(initDungonRes).contains(":enemies"));
     }
+
     // @Test
     public void testSingleGoalEnemies() {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -45,6 +48,7 @@ public class Goaltest {
         assertFalse(getGoals(initDungonRes).contains(":boulders"));
         assertTrue(getGoals(initDungonRes).contains(":enemies"));
     }
+
     // @Test
     public void testSingleGoalBoulder() {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -55,6 +59,7 @@ public class Goaltest {
         assertTrue(getGoals(initDungonRes).contains(":boulders"));
         assertFalse(getGoals(initDungonRes).contains(":enemies"));
     }
+
     // @Test
     public void testSingleGoalTreasure() {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -65,6 +70,7 @@ public class Goaltest {
         assertFalse(getGoals(initDungonRes).contains(":boulders"));
         assertFalse(getGoals(initDungonRes).contains(":enemies"));
     }
+
     // @Test
     public void testTwoGoals() {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -86,6 +92,7 @@ public class Goaltest {
         assertTrue(getGoals(initDungonRes).contains(":boulders"));
         assertFalse(getGoals(initDungonRes).contains(":enemies"));
     }
+
     // @Test
     public void testFourGoals() {
         DungeonManiaController dmc = new DungeonManiaController();

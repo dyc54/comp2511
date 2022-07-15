@@ -42,19 +42,21 @@ public class Portal extends StaticEntity {
                     .collect(Collectors.toList()).get(0).getLocation();
             System.out
                     .println(String.format("portal: tp %s ->  %s", entity.getLocation().toString(), target.toString()));
-
+            // Get the position behind the target portal
             Location entryLocation = entity.getLocation();
             Position p = Location.getMoveDir(entryLocation, getLocation());
             Location next = target.getLocation(p);
             if (DungeonMap.isaccessible(map, target, entity)) {
-
+                // If the position behind the portal has interactable entity, interact with it
                 if (DungeonMap.hasInteractableEntity(map, next, entity)) {
                     hasChain = true;
                     entity.setLocation(target);
                 } else {
+                    // If no interactable entity, just teleport to the position
                     if (DungeonMap.isaccessible(map, next, entity)) {
                         entity.setLocation(next);
                     } else if (entity instanceof Player) {
+                        // else just stay still
                         Player player = (Player) entity;
                         player.setStay(true);
                     }

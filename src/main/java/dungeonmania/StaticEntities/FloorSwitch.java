@@ -1,16 +1,21 @@
 package dungeonmania.StaticEntities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dungeonmania.Entity;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class FloorSwitch extends StaticEntity {
 
+    private List<StaticBomb> bombs;
     private boolean trigger;
 
     public FloorSwitch(String type, int x, int y) {
         super(type, x, y);
         this.trigger = false;
+        this.bombs = new ArrayList<StaticBomb>();
     }
 
     public boolean getTrigger() {
@@ -21,17 +26,12 @@ public class FloorSwitch extends StaticEntity {
         this.trigger = trigger;
     }
 
-    /**
-     * Return true if boulder's location is equal to trigger's location
-     * 
-     * @param Location
-     * @return boolean
-     */
-    public boolean boulderIsOnSwitch(Location location) {
-        if (this.getLocation().equals(location)) {
-            return true;
-        }
-        return false;
+    public void bombAttach(StaticBomb bomb) {
+        bombs.add(bomb);
+    }
+
+    public void notifyAllBombs(DungeonMap map) {
+        bombs.stream().forEach(e -> e.update(map));
     }
 
     @Override
@@ -39,12 +39,17 @@ public class FloorSwitch extends StaticEntity {
         // TODO Auto-generated method stub
         return true;
     }
+
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
-       if (entity instanceof Boulder) {
+        if (entity instanceof Boulder) {
             setTrigger(true);
-       }
-       return false;
+            // if (bombs.get(0).getType().equals("static_bomb")) {
+            // setType("2");
+            // }
+            notifyAllBombs(map);
+        }
+        return false;
     }
-    
+
 }

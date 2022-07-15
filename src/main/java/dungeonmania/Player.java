@@ -370,9 +370,9 @@ public class Player extends Entity implements PlayerMovementStrategy {
             inventory.removeFromInventoryList(entity);
         } else if (entity instanceof Bomb) {
             Bomb bomb = (Bomb) entity;
-            // if (bom)
-            bomb.put(getLocation());
-            map.addEntity(bomb);
+            // if bomb
+            bomb.put(getLocation(), map);
+            // map.addEntity(bomb);
             inventory.removeFromInventoryList(entity);
         } else {
             throw new IllegalArgumentException(
