@@ -35,6 +35,11 @@ public class Portal extends StaticEntity {
         // DO nothing by defalut
         boolean hasChain = false;
         if (entity instanceof Player || entity instanceof Mercenary) {
+            if (map.getEntities("portal")
+                    .stream()
+                    .noneMatch(portal -> ((Portal) portal).getColour().equals(color) && !portal.equals(this))) {
+                return hasChain;
+            }
             // Get the target portal
             Location target = map.getEntities("portal")
                     .stream()

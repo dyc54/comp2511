@@ -121,6 +121,28 @@ public class StaticEntityTests {
         }
 
         @Test
+        @DisplayName("Test the portal cannot use anymore if its twins portal has been destoyed")
+        public void testSinglePortalCannotUse() {
+                DungeonManiaController dmc = new DungeonManiaController();
+                DungeonResponse initDungonRes = dmc.newGame("d_singlePortal",
+                                "c_portalTest");
+                EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+                // create the expected result
+                EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(),
+                                new Position(3, 1),
+                                false);
+
+                // move player downward
+                DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+                EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+                // assert after movement
+                assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+                assertEquals(expectedPlayer, actualPlayer);
+        }
+
+        @Test
         @DisplayName("Test the player can't move through a portal if there is a wall behind it")
         public void testObstacleBehindPortal() {
                 DungeonManiaController dmc = new DungeonManiaController();
