@@ -43,7 +43,7 @@ public class DungeonManiaController {
     private List<EntityResponse> entities;
     // private List<ItemResponse> inventory;
     private List<BattleResponse> battles;
-    private List<String> buildables;
+    private List<String> buildables = new ArrayList<>();
     private String goalsString;
     private List<AnimationQueue> animations;
     // private Collection<Entity> entitiesList;
@@ -107,6 +107,8 @@ public class DungeonManiaController {
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
         System.out.println("************************ Tick itemUsedId********************");
         player.useItem(itemUsedId);
+        dungeonMap.battleAll(battles);
+        goals.hasAchieved(dungeonMap, player);
         return getDungeonResponse();
     }
 
@@ -203,7 +205,7 @@ public class DungeonManiaController {
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        player.build(buildable, dungeonConfig);
+        setBuildables(player.build(buildable, dungeonConfig));
         return getDungeonResponse();
     }
 
@@ -234,7 +236,6 @@ public class DungeonManiaController {
     private DungeonResponse getDungeonResponse() {
         setEntitiesResponse();
         setBattlesResponse();
-        setBuildables();
         // setItemResponse();
         return new DungeonResponse(dungeonId, dungeonName, entities, getItemResponse(), battles, buildables, goals.toString());
         // return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, "goal");
@@ -294,8 +295,9 @@ public class DungeonManiaController {
     /**
      * Create a buildables from a list of player inventoryList
      */
-    private void setBuildables() {
-
+    private void setBuildables(String buildResult) {
+        if (buildResult == null) return;
+        buildables.add(buildResult);
     }
 
     /**

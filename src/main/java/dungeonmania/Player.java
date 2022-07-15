@@ -349,6 +349,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     //player 查询背包物品进行建造
     public String build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
+        String buildResult = null;
         switch (buildable) {
             case "bow":
                 boolean wood_b = inventory.hasItem("wood", 1);
@@ -357,6 +358,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
                                                         , wood_b, inventory.getItems("wood").size(), 1, arrow, inventory.getItems("arrow").size(), 3));
                 if (wood_b && arrow) {
                     inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                    buildResult = "bow";
                 } else {
                     throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
@@ -372,6 +374,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
                 if (wood_s && (treasure || key)) {
                     inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                    buildResult = "shield";
                 } else {
                     throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
@@ -385,7 +388,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             default:
                 throw new IllegalArgumentException("buildable is not one of bow, shield");
         }
-        return "";
+        return buildResult;
     }
 
     // player 使用物品

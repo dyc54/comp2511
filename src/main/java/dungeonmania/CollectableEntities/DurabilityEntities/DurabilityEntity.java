@@ -21,6 +21,6 @@ public abstract class DurabilityEntity extends CollectableEntity{
     public boolean checkDurability(){
         System.out.println(String.format("Item %s DUration %d ", getEntityId(), durability));
         
-        return durability < 0;
+        return durability == 0;
     }
 }

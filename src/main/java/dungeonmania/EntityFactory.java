@@ -65,7 +65,7 @@ public class EntityFactory {
             case "invisibility_potion":
                 return new InvisibilityPotion(type, config.invisibility_potion_duration, x, y);
             case "sword":
-                return new Sword(type, x, y, config.sword_durability - 1, config.sword_attack);
+                return new Sword(type, x, y, config.sword_durability, config.sword_attack);
             case "treasure":
                 return new Treasure(type, x, y);
             case "wood":
@@ -136,9 +136,9 @@ public class EntityFactory {
     public static Entity newEntity(String type, Config config) {
         switch (type) {
             case "bow":
-                return new Bow(type, config.bow_durability - 1);
+                return new Bow(type, config.bow_durability);
             case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability - 1);
+                return new Shield(type, config.shield_defence, config.shield_durability);
             default:
                 break;
         }
