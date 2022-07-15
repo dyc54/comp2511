@@ -22,7 +22,7 @@ import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.StaticEntities.Portal;
 import dungeonmania.Strategies.PlayerMovementStrategy;
-import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
+import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
 import dungeonmania.Strategies.AttackStrategies.BonusDamageStrategy;
 import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;
 import dungeonmania.Strategies.DefenceStrategies.ArmorableStrategy;
@@ -36,7 +36,7 @@ import dungeonmania.helpers.Location;
 
 public class Player extends Entity implements PlayerMovementStrategy {
     // private int attack;
-    private AttackStrayegy attack;
+    private AttackStrategy attack;
     private DefenceStrategy defence;
     private double health;
     private Inventory inventory;
@@ -67,7 +67,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
         effects.add(e);
     }
 
-    public AttackStrayegy getAttackStrayegy() {
+    public AttackStrategy getAttackStrayegy() {
         return attack;
     }
 

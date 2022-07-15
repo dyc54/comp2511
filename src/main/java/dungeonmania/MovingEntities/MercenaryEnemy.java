@@ -1,0 +1,92 @@
+package dungeonmania.MovingEntities;
+
+import java.util.Collection;
+
+import dungeonmania.Entity;
+import dungeonmania.Interact;
+import dungeonmania.Player;
+import dungeonmania.Battle.Enemy;
+import dungeonmania.Strategies.EnemyMovement;
+import dungeonmania.Strategies.Movement;
+import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
+import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.Strategies.MovementStrategies.RandomMovement;
+import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Location;
+
+public class MercenaryEnemy extends Mercenary implements Enemy {
+    private double mercenary_attack;
+    private double mercenary_health;
+    public MercenaryEnemy(String type, Location location, double mercenary_attack, double mercenary_health,
+            int bribe_amount, int bribe_radius, int ally_attack, int ally_defence) {
+        super(type, location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
+        this.mercenary_attack = mercenary_attack;
+        this.mercenary_health = mercenary_health;
+    }
+
+	@Override
+	public AttackStrategy getAttackStrayegy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getEnemyId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getEnemyType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+    @Override
+    public boolean movement(DungeonMap dungeonMap) {
+        Location playerLocation = new Location();
+        Player p = dungeonMap.getPlayer();
+        playerLocation = p.getLocation();
+        Location next = new Location();
+        if (p.getCurrentEffect() != null) { //Check for invisibility 
+            if (p.getCurrentEffect().applyEffect().equals("Invisibility")) {
+                super.changeStrategy(new RandomMovement());
+                String choice = MovingEntity.getPossibleNextDirection(dungeonMap, this);
+                next = getMove().MoveOptions(choice).nextLocation(getLocation());
+                if (next.equals(getLocation())) {
+                    return false;
+                }
+            }
+        } else {
+            next = getMove().nextLocation(playerLocation);
+            if (dungeonMap.checkMovement(next)) {
+                next = getMove().moveWithWall(next, dungeonMap);
+                if (next.equals(getLocation())) {
+                    return false;
+                }
+            }
+        }
+        setLocation(next);
+        dungeonMap.UpdateEntity(this);
+        return false;
+
+    }
+
+    @Override
+    public boolean interact(Player player, DungeonMap dungeonMap) {
+        Collection<Entity> entities = dungeonMap.getEntities(player.getLocation(), super.getBribe_radius());
+        if (entities.stream().anyMatch(entity -> entity.getType().equals("mercenary"))) {
+            if (player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount())) {
+                MercenaryAlly ally = new MercenaryAlly("mercenary", getLocation(), this.mercenary_attack, this.mercenary_health, getBribe_amount(), getBribe_radius(),getAlly_attack(), getAlly_defence(), false);
+                dungeonMap.removeEntity(getEntityId());
+                dungeonMap.addEntity(ally);
+                
+                player.getAttackStrayegy().bonusDamage(ally);
+                player.getDefenceStrayegy().bonusDefence(ally);
+                // player.getInventory().r
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+	
+}

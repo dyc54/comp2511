@@ -8,7 +8,7 @@ import dungeonmania.Entity;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
-import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
+import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.CircleMovement;
 import dungeonmania.helpers.DungeonMap;
@@ -202,7 +202,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
     // }
 
     @Override
-    public AttackStrayegy getAttackStrayegy() {
+    public AttackStrategy getAttackStrayegy() {
         // TODO Auto-generated method stub
         return super.getAttack();
     }

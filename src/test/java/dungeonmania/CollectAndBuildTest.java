@@ -176,9 +176,9 @@ public class CollectAndBuildTest {
             assertEquals(0, getInventory(res, "arrow").size());
 
             // after build bow
-            res = dmc.build(new String("bow"));
-            assertEquals(0, getInventory(res, "bow").size());
-            assertEquals(1, getInventory(res, "wood").size());
+            res = dmc.build("bow");
+            assertEquals(1, getInventory(res, "bow").size());
+            assertEquals(0, getInventory(res, "wood").size());
             assertEquals(0, getInventory(res, "arrow").size());
 
 

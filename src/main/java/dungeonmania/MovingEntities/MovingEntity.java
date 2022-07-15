@@ -1,22 +1,22 @@
 package dungeonmania.MovingEntities;
 
 import dungeonmania.Entity;
-import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
+import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public abstract class MovingEntity extends Entity {
-    private AttackStrayegy attack;
+    private AttackStrategy attack;
     private MovementStrategy move;
     private double health;
-    public MovingEntity(String type, Location location, double health, AttackStrayegy attack, MovementStrategy move) {
+    public MovingEntity(String type, Location location, double health, AttackStrategy attack, MovementStrategy move) {
         super(type, location);
         this.attack = attack;
         this.move = move;
         this.health = health;
     }
-    public AttackStrayegy getAttack() {
+    public AttackStrategy getAttack() {
         return attack;
     }
     public double getHealth() {
