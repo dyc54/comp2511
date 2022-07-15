@@ -13,53 +13,102 @@ import dungeonmania.Strategies.DefenceStrategies.BonusDefenceAdd;
 import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
 import dungeonmania.Strategies.MovementStrategies.FollowingMovement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class MercenaryAlly extends Mercenary implements EnemyMovement, BonusDamageAdd, BonusDefenceAdd{
+public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd{
     
     private int ally_attack;
     private int ally_defence;
-    private boolean isMeet;
-    public MercenaryAlly(String type, Location location, double mercenary_attack, double mercenary_health,
-            int bribe_amount, int bribe_radius, int ally_attack, int ally_defence, boolean isMeet) {
-        super(type, location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
-        this.ally_defence = ally_defence;
-        this.isMeet = isMeet;
+    private boolean isFollowing;
+    private boolean effecs;
+    // public MercenaryAlly(String type, Location location, double mercenary_attack, double mercenary_health,
+    //         int bribe_amount, int bribe_radius, int ally_attack, int ally_defence, boolean isMeet) {
+    //     super(type, location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
+    //     this.ally_defence = ally_defence;
+    //     this.isMeet = isMeet;
+    // }
+    public MercenaryAlly(MercenaryEnemy mercenary) {
+        super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+                mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
+        isFollowing = false;
+        effecs = false;
+    // System.out.println("");
+        // isMeet = false;
     }
-
-    public void setMeet(){
-        this.isMeet = true;
-    }
+    // public void setMeet(){
+    //     this.isMeet = true;
+    // }
     
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        Location playerLocation = new Location();
-        Location next = new Location();
+        // super.movement(dungeonMap);
+        System.out.println("Ally MOveing");
         Player p = dungeonMap.getPlayer();
-        playerLocation = p.getLocation();
-        System.out.println("playerLocation:"+playerLocation);
-        System.out.println("MercenaryLocation:"+this.getLocation());
-        if (p.getPreviousLocation().equals(getLocation())) {
-            setMeet();
-            super.changeStrategy(new FollowingMovement());
-            return false;
-        }
-        if (isMeet) {
-            changeStrategy(new FollowingMovement());
-            Location playerPreLocation = p.getPreviousLocation();
-            next = super.getMove().nextLocation(playerPreLocation);
-        } else {
-            next = getMove().nextLocation(playerLocation);
-            if (dungeonMap.checkMovement(next)) {
-                next = getMove().moveWithWall(next, dungeonMap);
-                if (next.equals(getLocation())) {
-                    return false;
-                }
+        if (p.hasEffect()) {
+            String options = "";
+            if (p.getCurrentEffect().applyEffect().equals("Invisibility")) {
+                setMove(new RandomMovement());
+                options = MovingEntity.getPossibleNextDirection(dungeonMap, this);
             }
+            isFollowing = false;
+            setLocation(getMove().MoveOptions(options).nextLocation(p.getLocation()));
+            
+        } else {
+                // Player reach mercenary
+                if (getLocation().equals(p.getLocation())) {
+                    isFollowing = true;
+                    setMove(new FollowingMovement(p.getPreviousLocation()));
+                } else if (!isFollowing) {
+                    setMove(new ChaseMovement(getLocation()));
+                    setLocation(getMove().nextLocation(p.getLocation()));
+                    // mercenary reach Player
+                    if (getLocation().equals(p.getLocation())) {
+                        isFollowing = true;
+                        setMove(new FollowingMovement(p.getPreviousLocation()));
+                        return true;
+                    }
+                }
+                if( isFollowing) {
+                    setLocation(getMove().nextLocation(p.getLocation()));
+                }
+
+            // } else {
+
+            // }
+            // if (getLocation().equals(p.getLocation()) && isFollowing) {
+            //     isFollowing = true;
+            //     setMove(new FollowingMovement(p.getPreviousLocation()));
+            // } else {
+            //     setMove(new ChaseMovement(getLocation()));
+            //     setLocation(getMove().MoveOptions(options).nextLocation(p.getLocation()));
+            // }
         }
-        setLocation(next);
-        dungeonMap.UpdateEntity(this);
+        // // if (g)
+        // Location playerLocation = p.getLocation();
+        // // System.out.println("playerLocation:"+playerLocation);
+        // // System.out.println("MercenaryLocation:"+this.getLocation());
+        // if (p.getPreviousLocation().equals(getLocation())) {
+        //     setMeet();
+        //     super.changeStrategy(new FollowingMovement());
+        //     return false;
+        // }
+        // if (isMeet) {
+        //     changeStrategy(new FollowingMovement());
+        //     Location playerPreLocation = p.getPreviousLocation();
+        //     next = super.getMove().nextLocation(playerPreLocation);
+        // } else {
+        //     next = getMove().nextLocation(playerLocation);
+        //     if (dungeonMap.checkMovement(next)) {
+        //         next = getMove().moveWithWall(next, dungeonMap);
+        //         if (next.equals(getLocation())) {
+        //             return false;
+        //         }
+        //     }
+        // }
+        // setLocation(next);
+        // dungeonMap.UpdateEntity(this);
         return true;
     }
 
@@ -71,7 +120,7 @@ public class MercenaryAlly extends Mercenary implements EnemyMovement, BonusDama
     @Override
     public double damage() {
         // TODO Auto-generated method stub
-        return getAttack().attackDamage();
+        return ally_attack;
     }
 
     @Override

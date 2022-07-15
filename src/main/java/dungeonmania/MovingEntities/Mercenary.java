@@ -9,9 +9,10 @@ import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
-import dungeonmania.Strategies.EnemyMovement;
+import dungeonmania.Strategies.Movement;
 import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
+import dungeonmania.Strategies.AttackStrategies.BonusDamageAdd;
 import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
 import dungeonmania.Strategies.MovementStrategies.FollowingMovement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
@@ -19,7 +20,7 @@ import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public abstract class Mercenary extends MovingEntity {
+public abstract class Mercenary extends MovingEntity implements Movement {
     // Location location;
     // private double mercenary_attack;
     // private double mercenary_health;
@@ -27,13 +28,10 @@ public abstract class Mercenary extends MovingEntity {
     private int bribe_radius;
     private int ally_attack;
     private int ally_defence;
-    private MovementStrategy moveStrategy;
-    private AttackStrategy attackStrategy;
+    // private AttackStrategy attackStrategy;
 
     public Mercenary(String type, Location location, double mercenary_attack, double mercenary_health, int bribe_amount, int bribe_radius, int ally_attack, int ally_defence) {
         super(type, location, mercenary_health, new BaseAttackStrategy(mercenary_attack), new ChaseMovement(location));
-        // this.mercenary_attack = mercenary_attack;
-        // this.mercenary_health = mercenary_health;
         this.bribe_amount = bribe_amount;
         this.bribe_radius = bribe_radius;
         this.ally_attack = ally_attack;
@@ -45,9 +43,9 @@ public abstract class Mercenary extends MovingEntity {
     //     return this.moveStrategy;
     // }
 
-    public AttackStrategy getAttackStrage(){
-        return this.attackStrategy;
-    }
+    // public AttackStrategy getAttackStrage(){
+    //     return this.attackStrategy;
+    // }
     
     public int getBribe_amount() {
         return bribe_amount;
@@ -65,7 +63,7 @@ public abstract class Mercenary extends MovingEntity {
         return ally_defence;
     }
 
-    public abstract boolean movement(DungeonMap dungeonMap);
+    // public abstract boolean movement(DungeonMap dungeonMap);
     public abstract boolean interact(Player player, DungeonMap dungeonMap);
     // public boolean movement(DungeonMap dungeonMap) {
     //     Location playerLocation = new Location();
@@ -103,9 +101,9 @@ public abstract class Mercenary extends MovingEntity {
     //     return true;
     // }
 
-    public void changeStrategy(MovementStrategy newStrategy) {
-        this.moveStrategy = newStrategy;
-    }
+    // public void changeStrategy(MovementStrategy newStrategy) {
+    //     this.moveStrategy = newStrategy;
+    // }
 
     // public boolean interact(Player player, DungeonMap dungeonMap) {
     //     Collection<Entity> entities = dungeonMap.getEntities(player.getLocation(), this.bribe_radius);
