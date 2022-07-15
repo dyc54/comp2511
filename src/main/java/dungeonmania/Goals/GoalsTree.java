@@ -1,20 +1,25 @@
 package dungeonmania.Goals;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
-public class GoalsTree {
-    GoalsTree left;
-    GoalsTree right;
-    Logic logic;
-    Goal goal;
-    public GoalsTree(String type, Goal goal) {
-        logic = new Logic(type);
+import dungeonmania.helpers.LogicCondition;
+import dungeonmania.helpers.LogicContent;
+
+public class GoalsTree implements LogicContent<GoalComponent> {
+    private GoalsTree left;
+    private GoalsTree right;
+    private LogicCondition<GoalComponent> condition;
+    private GoalComponent goal;
+    public GoalsTree(String type, GoalComponent goal) {
+        condition = new LogicCondition<>(type);
         this.goal = goal;
         left = null;
         right = null;
     }
     public GoalsTree(String type) {
-        logic = new Logic(type);
+        condition = new LogicCondition<>(type);
         goal = null;
         left = null;
         right = null;
@@ -41,14 +46,14 @@ public class GoalsTree {
         if (left == null || right == null) {
             return goal.hasAchieved();
         } else {
-            return logic.hasAchieved(this);
+            return condition.isTrue(this);
         }
     }
     /**
      * get the Goal of given tree node
      * @return
      */
-    public Goal getGoal() {
+    public GoalComponent getGoal() {
         return goal;
     }
     /**
@@ -71,14 +76,14 @@ public class GoalsTree {
      * @param goal
      * @return
      */
-    public static GoalsTree AsGoalsTreeNode(String type, Goal goal) {
+    public static GoalsTree AsGoalsTreeNode(String type, GoalComponent goal) {
         return new GoalsTree(type, goal);
     }
     /**
      * Set the goal of given tree node.
      * @param goal
      */
-    public void setGoal(Goal goal) {
+    public void setGoal(GoalComponent goal) {
         this.goal = goal;
     }
     /**
@@ -86,7 +91,7 @@ public class GoalsTree {
      * @param func
      * @return
      */
-    public GoalsTree mapForAll(Consumer<Goal> func) {
+    public GoalsTree mapForAll(Consumer<GoalComponent> func) {
         if (left != null) {
             left.mapForAll(func);
         }
@@ -102,15 +107,50 @@ public class GoalsTree {
         if (left == null || right == null) {
             return goal.toString();
         } else {
-            return logic.toString(this, false);
+            return toString(false);
         }
+    }
+    public String toString(boolean bracket) {
+        String left = toGoalA().toString();
+        String right = toGoalB().toString();
+        String output;
+        String format;
+        if (left.equals("") || right.equals("")) {
+            output = String.format("%s%s", left, right);
+            format = "%s";
+        } else {
+            output = String.format("%s %s %s", toGoalA().toString(), condition.toString(), toGoalB().toString());
+            format = bracket? "(%s)": "%s";
+        }
+        return String.format(format, output);
+
     }
     @Override
     public String toString() {
         if (left == null || right == null) {
             return goal.toString();
         } else {
-            return logic.toString(this, true);
+            return toString(true);
         }
     }
+    @Override
+    public GoalComponent getContent() {
+        return getGoal();
+    }
+    
+    @Override
+    public boolean isTrue() {
+        return hasAchieved();
+    }
+    @Override
+    public LogicContent<GoalComponent> getSubContentA() {
+        // TODO Auto-generated method stub
+        return toGoalA();
+    }
+    @Override
+    public LogicContent<GoalComponent> getSubContentB() {
+        // TODO Auto-generated method stub
+        return toGoalB();
+    }
+    
 }

@@ -55,7 +55,7 @@ public class GoalController {
      * @param str type
      * @return
      */
-    private static Goal newGoal(String str) {
+    private static GoalComponent newGoal(String str) {
         switch (str) {
             case "enemies":
                 return new Enemies();

@@ -80,7 +80,7 @@ public class Inventory {
         }
         List<Entity> items = inventory.get(type);
         if (items.size() < number) {
-            String.format("%s does not have enough amount %d/%d", number, countItem(type));
+            String.format("%s does not have enough amount %d/%d",type, number, countItem(type));
             return false;
         } else {
             for(int i = 0; i < number; i++) {
@@ -159,7 +159,15 @@ public class Inventory {
     }
 
     public int countItem(String type) {
-        return inventory.get(type).size();
+        // System.out.println("----------------------");
+        // System.out.println(type);
+        // // System.out.println(type);
+        // print();
+        if (inventory.containsKey(type)) {
+
+            return inventory.get(type).size();
+        }
+        return 0;
     }
     // public int countWea
     /**

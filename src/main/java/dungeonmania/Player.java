@@ -15,6 +15,7 @@ import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Effect;
 import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
+import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
 import dungeonmania.Inventories.Inventory;
 import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
@@ -348,7 +349,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     }
 
     //player 查询背包物品进行建造
-    public String build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
+    public boolean build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         switch (buildable) {
             case "bow":
                 boolean wood_b = inventory.hasItem("wood", 1);
@@ -356,7 +357,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 System.out.println(String.format("Building bow: wood %s %d/%d arrow %s %d/%d"
                                                         , wood_b, inventory.getItems("wood").size(), 1, arrow, inventory.getItems("arrow").size(), 3));
                 if (wood_b && arrow) {
-                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
                 } else {
                     throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
@@ -371,7 +372,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
                                                         , wood_s, inventory.getItems("wood").size(), 2, treasure, inventory.getItems("treasure").size(), 1, key, inventory.getItems("key").size(), 1));
 
                 if (wood_s && (treasure || key)) {
-                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
                 } else {
                     throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
@@ -383,9 +384,19 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("buildable is not one of bow, shield");
+                throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", buildable));
         }
-        return "";
+        return true;
+    }
+    public void build(String buildable, Config config, int x) throws InvalidActionException, IllegalArgumentException {
+        BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
+        if (recipe.isSatisfied(inventory)) {
+            String type = recipe.consumeMaterial(inventory).getRecipeName();
+            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config), this);
+        } else {
+            throw new InvalidActionException("player does not have sufficient items to craft the buildable");
+        }
+
     }
 
     // player 使用物品

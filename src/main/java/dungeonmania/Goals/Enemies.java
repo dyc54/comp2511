@@ -4,7 +4,7 @@ import dungeonmania.Player;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 
-public class Enemies implements Goal {
+public class Enemies implements GoalComponent {
     private int TargetNum;
     private int spawners;
     private int destroyed;
@@ -19,7 +19,7 @@ public class Enemies implements Goal {
     }
 
     @Override
-    public Goal getMapData(DungeonMap map) {
+    public GoalComponent getMapData(DungeonMap map) {
         // TODO Auto-generated method stub
         destroyed = map.getDestoriedCounter();
         spawners = map.getEntities("zombie_toast_spawner").size();
@@ -27,7 +27,7 @@ public class Enemies implements Goal {
     }
 
     @Override
-    public Goal getConfig(Config config) {
+    public GoalComponent getConfig(Config config) {
         // TODO Auto-generated method stub
         TargetNum = config.enemy_goal;
         return this;
@@ -41,7 +41,7 @@ public class Enemies implements Goal {
         }
     }
     @Override
-    public Goal getMapData(Player player) {
+    public GoalComponent getMapData(Player player) {
         // TODO Auto-generated method stub
         return null;
     }
