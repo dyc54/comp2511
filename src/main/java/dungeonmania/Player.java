@@ -13,8 +13,10 @@ import java.util.stream.Collectors;
 import dungeonmania.CollectableEntities.Bomb;
 import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Effect;
+import dungeonmania.CollectableEntities.Key;
 import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
+import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
 import dungeonmania.Inventories.Inventory;
 import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
@@ -38,6 +40,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private DefenceStrategy defence;
     private double health;
     private Inventory inventory;
+    private Position direction;
     // private int x;
     // private int y;
     private boolean stay;
@@ -57,6 +60,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.map = map;
         stay = false;
         effects = new ArrayDeque<>();
+        this.direction = new Position(0, 0);
     }
 
     public void addeffect(PotionEntity e) {
@@ -73,6 +77,10 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     public double getHealth() {
         return health;
+    }
+
+    public Position getDirection() {
+        return this.direction;
     }
 
     public void subHealth(double health) {
@@ -128,6 +136,10 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.stay = stay;
     }
 
+    public void setDirection(Position p) {
+        this.direction = p;
+    }
+
     public boolean getStay() {
         return stay;
     }
@@ -165,191 +177,31 @@ public class Player extends Entity implements PlayerMovementStrategy {
         // If there is a wall, don't move
         // List<Entity> blocked = DungeonMap.blockedEntities(map,
         // getLocation().getLocation(p), this);
-
         // Location temp = previousLocation.clone();
         Location curr = getLocation().clone();
         Location next = getLocation().getLocation(p);
         System.out.println(String.format("Player at %s", curr.toString()));
+        setDirection(p);
         interactAll(curr, map, p);
         if (getLocation().equals(curr) && !stay) {
             if (DungeonMap.isaccessible(map, next, this)) {
                 previousLocation = getLocation().clone();
                 setLocation(next);
-
             }
         }
-        // map.getEntities(next).stream().forEach(entity -> {
-        // if (DungeonMap.isaccessible(map, next, this)) {
-        // previousLocation = getLocation().clone();
-        // setLocation(next);
-        // }
-        // });
-        // // if (getLocation().equals(curr)) {
-
-        // // }
-        // previousLocation.setLocation(temp);
-        // if (!getLocation().equals(curr)) {
-        // setLocation(curr);
-        // // previousLocation.setLocation(temp);
-        // if (DungeonMap.isaccessible(map, next, this)) {
-        // // previousLocation.setLocation(temp);
-        // previousLocation = getLocation().clone();
-        // setLocation(next);
-        // }
-        // } else {
-        // setLocation(curr);
-        // }
-        // // previousLocation.setLocation(temp);
-        // // Get back
-        // // if (DungeonMap.isaccessible(map, next, this)) {
-        // previousLocation = getLocation().clone();
-        // }
-
     }
-    // if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e ->
-    // e.getType().equals("wall"))) {
-    // return;
-    // // }
-
-    // // If there is a door
-    // if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e ->
-    // e.getType().equals("door"))) {
-    // // If you have a key
-    // if (this.getInventoryList().stream().anyMatch(e ->
-    // e.getType().equals("key"))) {
-    // // remove key from the bag
-    // this.removeInventoryList(
-    // this.getInventoryList().stream().filter(e ->
-    // e.getType().equals("key")).findFirst().get());
-    // // open the door
-    // map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e ->
-    // e.getType().equals("door"))
-    // .findFirst().get().setType("opened_door");
-    // // move to the position of door
-    // setPreviousLocation(Location.AsLocation(x, y));
-    // move(p);
-    // }
-
-    // // Don't have a key
-    // return;
-    // }
-
-    // // // If there is a Exit
-    // // if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e ->
-    // e.getType().equals("exit"))) {
-    // // move(p);
-    // // Entity temp = map.getEntities(x + p.getX(), y +
-    // p.getY()).stream().filter(e -> e.getType().equals("exit"))
-    // // .findFirst().get();
-    // // Exit exit = (Exit) temp;
-    // // exit.setPlayerExit(true);
-    // // }
-
-    // // If there is a boulder
-    // if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e ->
-    // e.getType().equals("boulder"))) {
-    // // If there is a boulder or a wall or a closed door after the boulder, you
-    // // cannot move the boulder
-    // Collection<Entity> entitiesAfterBoulder = map.getEntities(x + p.getX() +
-    // p.getX(), y + p.getY() + p.getY());
-    // if (entitiesAfterBoulder.stream().anyMatch(e ->
-    // e.getType().equals("boulder"))
-    // || entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("wall"))
-    // || entitiesAfterBoulder.stream().anyMatch(e -> e.getType().equals("door"))) {
-    // return;
-    // } else {
-    // // Else move the boulder to the next position
-    // Entity temp = map.getEntities(x + p.getX(), y + p.getY()).stream()
-    // .filter(e -> e.getType().equals("boulder"))
-    // .findFirst().get();
-    // Boulder boulder = (Boulder) temp;
-    // boulder.moveBoulder(p, map);
-    // }
-    // }
-
-    // // If there is a portal
-    // if (map.getEntities(x + p.getX(), y + p.getY()).stream().anyMatch(e ->
-    // e.getType().equals("portal"))) {
-    // // Get the portal
-    // Entity temp = map.getEntities(x + p.getX(), y + p.getY()).stream().filter(e
-    // -> e.getType().equals("portal"))
-    // .findFirst().get();
-    // Portal portal = (Portal) temp;
-    // teleport(p, x + p.getX(), y + p.getY(), portal);
-    // return;
-    // }
-    // // Move the player
-    // move(p);
-    // pickUp();
-    // }
-
-    // private void teleport(Position p, int currentX, int currentY, Portal portal)
-    // {
-    // String colour = portal.getColour();
-    // // Find another portal
-    // for (Entity entity : map.getEntities("portal")) {
-    // Portal currentPortal = (Portal) entity;
-    // // Find another portal with the same colour
-    // if (currentPortal.getColour().equals(colour)
-    // && currentPortal.getLocation().getX() != currentX
-    // && currentPortal.getLocation().getY() != currentY) {
-    // Collection<Entity> entitiesAfterPortal = map.getEntities(
-    // currentPortal.getLocation().getX() + p.getX(),
-    // currentPortal.getLocation().getY() + p.getY());
-    // // If there is a obstacle, don't move
-    // if (entitiesAfterPortal.stream().anyMatch(e -> e.getType().equals("boulder"))
-    // || entitiesAfterPortal.stream().anyMatch(e -> e.getType().equals("wall"))
-    // || entitiesAfterPortal.stream().anyMatch(e -> e.getType().equals("door"))) {
-    // return;
-    // } else if (entitiesAfterPortal.stream().anyMatch(e ->
-    // e.getType().equals("portal"))) {
-    // // Else if there is another teleport
-    // Entity temp = map.getEntities(currentPortal.getLocation().getX() + p.getX(),
-    // currentPortal.getLocation().getY() + p.getY()).stream()
-    // .filter(e -> e.getType().equals("portal"))
-    // .findFirst().get();
-    // Portal portalConnected = (Portal) temp;
-    // teleport(p, currentPortal.getLocation().getX() + p.getX(),
-    // currentPortal.getLocation().getY() + p.getY(),
-    // portalConnected);
-    // // }
-    // return;
-    // } else {
-    // // Else move to the related position after the portal
-    // super.setLocation(currentPortal.getLocation().getX() + p.getX(),
-    // currentPortal.getLocation().getY() + p.getY());
-    // this.x = currentPortal.getLocation().getX() + p.getX();
-    // this.y = currentPortal.getLocation().getY() + p.getY();
-    // return;
-    // }
-    // }
-    // }
-    // }
-
-    // public void move(Position p) {
-    // super.setLocation(x + p.getX(), y + p.getY());
-    // this.x = x + p.getX();
-    // this.y = y + p.getY();
-    // }
-
-    // public void pickUp() {
-    // Collection<Entity> currentPositionEntities = map.getEntities(x, y);
-    // for (Entity currentPositionEntitie : currentPositionEntities) {
-    // if (currentPositionEntitie instanceof CollectableEntity) {
-    // inventory.addToInventoryList(currentPositionEntitie);
-    // map.removeEntity(currentPositionEntitie.getEntityId());
-    // }
-    // }
-    // }
 
     public boolean pickup(Entity entity) {
+        if (entity instanceof Key) {
+            if (getInventoryList().stream().anyMatch(e -> e instanceof Key)) {
+                return false;
+            }
+        }
         return inventory.addToInventoryList(entity, this);
-
     }
 
-    //player 查询背包物品进行建造
-    public String build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
-        String buildResult = null;
+    //player 查询背包物品进行建造    
+    public boolean build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         switch (buildable) {
             case "bow":
                 boolean wood_b = inventory.hasItem("wood", 1);
@@ -357,8 +209,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 System.out.println(String.format("Building bow: wood %s %d/%d arrow %s %d/%d"
                                                         , wood_b, inventory.getItems("wood").size(), 1, arrow, inventory.getItems("arrow").size(), 3));
                 if (wood_b && arrow) {
-                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
-                    buildResult = "bow";
+                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
                 } else {
                     throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
@@ -373,8 +224,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
                                                         , wood_s, inventory.getItems("wood").size(), 2, treasure, inventory.getItems("treasure").size(), 1, key, inventory.getItems("key").size(), 1));
 
                 if (wood_s && (treasure || key)) {
-                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
-                    buildResult = "shield";
+                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
                 } else {
                     throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
@@ -386,9 +236,19 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("buildable is not one of bow, shield");
+                throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", buildable));
         }
-        return buildResult;
+        return true;
+    }
+    public void build(String buildable, Config config, int x) throws InvalidActionException, IllegalArgumentException {
+        BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
+        if (recipe.isSatisfied(inventory)) {
+            String type = recipe.consumeMaterial(inventory).getRecipeName();
+            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config), this);
+        } else {
+            throw new InvalidActionException("player does not have sufficient items to craft the buildable");
+        }
+
     }
 
     // player 使用物品
@@ -403,9 +263,9 @@ public class Player extends Entity implements PlayerMovementStrategy {
             inventory.removeFromInventoryList(entity);
         } else if (entity instanceof Bomb) {
             Bomb bomb = (Bomb) entity;
-            // if (bom)
-            bomb.put(getLocation());
-            map.addEntity(bomb);
+            // if bomb
+            bomb.put(getLocation(), map);
+            // map.addEntity(bomb);
             inventory.removeFromInventoryList(entity);
         } else {
             throw new IllegalArgumentException(

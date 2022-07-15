@@ -9,7 +9,7 @@ import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 
-public class Boulders implements Goal {
+public class Boulders implements GoalComponent {
     Collection<Entity> switchs;
     public Boulders() {
         switchs = new LinkedList<>();
@@ -23,13 +23,13 @@ public class Boulders implements Goal {
     }
 
     @Override
-    public Goal getMapData(DungeonMap map) {
+    public GoalComponent getMapData(DungeonMap map) {
         switchs.addAll(map.getEntities("switch"));
         return this;
     }
 
     @Override
-    public Goal getConfig(Config config) {
+    public GoalComponent getConfig(Config config) {
         // TODO Auto-generated method stub
         return this;
         
@@ -44,7 +44,7 @@ public class Boulders implements Goal {
     }
 
     @Override
-    public Goal getMapData(Player player) {
+    public GoalComponent getMapData(Player player) {
         // TODO Auto-generated method stub
         return this;
     }

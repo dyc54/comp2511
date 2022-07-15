@@ -51,6 +51,33 @@ public class ExampleTests {
     }
 
     @Test
+    @DisplayName("Test the player can move a boulder")
+    public void testMoveBoulder() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_complexGoalsTest_andAll",
+                "c_complexGoalsTest_andAll");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(),
+                new Position(3, 1),
+                false);
+
+        DungeonResponse actualDungonRes;
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert the position of boulder
+        Position boulderPosition = getEntities(actualDungonRes, "boulder").get(0).getPosition();
+        assertEquals(new Position(4, 1), boulderPosition);
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
     @DisplayName("Test basic movement of spiders")
     public void basicMovement() {
         DungeonManiaController dmc;
@@ -83,7 +110,7 @@ public class ExampleTests {
         }
     }
 
-    // @Test
+    @Test
     @DisplayName("Test surrounding entities are removed when placing a bomb next to an active switch with config file bomb radius set to 2")
     public void placeBombRadius2() {
         DungeonManiaController dmc;

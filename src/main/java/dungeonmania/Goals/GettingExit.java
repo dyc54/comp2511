@@ -8,7 +8,7 @@ import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class GettingExit implements Goal{
+public class GettingExit implements GoalComponent{
     private Location playerLocation;
     private Collection<Entity> exits;
     public GettingExit() {
@@ -21,14 +21,14 @@ public class GettingExit implements Goal{
     }
 
     @Override
-    public Goal getMapData(DungeonMap map) {
+    public GoalComponent getMapData(DungeonMap map) {
         // TODO Auto-generated method stub
         this.exits = map.getEntities("exit");
         return this;
     }
 
     @Override
-    public Goal getConfig(Config config) {
+    public GoalComponent getConfig(Config config) {
         // TODO Auto-generated method stub
         return this;
     }
@@ -41,7 +41,7 @@ public class GettingExit implements Goal{
         }
     }
     @Override
-    public Goal getMapData(Player player) {
+    public GoalComponent getMapData(Player player) {
         // TODO Auto-generated method stub
         playerLocation = player.getLocation();
         return this;
