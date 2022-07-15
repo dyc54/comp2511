@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
@@ -104,27 +105,59 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
     @Test
     @DisplayName("Test the player use invincibility_potion")
     public void testPlayerUsingInvincibilityPotion() throws IllegalArgumentException, InvalidActionException {
+        assertDoesNotThrow(() -> {
+            DungeonManiaController dmc = new DungeonManiaController();
 
-        DungeonManiaController dmc = new DungeonManiaController();
-
-        DungeonResponse res = dmc.newGame("d_potionDurablePlayerStatu",
-                "c_collectTests");
-
-        // pick up potion
-        res = playerMoveController(dmc, Direction.RIGHT, 6);
-        assertEquals(3, getInventory(res, "invisibility_potion").size());
-        assertEquals(3, getInventory(res, "invincibility_potion").size());
-
-        //get potion id
-        String invisibility_potion_1_ID = getInventory(res, "invisibility_potion").get(0).getId();
-        res = dmc.tick(invisibility_potion_1_ID);
-        assertEquals(2, getInventory(res, "invisibility_potion").size());
-        assertEquals(3, getInventory(res, "invincibility_potion").size());
+            DungeonResponse res = dmc.newGame("d_potionDurablePlayerStatu",
+                    "c_collectTests");
+    
+            // pick up potion
+            res = playerMoveController(dmc, Direction.RIGHT, 6);
+            assertEquals(3, getInventory(res, "invisibility_potion").size());
+            assertEquals(3, getInventory(res, "invincibility_potion").size());
+    
+            //get potion id
+            String invisibility_potion_1_ID = getInventory(res, "invisibility_potion").get(0).getId();
+            res = dmc.tick(invisibility_potion_1_ID);
+            assertEquals(2, getInventory(res, "invisibility_potion").size());
+            assertEquals(3, getInventory(res, "invincibility_potion").size());
+            
+        });
     }
 
     @Test
-    @DisplayName("Test the player can win battle with spider")
-    public void testBattleWithSpiderWin() throws IllegalArgumentException, InvalidActionException {
+    @DisplayName("Test the player use Use ItemFail IllegalArgumentException")
+    public void testUseItemFail() throws IllegalArgumentException, InvalidActionException {
+    
+        assertThrows(IllegalArgumentException.class, () -> {
+            DungeonManiaController dmc = new DungeonManiaController();
+            DungeonResponse res = dmc.newGame("d_potionDurablePlayerStatu", "c_Battletest_PlayerStrong");
+            res = playerMoveController(dmc, Direction.RIGHT, 7);
+
+            String ID = getInventory(res, "wood").get(0).getId();
+            res = dmc.tick(ID);
+            
+        });
+    }
+
+    @Test
+    @DisplayName("Test the player use Use ItemFail InvalidActionException")
+    public void testUseItemFail2() throws IllegalArgumentException, InvalidActionException {
+        assertThrows(InvalidActionException.class, () -> {
+            DungeonManiaController dmc = new DungeonManiaController();
+            DungeonResponse res = dmc.newGame("d_potionDurablePlayerStatu", "c_Battletest_PlayerStrong");
+            res = playerMoveController(dmc, Direction.RIGHT, 7);
+
+            String ID = getInventory(res, "wood").get(0).getId();
+            res = dmc.tick(ID+"1");
+            
+        });
+    }
+
+
+    @Test
+    @DisplayName("Test the player use can invisibility_potion battle with mercenary")
+    public void testBattleInvisibilityPotion() throws IllegalArgumentException, InvalidActionException {
         /**
          * player [    ] 
          * [    ] [    ] spider 
@@ -135,21 +168,89 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
         assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
         assertEquals(new Position(4,1), getEntities(res, "mercenary").get(0).getPosition());
 
-        //player takes invisibility_potion
+        //player takes invisibility_potion, mercenary loses player coordinates
         String invisibility_potion_1_ID = getInventory(res, "invisibility_potion").get(0).getId();
         res = dmc.tick(invisibility_potion_1_ID);
         assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(0,0), getEntities(res, "mercenary").get(0).getPosition());
 
-        //player takes invisibility_potion, mercenary loses player coordinates
-        assertEquals(new Position(4,1), getEntities(res, "mercenary").get(0).getPosition());
-        res = dmc.tick(Direction.RIGHT);
         //invisibility_potion invalid, mercenary find player coordinates
+        res = dmc.tick(Direction.RIGHT);
         assertEquals(new Position(3,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(0,-1), getEntities(res, "mercenary").get(0).getPosition());
+
         /* assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
         assertEquals(1, res.getBattles().size()); */
         /* BattleResponse battle = res.getBattles().get(0);
         assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong");
  */
     }
+
+
+    @Test
+    @DisplayName("Test the player use invincibility_potion battle with mercenary")
+    public void testBattleInvincibilityPotion() throws IllegalArgumentException, InvalidActionException {
+        /**
+         * player [    ] 
+         * [    ] [    ] spider 
+         */
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_potionBattleTest2", "c_Battletest_PlayerStrong");
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(4,1), getEntities(res, "mercenary").get(0).getPosition());
+
+        res = dmc.tick(Direction.RIGHT);
+        //player takes invisibility_potion, mercenary loses player coordinates
+        String invisibility_potion_1_ID = getInventory(res, "invincibility_potion").get(0).getId();
+        res = dmc.tick(invisibility_potion_1_ID);
+        assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
+
+        //invisibility_potion invalid, mercenary find player coordinates
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(3,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(0,-1), getEntities(res, "mercenary").get(0).getPosition());
+
+        /* assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
+        assertEquals(1, res.getBattles().size()); */
+        /* BattleResponse battle = res.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong");
+ */
+    }
+
+
+    @Test
+    @DisplayName("Test the player use invincibility_potion and invincibility_potion battle with mercenary")
+    public void testBattleInvincibilityPotionAndInvisibilityPotion() throws IllegalArgumentException, InvalidActionException {
+        /**
+         * player [    ] 
+         * [    ] [    ] spider 
+         */
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_potionBattleTest3", "c_Battletest_PlayerStrong");
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(4,1), getEntities(res, "mercenary").get(0).getPosition());
+
+        res = dmc.tick(Direction.RIGHT);
+        //player takes invisibility_potion, mercenary loses player coordinates
+        String invisibility_potion_1_ID = getInventory(res, "invincibility_potion").get(0).getId();
+        res = dmc.tick(invisibility_potion_1_ID);
+        assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
+
+        //invisibility_potion invalid, mercenary find player coordinates
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(3,1), getEntities(res, "player").get(0).getPosition());
+        assertEquals(new Position(0,-1), getEntities(res, "mercenary").get(0).getPosition());
+
+        /* assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
+        assertEquals(1, res.getBattles().size()); */
+        /* BattleResponse battle = res.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong");
+ */
+    }
+
     
 }
