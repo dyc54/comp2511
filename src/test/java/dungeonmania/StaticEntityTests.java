@@ -234,7 +234,66 @@ public class StaticEntityTests {
 
                 assertEquals(0, getInventory(res, "bomb").size());
                 assertEquals(1, getEntities(res, "static_bomb").size());
+        }
 
+        @Test
+        @DisplayName("Test if you can place a bomb correctly when you have two bomb in your bag")
+        public void TestPlaceOneOfTwoBombs() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_TwoBombsTest",
+                                "c_bombTest_placeBombRadius2");
+
+                // pick up bomb
+                res = dmc.tick(Direction.DOWN);
+                res = dmc.tick(Direction.RIGHT);
+                Position pos = getEntities(res, "player").get(0).getPosition();
+                assertEquals(new Position(3, 3), pos);
+                assertEquals(1, getInventory(res, "bomb").size());
+
+                // The second bomb
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(2, getInventory(res, "bomb").size());
+
+                // Place the bomb
+                String bombId = getInventory(res, "bomb").get(1).getId();
+                res = assertDoesNotThrow(() -> dmc.tick(bombId));
+
+                assertEquals(1, getInventory(res, "bomb").size());
+                assertEquals(1, getEntities(res, "static_bomb").size());
+        }
+
+        @Test
+        @DisplayName("Test placeing a bomb cardinally adjacent to an inactive switch does not cause the bomb to explode")
+        public void TestBombNotExplode() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_bombTest_placeBombRadius2",
+                                "c_bombTest_placeBombRadius2");
+
+                // pick up bomb
+                res = dmc.tick(Direction.DOWN);
+                res = dmc.tick(Direction.RIGHT);
+
+                assertEquals(1, getInventory(res, "bomb").size());
+                res = dmc.tick(Direction.RIGHT);
+
+                // Place the bomb
+                String bombId = getInventory(res, "bomb").get(0).getId();
+                res = assertDoesNotThrow(() -> dmc.tick(bombId));
+
+                assertEquals(0, getInventory(res, "bomb").size());
+                assertEquals(1, getEntities(res, "static_bomb").size());
+                Position posBomb = getEntities(res, "static_bomb").get(0).getPosition();
+                assertEquals(new Position(4, 3), posBomb);
+
+                assertEquals(1, getEntities(res, "player").size());
+                // Other entities should also haven't been removed
+                assertEquals(1, getEntities(res, "switch").size());
+                assertEquals(2, getEntities(res, "wall").size());
+                assertEquals(2, getEntities(res, "treasure").size());
+                assertEquals(1, getEntities(res, "boulder").size());
+                assertEquals(1, getEntities(res, "static_bomb").size());
         }
 
         @Test
@@ -264,10 +323,7 @@ public class StaticEntityTests {
                 // Go back and push the boulder
                 res = dmc.tick(Direction.LEFT);
                 res = dmc.tick(Direction.LEFT);
-                res = dmc.tick(Direction.LEFT);
                 res = dmc.tick(Direction.UP);
-                res = dmc.tick(Direction.RIGHT);
-
                 res = dmc.tick(Direction.RIGHT);
 
                 // Check the positions of the player
@@ -284,4 +340,5 @@ public class StaticEntityTests {
                 assertEquals(0, getEntities(res, "boulder").size());
                 assertEquals(0, getEntities(res, "static_bomb").size());
         }
+
 }

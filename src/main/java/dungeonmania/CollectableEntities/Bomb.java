@@ -29,7 +29,11 @@ public class Bomb extends CollectableEntity {
         dungeonMap.getFourNearEntities(location).stream().forEach(e -> {
             if (e instanceof FloorSwitch) {
                 FloorSwitch floorSwitch = (FloorSwitch) e;
-                floorSwitch.bombAttach(staticBomb);
+                if (floorSwitch.getTrigger()) {
+                    staticBomb.update(dungeonMap);
+                } else {
+                    floorSwitch.bombAttach(staticBomb);
+                }
             }
         });
     }
