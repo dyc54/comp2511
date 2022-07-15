@@ -1,6 +1,6 @@
 package dungeonmania.Strategies.AttackStrategies;
 
-public interface AttackStrayegy {
+public interface AttackStrategy {
     public double attackDamage();
     public void bonusDamage(BonusDamageAdd attack);
     public void bonusDamage(BonusDamageMul attack);

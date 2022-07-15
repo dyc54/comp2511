@@ -126,10 +126,11 @@ public class MovementTest {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(1, getInventory(res, "treasure").size());
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
+        System.out.println(getEntities(res, "mercenary").get(0).getId());
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
         
         assertEquals(0, getInventory(res, "treasure").size());
-        assertEquals(1, getEntities(res, "ally").size());
+        assertEquals(1, getEntities(res, "mercenary").size());
     }
     
     @Test
@@ -184,11 +185,21 @@ public class MovementTest {
         assertEquals(1, getInventory(res, "treasure").size());
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
-        Position playerPosition = getEntities(res, "player").get(0).getPosition();
-        res = dmc.tick(Direction.UP);
         assertEquals(0, getInventory(res, "treasure").size());
+        System.out.println("--------before"+getEntities(res, "player").get(0).getPosition());
+        System.out.println("--------before"+getEntities(res, "mercenary").get(0).getPosition());
+        res = dmc.tick(Direction.RIGHT);
+        System.out.println("--------after"+getEntities(res, "player").get(0).getPosition());
+        System.out.println("--------after"+getEntities(res, "mercenary").get(0).getPosition());
+        assertEquals(getEntities(res, "player").get(0).getPosition(), getEntities(res, "mercenary").get(0).getPosition());
+        Position playerPosition = getEntities(res, "player").get(0).getPosition();
+        res = dmc.tick(Direction.DOWN);
         assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
-
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(new Position(3, 1), getEntities(res, "mercenary").get(0).getPosition());
+        playerPosition = getEntities(res, "player").get(0).getPosition();
+        res = dmc.tick(Direction.LEFT);
+        assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
     }
 
     @Test
@@ -229,4 +240,19 @@ public class MovementTest {
         res = dmc.tick(Direction.DOWN);
         assertEquals(new Position(x, y - 1), getEntities(res, "mercenary").get(0).getPosition()); 
     }
+
+    @Test
+    @DisplayName("Test spider spawn rate")
+    public void spiderSpawn() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_spiderSpwanTest", "c_spiderSpwanTest");
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(1, getEntities(res, "spider").size());
+    }
+
 }

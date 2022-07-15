@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.CollectableEntities.CollectableEntity;
-import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
+import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
 import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
@@ -30,12 +30,12 @@ public class Battle {
 
     }
     private double playerDamage() {
-        AttackStrayegy attackStrayegy = player.getAttackStrayegy();
+        AttackStrategy attackStrayegy = player.getAttackStrayegy();
         return attackStrayegy.attackDamage() / 5.0;
         // return 0;
     }
     private double enemyDamage() {
-        AttackStrayegy attackStrayegy = enemy.getAttackStrayegy();
+        AttackStrategy attackStrayegy = enemy.getAttackStrayegy();
         DefenceStrategy defenceStrategy = player.getDefenceStrayegy();
         double damage = attackStrayegy.attackDamage() - defenceStrategy.defenceDamage();
         return (damage > 0 ? damage : 0) / 10.0;

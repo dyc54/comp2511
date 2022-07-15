@@ -4,7 +4,7 @@ import dungeonmania.Entity;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.Movement;
-import dungeonmania.Strategies.AttackStrategies.AttackStrayegy;
+import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
 import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
@@ -78,7 +78,7 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     // }
 
     @Override
-    public AttackStrayegy getAttackStrayegy() {
+    public AttackStrategy getAttackStrayegy() {
         return super.getAttack();
     }
 

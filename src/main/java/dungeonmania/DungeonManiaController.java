@@ -13,6 +13,7 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
+import dungeonmania.helpers.Location;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,6 +51,10 @@ public class DungeonManiaController {
     // private Collection<Entity> entitiesList;
     private Player player;  
     int timer = 0;
+    int spider_spawn_rate;
+    int spider_attack;
+    int spider_health;
+
     public String getSkin() {
         return "default";
     }
@@ -78,12 +84,12 @@ public class DungeonManiaController {
         try {
             dungeonConfig = new Config(configName);
             battles = new ArrayList<>();
-            //dungeonMap = new DungeonMap();
             dungeonMap.loads(dungeonName, dungeonConfig).interactAll().battleAll(battles);
             goals = new GoalController(dungeonName, dungeonConfig);
-            // entitiesList = dungeonMap.getAllEntities();
             player = dungeonMap.getPlayer();
-            // setPlayer();
+            spider_spawn_rate = dungeonConfig.spider_spawn_rate;
+            spider_attack = dungeonConfig.spider_attack;
+            spider_health = dungeonConfig.spider_health;
             goals.hasAchieved(dungeonMap, player);
             // setGoalsString(dungeonName);
             // System.out.println(getDungeonResponse().getEntities().get(0).getType());
@@ -94,6 +100,27 @@ public class DungeonManiaController {
         
     }
 
+    public void timerAdd(){
+        this.timer++;
+    }
+
+    public void checkTimer(int t) {
+        if (t == spider_spawn_rate) {
+            createSpider();
+            timer = 0;
+        }
+    }
+
+    public Location randomLocation() {
+        Random random = new Random();
+        int x = random.nextInt(dungeonMap.getPlayer().getLocation().getX() + 30);
+        int y = random.nextInt(dungeonMap.getPlayer().getLocation().getY() + 30);
+        return Location.AsLocation(x, y);
+    }
+
+    public void createSpider() {
+        dungeonMap.addEntity(new Spider("spider", randomLocation(), spider_attack, spider_health));
+    }
     /**
      * /game/dungeonResponseModel
      */
@@ -106,6 +133,8 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
         System.out.println("************************ Tick itemUsedId********************");
+        timerAdd();
+        checkTimer(timer);
         player.useItem(itemUsedId);
         return getDungeonResponse();
     }
@@ -115,9 +144,9 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         System.out.println("************************ Tick movementDirection ********************");
-        dungeonMap.timerAdd();
         player.movement(movementDirection.getOffset());
-        System.out.println("player:"+player.getLocation());
+        timerAdd();
+        checkTimer(timer);
         dungeonMap.UpdateAllEntities();
         for (Entity entity : dungeonMap.getAllEntities()) {
         // entitiesList = dungeonMap.getAllEntities();
