@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import dungeonmania.CollectableEntities.Bomb;
 import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Effect;
+import dungeonmania.CollectableEntities.Key;
 import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
 import dungeonmania.Inventories.Inventory;
@@ -165,8 +166,12 @@ public class Player extends Entity implements PlayerMovementStrategy {
     }
 
     public boolean pickup(Entity entity) {
+        if (entity instanceof Key) {
+            if (getInventoryList().stream().anyMatch(e -> e instanceof Key)) {
+                return false;
+            }
+        }
         return inventory.addToInventoryList(entity, this);
-
     }
 
     // player 查询背包物品进行建造

@@ -214,6 +214,88 @@ public class StaticEntityTests {
         }
 
         @Test
+        @DisplayName("Test player cannot have two keys in bag at the same time")
+        public void TestCannotPickUpTwoKey() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_twoKeyTest",
+                                "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
+
+                // pick up key
+                res = dmc.tick(Direction.DOWN);
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(1, getInventory(res, "key").size());
+
+                // walk through door and check key is gone
+                res = dmc.tick(Direction.UP);
+                assertEquals(1, getInventory(res, "key").size());
+                Position pos = getEntities(res, "player").get(0).getPosition();
+                assertEquals(new Position(2, 1), pos);
+        }
+
+        @Test
+        @DisplayName("Test player can use the correct key to open and walk through a related door")
+        public void TestTwoKey() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_twoKeyTest",
+                                "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
+
+                // pick up key
+                res = dmc.tick(Direction.DOWN);
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(1, getInventory(res, "key").size());
+
+                // walk through door and check key is gone
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(0, getInventory(res, "key").size());
+                Position pos = getEntities(res, "player").get(0).getPosition();
+                assertEquals(new Position(3, 2), pos);
+        }
+
+        @Test
+        @DisplayName("Test player cannot open a door with a wrong key")
+        public void TestCannotOpenDoorWithWrongKey() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_twoKeyTest",
+                                "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
+
+                // pick up the key
+                res = dmc.tick(Direction.RIGHT);
+                res = dmc.tick(Direction.DOWN);
+                assertEquals(1, getInventory(res, "key").size());
+
+                // The player cannot pass
+                Position posPlayer = getEntities(res, "player").get(0).getPosition();
+                assertEquals(new Position(2, 2), posPlayer);
+                assertEquals(1, getInventory(res, "key").size());
+        }
+
+        @Test
+        @DisplayName("Test player can pass opened door without consuming key")
+        public void TestDoorKeyAdvanced() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_twoKeyTest",
+                                "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
+
+                // pick up key
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(1, getInventory(res, "key").size());
+
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(0, getInventory(res, "key").size());
+
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(0, getInventory(res, "key").size());
+
+                // walk through the opened door
+                res = dmc.tick(Direction.LEFT);
+                assertEquals(0, getInventory(res, "key").size());
+        }
+
+        @Test
         @DisplayName("Test if you can place a bomb")
         public void TestPlaceBomb() {
                 DungeonManiaController dmc;
