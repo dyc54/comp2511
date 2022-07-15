@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import dungeonmania.CollectableEntities.Bomb;
 import dungeonmania.CollectableEntities.CollectableEntity;
 import dungeonmania.CollectableEntities.Effect;
-import dungeonmania.CollectableEntities.Key;
 import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
@@ -40,12 +39,12 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private DefenceStrategy defence;
     private double health;
     private Inventory inventory;
-    private Position direction;
+    private Position next;
     // private int x;
     // private int y;
     private boolean stay;
     private DungeonMap map;
-    private Location previousLocation;
+    private final Location previousLocation;
     private Queue<PotionEntity> effects;
 
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
@@ -60,14 +59,13 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.map = map;
         stay = false;
         effects = new ArrayDeque<>();
-        this.direction = new Position(0, 0);
     }
 
     public void addeffect(PotionEntity e) {
         effects.add(e);
     }
 
-    public AttackStrategy getAttackStrayegy() {
+    public AttackStrategy getAttackStrategy() {
         return attack;
     }
 
@@ -77,10 +75,6 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     public double getHealth() {
         return health;
-    }
-
-    public Position getDirection() {
-        return this.direction;
     }
 
     public void subHealth(double health) {
@@ -135,11 +129,9 @@ public class Player extends Entity implements PlayerMovementStrategy {
     public void setStay(boolean stay) {
         this.stay = stay;
     }
-
-    public void setDirection(Position p) {
-        this.direction = p;
+    public Position getDirection() {
+        return next;
     }
-
     public boolean getStay() {
         return stay;
     }
@@ -177,30 +169,28 @@ public class Player extends Entity implements PlayerMovementStrategy {
         // If there is a wall, don't move
         // List<Entity> blocked = DungeonMap.blockedEntities(map,
         // getLocation().getLocation(p), this);
+
         // Location temp = previousLocation.clone();
         Location curr = getLocation().clone();
         Location next = getLocation().getLocation(p);
         System.out.println(String.format("Player at %s", curr.toString()));
-        setDirection(p);
+        this.next = p;
         interactAll(curr, map, p);
         if (getLocation().equals(curr) && !stay) {
             if (DungeonMap.isaccessible(map, next, this)) {
-                previousLocation = getLocation().clone();
+                previousLocation.setLocation(getLocation());
                 setLocation(next);
+
             }
         }
+        System.out.println(String.format("Player %s -> %s", previousLocation.toString(), getLocation().toString()));
     }
-
     public boolean pickup(Entity entity) {
-        if (entity instanceof Key) {
-            if (getInventoryList().stream().anyMatch(e -> e instanceof Key)) {
-                return false;
-            }
-        }
         return inventory.addToInventoryList(entity, this);
+
     }
 
-    //player 查询背包物品进行建造    
+    //player 查询背包物品进行建造
     public boolean build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         switch (buildable) {
             case "bow":
@@ -251,7 +241,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     }
 
-    // player 使用物品
+    // player 使用物品F
     public void useItem(String itemUsedId) throws InvalidActionException, IllegalArgumentException {
         Entity entity = inventory.getItem(itemUsedId);
         if (entity == null) {
@@ -259,13 +249,13 @@ public class Player extends Entity implements PlayerMovementStrategy {
         }
         if (entity instanceof PotionEntity) {
             addeffect((PotionEntity) entity);
-            // System.out.println(String.format("%s has been use", args));
+            // System.out.println(String.format("%s has been use as potion", entity.getType()));
             inventory.removeFromInventoryList(entity);
         } else if (entity instanceof Bomb) {
             Bomb bomb = (Bomb) entity;
-            // if bomb
+            // if (bom)
             bomb.put(getLocation(), map);
-            // map.addEntity(bomb);
+            map.addEntity(bomb);
             inventory.removeFromInventoryList(entity);
         } else {
             throw new IllegalArgumentException(
@@ -303,7 +293,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     }
 
     public void setPreviousLocation(Location previousLocation) {
-        this.previousLocation = previousLocation;
+        this.previousLocation.setLocation(previousLocation);
     }
     // public void update() {
     //     PotionEntity entity = getCurrentEffect();

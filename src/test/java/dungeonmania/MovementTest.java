@@ -186,6 +186,7 @@ public class MovementTest {
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
         assertEquals(0, getInventory(res, "treasure").size());
+        
         System.out.println("--------before"+getEntities(res, "player").get(0).getPosition());
         System.out.println("--------before"+getEntities(res, "mercenary").get(0).getPosition());
         res = dmc.tick(Direction.RIGHT);
