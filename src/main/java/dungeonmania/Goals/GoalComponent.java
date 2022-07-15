@@ -4,7 +4,7 @@ import dungeonmania.Player;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 
-public interface Goal {
+public interface GoalComponent {
     /**
      * Return whether a goal has achieved
      * @return
@@ -15,17 +15,17 @@ public interface Goal {
      * @param map
      * @return
      */
-    public Goal getMapData(DungeonMap map);
+    public GoalComponent getMapData(DungeonMap map);
     // TODO: waiting player
     
-    public Goal getMapData(Player player);
+    public GoalComponent getMapData(Player player);
     
     /**
      * Load config from congis to goal
      * @param config
      * @return
      */
-    public Goal getConfig(Config config);
+    public GoalComponent getConfig(Config config);
 
 
 }

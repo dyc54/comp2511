@@ -15,25 +15,27 @@ public class ChaseMovement implements MovementStrategy{
         return location;
     }
 
-    private boolean checkMovement(DungeonMap dungeonMap, Location next) {
-        return dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
-    }
-
     @Override
     public Location moveWithWall(Location location, DungeonMap dungeonMap) {
         Location next = new Location();
-        if (location.diff(getLocation()).getX() == getLocation().getX()) {
-            if (!checkMovement(dungeonMap, getLocation().getLeft()) && !checkMovement(dungeonMap, getLocation().getRight())) {
-                return location;
-            } else if (!checkMovement(dungeonMap, getLocation().getRight())) {
+        Location diff = getLocation().diff(location);
+        if (diff.getX() == 0) {
+            if (dungeonMap.checkMovement(getLocation().getRight()) && dungeonMap.checkMovement(getLocation().getRight())) {
+                next = getLocation().changeLocation(location);
+            } else if (!(dungeonMap.checkMovement(getLocation().getRight()) || dungeonMap.checkMovement(getLocation().getRight()))) {
+                next = getLocation().getRight().distance(dungeonMap.getPlayer().getLocation()) > getLocation().getLeft().distance(dungeonMap.getPlayer().getLocation())? getLocation().getLeft(): getLocation().getRight();
+            } else if (!dungeonMap.checkMovement(getLocation().getRight())) {
                 next = getLocation().getRight();
             } else {
                 next = getLocation().getLeft();
             }
         } else {
-            if (!checkMovement(dungeonMap, getLocation().getUp()) && !checkMovement(dungeonMap, getLocation().getDown())) {
-                return location;
-            } else if (!checkMovement(dungeonMap, getLocation().getDown())) {
+            if (dungeonMap.checkMovement(getLocation().getUp()) && dungeonMap.checkMovement(getLocation().getDown())) {
+                next = getLocation().changeLocation(location);
+            }else if (!(dungeonMap.checkMovement(getLocation().getUp()) || dungeonMap.checkMovement(getLocation().getDown()))) {
+                System.out.println("-------------------");
+                next = getLocation().getUp().distance(dungeonMap.getPlayer().getLocation()) > getLocation().getDown().distance(dungeonMap.getPlayer().getLocation())? getLocation().getDown(): getLocation().getUp();
+            } else if (!dungeonMap.checkMovement(getLocation().getDown())) {
                 next = getLocation().getDown();
             } else {
                 next = getLocation().getUp();
@@ -44,10 +46,9 @@ public class ChaseMovement implements MovementStrategy{
 
     @Override
     public Location nextLocation(Location location) {
-        double presentDistance = getLocation().distance(location);
-        double distance = presentDistance;
+        double distance = getLocation().distance(location);
         Location next = new Location();
-        if (getLocation().getUp().distance(location) <= presentDistance) {
+        if (getLocation().getUp().distance(location) <= distance) {
             next = getLocation().getUp();
             distance = next.distance(location);
         } 

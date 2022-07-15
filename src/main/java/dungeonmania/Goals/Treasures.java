@@ -4,7 +4,7 @@ import dungeonmania.Player;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 
-public class Treasures implements Goal{
+public class Treasures implements GoalComponent{
     private int TargetNum;
     private int GoldNum;
     public Treasures() {
@@ -19,13 +19,13 @@ public class Treasures implements Goal{
     }
 
     @Override
-    public Goal getMapData(DungeonMap map) {
+    public GoalComponent getMapData(DungeonMap map) {
         // TODO Auto-generated method stub
         return this;
     }
 
     @Override
-    public Goal getConfig(Config config) {
+    public GoalComponent getConfig(Config config) {
         // TODO Auto-generated method stub
         TargetNum = config.treasure_goal;
         return this;
@@ -39,7 +39,7 @@ public class Treasures implements Goal{
         }
     }
     @Override
-    public Goal getMapData(Player player) {
+    public GoalComponent getMapData(Player player) {
         // TODO Auto-generated method stub
         GoldNum = player.getInventory().getItems("treasure").size();
         return this;

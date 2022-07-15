@@ -234,12 +234,39 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         // System.out.println(String.format("%f: %d + %d(%f), %d + %d(%f) = %s", degree, x, round(deltaX), deltaX, y, round(deltaY) * -1, deltaY, add(round(deltaX) , round(deltaY) * -1).toString()));
         return add(round(deltaX) , round(deltaY) * -1);
     }
+    
     public Location getLocation(int deltaX, int deltaY) {
         return add(deltaX, deltaY);
     }
+
     public Location diff(Location location) {
         return new Location(location.getX() - x, location.getY() - y);
     }
+
+    /**
+     * change to next location which is opposite to the current
+     * @param locaiton
+     * @return
+     */
+    public Location changeLocation(Location locaiton) {
+        Location diff = diff(locaiton);
+        Location nextLocation = new Location();
+        if (diff.getX() == 0 && diff.getY() > 0) {
+            if (diff.getY() > 0) {
+                nextLocation = getUp();
+            } else {
+                nextLocation = getDown();
+            }
+        } else {
+            if (diff.getX() > 0) {
+                nextLocation = getLeft();
+            } else {
+                nextLocation = getRight();
+            }
+        }
+        return nextLocation;
+    }
+
     public Location clone() {
         return new Location(x, y);
     }

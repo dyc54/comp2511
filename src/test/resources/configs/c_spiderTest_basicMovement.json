@@ -18,7 +18,7 @@
   "spider_health": 5,
   "spider_spawn_rate": 10,
   "sword_attack": 2,
-  "sword_durability": 1,
+  "sword_durability": 100,
   "treasure_goal": 1,
   "zombie_attack": 1,
   "zombie_health": 5,

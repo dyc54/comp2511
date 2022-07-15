@@ -8,6 +8,7 @@ import dungeonmania.MovingEntities.MercenaryAlly;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
+import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,7 +41,7 @@ public class DungeonManiaController {
     // 用于返回DungeonResponse
     private String dungeonId;
     private String dungeonName;
-    private List<EntityResponse> entities;
+    // private List<EntityResponse> entities;
     // private List<ItemResponse> inventory;
     private List<BattleResponse> battles;
     private List<String> buildables;
@@ -74,23 +76,20 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
+        this.dungeonId = UUID.randomUUID().toString();
+        battles = new ArrayList<>();
+        this.dungeonName = dungeonName;
         try {
             dungeonConfig = new Config(configName);
-            // dungeonMap = new DungeonMap();
-            dungeonMap.loads(dungeonName, dungeonConfig);
+            dungeonMap.loads(dungeonName, dungeonConfig).interactAll().battleAll(battles);
             goals = new GoalController(dungeonName, dungeonConfig);
-            // entitiesList = dungeonMap.getAllEntities();
-            player = dungeonMap.getPlayer();
-            // setPlayer();
-            goals.hasAchieved(dungeonMap, player);
-            battles = new ArrayList<>();
-            // setGoalsString(dungeonName);
-            // System.out.println(getDungeonResponse().getEntities().get(0).getType());
-            return getDungeonResponse();
         } catch (IOException e) {
             throw new IllegalArgumentException(
                     "'configName' or 'dungeonName' is not a configuration/dungeon that exists");
         }
+        player = dungeonMap.getPlayer();
+        goals.hasAchieved(dungeonMap, player);
+        return getDungeonResponse();
 
     }
 
@@ -105,6 +104,7 @@ public class DungeonManiaController {
      * /game/tick/item
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
+        System.out.println("************************ Tick itemUsedId********************");
         player.useItem(itemUsedId);
         return getDungeonResponse();
     }
@@ -113,7 +113,8 @@ public class DungeonManiaController {
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
-        System.out.println("************************ Tick ********************");
+        System.out.println("************************ Tick movementDirection ********************");
+
         player.movement(movementDirection.getOffset());
         System.out.println("player:" + player.getLocation());
         dungeonMap.UpdateAllEntities();
@@ -127,6 +128,7 @@ public class DungeonManiaController {
             if (entity.getType().equals("zombie_toast")) {
                 ZombieToast zombie = (ZombieToast) entity;
                 zombie.movement(dungeonMap);
+                System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
             }
             if (entity.getType().equals("zombie_toast_spawner")) {
                 ZombieToastSpawner zts = (ZombieToastSpawner) entity;
@@ -137,74 +139,24 @@ public class DungeonManiaController {
                 Mercenary mercenary = (Mercenary) entity;
                 mercenary.movement(dungeonMap);
             }
-            if (entity.getType().equals("ally")) {
-                MercenaryAlly mercenaryAlly = (MercenaryAlly) entity;
-                mercenaryAlly.movement(dungeonMap);
-            }
+            // if (entity.getType().equals("ally")) {
+            // MercenaryAlly mercenaryAlly = (MercenaryAlly) entity;
+            // mercenaryAlly.movement(dungeonMap);
+            // }
         }
         // Battle
-        String effect = "";
-        if (player.hasEffect()) {
-            effect = player.getCurrentEffect().applyEffect();
-        }
-        if (dungeonMap.getEntities(player.getLocation()).size() > 0 && !effect.equals("Invisibility")) {
-            System.out.println("GetEntities");
-            dungeonMap.getEntities(player.getLocation()).stream()
-                    .forEach(entity -> System.out.println(entity.toString()));
-            List<String> removed = new ArrayList<>();
-            System.out.println(player.getLocation().toString());
-            for (Entity entity : dungeonMap.getEntities(player.getLocation())) {
-                System.out.println(entity.toString());
-                if (entity instanceof Enemy) {
-                    System.out.println(String.format("%s at %s\n%s at %s", player.getEntityId().toString(),
-                            player.getLocation().toString(), entity.getEntityId().toString(),
-                            entity.getLocation().toString()));
-                    Battle battle = new Battle();
-                    String loser = battle.setBattle(player, (Enemy) entity).startBattle();
-                    if (loser.equals("Both")) {
-                        System.out.println("remove both");
-                        removed.add(player.getEntityId());
-                        removed.add(entity.getEntityId());
-                    } else {
-                        System.out.println(String.format("Loser %s", loser));
-                        // System.out.println(loser);
-                        removed.add(loser);
-                    }
-                    battles.add(battle.toResponse());
-                }
-            }
-            removed.stream().forEach(id -> dungeonMap.removeEntity(id));
-            // dungeonMap.getEntities(player.getLocation())
-            // .stream()
-            // .forEach(entity -> {
-            // System.out.println(entity.toString());
-            // if (entity instanceof Enemy) {
-            // Battle battle = new Battle();
-            // String loser = battle.setBattle(player, (Enemy) entity).startBattle();
-            // if (loser.equals("Both")) {
-            // removed.add(player.getEntityId());
-            // removed.add(entity.getEntityId());
-            // } else {
-            // removed.add(loser);
-            // }
-            // battles.add(battle.toResponse());
-            // }
-            // });
-
-            System.out.println(dungeonMap.toString());
-            // dungeonMap
-            goals.hasAchieved(dungeonMap, player);
-        }
-        // System.out.println("************************ Tick E********************");
-        // removed.stream().forEach(action);
+        dungeonMap.battleAll(battles);
+        goals.hasAchieved(dungeonMap, player);
+        dungeonMap.toString();
         return getDungeonResponse();
+
     }
 
     /**
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        player.build(buildable, dungeonConfig);
+        player.build(buildable, dungeonConfig, 0);
         return getDungeonResponse();
     }
 
@@ -218,7 +170,6 @@ public class DungeonManiaController {
         }
         if (entity.getType().equals("zombie_toast_spawner")) {
             ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
-            System.out.println("+++++++++");
             if (!zombieToastSpawner.interact(player, dungeonMap)) {
                 throw new InvalidActionException("Invaild action");
             }
@@ -234,14 +185,12 @@ public class DungeonManiaController {
 
     /* *********************************************** */
     private DungeonResponse getDungeonResponse() {
-        setEntitiesResponse();
+        // setEntitiesResponse();
         setBattlesResponse();
         setBuildables();
         // setItemResponse();
-        return new DungeonResponse(dungeonId, dungeonName, entities, getItemResponse(), battles, buildables,
-                goals.toString());
-        // return new DungeonResponse(dungeonId, dungeonName, entities, inventory,
-        // battles, buildables, "goal");
+        return new DungeonResponse(dungeonId, dungeonName, getEntitiesResponse(), getItemResponse(), battles,
+                buildables, goals.toString());
     }
 
     /**
@@ -273,12 +222,13 @@ public class DungeonManiaController {
     /**
      * Create EntitiesResponses from a list of entities
      */
-    private void setEntitiesResponse() {
+    private List<EntityResponse> getEntitiesResponse() {
         List<EntityResponse> entities = new ArrayList<>();
         for (Entity entitie : dungeonMap.getAllEntities()) {
             entities.add(entitie.getEntityResponse());
         }
-        this.entities = entities;
+        return entities;
+        // this.entities = entities;
     }
 
     /**

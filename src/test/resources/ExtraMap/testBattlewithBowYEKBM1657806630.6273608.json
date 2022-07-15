@@ -1,0 +1,37 @@
+{
+  "entities": [
+    {
+      "type": "player",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "type": "spider",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "type": "wood",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "type": "arrow",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "type": "arrow",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "type": "arrow",
+      "x": 0,
+      "y": 0
+    }
+  ],
+  "goal-condition": {
+    "goal": "exit"
+  }
+}

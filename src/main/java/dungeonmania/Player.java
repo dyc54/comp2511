@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import dungeonmania.CollectableEntities.Effect;
 import dungeonmania.CollectableEntities.Key;
 import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
+import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
 import dungeonmania.Inventories.Inventory;
 import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.Exit;
@@ -91,6 +93,30 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     public Inventory getInventory() {
         return inventory;
+    }
+    public void setBattleUsedDuration() {
+        inventory.getAllInventory().forEach( entity ->{
+            if (entity instanceof DurabilityEntity) {
+                ((DurabilityEntity) entity).setDurability();
+            }
+        });
+    }
+    public void cleardisusableItem() {
+        // System.out.println("******");
+        // inventory.print();
+        List<Entity> entities = new LinkedList<>();
+        inventory.getAllInventory().forEach( entity ->{
+            System.out.println(entity.getType());
+            if (entity instanceof DurabilityEntity && ((DurabilityEntity) entity).checkDurability()) {
+                // System.out.println("");
+                entities.add(entity);
+            }
+        });
+        entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
+        if (hasEffect() && !getCurrentEffect().checkDurability()) {
+            effects.poll();
+        }
+
     }
     // public void addInventoryList(Entity item) {
     // inventory.addToInventoryList(item);
@@ -174,28 +200,33 @@ public class Player extends Entity implements PlayerMovementStrategy {
         return inventory.addToInventoryList(entity, this);
     }
 
-    // player 查询背包物品进行建造
-    public String build(String buildable, Config config) throws IllegalArgumentException, InvalidActionException {
+    //player 查询背包物品进行建造
+    public boolean build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         switch (buildable) {
             case "bow":
                 boolean wood_b = inventory.hasItem("wood", 1);
-                boolean arrow = inventory.hasItem("arrows", 3);
+                boolean arrow = inventory.hasItem("arrow", 3);
+                System.out.println(String.format("Building bow: wood %s %d/%d arrow %s %d/%d"
+                                                        , wood_b, inventory.getItems("wood").size(), 1, arrow, inventory.getItems("arrow").size(), 3));
                 if (wood_b && arrow) {
-                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
                 } else {
                     throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
                 inventory.removeFromInventoryList("wood", 1);
-                inventory.removeFromInventoryList("arrows", 3);
+                inventory.removeFromInventoryList("arrow", 3);
                 break;
             case "shield":
                 boolean wood_s = inventory.hasItem("wood", 2);
-                boolean treasure = inventory.hasItem("treasure ", 1);
-                boolean key = inventory.hasItem("key ", 1);
+                boolean treasure  = inventory.hasItem("treasure", 1);
+                boolean key  = inventory.hasItem("key", 1);
+                System.out.println(String.format("Building shield: wood %s %d/%d (arrow %s %d/%d or key %s %d/%d)"
+                                                        , wood_s, inventory.getItems("wood").size(), 2, treasure, inventory.getItems("treasure").size(), 1, key, inventory.getItems("key").size(), 1));
+
                 if (wood_s && (treasure || key)) {
-                    inventory.addToInventoryList(EntityFactory.newEntity(buildable, config), this);
+                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
                 } else {
-                    throw new InvalidActionException("buildable is not one of bow, shield");
+                    throw new InvalidActionException("player does not have sufficient items to craft the buildable");
                 }
                 inventory.removeFromInventoryList("wood", 2);
                 if (treasure) {
@@ -205,10 +236,19 @@ public class Player extends Entity implements PlayerMovementStrategy {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("buildable is not one of bow, shield");
-            // break;
+                throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", buildable));
         }
-        return "";
+        return true;
+    }
+    public void build(String buildable, Config config, int x) throws InvalidActionException, IllegalArgumentException {
+        BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
+        if (recipe.isSatisfied(inventory)) {
+            String type = recipe.consumeMaterial(inventory).getRecipeName();
+            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config), this);
+        } else {
+            throw new InvalidActionException("player does not have sufficient items to craft the buildable");
+        }
+
     }
 
     // player 使用物品
@@ -219,6 +259,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
         }
         if (entity instanceof PotionEntity) {
             addeffect((PotionEntity) entity);
+            // System.out.println(String.format("%s has been use", args));
             inventory.removeFromInventoryList(entity);
         } else if (entity instanceof Bomb) {
             Bomb bomb = (Bomb) entity;
@@ -253,27 +294,25 @@ public class Player extends Entity implements PlayerMovementStrategy {
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation = previousLocation;
     }
+    // public void update() {
+    //     PotionEntity entity = getCurrentEffect();
+    //     entity.setDurability();
+    //     if (!entity.checkDurability()) {
+    //         effects.poll();
+    //     }
+    //     // TODO: refactor
+    //     for(Iterator<Entity> iterator = inventory.getAllInventory().iterator(); iterator.hasNext();) {
+    //         Entity temp = iterator.next();
+    //         if (temp instanceof DurabilityEntity && ! (temp instanceof PotionEntity)) {
+    //             DurabilityEntity durabilityEntity = (DurabilityEntity) temp;
+    //             durabilityEntity.setDurability();
+    //             if (!entity.checkDurability()) {
+    //                 inventory.removeFromInventoryList(temp);
+    //             }
+    //         }
+    //     }
 
-    public void update() {
-        PotionEntity entity = getCurrentEffect();
-        entity.setDurability();
-        if (!entity.checkDurability()) {
-            effects.poll();
-        }
-        // TODO: refactor
-        for (Iterator<Entity> iterator = inventory.getAllInventory().iterator(); iterator.hasNext();) {
-            Entity temp = iterator.next();
-            if (temp instanceof DurabilityEntity && !(temp instanceof PotionEntity)) {
-                DurabilityEntity durabilityEntity = (DurabilityEntity) temp;
-                durabilityEntity.setDurability();
-                if (!entity.checkDurability()) {
-                    inventory.removeFromInventoryList(temp);
-                }
-            }
-        }
-
-    }
-
+    // }
     public List<Entity> getBattleUsage() {
         List<Entity> list = new ArrayList<>();
         if (hasEffect()) {
