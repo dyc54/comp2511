@@ -23,6 +23,7 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -174,20 +175,41 @@ public class BattleTest {
         assertTrue(postBattleResponse.getBattles().size() == 1);
         assertNotEquals(getEntities(postBattleResponse, "zombie").get(0).getPosition(), new Position(2,3));
     }
+    // TODO: 
     // @Test
     public void testBattleWithEnemyInvincibilityPotionWithMercenaries() {
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithZombie27YQN1657789905.4370875", "c_BattleTest_playerweak");
+        DungeonResponse initialResponse = controller.newGame("testinvincibility_mercenaries0OP3K1657808661.9115794", "c_BattleTest_playerweak");
         String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
         assertDoesNotThrow( () -> {
             controller.tick(invincibility_potion_id);
         });
         DungeonResponse postBattleResponse = controller.tick(Direction.DOWN);
-        // Position curr = 
-        assertTrue(getEntities(postBattleResponse, "zombie").size() == 1);
+        // mercenary is a enemy
+        assertTrue(getEntities(postBattleResponse, "mercenary").size() == 1);
+        // There is a battle within them
         assertTrue(postBattleResponse.getBattles().size() == 1);
-        assertNotEquals(getEntities(postBattleResponse, "zombie").get(0).getPosition(), new Position(2,3));
+        // mercenary go away
+        assertNotEquals(getEntities(postBattleResponse, "mercenary").get(0).getPosition(), new Position(2,3));
     }
+    // TODO: 
+
+    // @Test
+    public void testBattleWithEnemyInvincibilityPotionWithAlly() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("testinvincibility_mercenaries0OP3K1657808661.9115794", "c_BattleTest_playerweak");
+        String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
+        String mercenary_id = getEntities(initialResponse, "mercenary").get(0).getId();
+        assertDoesNotThrow( () -> {
+            controller.tick(invincibility_potion_id);
+            controller.interact(mercenary_id);
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.DOWN);
+        assertTrue(getEntities(postBattleResponse, "mercenary").size() == 1);
+        assertTrue(postBattleResponse.getBattles().size() == 0);
+        assertEquals(getEntities(postBattleResponse, "mercenary").get(0).getPosition(), new Position(2,3));
+    }
+
     @Test
     public void testBattleWithEnemyInvincibilityPotionLost() {
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
@@ -249,51 +271,64 @@ public class BattleTest {
         //         "c_battleTests_basicMercenaryPlayerDies");
     }
     @Test
-    public void testBattleWithEnemyBowLost() {
-        DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
-    }
-    @Test
     public void testBattleWithEnemyShieldWin() {
+        // DungeonManiaController controller = new DungeonManiaController();
         DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("testBattleShield5YIPL1657809090.6974766", "c_BattleTest_playerweak");
+        assertDoesNotThrow( () -> {
+            controller.build("shield");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak", false, true, false);
+
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
     }
     @Test
     public void testBattleWithEnemyShieldGtEnemyAttack() {
         DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
-    }
-    @Test
-    public void testBattleWithEnemyShieldLost() {
-        DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
+        DungeonResponse initialResponse = controller.newGame("testBattleShield5YIPL1657809090.6974766", "c_Battletest_PlayerStrong");
+        assertDoesNotThrow( () -> {
+            controller.build("shield");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("spider", battle, true, "c_Battletest_PlayerStrong", false, true, false);
     }
     @Test
     public void testBattleWithEnemySwordAndBowWin() {
         DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
-    }
-    @Test
-    public void testBattleWithEnemySwordAndBowLost() {
-                DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("testBattleBuildAllV4EJM1657810665.3420236", "c_Battletest_PlayerStrong");
+        assertDoesNotThrow( () -> {
+            controller.build("bow");
+            // controller.build("sword");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("spider", battle, true, "c_Battletest_PlayerStrong", true, false, true);
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
     }
     @Test
     public void testBattleWithEnemySwordAndBowAndShieldWin() {
+        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
+        //         "c_battleTests_basicMercenaryPlayerDies");
         DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
+        DungeonResponse initialResponse = controller.newGame("testBattleBuildAllV4EJM1657810665.3420236", "c_Battletest_PlayerStrong");
+        assertDoesNotThrow( () -> {
+            controller.build("bow");
+            controller.build("shield");
+        });
+        // List<ItemResponse> inv = getInventory(next, "bow");
+        // assertEquals(0, inv.size());
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("spider", battle, true, "c_Battletest_PlayerStrong", true, true, true);
+        DungeonResponse next = controller.tick(Direction.RIGHT);
+        List<ItemResponse> inv = getInventory(next, "bow");
+        assertEquals(0, inv.size());
+
     }
-    @Test
-    public void testBattleWithEnemySwordAndBowAndShieldLost() {
-                DungeonManiaController controller = new DungeonManiaController();
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
-    }
+
 }

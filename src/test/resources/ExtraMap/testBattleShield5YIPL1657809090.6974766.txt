@@ -1,0 +1,6 @@
+player,0,0
+spider,1,1
+wood,0,0
+wood,0,0
+key,0,0,1
+g,exit

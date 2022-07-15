@@ -1,0 +1,16 @@
+wall,3,4
+wall,3,2
+wall,4,3
+player,2,2
+invincibility_potion,2,2
+mercenary,3,3
+treasurey,2,2
+treasurey,2,2
+treasurey,2,2
+treasurey,2,2
+treasurey,2,2
+treasurey,2,2
+treasurey,2,2
+treasurey,2,2
+treasurey,2,2
+g,exit

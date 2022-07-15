@@ -47,6 +47,10 @@ public abstract class Entity{
     }
 
     public void setLocation(Location location) {
+        System.out.println(
+            "thisLocation:"+getEntityId()+"//"+getLocation()
+        );
+        System.out.println(location);
         this.location.setLocation(location);
     }
 

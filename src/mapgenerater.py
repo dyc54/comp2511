@@ -126,7 +126,7 @@ def printmap(map):
                     else:
                         count_str = str(count)
                         word = f"[{(4-len(count_str)) * '_'} {count_str}]" 
-                        addition += f"{count}: "+' and '.join(map[x][y])
+                        addition += f"{count}: "+', '.join(map[x][y])
                         count += 1
                 else:
                     word = f"[{' ' * 4}]"
