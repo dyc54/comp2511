@@ -144,6 +144,7 @@ public class DungeonManiaController {
         timerAdd();
         checkTimer(timer);
         player.useItem(itemUsedId);
+        player.updatePotionDuration();
         dungeonMap.battleAll(battles);
         goals.hasAchieved(dungeonMap, player);
         return getDungeonResponse();
@@ -155,6 +156,7 @@ public class DungeonManiaController {
     public DungeonResponse tick(Direction movementDirection) {
         System.out.println("************************ Tick movementDirection ********************");
         player.movement(movementDirection.getOffset());
+        player.updatePotionDuration();
         timerAdd();
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();

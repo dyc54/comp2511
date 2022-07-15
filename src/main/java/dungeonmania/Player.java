@@ -283,6 +283,17 @@ public class Player extends Entity implements PlayerMovementStrategy {
         return effects.peek();
     }
 
+    public void updatePotionDuration() {
+        Queue<PotionEntity> queue = new LinkedList<>(effects);
+        for(PotionEntity effect : queue){
+            if(effect.checkDurability()){
+                effects.remove(effect);
+            }else{
+                effect.setDurability();
+            }
+        }
+    }
+
     public boolean hasEffect() {
         return effects.size() != 0;
     }
