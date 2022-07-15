@@ -29,6 +29,7 @@ public class EntityFactory {
         int x = entity.getInt("x");
         int y = entity.getInt("y");
         // TODO: Add create entities.
+        System.out.println(String.format("new entity %s at <%d,%d>", type, x, y));
         int key = 0;
         switch (type) {
             case "player":
@@ -60,11 +61,11 @@ public class EntityFactory {
             case "bomb":
                 return new Bomb(type, x, y, config.bomb_radius);
             case "invincibility_potion":
-                return new InvincibilityPotion(type, x, y, config.invincibility_potion_duration);
+                return new InvincibilityPotion(type, config.invincibility_potion_duration, x, y);
             case "invisibility_potion":
-                return new InvisibilityPotion(type, x, y, config.invisibility_potion_duration);
+                return new InvisibilityPotion(type, config.invisibility_potion_duration, x, y);
             case "sword":
-                return new Sword(type, x, y, config.sword_attack, config.sword_durability);
+                return new Sword(type, x, y, config.sword_durability - 1, config.sword_attack);
             case "treasure":
                 return new Treasure(type, x, y);
             case "wood":
@@ -74,7 +75,7 @@ public class EntityFactory {
             case "mercenary":
                 return new Mercenary(type, Location.AsLocation(x, y), config.mercenary_attack, config.mercenary_health, config.bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence);
             case "ally":
-                return new MercenaryAlly(type, Location.AsLocation(x, y), config.ally_attack, config.ally_defence);
+                return new MercenaryAlly("mercenary", Location.AsLocation(x, y), config.ally_attack, config.ally_defence, 0);
         }
         return null;
     }
@@ -135,9 +136,9 @@ public class EntityFactory {
     public static Entity newEntity(String type, Config config) {
         switch (type) {
             case "bow":
-                return new Bow(type, config.bow_durability);
+                return new Bow(type, config.bow_durability - 1);
             case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability);
+                return new Shield(type, config.shield_defence, config.shield_durability - 1);
             default:
                 break;
         }

@@ -105,18 +105,18 @@ public class MovementTest {
         assertEquals(new Position(x, y + 1), getEntities(res, "mercenary").get(0).getPosition());
     }
 
-    @Test
-    @DisplayName("The following state for mercenary movement")
-    public void mercenaryFollowing() {
-        DungeonManiaController dmc;
-        dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_mercenaryTest_follow", "c_spiderTest_basicMovement");
-        Position pos = getEntities(res, "player").get(0).getPosition();
-        int x = pos.getX();
-        int y = pos.getY();
-        res = dmc.tick(Direction.DOWN);
-        assertEquals(new Position(x, y), getEntities(res, "ally").get(0).getPosition());
-    }
+    // @Test
+    // @DisplayName("The following state for mercenary movement")
+    // public void mercenaryFollowing() {
+    //     DungeonManiaController dmc;
+    //     dmc = new DungeonManiaController();
+    //     DungeonResponse res = dmc.newGame("d_mercenaryTest_follow", "c_spiderTest_basicMovement");
+    //     Position pos = getEntities(res, "player").get(0).getPosition();
+    //     int x = pos.getX();
+    //     int y = pos.getY();
+    //     res = dmc.tick(Direction.DOWN);
+    //     assertEquals(new Position(x, y), getEntities(res, "ally").get(0).getPosition());
+    // }
 
     @Test
     @DisplayName("The mercenary is bribed by the player-success")
@@ -141,6 +141,7 @@ public class MovementTest {
         dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("d_mercenaryTest_bribeFail", "c_mercenaryTest_bribeFail");
         res = dmc.tick(Direction.UP);
+        // getEntities(res, type)
         assertEquals(0, getInventory(res, "treasure").size());
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
         assertThrows(InvalidActionException.class, ()-> {

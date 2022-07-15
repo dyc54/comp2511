@@ -1,5 +1,6 @@
 package dungeonmania.CollectableEntities.DurabilityEntities;
 
+import dungeonmania.Interactability;
 import dungeonmania.CollectableEntities.Effect;
 
 public abstract class PotionEntity extends DurabilityEntity implements Effect {

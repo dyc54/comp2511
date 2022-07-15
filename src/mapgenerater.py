@@ -4,6 +4,8 @@ import random
 import string
 import time
 
+import outcome
+
 
 
 def print_input(func):
@@ -24,15 +26,15 @@ def newEntities(Etype, x, y):
     }
 
 
-def save(dic, loging):
-    name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+def save(dic, loging, filename):
+    name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
     name += str(time.time())
-    with open(f'./src/test/resources/ExtraMap/{name}.json', 'w') as f:
+    with open(f'./src/test/resources/ExtraMap/{filename+name}.json', 'w') as f:
         json.dump(dic, f, indent=2)
-    log = open(f'./src/test/resources/ExtraMap/{name}.txt', 'w')
+    log = open(f'./src/test/resources/ExtraMap/{filename+name}.txt', 'w')
     log.write(loging)
     log.close()
-    print(f"filename: {name}")
+    print(f"filename: {filename+name}")
     # return name
 
 @print_input
@@ -83,7 +85,67 @@ def complexMergeGoal(temp, command):
         return respnse
     print("temp Key Error")
 
+def addmap(x, y, map, entityname):
+    if x in map.keys():
+        if y in map[x].keys():
+            map[x][y].append(entityname)
+        else:
+            map[x][y] = []
+            map[x][y].append(entityname)
+    else:
+        map[x] = {y: [entityname]}
+
+def printmap(map):
+    output = ""
+    addition = ""
+    count = 1
+    min_x = min(map.keys())
+    min_y = min([min(ent.keys()) for ent in map.values()])
+    max_x = max(map.keys())
+    max_y = max([max(ent.keys()) for ent in map.values()])
+    print("-" * (8 * (max_y - min_y)))
+    # print(min_x)
+    # print(min_y)
+    # print(max_x)
+    # print(max_y)
+    for x in range(min_x, max_x + 1):
+        line = ""
+        for y in range(min_y, max_y + 1):
+            word = ""
+            if x in map.keys():
+                if y in map[x].keys():
+                    if len(map[x][y]) == 1:
+                        if len(map[x][y][0]) > 6:
+                            word = f"{map[x][y][0][:6]}"
+                        else:
+                            if int((6 - len(map[x][y][0]))/2) * 2 == (6 - len(map[x][y][0])):
+                                word = f"{' ' * int((6 - len(map[x][y][0]))/2)}{map[x][y][0]}{' ' * int((6 - len(map[x][y][0]))/2)}"
+                            else:
+                                word = f"{' ' * int((6 - len(map[x][y][0]))/2)}{map[x][y][0]}{' ' * (int((6 - len(map[x][y][0]))/2)+1)}"
+
+                    else:
+                        count_str = str(count)
+                        word = f"[{(4-len(count_str)) * '_'} {count_str}]" 
+                        addition += f"{count}: "+' and '.join(map[x][y])
+                        count += 1
+                else:
+                    word = f"[{' ' * 4}]"
+            else:
+                word = f"[{' ' * 4}]"
+            line += word + " "
+        output += line + "\n"
+    print(output + addition)
+    return output + addition
+
+
+            
+
+
+
 def main():
+    map = {}
+
+    filename = input("filename: ")
     print("Add Entity, format type, x, y, [color, key], crtl + c/d to next, __q__ to exit")
     entities = []
     log = ""
@@ -100,6 +162,7 @@ def main():
                 print("Error in input argument, lacking of 'color' in portal or 'key' in (door and key)")
                 continue
             entity = newEntities(arg[0], int(arg[1]), int(arg[2]))
+            addmap(int(arg[2]),int(arg[1]), map, arg[0])
             if (arg[0] == "portal"):
                 entity['colour'] = arg[3]
             elif (arg[0] in ['door', 'key']):
@@ -108,7 +171,7 @@ def main():
         except (ValueError, EOFError, KeyboardInterrupt):
             break
     temp = {}
-    goals = []
+    goals = {}
     print("Add Goal, format command, args, ..., crtl + c/d to next, __q__ to exit")
     while True:
         try:
@@ -122,13 +185,13 @@ def main():
             args = line.replace(" ", "").split(',')
             command = args[0]
             if (command == "g" and len(args) == 2):
-                goals.append(goal(args[1]))
+                goals = goal(args[1])
             elif (command == "s" and len(args) == 4):
-                goals.append(supergoal(args[1], args[2], args[3]))
+                goals = supergoal(args[1], args[2], args[3])
             elif (command == "c" and (len(args) == 3 or len(args) == 5)):
                 complexCreateGoal(temp, line)
             elif (command == "m" and len(args) == 4):
-                goals.append(complexMergeGoal(temp, line))
+                goals = complexMergeGoal(temp, line)
             else:
                 print("Error input, try again")
                 continue
@@ -138,9 +201,16 @@ def main():
         'entities': entities,
         'goal-condition': goals,
     }
-    # print(response)
-    # print(log)
-    save(response, log)
+    printmap(map)
+    # print(goals)
+    save(response, log, filename)
 
 
 main()
+# temp= {}
+# addmap(1,2,temp, "test")
+# addmap(2,3,temp, "test")
+# addmap(1,4,temp, "test")
+# addmap(4,4,temp, "test")
+# print(temp)
+# printmap(temp)

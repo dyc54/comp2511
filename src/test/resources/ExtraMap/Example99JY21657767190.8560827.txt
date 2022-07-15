@@ -1,10 +1,9 @@
-door,2,2,key_one
-key,3,4,key_one
+door,2,2,2
+key,3,4,2
 portal,5,5,red
-portal,5,5,red 
+portal,5,6,red 
 wall,2,3
 player,12,12
-
 g, goal
 s, AND, goal1, goal2
 c, TEMP_GOAL1, AND, goal3, goal 3

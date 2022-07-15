@@ -18,6 +18,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -84,5 +85,138 @@ public class CollectAndBuildTest {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(1, getInventory(res, "invincibility_potion").size());
     }
+    
 
+    @Test
+    @DisplayName("Test the player can pick invisibility_potion in map")
+    public void testPickUpInvisibilityPotion() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
+                "c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "invisibility_potion").size());
+    }
+
+    @Test
+    @DisplayName("Test the player can pick key map")
+    public void testPickUpkey() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
+                "c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "key").size());
+    }
+
+
+    @Test
+    @DisplayName("Test the player can pick treasure map")
+    public void testPickUpTreasure() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
+                "c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "treasure").size());
+    }
+
+
+    @Test
+    @DisplayName("Test the player can pick sword map")
+    public void testPickUpSword() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
+                "c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "sword").size());
+    }
+
+    @Test
+    @DisplayName("Test the player can bulid bow ")
+    public void testBulidBow() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
+                "c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.build("bow");
+        assertEquals(1, getInventory(res, "bow").size());
+        assertEquals(1, getInventory(res, "wood").size());
+        assertEquals(0, getInventory(res, "arrow").size());
+
+    }
+
+    @Test
+    @DisplayName("Test the player can bulid shield ")
+    public void testBulidShield() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
+                "c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(2, getInventory(res, "wood").size());
+        /* res = dmc.build("shield");
+        assertEquals(1, getInventory(res, "shield").size());
+        assertEquals(0, getInventory(res, "wood").size());
+        assertEquals(0, getInventory(res, "treasure").size()); */
+
+    }
 }

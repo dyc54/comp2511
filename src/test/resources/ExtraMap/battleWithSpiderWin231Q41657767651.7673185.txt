@@ -1,0 +1,3 @@
+player,0,0
+spider,1,1
+g, exit

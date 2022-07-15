@@ -13,8 +13,13 @@ import org.json.*;
 
 public class FileReader {
     public static String LoadFile(String FileName) throws IOException {
-        Path absPath = searchFile(new File("./src/test"), FileName+".json").toPath();
-        return new String(Files.readAllBytes(absPath));
+        try {
+            Path absPath = searchFile(new File("./src/test"), FileName+".json").toPath();
+            return new String(Files.readAllBytes(absPath));
+        } catch (Exception nulException) {
+            //TODO: handle exception
+            throw new IOException("No such file");
+        }
     }
     public static List<Map<String, String>> LoadEntities(String FileName) throws IOException {
         String content = FileReader.LoadFile(FileName);
