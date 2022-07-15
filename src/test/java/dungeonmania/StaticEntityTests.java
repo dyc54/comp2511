@@ -445,8 +445,7 @@ public class StaticEntityTests {
                 assertEquals(0, getEntities(res, "static_bomb").size());
         }
 
-        @Test
-
+        // @Test
         @DisplayName("Test player can pick up multiple entities at the same time")
         public void TestPlayerCanPickUpMultipleEntitiesAtOneTime() {
                 DungeonManiaController dmc;
