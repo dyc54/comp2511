@@ -51,27 +51,26 @@ public class StaticEntityTests {
         }
 
         @Test
-        @DisplayName("Test the player can move a boulder")
+        @DisplayName("Test the player can simply move a boulder")
         public void testMoveBoulder() {
                 DungeonManiaController dmc = new DungeonManiaController();
-                DungeonResponse initDungonRes = dmc.newGame("d_complexGoalsTest_andAll",
+                DungeonResponse initDungonRes = dmc.newGame("d_boulderTest",
                                 "c_complexGoalsTest_andAll");
                 EntityResponse initPlayer = getPlayer(initDungonRes).get();
 
                 // create the expected result
                 EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(),
-                                new Position(3, 1),
+                                new Position(2, 1),
                                 false);
 
                 DungeonResponse actualDungonRes;
-                actualDungonRes = dmc.tick(Direction.RIGHT);
                 actualDungonRes = dmc.tick(Direction.RIGHT);
 
                 EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
 
                 // assert the position of boulder
                 Position boulderPosition = getEntities(actualDungonRes, "boulder").get(0).getPosition();
-                assertEquals(new Position(4, 1), boulderPosition);
+                assertEquals(new Position(3, 1), boulderPosition);
 
                 // assert after movement
                 assertEquals(expectedPlayer, actualPlayer);

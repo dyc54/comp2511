@@ -33,17 +33,22 @@ public class Boulder extends StaticEntity implements Interactability {
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
         if (entity instanceof Player) {
+            // Get the moving direction
             Player player = (Player) entity;
-            Position p = Location.getMoveDir(player.getPreviousLocation(), player.getLocation());
-            Location next = getLocation().getLocation(p);
+            // Position direction = Location.getMoveDir(player.getPreviousLocation(),
+            // player.getLocation());
+            Location next = getLocation().getLocation(player.getDirection());
+            // Location next = new Location(player.getLocation().getX() + direction.getX(),
+            // player.getLocation().getY() + direction.getY());
             if (DungeonMap.isaccessible(map, next, this)) {
                 // set the position of player
                 if (!entity.getLocation().equals(getLocation())
                         && DungeonMap.isaccessible(map, getLocation(), entity)) {
                     entity.setLocation(getLocation());
                 }
+                // set the new position of the boulder
                 setLocation(next);
-                // Interact with entities in the next position. i.e. switch, boulder
+                // Interact with entities in the next position. i.e. switch
                 map.getEntities(next).forEach(element -> {
                     if (element instanceof Interactability) {
                         Interactability interactableEntity = (Interactability) element;

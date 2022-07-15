@@ -37,6 +37,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private DefenceStrategy defence;
     private double health;
     private Inventory inventory;
+    private Position direction;
     // private int x;
     // private int y;
     private boolean stay;
@@ -56,6 +57,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
         this.map = map;
         stay = false;
         effects = new ArrayDeque<>();
+        this.direction = new Position(0, 0);
     }
 
     public void addeffect(PotionEntity e) {
@@ -72,6 +74,10 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     public double getHealth() {
         return health;
+    }
+
+    public Position getDirection() {
+        return this.direction;
     }
 
     public void subHealth(double health) {
@@ -101,6 +107,10 @@ public class Player extends Entity implements PlayerMovementStrategy {
 
     public void setStay(boolean stay) {
         this.stay = stay;
+    }
+
+    public void setDirection(Position p) {
+        this.direction = p;
     }
 
     public boolean getStay() {
@@ -140,17 +150,16 @@ public class Player extends Entity implements PlayerMovementStrategy {
         // If there is a wall, don't move
         // List<Entity> blocked = DungeonMap.blockedEntities(map,
         // getLocation().getLocation(p), this);
-
         // Location temp = previousLocation.clone();
         Location curr = getLocation().clone();
         Location next = getLocation().getLocation(p);
         System.out.println(String.format("Player at %s", curr.toString()));
+        setDirection(p);
         interactAll(curr, map, p);
         if (getLocation().equals(curr) && !stay) {
             if (DungeonMap.isaccessible(map, next, this)) {
                 previousLocation = getLocation().clone();
                 setLocation(next);
-
             }
         }
         // map.getEntities(next).stream().forEach(entity -> {
