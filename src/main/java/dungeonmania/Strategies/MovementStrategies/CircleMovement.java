@@ -1,6 +1,5 @@
 package dungeonmania.Strategies.MovementStrategies;
 
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class CircleMovement implements MovementStrategy {
@@ -32,7 +31,6 @@ public class CircleMovement implements MovementStrategy {
     public MovementStrategy MoveOptions(String string) {
         switch (string) {
             case "CHANGE_DIRECTION": 
-                // System.out.println("reverse");
                 this.current -= this.speed * direction;
                 direction *= -1;
                 break;
@@ -43,10 +41,5 @@ public class CircleMovement implements MovementStrategy {
         return this;
     }
 
-    @Override
-    public Location moveWithWall(Location location, DungeonMap dungeonMap) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }

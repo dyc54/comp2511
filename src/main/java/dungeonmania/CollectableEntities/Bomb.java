@@ -1,6 +1,5 @@
 package dungeonmania.CollectableEntities;
 
-import dungeonmania.Accessibility;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.StaticEntities.StaticBomb;

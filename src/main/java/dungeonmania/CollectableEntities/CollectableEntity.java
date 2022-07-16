@@ -4,18 +4,14 @@ import dungeonmania.Entity;
 import dungeonmania.Interactability;
 import dungeonmania.Player;
 import dungeonmania.helpers.DungeonMap;
-import dungeonmania.helpers.Location;
 import dungeonmania.response.models.ItemResponse;
 
 public abstract class CollectableEntity extends Entity implements Interactability {
-    private boolean isCollected;
     public CollectableEntity(String type, int x, int y){
         super(type, x, y);
-        isCollected = false;
     }
     public CollectableEntity(String type) {
         super(type);
-        isCollected = false;
 
     }
     public ItemResponse getItemResponse(){
@@ -25,7 +21,6 @@ public abstract class CollectableEntity extends Entity implements Interactabilit
 
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
-        // TODO Auto-generated method stub
         if (entity instanceof Player) {
             Player player = (Player) entity;
             if (player.pickup(this)) {
@@ -39,7 +34,6 @@ public abstract class CollectableEntity extends Entity implements Interactabilit
     }
     @Override
     public boolean hasSideEffect(Entity entity, DungeonMap  map) {
-        // do nothing by defalut 
         return DungeonMap.isaccessible(map, getLocation(), entity);
     }
 }

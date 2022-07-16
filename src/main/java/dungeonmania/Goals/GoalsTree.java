@@ -1,7 +1,5 @@
 package dungeonmania.Goals;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 
 import dungeonmania.helpers.LogicCondition;
@@ -150,12 +148,10 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     }
     @Override
     public LogicContent<GoalComponent> getSubContentA() {
-        // TODO Auto-generated method stub
         return toGoalA();
     }
     @Override
     public LogicContent<GoalComponent> getSubContentB() {
-        // TODO Auto-generated method stub
         return toGoalB();
     }
     

@@ -16,13 +16,11 @@ public class Bow extends DurabilityEntity implements BonusDamageMul{
 
     @Override
     public double damage() {
-        // TODO Auto-generated method stub
         return getAttack();
     }
 
     @Override
     public boolean equals(BonusDamageMul obj) {
-        // TODO Auto-generated method stub
         return obj == this;
     }
 

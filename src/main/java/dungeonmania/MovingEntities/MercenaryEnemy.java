@@ -3,42 +3,31 @@ package dungeonmania.MovingEntities;
 import java.util.Collection;
 
 import dungeonmania.Entity;
-import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
 import dungeonmania.Battle.Enemy;
-import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.Movement;
 import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
 import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
-import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
 import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class MercenaryEnemy extends Mercenary implements Enemy {
-    // private double mercenary_attack;
-    // private double mercenary_health;
     public MercenaryEnemy(String type, Location location, double mercenary_attack, double mercenary_health,
             int bribe_amount, int bribe_radius, int ally_attack, int ally_defence) {
         super("mercenary", location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
-        // this.mercenary_attack = mercenary_attack;
-        // this.mercenary_health = mercenary_health;
     }
 
 	@Override
 	public AttackStrategy getAttackStrayegy() {
-		// TODO Auto-generated method stub
 		return getAttack();
 	}
 	@Override
 	public String getEnemyId() {
-		// TODO Auto-generated method stub
 		return getEntityId();
 	}
 	@Override
 	public String getEnemyType() {
-		// TODO Auto-generated method stub
 		return getType();
 	}
 	
@@ -49,34 +38,9 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         Player p = dungeonMap.getPlayer();
         playerLocation = p.getLocation();
         Location next = new Location();
-        // if (p.hasEffect()) { //Check for invisibility 
-        //     if (p.getCurrentEffect().applyEffect().equals("Invisibility")) {
-        //         setMove(new RandomMovement());
-        //         String choice = MovingEntity.getPossibleNextDirection(dungeonMap, this);
-        //         next = getMove().MoveOptions(choice).nextLocation(getLocation());
-        //         if (next.equals(getLocation())) {
-        //             return false;
-        //         }
-        //     }
-        // } else {
-        //     setMove(new ChaseMovement(getLocation()));
-        //     next = getMove().nextLocation(playerLocation);
-        //     if (dungeonMap.checkMovement(next)) {
-        //         next = getMove().moveWithWall(next, dungeonMap);
-        //         if (next.equals(getLocation())) {
-        //             return false;
-        //         }
-        //     }
-        // }
         String choice = MovingEntity.getPossibleNextDirection(dungeonMap, this);
         next = getMove().MoveOptions(choice).nextLocation(playerLocation);
-        // if (dungeonMap.checkMovement(next)) {
-        //     next = getMove().moveWithWall(next, dungeonMap);
-        //     if (next.equals(getLocation())) {
-        //         return false;
-        //     }
         System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
-        // }
         setLocation(next);
         dungeonMap.UpdateEntity(this);
         return false;
@@ -98,7 +62,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
                 player.getAttackStrategy().bonusDamage(ally);
                 player.getDefenceStrayegy().bonusDefence(ally);
                 player.attach(ally);
-                // player.getInventory().r
                 return true;
             }
             return false;
@@ -108,7 +71,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
 
     @Override
     public void update(PotionEffectSubject subject) {
-        // TODO Auto-generated method stub
         if (subject instanceof Player) {
             update((Player) subject);
         }
