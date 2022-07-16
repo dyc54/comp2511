@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
@@ -19,6 +20,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -26,17 +28,18 @@ import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-
 public class ExampleTests {
     @Test
     @DisplayName("Test the player can move down")
     public void testMovementDown() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "c_movementTest_testMovementDown");
+        DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown",
+                "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
 
         // create the expected result
-        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 2), false);
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 2),
+                false);
 
         // move player downward
         DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
@@ -45,13 +48,158 @@ public class ExampleTests {
         // assert after movement
         assertEquals(expectedPlayer, actualPlayer);
     }
-    
+
+    @Test
+    @DisplayName("Test the player cannot pass a wall")
+    public void testWall() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_spiderTest_basicMovement",
+                "c_spiderTest_basicMovement");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1),
+                false);
+
+        // move player upward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.UP);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player can move a boulder")
+    public void testMoveBoulder() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_complexGoalsTest_andAll",
+                "c_complexGoalsTest_andAll");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 1),
+                false);
+
+        DungeonResponse actualDungonRes;
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert the position of boulder
+        Position boulderPosition = getEntities(actualDungonRes, "boulder").get(0).getPosition();
+        assertEquals(new Position(4, 1), boulderPosition);
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player cannot move a boulder if there are obstacle behind it")
+    public void testObstacleBehindBoulder() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_moveBoulderTest",
+                "c_moveBoulderTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1),
+                false);
+
+        DungeonResponse actualDungonRes;
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player can move through a portal")
+    public void testMoveThroughPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 3),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player can't move through a portal if there is a wall behind it")
+    public void testObstacleBehindPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 0),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.RIGHT);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test advanced portal")
+    public void testAdvancedPortal() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_portalTest",
+                "c_portalTest");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 5),
+                false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer.getPosition(), actualPlayer.getPosition());
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test zombie toast spwaner")
+    public void testZombieSpwaner() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieSpwaner",
+                "c_zombieSpwaner");
+
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
+        assertEquals(true, actualDungonRes.getEntities().stream().anyMatch(e -> e.getType().equals("zombie_toast_spawner")));
+        assertEquals(1, getEntities(actualDungonRes, "zombie_toast").size());
+        actualDungonRes = dmc.tick(Direction.LEFT);
+        assertEquals(2, getEntities(actualDungonRes, "zombie_toast").size());
+    }
+
     @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughOpenDoor", "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
+        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughOpenDoor",
+                "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
 
         // pick up key
         res = dmc.tick(Direction.RIGHT);
@@ -63,7 +211,7 @@ public class ExampleTests {
         assertEquals(0, getInventory(res, "key").size());
         assertNotEquals(pos, getEntities(res, "player").get(0).getPosition());
     }
-    
+
     @Test
     @DisplayName("Test basic movement of spiders")
     public void basicMovement() {
@@ -76,28 +224,28 @@ public class ExampleTests {
         int x = pos.getX();
         int y = pos.getY();
         int nextPositionElement = 0;
-        movementTrajectory.add(new Position(x  , y-1));
-        movementTrajectory.add(new Position(x+1, y-1));
-        movementTrajectory.add(new Position(x+1, y));
-        movementTrajectory.add(new Position(x+1, y+1));
-        movementTrajectory.add(new Position(x  , y+1));
-        movementTrajectory.add(new Position(x-1, y+1));
-        movementTrajectory.add(new Position(x-1, y));
-        movementTrajectory.add(new Position(x-1, y-1));
+        movementTrajectory.add(new Position(x, y - 1));
+        movementTrajectory.add(new Position(x + 1, y - 1));
+        movementTrajectory.add(new Position(x + 1, y));
+        movementTrajectory.add(new Position(x + 1, y + 1));
+        movementTrajectory.add(new Position(x, y + 1));
+        movementTrajectory.add(new Position(x - 1, y + 1));
+        movementTrajectory.add(new Position(x - 1, y));
+        movementTrajectory.add(new Position(x - 1, y - 1));
 
         // Assert Circular Movement of Spider
         for (int i = 0; i <= 20; ++i) {
             res = dmc.tick(Direction.UP);
             assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
-            
+
             nextPositionElement++;
-            if (nextPositionElement == 8){
+            if (nextPositionElement == 8) {
                 nextPositionElement = 0;
             }
         }
     }
-        
-    @Test
+
+    // @Test
     @DisplayName("Test surrounding entities are removed when placing a bomb next to an active switch with config file bomb radius set to 2")
     public void placeBombRadius2() {
         DungeonManiaController dmc;
@@ -118,10 +266,10 @@ public class ExampleTests {
 
         // Check Bomb exploded with radius 2
         //
-        //              Boulder/Switch      Wall            Wall
-        //              Bomb                Treasure
+        // Boulder/Switch Wall Wall
+        // Bomb Treasure
         //
-        //              Treasure
+        // Treasure
         assertEquals(0, getEntities(res, "bomb").size());
         assertEquals(0, getEntities(res, "boulder").size());
         assertEquals(0, getEntities(res, "switch").size());
@@ -129,7 +277,7 @@ public class ExampleTests {
         assertEquals(0, getEntities(res, "treasure").size());
         assertEquals(1, getEntities(res, "player").size());
     }
-    
+
     @Test
     @DisplayName("Testing a map with 4 conjunction goal")
     public void andAll() {
@@ -170,19 +318,20 @@ public class ExampleTests {
 
     private static DungeonResponse genericMercenarySequence(DungeonManiaController controller, String configFile) {
         /*
-         *  exit   wall  wall  wall
-         * player  [  ]  merc  wall
-         *  wall   wall  wall  wall
+         * exit wall wall wall
+         * player [ ] merc wall
+         * wall wall wall wall
          */
         DungeonResponse initialResponse = controller.newGame("d_battleTest_basicMercenary", configFile);
         int mercenaryCount = countEntityOfType(initialResponse, "mercenary");
-        
+
         assertEquals(1, countEntityOfType(initialResponse, "player"));
         assertEquals(1, mercenaryCount);
         return controller.tick(Direction.RIGHT);
     }
 
-    private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies, String configFilePath) {
+    private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies,
+            String configFilePath) {
         List<RoundResponse> rounds = battle.getRounds();
         double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
         double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
@@ -190,8 +339,11 @@ public class ExampleTests {
         double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
 
         for (RoundResponse round : rounds) {
-            assertEquals(-(enemyAttack / 10), round.getDeltaCharacterHealth(), 0.001);
-            assertEquals(-(playerAttack / 5), round.getDeltaEnemyHealth(), 0.001);
+            // System.out.println("TEST OUTPUT");
+            // System.out.println(round.getDeltaCharacterHealth());
+            // System.out.println(-(enemyAttack / 10));
+            assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
+            assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
         }
@@ -206,20 +358,64 @@ public class ExampleTests {
     @Test
     @DisplayName("Test basic battle calculations - mercenary - player loses")
     public void testHealthBelowZeroMercenary() {
-       DungeonManiaController controller = new DungeonManiaController();
-       DungeonResponse postBattleResponse = genericMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
-       BattleResponse battle = postBattleResponse.getBattles().get(0);
-       assertBattleCalculations("mercenary", battle, false, "c_battleTests_basicMercenaryPlayerDies");
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse postBattleResponse = genericMercenarySequence(controller,
+                "c_battleTests_basicMercenaryPlayerDies");
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, false, "c_battleTests_basicMercenaryPlayerDies");
     }
-
 
     @Test
     @DisplayName("Test basic battle calculations - mercenary - player wins")
     public void testRoundCalculationsMercenary() {
-       DungeonManiaController controller = new DungeonManiaController();
-       DungeonResponse postBattleResponse = genericMercenarySequence(controller, "c_battleTests_basicMercenaryMercenaryDies");
-       BattleResponse battle = postBattleResponse.getBattles().get(0);
-       assertBattleCalculations("mercenary", battle, true, "c_battleTests_basicMercenaryMercenaryDies");
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse postBattleResponse = genericMercenarySequence(controller,
+                "c_battleTests_basicMercenaryMercenaryDies");
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, true, "c_battleTests_basicMercenaryMercenaryDies");
     }
 
+    @Test
+    @DisplayName("Test player distory zombie toast spawner-success")
+    public void distorySpawner() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_distorySpawner", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.DOWN); // pick up sword
+        assertEquals(1, getInventory(res, "sword").size());
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+        String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
+        res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+        assertEquals(0, getEntities(res, "zombie_toast_spawner").size());
+    }
+
+    @Test
+    @DisplayName("Test player distory zombie toast spawner-fail because the player is not around the spwaner")
+    public void distorySpawnerFail1() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_distorySpawner", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.DOWN); // pick up sword
+        assertEquals(1, getInventory(res, "sword").size());
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+        String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+    }
+
+    @Test
+    @DisplayName("Test player distory zombie toast spawner-fail because the play has not a weapon")
+    public void distorySpawnerFail2() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_distorySpawner", "c_spiderTest_basicMovement");
+        res = dmc.tick(Direction.UP); 
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "sword").size());
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+        String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+    }
 }
