@@ -52,10 +52,10 @@ public class Inventory {
         // inventory.keySet().stream().forEach(str -> System.out.println(str));
         if (item instanceof BonusDamageAdd) {
             
-            player.getAttackStrayegy().bonusDamage((BonusDamageAdd) item);
+            player.getAttackStrategy().bonusDamage((BonusDamageAdd) item);
             System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } else if (item instanceof BonusDamageMul) {
-            player.getAttackStrayegy().bonusDamage((BonusDamageMul) item);
+            player.getAttackStrategy().bonusDamage((BonusDamageMul) item);
             System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } else if (item instanceof BonusDefenceAdd) {
             player.getDefenceStrayegy().bonusDefence((BonusDefenceAdd) item);
@@ -112,9 +112,9 @@ public class Inventory {
         Entity item = getItem(itemId);
         if (item != null) {
             if (item instanceof BonusDamageAdd) {
-                player.getAttackStrayegy().removeBounus((BonusDamageAdd) item);
+                player.getAttackStrategy().removeBounus((BonusDamageAdd) item);
             } else if (item instanceof BonusDamageMul) {
-                player.getAttackStrayegy().removeBounus((BonusDamageMul) item);
+                player.getAttackStrategy().removeBounus((BonusDamageMul) item);
             } else if (item instanceof BonusDefenceAdd) {
                 player.getDefenceStrayegy().removeDefence((BonusDefenceAdd) item);
             }

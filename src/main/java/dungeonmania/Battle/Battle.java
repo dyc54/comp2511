@@ -30,7 +30,7 @@ public class Battle {
 
     }
     private double playerDamage() {
-        AttackStrategy attackStrayegy = player.getAttackStrayegy();
+        AttackStrategy attackStrayegy = player.getAttackStrategy();
         return attackStrayegy.attackDamage() / 5.0;
         // return 0;
     }
