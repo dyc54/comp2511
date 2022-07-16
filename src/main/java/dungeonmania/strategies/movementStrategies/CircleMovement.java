@@ -7,15 +7,11 @@ public class CircleMovement implements MovementStrategy {
     private double current;
     private int direction;
     private final double speed = 45;
-    public CircleMovement(Location center, boolean isClockWise) {
+    public CircleMovement(Location center) {
         System.out.println("Center at" + center.toString());
         this.center = center.clone();
         this.current = 90;
-        if (isClockWise) {
-            this.direction = -1;
-        } else {
-            this.direction = 1;
-        }
+        this.direction = -1;
     }
 
     @Override

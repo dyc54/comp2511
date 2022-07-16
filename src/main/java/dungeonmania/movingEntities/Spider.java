@@ -19,7 +19,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
      * @param spider_health
      */
     public Spider(String type, Location location, int spider_attack, int spider_health) {
-        super(type, location, spider_health, new BaseAttackStrategy(spider_attack), new CircleMovement(location, true));
+        super(type, location, spider_health, new BaseAttackStrategy(spider_attack), new CircleMovement(location));
     }
     private boolean checkhasBoulder(DungeonMap dungeonMap, Location next) {
         return dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("boulder"));

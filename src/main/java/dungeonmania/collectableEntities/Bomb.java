@@ -39,13 +39,7 @@ public class Bomb extends CollectableEntity implements Useable {
         });
     }
 
-    @Override
-    public boolean interact(Entity entity, DungeonMap map) {
-        if (!hasPlaced) {
-            super.interact(entity, map);
-        }
-        return false;
-    }
+    
     @Override
     public void use(DungeonMap map, Player player) {
         put(player.getLocation(), map);

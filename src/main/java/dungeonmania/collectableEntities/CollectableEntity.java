@@ -21,13 +21,11 @@ public abstract class CollectableEntity extends Entity implements Interactabilit
 
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            if (DungeonMap.isaccessible(map, getLocation(), entity)) {
-                if (player.pickup(this)) {
-                    map.removeEntity(getEntityId());
-                    entity.setLocation(getLocation());
-                }
+        Player player = (Player) entity;
+        if (DungeonMap.isaccessible(map, getLocation(), entity)) {
+            if (player.pickup(this)) {
+                map.removeEntity(getEntityId());
+                entity.setLocation(getLocation());
             }
         }
         return false;
