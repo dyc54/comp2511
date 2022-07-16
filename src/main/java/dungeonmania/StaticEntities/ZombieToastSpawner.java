@@ -96,6 +96,8 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
                 // spawn
                 ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack, zombie_health);
                 zombie.movement(map);
+                map.UpdateEntity(zombie);
+                System.out.println("PUT ZOMBIE TO MAP");
                 //System.out.println("after:" + zombie.getLocation());
                 setTimer(0);
             }

@@ -28,17 +28,17 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
 	@Override
 	public AttackStrategy getAttackStrayegy() {
 		// TODO Auto-generated method stub
-		return null;
+		return getAttack();
 	}
 	@Override
 	public String getEnemyId() {
 		// TODO Auto-generated method stub
-		return null;
+		return getEntityId();
 	}
 	@Override
 	public String getEnemyType() {
 		// TODO Auto-generated method stub
-		return null;
+		return getType();
 	}
 	
     

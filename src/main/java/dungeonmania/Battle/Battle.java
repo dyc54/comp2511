@@ -30,7 +30,7 @@ public class Battle {
 
     }
     private double playerDamage() {
-        AttackStrategy attackStrayegy = player.getAttackStrayegy();
+        AttackStrategy attackStrayegy = player.getAttackStrategy();
         return attackStrayegy.attackDamage() / 5.0;
         // return 0;
     }
@@ -105,6 +105,8 @@ public class Battle {
         if (removed_ids.size() > 0) {
             return removed_ids;
         } 
+        // System.out.println("Current");
+        System.out.println(String.format("Current Battle effect : (%s)", effect));
         if (effect.equals("Invincibility")) {
             return new ArrayList<>();
         }

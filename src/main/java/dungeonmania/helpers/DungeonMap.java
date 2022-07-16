@@ -28,6 +28,7 @@ import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.Strategies.EnemyMovement;
+import dungeonmania.Strategies.Movement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.Strategies.MovementStrategies.*;
@@ -356,9 +357,8 @@ public class DungeonMap {
     public void moveAllEntities() {
         Collection<Entity> entities = getAllEntities();
         entities.stream().forEach(entity -> {
-            if (entity instanceof EnemyMovement) {
-                // TODO: do something
-                EnemyMovement movingEntity = (EnemyMovement) entity;
+            if (entity instanceof Movement) {
+                Movement movingEntity = (Movement) entity;
                 movingEntity.movement(this);
                 
             }

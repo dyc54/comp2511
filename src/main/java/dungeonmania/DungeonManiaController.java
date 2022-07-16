@@ -3,6 +3,7 @@ package dungeonmania;
 import dungeonmania.Battle.Battle;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Goals.GoalController;
+import dungeonmania.Inventories.Inventory;
 import dungeonmania.MovingEntities.Mercenary;
 import dungeonmania.MovingEntities.MercenaryAlly;
 import dungeonmania.MovingEntities.Spider;
@@ -23,10 +24,12 @@ import dungeonmania.response.models.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -158,28 +161,27 @@ public class DungeonManiaController {
         timerAdd();
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();
-        for (Entity entity : dungeonMap.getAllEntities()) {
-            // entitiesList = dungeonMap.getAllEntities();
-            // for (Entity entity : entitiesList) {
-            if (entity.getType().equals("spider")) {
-                Spider spider = (Spider) entity;
-                spider.movement(dungeonMap);
-            }
-            if (entity.getType().equals("zombie_toast")) {
-                ZombieToast zombie = (ZombieToast) entity;
-                zombie.movement(dungeonMap);
-                System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
-            }
-            if (entity.getType().equals("zombie_toast_spawner")) {
-                ZombieToastSpawner zts = (ZombieToastSpawner) entity;
-                zts.ZombieToastSpwanCheck();
-                System.out.println("number" + dungeonMap.getEntities("zombie_toast").size());
-            }
-            if (entity.getType().equals("mercenary")) {
-                Mercenary mercenary = (Mercenary) entity;
-                mercenary.movement(dungeonMap);
-            } 
-        }
+        dungeonMap.moveAllEntities();
+        // for (Entity entity : dungeonMap.getAllEntities()) {
+        //     if (entity.getType().equals("spider")) {
+        //         Spider spider = (Spider) entity;
+        //         spider.movement(dungeonMap);
+        //     }
+        //     if (entity.getType().equals("zombie_toast")) {
+        //         ZombieToast zombie = (ZombieToast) entity;
+        //         zombie.movement(dungeonMap);
+        //         System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
+        //     }
+        //     if (entity.getType().equals("zombie_toast_spawner")) {
+        //         ZombieToastSpawner zts = (ZombieToastSpawner) entity;
+        //         zts.ZombieToastSpwanCheck();
+        //         System.out.println("number" + dungeonMap.getEntities("zombie_toast").size());
+        //     }
+        //     if (entity.getType().equals("mercenary")) {
+        //         Mercenary mercenary = (Mercenary) entity;
+        //         mercenary.movement(dungeonMap);
+        //     } 
+        // }
         // Battle
         dungeonMap.battleAll(battles);
         goals.hasAchieved(dungeonMap, player);
@@ -192,8 +194,11 @@ public class DungeonManiaController {
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
+        System.out.println(" ------------------- BUILD ------------------- ");
+        System.out.println("Current Inventory: ");
+        player.getInventory().print();
         player.build(buildable, dungeonConfig, 0);
-        buildables.add(buildable);
+        // buildables.add(buildable);
         return getDungeonResponse();
     }
 
@@ -226,7 +231,7 @@ public class DungeonManiaController {
         setBattlesResponse();
         // setItemResponse();
         return new DungeonResponse(dungeonId, dungeonName, getEntitiesResponse(), getItemResponse(), battles,
-                buildables, goals.toString());
+                    getBuildables(player.getInventory()), goals.toString());
     }
 
 
@@ -278,9 +283,16 @@ public class DungeonManiaController {
     /**
      * Create a buildables from a list of player inventoryList
      */
-    private void setBuildables(String buildResult) {
-        if (buildResult == null) return;
-        buildables.add(buildResult);
+    private List<String> getBuildables(Inventory inventory) {
+        // if (buildResult == null) return;
+
+        // buildables.add(buildResult);
+        System.out.println("CHECK BUILDABLES");
+        return Arrays.asList(BuildableEntityFactory.newRecipe("bow"),
+                    BuildableEntityFactory.newRecipe("shield")).stream()
+                    .filter(recipe -> recipe.isSatisfied(inventory))
+                    .map(recipe -> recipe.getRecipeName())
+                    .collect(Collectors.toList());
     }
 
     /**

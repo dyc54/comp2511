@@ -107,8 +107,11 @@ public class Player extends Entity implements PlayerMovementStrategy {
             }
         });
         entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
-        if (hasEffect() && !getCurrentEffect().checkDurability()) {
+        if (hasEffect() && getCurrentEffect().checkDurability()) {
             effects.poll();
+        } else if (hasEffect()) {
+            getCurrentEffect().setDurability();
+
         }
 
     }

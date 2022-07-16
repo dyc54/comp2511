@@ -41,9 +41,9 @@ public class BuildableEntityFactory extends EntityFactory{
     public static Entity newEntity(String type, Config config) {
         switch (type) {
             case "bow":
-                return new Bow(type, config.bow_durability - 1);
+                return new Bow(type, config.bow_durability);
             case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability - 1);
+                return new Shield(type, config.shield_defence, config.shield_durability);
             default:
                 break;
         }

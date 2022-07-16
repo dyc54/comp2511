@@ -7,9 +7,9 @@ import javax.swing.text.AbstractDocument.Content;
 
 public class LogicCondition<T> {
     private final String type;
-    private final String superLogic = "SUPER";
-    private final String and = "AND";
-    private final String or = "OR";
+    private final static String superLogic = "SUPER";
+    private final static String and = "AND";
+    private final static String or = "OR";
     public LogicCondition(String type) {
         if (type.equals(and) || type.equals(or)) {
             this.type = type;
@@ -17,7 +17,7 @@ public class LogicCondition<T> {
             this.type = superLogic;
         }
     }
-    private boolean compareTwo(LogicContent<T> a, LogicContent<T> b) {
+    public static <T> boolean compareTwo(String type, LogicContent<T> a, LogicContent<T> b) {
         boolean condA = a == null ? false: a.isTrue();
         boolean condB = b == null ? false: b.isTrue();
         switch (type) {
@@ -33,7 +33,7 @@ public class LogicCondition<T> {
         if (type.equals(superLogic)) {
             return content.isTrue();
         } else {
-            return compareTwo(content.getSubContentA(), content.getSubContentB());
+            return LogicCondition.compareTwo(type, content.getSubContentA(), content.getSubContentB());
         }
     }
     public String getLogic() {
