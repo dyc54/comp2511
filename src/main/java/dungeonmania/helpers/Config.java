@@ -16,8 +16,8 @@ public class Config {
     public final int invisibility_potion_duration;
     public final int mercenary_attack;
     public final int mercenary_health;
-    public final int player_attack ;
-    public final int player_health ;
+    public final int player_attack;
+    public final int player_health;
     public final int shield_defence;
     public final int shield_durability;
     public final int spider_attack;

@@ -1,4 +1,5 @@
 package dungeonmania;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,76 +25,114 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
+
 public class Goaltest {
-    // @Test
-    public void testSingleGoalExit() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("24P4BWCXL31657541510.444106",
-                "c_spiderTest_basicMovement");
-        assertTrue(getGoals(initDungonRes).contains(":exit"));
-        assertFalse(getGoals(initDungonRes).contains(":treasure"));
-        assertFalse(getGoals(initDungonRes).contains(":boulders"));
-        assertFalse(getGoals(initDungonRes).contains(":enemies"));
-    }
-    // @Test
-    public void testSingleGoalEnemies() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("LPR3OCI00B1657541807.9557867",
-                "c_spiderTest_basicMovement");
-        assertFalse(getGoals(initDungonRes).contains(":exit"));
-        assertFalse(getGoals(initDungonRes).contains(":treasure"));
-        assertFalse(getGoals(initDungonRes).contains(":boulders"));
-        assertTrue(getGoals(initDungonRes).contains(":enemies"));
-    }
-    // @Test
-    public void testSingleGoalBoulder() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("QMYNAP8EE81657541856.4180584",
-                "c_spiderTest_basicMovement");
-        assertFalse(getGoals(initDungonRes).contains(":exit"));
-        assertFalse(getGoals(initDungonRes).contains(":treasure"));
-        assertTrue(getGoals(initDungonRes).contains(":boulders"));
-        assertFalse(getGoals(initDungonRes).contains(":enemies"));
-    }
-    // @Test
-    public void testSingleGoalTreasure() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("35DSX86O451657542045.7539003",
-                "c_spiderTest_basicMovement");
-        assertFalse(getGoals(initDungonRes).contains(":exit"));
-        assertTrue(getGoals(initDungonRes).contains(":treasure"));
-        assertFalse(getGoals(initDungonRes).contains(":boulders"));
-        assertFalse(getGoals(initDungonRes).contains(":enemies"));
-    }
-    // @Test
-    public void testTwoGoals() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("989JV0U2M91657542060.802809",
-                "c_spiderTest_basicMovement");
-        assertTrue(getGoals(initDungonRes).contains(":exit"));
-        assertTrue(getGoals(initDungonRes).contains(":treasure"));
-        assertFalse(getGoals(initDungonRes).contains(":boulders"));
-        assertFalse(getGoals(initDungonRes).contains(":enemies"));
+    @Test
+    public void testWalkThroughExit() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_complexGoalsTest_andAll", "c_complexGoalsTest_andAll");
+
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // kill spider
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // move boulder onto switch
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // pickup treasure
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // move to exit
+        res = dmc.tick(Direction.DOWN);
+        assertEquals("", getGoals(res));
+        assertFalse(getGoals(res).contains(":exit"));
+
+        // move to next place
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
     }
 
-    // @Test
-    public void testThreeGoals() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("RE16RA3HND1657542126.6908503",
-                "c_spiderTest_basicMovement");
-        assertTrue(getGoals(initDungonRes).contains(":exit"));
-        assertTrue(getGoals(initDungonRes).contains(":treasure"));
-        assertTrue(getGoals(initDungonRes).contains(":boulders"));
-        assertFalse(getGoals(initDungonRes).contains(":enemies"));
+    @Test
+    public void testGoalMoveBoulderOutOfSwitch() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_complexGoalsTest_andAll", "c_complexGoalsTest_andAll");
+
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // kill spider
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // move boulder onto switch
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // Push the boulder to leave the switch
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
     }
-    // @Test
-    public void testFourGoals() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("RE16RA3HND1657542126.6908503",
-                "c_spiderTest_basicMovement");
-        assertTrue(getGoals(initDungonRes).contains(":exit"));
-        assertTrue(getGoals(initDungonRes).contains(":treasure"));
-        assertTrue(getGoals(initDungonRes).contains(":boulders"));
-        assertTrue(getGoals(initDungonRes).contains(":enemies"));
+
+    @Test
+    public void testGoalOR() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_goalTest_OR", "c_complexGoalsTest_andAll");
+
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // kill spider
+        res = dmc.tick(Direction.RIGHT);
+
+        assertEquals("", getGoals(res));
     }
+
+    @Test
+    public void testGoalDestoryZombieSpwaner() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_goalTestDestorySpwaner", "c_goalTestDestorySpwaner");
+        res = dmc.tick(Direction.DOWN); // pick up sword
+        assertEquals(1, getInventory(res, "sword").size());
+        assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
+        String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
+        res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+        assertEquals(0, getEntities(res, "zombie_toast_spawner").size());
+        assertEquals(0, getEntities(res, "zombie").size());
+        assertEquals("", getGoals(res));
+    }
+
 }

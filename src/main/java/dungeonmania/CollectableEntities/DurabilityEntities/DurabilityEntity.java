@@ -14,10 +14,13 @@ public abstract class DurabilityEntity extends CollectableEntity{
         this.durability = durability;
     }
     public void setDurability() {
+        System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), durability, durability - 1));
         this.durability -= 1;
     }
 
     public boolean checkDurability(){
-        return durability < 0;
+        System.out.println(String.format("Item %s DUration %d ", getEntityId(), durability));
+        
+        return durability == 0;
     }
 }

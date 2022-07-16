@@ -1,0 +1,11 @@
+player,0,0
+spider,1,1
+wood,0,0
+wood,0,0
+wood,0,0
+arrow,0,0
+arrow,0,0
+arrow,0,0
+key,0,0,1
+sword,0,0
+g,exit

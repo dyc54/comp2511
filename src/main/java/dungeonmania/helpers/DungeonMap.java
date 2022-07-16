@@ -1,10 +1,12 @@
 package dungeonmania.helpers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +22,16 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Interactability;
 import dungeonmania.Player;
+import dungeonmania.Battle.Battle;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.MovingEntities.MovingEntity;
+import dungeonmania.MovingEntities.Spider;
+import dungeonmania.MovingEntities.ZombieToast;
+import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.Strategies.EnemyMovement;
+import dungeonmania.Strategies.Movement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.response.models.BattleResponse;
 import dungeonmania.Strategies.MovementStrategies.*;
 
 /**
@@ -46,7 +54,7 @@ public class DungeonMap {
      * @param GivenType
      * @return
      */
-    private static <X, Y> boolean isSameType(String EntityType, String givenType) {
+    private static boolean isSameType(String EntityType, String givenType) {
         if (EntityType.equals(givenType)) {
             return true;
         }
@@ -71,7 +79,7 @@ public class DungeonMap {
      * @param path
      * @throws IOException
      */
-    public void loads(String path, Config config) throws IOException {
+    public DungeonMap loads(String path, Config config) throws IOException {
         
         String content = FileReader.LoadFile(path);
         JSONObject json = new JSONObject(content);
@@ -80,8 +88,10 @@ public class DungeonMap {
             JSONObject entity = entities.getJSONObject(i);
             addEntity(EntityFactory.newEntity(entity, config, this));
         }
+        toString();
+        return this;
     }
-
+    
     /**
      * Add a Entity to Dungeon Map.
      * 
@@ -225,12 +235,13 @@ public class DungeonMap {
         Collection<Entity> entities = getEntities(location);
         Entity temp = getEntity(id);
         if (temp instanceof Enemy) {
-            System.out.println("cCounter++");
+            // System.out.println("cCounter++");
             EnemiesDestroiedCounter += 1;
 
         }
+        
         // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
-        // System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
+        System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
         entities.remove(temp);
         idCollection.remove(id);
         // IdCollection.
@@ -348,11 +359,12 @@ public class DungeonMap {
     public void moveAllEntities() {
         Collection<Entity> entities = getAllEntities();
         entities.stream().forEach(entity -> {
-            if (entity instanceof EnemyMovement) {
-                // TODO: do something
-                EnemyMovement movingEntity = (EnemyMovement) entity;
+            if (entity instanceof Movement) {
+                Movement movingEntity = (Movement) entity;
                 movingEntity.movement(this);
-                
+            }
+            if (entity instanceof ZombieToastSpawner) {
+                ((ZombieToastSpawner) entity).ZombieToastSpwanCheck();
             }
         });
     }
@@ -397,10 +409,63 @@ public class DungeonMap {
     }
 
     public int getDestoriedCounter() {
+        System.out.println(String.format("Counter = ", EnemiesDestroiedCounter));
         return EnemiesDestroiedCounter;
     }
     public void UpdateAllEntities() {
         getAllEntities().stream().forEach(entity -> UpdateEntity(entity));
+    }
+    public DungeonMap interactAll() {
+        List<Interactability> list = new ArrayList<>();
+        System.out.println("ITERACT ALL");
+        for (Iterator<Entity> ptr = getEntities(player.getLocation()).iterator(); ptr.hasNext();) {
+            Entity entity = ptr.next();
+            if (entity instanceof Interactability) {
+                list.add((Interactability) entity);
+            }
+        }
+        list.stream().forEach(en -> en.interact(player, this));
+        return this;
+    }
+    public DungeonMap battleAll(List<BattleResponse> battles) {
+        String effect = "";
+        if (player.hasEffect()) {
+            effect = player.getCurrentEffect().applyEffect();
+        }
+        System.out.println(player.getLocation());
+        this.getEntities(player.getLocation()).stream().forEach(entity -> System.out.println(entity.toString()));
+
+        if (this.getEntities(player.getLocation()).size() > 1 && !effect.equals("Invisibility")) {
+            System.out.println("GetEntities");
+            List<String> removed = new ArrayList<>();
+            List<Movement> movements = new ArrayList<>();
+            System.out.println(player.getLocation().toString());
+            for (Entity entity: this.getEntities(player.getLocation())) {
+                System.out.println(entity.toString() + "BATTLE CHECK");
+                if (entity instanceof Enemy) {
+                    Battle battle = new Battle();
+                    List<String> losers = battle.setBattle(player, (Enemy) entity).startBattle();
+                    losers.stream().forEach(loser -> removed.add(loser));
+                    System.out.println(String.format("loser :"));
+                    removed.stream().forEach(loser -> System.out.println(loser));
+                    if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invincibility")) {
+                        if (!(entity instanceof Spider)) {
+                            movements.add((Movement) entity);
+                            // ((EnemyMovement) entity).movement(this);
+                        }
+                    }
+                    battles.add(battle.toResponse());
+                }
+            }
+            if (removed.size() != 0) {
+                // player.setBattleUsedDuration();
+            }
+            player.cleardisusableItem();
+            removed.stream().forEach(id -> this.removeEntity(id));
+            movements.stream().forEach(ent -> ent.movement(this));
+            
+        }
+        return this;
     }
     @Override
     public String toString() {
@@ -449,5 +514,9 @@ public class DungeonMap {
         return map.getEntities(location).stream()
             .filter(element ->  location.equals(element.getLocation()) && element instanceof Interactability && ((Interactability) element).hasSideEffect(entity, map))
             .collect(Collectors.toList());
+    }
+    // public static void interact
+    public boolean checkMovement(Location location) {
+        return getEntities(location).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
     }
 }

@@ -35,7 +35,7 @@ public class Inventory {
      * @param Entity item
      */
     public boolean addToInventoryList(Entity item, Player player) {
-        if (item instanceof ItemInventoryLimit && countItem(item.getType()) != 0) {
+        if (item instanceof ItemInventoryLimit && countItem(item.getType()) >= ((ItemInventoryLimit) item).getMax()) {
             return false;
         } 
         if (!idCollection.hasId(item.getEntityId())) {
@@ -51,11 +51,15 @@ public class Inventory {
         System.out.println(String.format("Inventory: %s has been picked up", item.getType()));
         // inventory.keySet().stream().forEach(str -> System.out.println(str));
         if (item instanceof BonusDamageAdd) {
-            player.getAttackStrayegy().bonusDamage((BonusDamageAdd) item);
+            
+            player.getAttackStrategy().bonusDamage((BonusDamageAdd) item);
+            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } else if (item instanceof BonusDamageMul) {
-            player.getAttackStrayegy().bonusDamage((BonusDamageMul) item);
+            player.getAttackStrategy().bonusDamage((BonusDamageMul) item);
+            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } else if (item instanceof BonusDefenceAdd) {
             player.getDefenceStrayegy().bonusDefence((BonusDefenceAdd) item);
+            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         }
         return true;
     }
@@ -66,21 +70,26 @@ public class Inventory {
      * @param Entity item
      */
     public void removeFromInventoryList(Entity item) {
+        // removeFromInventoryList(item.getType(), 1);
         inventory.get(item.getType()).remove(item);
+        idCollection.remove(item.getEntityId());
     }
-
     public boolean removeFromInventoryList(String type, int number) {
         if (!inventory.containsKey(type)) {
+            String.format("%s does not exit", type);
             return false;
         }
         List<Entity> items = inventory.get(type);
         if (items.size() < number) {
+            String.format("%s does not have enough amount %d/%d",type, number, countItem(type));
             return false;
         } else {
             for(int i = 0; i < number; i++) {
+                idCollection.remove(items.get(0).getEntityId());
                 items.remove(0);
             }
         }
+        System.out.println(String.format("%s has remove %d from inventory", type, number));
         return true;
     }
     public Entity getItem(String id) {
@@ -105,13 +114,15 @@ public class Inventory {
         Entity item = getItem(itemId);
         if (item != null) {
             if (item instanceof BonusDamageAdd) {
-                player.getAttackStrayegy().removeBounus((BonusDamageAdd) item);
+                player.getAttackStrategy().removeBounus((BonusDamageAdd) item);
             } else if (item instanceof BonusDamageMul) {
-                player.getAttackStrayegy().removeBounus((BonusDamageMul) item);
+                player.getAttackStrategy().removeBounus((BonusDamageMul) item);
             } else if (item instanceof BonusDefenceAdd) {
                 player.getDefenceStrayegy().removeDefence((BonusDefenceAdd) item);
             }
             inventory.get(type).remove(item);
+            System.out.println(String.format("%s has remove from inventory", type));
+            
             return idCollection.remove(itemId);
         }
         return false;
@@ -150,7 +161,15 @@ public class Inventory {
     }
 
     public int countItem(String type) {
-        return inventory.get(type).size();
+        // System.out.println("----------------------");
+        // System.out.println(type);
+        // // System.out.println(type);
+        // print();
+        if (inventory.containsKey(type)) {
+
+            return inventory.get(type).size();
+        }
+        return 0;
     }
     // public int countWea
     /**
@@ -347,5 +366,7 @@ public class Inventory {
         }
         return items;
     } 
-
+    public void print() {
+        idCollection.Keys().stream().forEach(key -> System.out.println(key));
+    }
 }

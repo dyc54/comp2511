@@ -3,7 +3,7 @@ package dungeonmania.Strategies.AttackStrategies;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeaponableAttackStrategy implements AttackStrayegy{
+public class WeaponableAttackStrategy implements AttackStrategy{
     private BaseAttackStrategy base;
     private List<BonusDamageMul> bonusdamages;
     public WeaponableAttackStrategy(int base) {

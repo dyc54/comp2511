@@ -26,6 +26,4 @@ public class Exit extends StaticEntity {
         return true;
     }
 
-    
-
 }

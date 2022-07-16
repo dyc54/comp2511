@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BaseAttackStrategy implements AttackStrayegy{
+public class BaseAttackStrategy implements AttackStrategy{
     private double attack;
     private List<BonusDamageAdd> bonusdamages; 
     public BaseAttackStrategy(double attack) {
@@ -21,6 +21,8 @@ public class BaseAttackStrategy implements AttackStrayegy{
     @Override
     public void bonusDamage(BonusDamageAdd attack) {
         bonusdamages.add(attack);
+        System.out.println(attack.damage());
+        System.out.println("*****");
         
     }
 

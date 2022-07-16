@@ -13,7 +13,7 @@ import dungeonmania.helpers.Location;
 import dungeonmania.util.Position;
 
 public class Portal extends StaticEntity {
-    final String color;
+    private final String color;
 
     public Portal(String type, int x, int y, String color) {
         super(type, x, y);
@@ -29,51 +29,51 @@ public class Portal extends StaticEntity {
         // TODO Auto-generated method stub
         return true;
     }
+
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
-        // DO nothing by defalut 
+        // DO nothing by defalut
         boolean hasChain = false;
         if (entity instanceof Player || entity instanceof Mercenary) {
+            if (map.getEntities("portal")
+                    .stream()
+                    .noneMatch(portal -> ((Portal) portal).getColour().equals(color) && !portal.equals(this))) {
+                return hasChain;
+            }
+            // Get the target portal
             Location target = map.getEntities("portal")
-                                .stream()
-                                .filter(portal -> ((Portal) portal).getColour().equals(color) && !portal.equals(this))
-                                .collect(Collectors.toList()).get(0).getLocation();
-
-                System.out.println(String.format("portal: tp %s ->  %s", entity.getLocation().toString(), target.toString()));
-                
+                    .stream()
+                    .filter(portal -> ((Portal) portal).getColour().equals(color) && !portal.equals(this))
+                    .collect(Collectors.toList()).get(0).getLocation();
+            System.out
+                    .println(String.format("portal: tp %s ->  %s", entity.getLocation().toString(), target.toString()));
+            // Get the position behind the target portal
             Location entryLocation = entity.getLocation();
             Position p = Location.getMoveDir(entryLocation, getLocation());
             Location next = target.getLocation(p);
             if (DungeonMap.isaccessible(map, target, entity)) {
-
+                // If the position behind the portal has interactable entity, interact with it
                 if (DungeonMap.hasInteractableEntity(map, next, entity)) {
                     hasChain = true;
                     entity.setLocation(target);
                 } else {
+                    // If no interactable entity, just teleport to the position
                     if (DungeonMap.isaccessible(map, next, entity)) {
                         entity.setLocation(next);
                     } else if (entity instanceof Player) {
+                        // else just stay still
                         Player player = (Player) entity;
                         player.setStay(true);
-                    } 
+                    }
                 }
             }
-                // if (DungeonMap.isaccessible(map, target, entity) && ) {
-            //     System.out.println("DEST is accessible");
-            //     List<Function<Location, Location>> possible = target.getFourNearPosition().stream().filter(func -> DungeonMap.isaccessible(map, func.apply(target), entity)).collect(Collectors.toList());
-            //     if (possible.size() != 0) {
-            //         // Location next = possible.get(0).apply(target);
-            //         System.out.println("SET");
-            //         System.out.println(next.toString());
-            //         entity.setLocation(next);
-            //     } 
-            // }
         }
         return hasChain;
     }
+
     @Override
-    public boolean hasSideEffect(Entity entity, DungeonMap  map) {
-        // do nothing by defalut 
+    public boolean hasSideEffect(Entity entity, DungeonMap map) {
+        // do nothing by defalut
         return DungeonMap.isaccessible(map, getLocation(), entity);
     }
 }

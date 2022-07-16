@@ -1,0 +1,50 @@
+{
+    "entities": [
+        {
+            "type" : "player",
+            "x" : 1,
+            "y" : 1
+        },
+        {
+            "type" : "invincibility_potion",
+            "x" : 2,
+            "y" : 1
+        },
+        {
+            "type" : "invisibility_potion",
+            "x" : 3,
+            "y" : 1
+        },
+        {
+            "type" : "invincibility_potion",
+            "x" : 4,
+            "y" : 1
+        },
+        {
+            "type" : "invisibility_potion",
+            "x" : 5,
+            "y" : 1
+        },
+        {
+            "type" : "invincibility_potion",
+            "x" : 6,
+            "y" : 1
+        },
+        {
+            "type" : "invisibility_potion",
+            "x" : 7,
+            "y" : 1
+        },
+        {
+            "type" : "wood",
+            "x" : 8,
+            "y" : 1
+        },
+        {
+            "type": "exit",
+            "x": 0,
+            "y": 2
+        }
+    ],
+    "goal-condition": {"goal": "exit"}
+}
