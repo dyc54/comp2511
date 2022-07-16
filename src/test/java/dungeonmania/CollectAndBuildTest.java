@@ -164,25 +164,19 @@ public class CollectAndBuildTest {
     @Test
     @DisplayName("Test the player can build bow fail by no enough material")
     public void testBulidBowFail2() throws IllegalArgumentException, InvalidActionException {
-        DungeonManiaController dmc = new DungeonManiaController();
-        
-        DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
-        "c_collectTests");
-        
-        res = playerMoveController(dmc, Direction.RIGHT, 1);
-        // before build bow
-        assertEquals(0, getInventory(res, "bow").size());
-        assertEquals(1, getInventory(res, "wood").size());
-        assertEquals(0, getInventory(res, "arrow").size());
-        
         // after build bow
         assertThrows(InvalidActionException.class, () -> {
-            DungeonResponse rres = dmc.build("bow");
-            assertEquals(1, getInventory(rres, "bow").size());
-            assertEquals(0, getInventory(rres, "wood").size());
-            assertEquals(0, getInventory(rres, "arrow").size());
-            List<String> buildables = new ArrayList<>();
-            assertEquals(buildables, rres.getBuildables());
+            DungeonManiaController dmc = new DungeonManiaController();
+        
+            DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
+            "c_collectTests");
+            
+            res = playerMoveController(dmc, Direction.RIGHT, 1);
+            // before build bow
+            assertEquals(0, getInventory(res, "bow").size());
+            assertEquals(1, getInventory(res, "wood").size());
+            assertEquals(0, getInventory(res, "arrow").size());
+            res = dmc.build("bow");
         });
 
 
@@ -270,35 +264,6 @@ public class CollectAndBuildTest {
             assertEquals(buildables, res.getBuildables());
         });
     }
-
-    // @Test
-    // @DisplayName("Test the player can build shield by wood and treasure")
-    // public void testBulidShieldByTreasure() throws IllegalArgumentException, InvalidActionException {
-    //     assertDoesNotThrow(() -> {
-    //         DungeonManiaController dmc = new DungeonManiaController();
-
-    //         DungeonResponse res = dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
-    //                 "c_collectTests");
-
-    //         res = playerMoveController(dmc, Direction.RIGHT, 10);
-    //         // before build shield by wood and treasure 
-    //         assertEquals(0, getInventory(res, "shield").size());
-    //         assertEquals(2, getInventory(res, "wood").size());
-    //         assertEquals(1, getInventory(res, "treasure").size());
-
-    //         // after build shield by wood and treasure
-    //         res = dmc.build("shield");
-    //         assertEquals(1, getInventory(res, "shield").size());
-    //         assertEquals(0, getInventory(res, "wood").size());
-    //         assertEquals(1, getInventory(res, "treasure").size());
-
-    //         List<String> buildables = new ArrayList<>();
-    //         // buildables.add("shield");
-    //         assertEquals(buildables, res.getBuildables());
-           
-    //     });
-
-    // }
 
     @Test
     @DisplayName("Test the player can build shield by wood and key")

@@ -54,7 +54,7 @@ public class DungeonMap {
      * @param GivenType
      * @return
      */
-    private static <X, Y> boolean isSameType(String EntityType, String givenType) {
+    private static boolean isSameType(String EntityType, String givenType) {
         if (EntityType.equals(givenType)) {
             return true;
         }
@@ -239,8 +239,9 @@ public class DungeonMap {
             EnemiesDestroiedCounter += 1;
 
         }
+        
         // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
-        // System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
+        System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
         entities.remove(temp);
         idCollection.remove(id);
         // IdCollection.
@@ -437,7 +438,7 @@ public class DungeonMap {
         if (this.getEntities(player.getLocation()).size() > 1 && !effect.equals("Invisibility")) {
             System.out.println("GetEntities");
             List<String> removed = new ArrayList<>();
-            List<EnemyMovement> movements = new ArrayList<>();
+            List<Movement> movements = new ArrayList<>();
             System.out.println(player.getLocation().toString());
             for (Entity entity: this.getEntities(player.getLocation())) {
                 System.out.println(entity.toString() + "BATTLE CHECK");
@@ -449,7 +450,7 @@ public class DungeonMap {
                     removed.stream().forEach(loser -> System.out.println(loser));
                     if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invincibility")) {
                         if (!(entity instanceof Spider)) {
-                            movements.add((EnemyMovement) entity);
+                            movements.add((Movement) entity);
                             // ((EnemyMovement) entity).movement(this);
                         }
                     }

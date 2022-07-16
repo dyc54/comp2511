@@ -146,16 +146,15 @@ public class BattleTest {
 
     @Test
     public void testBattleWithEnemyInvincibilityPotionWin() {
-        DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithSpider4LQ3G1657779449.1987035", "c_BattleTest_playerweak");
-        String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
         assertDoesNotThrow( () -> {
-            controller.tick(invincibility_potion_id);
+            DungeonManiaController controller = new DungeonManiaController();
+            DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithSpider4LQ3G1657779449.1987035", "c_BattleTest_playerweak");
+            String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
+            DungeonResponse postBattleResponse = controller.tick(invincibility_potion_id);
+            assertTrue(getEntities(postBattleResponse, "spider").size() == 1);
+            assertTrue(postBattleResponse.getBattles().size() == 1);
+            assertEquals(getEntities(postBattleResponse, "spider").get(0).getPosition(), new Position(0,0));
         });
-        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
-        assertTrue(getEntities(postBattleResponse, "spider").size() == 1);
-        assertTrue(postBattleResponse.getBattles().size() == 1);
-        assertEquals(getEntities(postBattleResponse, "spider").get(0).getPosition(), new Position(1,0));
         // DungeonResponse ; 
         // });
         // assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak");
@@ -163,17 +162,15 @@ public class BattleTest {
     
     @Test
     public void testBattleWithEnemyInvincibilityPotionWithZombie() {
-        DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithZombie27YQN1657789905.4370875", "c_BattleTest_playerweak");
-        String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
         assertDoesNotThrow( () -> {
-            controller.tick(invincibility_potion_id);
+            DungeonManiaController controller = new DungeonManiaController();
+            DungeonResponse initialResponse = controller.newGame("d_potionWithZombie", "c_BattleTest_playerweak");
+            String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
+            DungeonResponse postBattleResponse = controller.tick(invincibility_potion_id);
+            assertTrue(getEntities(postBattleResponse, "zombie").size() == 1);
+            assertTrue(postBattleResponse.getBattles().size() == 1);
+            assertNotEquals(getEntities(postBattleResponse, "zombie").get(0).getPosition(), new Position(2,3));
         });
-        DungeonResponse postBattleResponse = controller.tick(Direction.DOWN);
-        // Position curr = 
-        assertTrue(getEntities(postBattleResponse, "zombie").size() == 1);
-        assertTrue(postBattleResponse.getBattles().size() == 1);
-        assertNotEquals(getEntities(postBattleResponse, "zombie").get(0).getPosition(), new Position(2,3));
     }
     // TODO: 
     // @Test
@@ -214,18 +211,17 @@ public class BattleTest {
     public void testBattleWithEnemyInvincibilityPotionLost() {
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
-        DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("testinvincibility_potionWithZombie27YQN1657789905.4370875", "c_BattleTest_StrongEnemies");
-        String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
         assertDoesNotThrow( () -> {
-            controller.tick(invincibility_potion_id);
+            DungeonManiaController controller = new DungeonManiaController();
+            DungeonResponse initialResponse = controller.newGame("d_potionWithZombie", "c_BattleTest_StrongEnemies");
+            String invincibility_potion_id = getInventory(initialResponse, "invincibility_potion").get(0).getId();
+            DungeonResponse postBattleResponse = controller.tick(invincibility_potion_id);
+            assertTrue(postBattleResponse.getBattles().size() == 1);
+            assertTrue(getEntities(postBattleResponse, "zombie").size() == 1);
+            assertTrue(getEntities(postBattleResponse, "player").size() == 0);
+            assertNotEquals(getEntities(postBattleResponse, "zombie").get(0).getPosition(), new Position(2,3));
+
         });
-        DungeonResponse postBattleResponse = controller.tick(Direction.DOWN);
-        // Position curr = 
-        assertTrue(getEntities(postBattleResponse, "zombie").size() == 1);
-        assertTrue(getEntities(postBattleResponse, "player").size() == 0);
-        assertTrue(postBattleResponse.getBattles().size() == 1);
-        assertNotEquals(getEntities(postBattleResponse, "zombie").get(0).getPosition(), new Position(2,3));
 
     }
     @Test

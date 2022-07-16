@@ -97,7 +97,7 @@ public class DungeonManiaController {
             spider_spawn_rate = dungeonConfig.spider_spawn_rate;
             spider_attack = dungeonConfig.spider_attack;
             spider_health = dungeonConfig.spider_health;
-            goals.hasAchieved(dungeonMap, player);
+            // goals.hasAchieved(dungeonMap, player);
             // setGoalsString(dungeonName);
             // System.out.println(getDungeonResponse().getEntities().get(0).getType());
             return getDungeonResponse();
@@ -147,8 +147,36 @@ public class DungeonManiaController {
         timerAdd();
         checkTimer(timer);
         player.useItem(itemUsedId);
+        player.updatePotionDuration();
+        timerAdd();
+        checkTimer(timer);
+        dungeonMap.UpdateAllEntities();
+        for (Entity entity : dungeonMap.getAllEntities()) {
+            // entitiesList = dungeonMap.getAllEntities();
+            // for (Entity entity : entitiesList) {
+            if (entity.getType().equals("spider")) {
+                Spider spider = (Spider) entity;
+                spider.movement(dungeonMap);
+            }
+            if (entity.getType().equals("zombie_toast")) {
+                ZombieToast zombie = (ZombieToast) entity;
+                zombie.movement(dungeonMap);
+                System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
+            }
+            if (entity.getType().equals("zombie_toast_spawner")) {
+                ZombieToastSpawner zts = (ZombieToastSpawner) entity;
+                zts.ZombieToastSpwanCheck();
+                System.out.println("number" + dungeonMap.getEntities("zombie_toast").size());
+            }
+            if (entity.getType().equals("mercenary")) {
+                Mercenary mercenary = (Mercenary) entity;
+                mercenary.movement(dungeonMap);
+            } 
+        }
+        // Battle
+        dungeonMap.toString();
         dungeonMap.battleAll(battles);
-        goals.hasAchieved(dungeonMap, player);
+        // goals.hasAchieved(dungeonMap, player);
         return getDungeonResponse();
     }
 
@@ -158,6 +186,7 @@ public class DungeonManiaController {
     public DungeonResponse tick(Direction movementDirection) {
         System.out.println("************************ Tick movementDirection ********************");
         player.movement(movementDirection.getOffset());
+        player.updatePotionDuration();
         timerAdd();
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();
@@ -184,7 +213,7 @@ public class DungeonManiaController {
         // }
         // Battle
         dungeonMap.battleAll(battles);
-        goals.hasAchieved(dungeonMap, player);
+        // goals.hasAchieved(dungeonMap, player);
         dungeonMap.toString();
         return getDungeonResponse();
 
@@ -230,6 +259,7 @@ public class DungeonManiaController {
         // setEntitiesResponse();
         setBattlesResponse();
         // setItemResponse();
+        goals.hasAchieved(dungeonMap, dungeonMap.getPlayer());
         return new DungeonResponse(dungeonId, dungeonName, getEntitiesResponse(), getItemResponse(), battles,
                     getBuildables(player.getInventory()), goals.toString());
     }
