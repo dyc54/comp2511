@@ -14,11 +14,6 @@
             "x": 2,
             "y": 2,
             "type": "zombie_toast_spawner"
-        },
-        {
-            "x": 8,
-            "y": 8,
-            "type": "exit"
         }
     ],
     "goal-condition": {"goal": "enemies"}
