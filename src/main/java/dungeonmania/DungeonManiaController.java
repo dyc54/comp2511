@@ -35,9 +35,6 @@ public class DungeonManiaController {
     private List<AnimationQueue> animations;
     private Player player;  
     int timer = 0;
-    int spider_spawn_rate;
-    int spider_attack;
-    int spider_health;
 
     public String getSkin() {
         return "default";
@@ -74,9 +71,6 @@ public class DungeonManiaController {
             dungeonMap.loads(dungeonName, dungeonConfig).interactAll().battleAll(battles);
             goals = new GoalController(dungeonName, dungeonConfig);
             player = dungeonMap.getPlayer();
-            spider_spawn_rate = dungeonConfig.spider_spawn_rate;
-            spider_attack = dungeonConfig.spider_attack;
-            spider_health = dungeonConfig.spider_health;
             return getDungeonResponse();
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -90,7 +84,7 @@ public class DungeonManiaController {
     }
 
     public void checkTimer(int t) {
-        if (t == spider_spawn_rate) {
+        if (t == dungeonConfig.spider_spawn_rate) {
             createSpider();
             timer = 0;
         }
@@ -104,7 +98,8 @@ public class DungeonManiaController {
     }
 
     public void createSpider() {
-        dungeonMap.addEntity(new Spider("spider", randomLocation(), spider_attack, spider_health));
+        // dungeonMap.addEntity(EntityFactory.)
+        dungeonMap.addEntity(new Spider("spider", randomLocation(), dungeonConfig.spider_attack, dungeonConfig.spider_health));
     }
     /**
      * /game/dungeonResponseModel

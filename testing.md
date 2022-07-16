@@ -1,12 +1,11 @@
+# Signal Object test
 ## Spider
 - For movement, the spider can move clockwise direction 'circling' their spawn spot.
 - Testing the spider should change the moving direction when they meet the boulder.
 - Test spider spawn by counting the number of spider after X ticks
 
-
 ## Zombie Toast
 - Zombie toast have random moving direction so the test should limit the moving path to make the limited condition the same as player
-
 ## Mercenary
 - The mercenary will move to player when their are hostile, so test should judge whether the mercenary close to player and have the same movement restraction as the player
 - When mercenary become the allies, they will following the player. Therefore, the test should check whether the mercenary in following state.
@@ -20,20 +19,10 @@
 - create zombie after X ticks by counting the number of zombie toast
 - the player can interact with zombie toast spwaner and distory this using the weapon
 - test distory the zombie toast spwaner fail situation
-
 ## Player
 - Players can move
-
-## Key
-- Only one key can be picked up
-
-## Door
-
 ## Wall
 The player cannot pass the wall
-
-## Exit
-The player walks to the exit to reach the goal
 
 ## Door and key
 The player can open the right lock with the right key. 
@@ -60,10 +49,34 @@ Players can place bombs. When a bomb exists around a switch and the switch is on
 
 ## goal
 Sub-goals can still be changed to unrealized after they are achieved, or goals can be achieved, achieving the enemies goal requires destroying the zombie generator
+- The player can move up, left, right and down. The player can interact with other entities successfully
+
 
 ## Bomb
+- The player can put the bomb. When a bomb is cardinally adjacent to a switch, if the trigger of the switch is true, remove all the entities according to the given radius.
 
-## Battle
+
+## Wall
+- Player, zombie and mercenary cannot walk through a wall.
+
+## Exit
+- Player will achieve the goal when he is on the exit.
+
+## Portal
+- Player and mercenary can teleport to the target portal and the player can interact with the other entities after the teleport.
+
+## ZombieSpwaner
+- The zombie Spwaner can spwan zombie at the cardinally adjacent positions, if all the four positions contain a obstacle, don't spwan.
+
+
+## Collectable entities
+- Player can pickup all the collectable entitie and add them to the bag list successfully. (but a bag cannot contains two key)
+
+## Buildable entities
+- Player can build Bow and shield with the correct materials.
+
+# muti object test
+# Battle
 - Enemies can be defeated
 - The enemy defeats the player
 - Fighting with enemies in cases without weapons and potions
@@ -73,9 +86,10 @@ Sub-goals can still be changed to unrealized after they are achieved, or goals c
 - Use weapons to defeat enemies
 - Bribing mercenaries to defeat the enemy
 
-## Goals
+# Goals
 - Completion of individual goals
 - Complete OR as a connected target
 - Complete AND as a connected target
 - Completing the complex goal
 - Some goals are completed and then become uncompleted
+- After a subgoal have been achieved, it can still be disachieved. i.e. boulder, exit. OR goal can be achieved. zombie spwaner needs to be destoryed to achieve enemies goal.

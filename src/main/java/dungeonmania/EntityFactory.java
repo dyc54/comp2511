@@ -13,7 +13,9 @@ import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.movingEntities.ZombieToast;
 import dungeonmania.staticEntities.*;
-
+/**
+ * create Entity
+ */
 public class EntityFactory {
 
     public static Entity newEntity(JSONObject entity, Config config, DungeonMap map) {

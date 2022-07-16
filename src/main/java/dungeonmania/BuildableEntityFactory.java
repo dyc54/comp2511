@@ -5,7 +5,7 @@ import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bui
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
 
-public class BuildableEntityFactory extends EntityFactory{
+public class BuildableEntityFactory {
     
     public static Entity newEntity(String type, Config config) {
         switch (type) {

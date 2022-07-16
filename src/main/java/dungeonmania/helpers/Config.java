@@ -2,7 +2,9 @@ package dungeonmania.helpers;
 import java.io.IOException;
 
 import org.json.*;
-
+/**
+ * load config
+ */
 public class Config {
     public final int ally_attack;
     public final int ally_defence;

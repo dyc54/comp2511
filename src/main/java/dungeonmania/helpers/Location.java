@@ -3,10 +3,10 @@ package dungeonmania.helpers;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.ArrayList;
 
 import dungeonmania.util.Position;
 
-import java.util.ArrayList;
 
 public class Location implements Comparator<Location>, Comparable<Location>{
     private int x;
@@ -134,10 +134,9 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         return ((int) (num > 0 ? Math.ceil(num) : Math.floor(num)));
     }
     public Location getLocation(double degree, int radius) {
-        double deltaX = Math.cos(Math.toRadians(degree)) * radius;
-        double deltaY = Math.sin(Math.toRadians(degree)) * radius;
-        // System.out.println(String.format("%f: %d + %d(%f), %d + %d(%f) = %s", degree, x, round(deltaX), deltaX, y, round(deltaY) * -1, deltaY, add(round(deltaX) , round(deltaY) * -1).toString()));
-        return add(round(deltaX) , round(deltaY) * -1);
+        double deltaX = Math.cos(Math.toRadians(degree)) ;
+        double deltaY = Math.sin(Math.toRadians(degree)) ;
+        return add(round(deltaX) * radius, round(deltaY) * -1 *  radius);
     }
     
     public Location getLocation(int deltaX, int deltaY) {
@@ -187,15 +186,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public static Location getRight(Location location) {
         return location.getRight();
     }
-    /**
-     * Convert a location to an array.
-     * @param location 
-     * @return assume (x, y)
-     */
-    public static int[] toInts (Location location) {
-        int[] response = {location.x, location.y};
-        return response; 
-    }
+
     /**
      * Return a Location
      * @param x

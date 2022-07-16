@@ -1,5 +1,8 @@
 package dungeonmania.helpers;
-
+/**
+ * Propose
+ * to provide room for future expansion of similar structures, For example, nested buildable entities construction, etc.
+ */
 public class LogicCondition<T> {
     private final String type;
     private final static String superLogic = "SUPER";

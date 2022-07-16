@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.inventories.Inventory;
-
+/**
+ * Save buildable Recipe
+ */
 public class BuildableRecipe {
     List<BuildableComponent> and;
     List<BuildableComponent> or;

@@ -15,7 +15,7 @@ import dungeonmania.strategies.attackStrategies.BonusDamageStrategy;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
 public class Inventory {
-    private final HashMap<String, List<Entity>> inventory = new HashMap<>(); //key 是实体的类型
+    private final HashMap<String, List<Entity>> inventory = new HashMap<>();
     private final IdCollection<String> idCollection = new IdCollection<>();
 
     /**

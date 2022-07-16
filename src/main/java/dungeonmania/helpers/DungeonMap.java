@@ -26,11 +26,7 @@ import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.strategies.Movement;
 
 /**
- * Observer Pattern
- * ! but not sure
- * Wo bu hui ...
- * 
- * @author Shilong
+ * Save entities
  */
 public class DungeonMap {
     private TreeMap<Location, HashSet<Entity>> map;
@@ -368,14 +364,10 @@ public class DungeonMap {
                     if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invincibility")) {
                         if (!(entity instanceof Spider)) {
                             movements.add((Movement) entity);
-                            // ((EnemyMovement) entity).movement(this);
                         }
                     }
                     battles.add(battle.toResponse());
                 }
-            }
-            if (removed.size() != 0) {
-                // player.setBattleUsedDuration();
             }
             player.cleardisusableItem();
             removed.stream().forEach(id -> this.removeEntity(id));
@@ -384,13 +376,7 @@ public class DungeonMap {
         }
         return this;
     }
-    @Override
-    public String toString() {
-        System.out.println("*********** MAP ***********\n");
-        getAllEntities().stream().forEach(entity -> System.out.println(entity.toString()));
-        System.out.println("*********** MAP ***********\n");
-        return "output";
-    }
+
     public static boolean isaccessible(DungeonMap map, Location location, Entity entity) {
         List<Entity> list = DungeonMap.blockedEntities(map, location, entity);
         System.out.println(String.format("For entity %s, unaccessable entities at %s are:", entity.toString(), location.toString()));
