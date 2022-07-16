@@ -8,22 +8,22 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import dungeonmania.CollectableEntities.Bomb;
-import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
-import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
-import dungeonmania.Inventories.Inventory;
-import dungeonmania.Strategies.PlayerMovementStrategy;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;
-import dungeonmania.Strategies.DefenceStrategies.ArmorableStrategy;
-import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
+import dungeonmania.collectableEntities.Bomb;
+import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.strategies.PlayerMovementStrategy;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.WeaponableAttackStrategy;
+import dungeonmania.strategies.defenceStrategies.ArmorableStrategy;
+import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
 import dungeonmania.util.Position;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.inventories.Inventory;
 
 public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject {
     // private int attack;

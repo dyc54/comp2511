@@ -18,12 +18,12 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Interactability;
 import dungeonmania.Player;
-import dungeonmania.Battle.Battle;
-import dungeonmania.Battle.Enemy;
-import dungeonmania.MovingEntities.Spider;
-import dungeonmania.StaticEntities.ZombieToastSpawner;
-import dungeonmania.Strategies.Movement;
+import dungeonmania.battle.Battle;
+import dungeonmania.battle.Enemy;
+import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.BattleResponse;
+import dungeonmania.staticEntities.ZombieToastSpawner;
+import dungeonmania.strategies.Movement;
 
 /**
  * Observer Pattern

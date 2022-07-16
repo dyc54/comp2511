@@ -1,17 +1,17 @@
 package dungeonmania;
 
-import dungeonmania.Goals.GoalController;
-import dungeonmania.Inventories.Inventory;
-import dungeonmania.MovingEntities.Mercenary;
-import dungeonmania.MovingEntities.Spider;
-import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goals.GoalController;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.inventories.Inventory;
+import dungeonmania.movingEntities.Mercenary;
+import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.response.models.*;

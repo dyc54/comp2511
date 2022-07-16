@@ -4,7 +4,6 @@ import java.io.IOException;
 import org.json.*;
 
 public class Config {
-    // public 
     public final int ally_attack;
     public final int ally_defence;
     public final int bomb_radius;

@@ -2,19 +2,17 @@ package dungeonmania;
 
 import org.json.JSONObject;
 
-import dungeonmania.CollectableEntities.*;
-import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
-import dungeonmania.CollectableEntities.DurabilityEntities.InvisibilityPotion;
-import dungeonmania.CollectableEntities.DurabilityEntities.Sword;
-import dungeonmania.StaticEntities.*;
+import dungeonmania.collectableEntities.*;
+import dungeonmania.collectableEntities.durabilityEntities.InvincibilityPotion;
+import dungeonmania.collectableEntities.durabilityEntities.InvisibilityPotion;
+import dungeonmania.collectableEntities.durabilityEntities.Sword;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
-import dungeonmania.MovingEntities.MercenaryEnemy;
-import dungeonmania.MovingEntities.Spider;
-import dungeonmania.MovingEntities.ZombieToast;
-import dungeonmania.StaticEntities.Exit;
-import dungeonmania.StaticEntities.Wall;
 import dungeonmania.helpers.Location;
+import dungeonmania.movingEntities.MercenaryEnemy;
+import dungeonmania.movingEntities.Spider;
+import dungeonmania.movingEntities.ZombieToast;
+import dungeonmania.staticEntities.*;
 
 public class EntityFactory {
 

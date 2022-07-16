@@ -1,8 +1,8 @@
 package dungeonmania;
 
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Bow;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shield;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
 
 public class BuildableEntityFactory extends EntityFactory{
