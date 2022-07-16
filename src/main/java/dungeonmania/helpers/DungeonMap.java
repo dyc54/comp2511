@@ -45,9 +45,6 @@ public class DungeonMap {
         if (EntityType.equals(givenType)) {
             return true;
         }
-        if (givenType.toLowerCase().equals(new String("enemies"))) {
-            return Arrays.asList("Spider", "Zombie Toast", "Zombie", "Unbribed Mercenary").contains(EntityType);
-        }
         
         return false;
     }
@@ -193,9 +190,9 @@ public class DungeonMap {
      * @return
      */
     public Collection<Entity> getEntities(String type) {
-        if (type.equals("player")) {
-            return Arrays.asList(player);
-        }
+        // if (type.equals("player")) {
+        //     return Arrays.asList(player);
+        // }
         Collection<Entity> entities = new LinkedList<>();
         getAllEntities().stream().forEach(entity -> {
             if (DungeonMap.isSameType(entity.getType(), type)) {

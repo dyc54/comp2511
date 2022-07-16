@@ -235,5 +235,27 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
         });
 
     }
+    @Test
+    public void testPotionwithAlly2() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("testAllyBKZQI1657998807.906683", "c_Battletest_PlayerStrong");
+        String id = getEntities(res, "mercenary").get(0).getId();
+        assertDoesNotThrow(()->{
+            dmc.interact(id);
+            // String nid = getInventory(res, "invisibility_potion").get(0).getId();
+            dmc.tick(Direction.DOWN);
+            dmc.tick(Direction.DOWN);
+            dmc.tick(Direction.DOWN);
+            dmc.tick(Direction.DOWN);
+            dmc.tick(Direction.DOWN);
+            dmc.tick(Direction.UP);
+            dmc.tick(Direction.UP);
+            dmc.tick(Direction.UP);
+            dmc.tick(Direction.UP);
+            dmc.tick(Direction.UP);
+            dmc.tick(Direction.UP);
+        });
+
+    }
 
 }

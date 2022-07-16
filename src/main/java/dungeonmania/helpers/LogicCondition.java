@@ -16,13 +16,11 @@ public class LogicCondition<T> {
         }
     }
     public static <T> boolean compareTwo(String type, LogicContent<T> a, LogicContent<T> b) {
-        boolean condA = a == null ? false: a.isTrue();
-        boolean condB = b == null ? false: b.isTrue();
         switch (type) {
             case and:
-                return condA && condB;
+                return a.isTrue() && b.isTrue();
             case or:
-                return condA || condB;
+                return a.isTrue() || b.isTrue();
             default:
                 return false;
         }
