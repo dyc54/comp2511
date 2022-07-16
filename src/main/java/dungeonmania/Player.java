@@ -33,7 +33,7 @@ import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class Player extends Entity implements PlayerMovementStrategy {
+public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject {
     // private int attack;
     private AttackStrategy attack;
     private DefenceStrategy defence;
@@ -46,7 +46,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
     private DungeonMap map;
     private final Location previousLocation;
     private Queue<PotionEntity> effects;
-
+    private List<PotionEffecObserver> observers;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -258,7 +258,7 @@ public class Player extends Entity implements PlayerMovementStrategy {
             Bomb bomb = (Bomb) entity;
             // if (bom)
             bomb.put(getLocation(), map);
-            map.addEntity(bomb);
+            // map.addEntity(bomb);
             inventory.removeFromInventoryList(entity);
         } else {
             throw new IllegalArgumentException(
@@ -317,8 +317,29 @@ public class Player extends Entity implements PlayerMovementStrategy {
         list.addAll(invUsage);
         return list;
     }
-    // TODO: if player have sword, bow or bribed mercenary, attack has to be added.
-    // TODO: e.g. attack.bonusDamage(sward)
+
+    @Override
+    public void attach(PotionEffecObserver observer) {
+        // TODO Auto-generated method stub
+        observers.add(observer);
+    }
+
+    @Override
+    public void detach(PotionEffecObserver observer) {
+        // TODO Auto-generated method stub
+        observers.remove(observer);
+
+        
+    }
+
+    @Override
+    public void notifyObserver() {
+        // TODO Auto-generated method stub
+        for (PotionEffecObserver observer : observers) {
+            observer.update(this);
+        }
+        
+    }
 
     //
 }

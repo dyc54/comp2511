@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
+import dungeonmania.PotionEffectSubject;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
@@ -46,33 +47,47 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         // super.movement(dungeonMap);
         System.out.println("Ally MOveing");
         Player p = dungeonMap.getPlayer();
-        if (p.hasEffect()) {
-            String options = "";
-            if (p.getCurrentEffect().applyEffect().equals("Invisibility")) {
-                setMove(new RandomMovement());
-                options = MovingEntity.getPossibleNextDirection(dungeonMap, this);
-            }
-            isFollowing = false;
-            setLocation(getMove().MoveOptions(options).nextLocation(p.getLocation()));
+        String options = MovingEntity.getPossibleNextDirection(dungeonMap, this);
+        if (p.getLocation().equals(getLocation())) {
+            setMove(new FollowingMovement(p.getPreviousLocation()));
+        } 
+        Location next = getMove().MoveOptions(options).nextLocation(p.getLocation());
+        if (p.getLocation().equals(next)) {
+            setMove(new FollowingMovement(p.getPreviousLocation()));
+        } 
+        System.out.println(String.format("Movement: Mercenary %s -> %s", getLocation(), next));
+
+        setLocation(next);
+        
+        dungeonMap.UpdateEntity(this);
+        // if (p.hasEffect()) {
+        //     String options = "";
+        //     if (p.getCurrentEffect().applyEffect().equals("Invisibility")) {
+        //         setMove(new RandomMovement());
+        //         options = MovingEntity.getPossibleNextDirection(dungeonMap, this);
+        //     }
+        //     isFollowing = false;
+        //     setLocation(getMove().MoveOptions(options).nextLocation(p.getLocation()));
             
-        } else {
-                // Player reach mercenary
-                if (getLocation().equals(p.getLocation())) {
-                    isFollowing = true;
-                    setMove(new FollowingMovement(p.getPreviousLocation()));
-                } else if (!isFollowing) {
-                    setMove(new ChaseMovement(getLocation()));
-                    setLocation(getMove().nextLocation(p.getLocation()));
-                    // mercenary reach Player
-                    if (getLocation().equals(p.getLocation())) {
-                        isFollowing = true;
-                        setMove(new FollowingMovement(p.getPreviousLocation()));
-                        return true;
-                    }
-                }
-                if( isFollowing) {
-                    setLocation(getMove().nextLocation(p.getLocation()));
-                }
+        // } else {
+        //         // Player reach mercenary
+        //         if (getLocation().equals(p.getLocation())) {
+        //             isFollowing = true;
+        //             setMove(new FollowingMovement(p.getPreviousLocation()));
+        //         } else if (!isFollowing) {
+        //             setMove(new ChaseMovement(getLocation()));
+        //             setLocation(getMove().nextLocation(p.getLocation()));
+        //             // mercenary reach Player
+        //             if (getLocation().equals(p.getLocation())) {
+        //                 isFollowing = true;
+        //                 setMove(new FollowingMovement(p.getPreviousLocation()));
+        //                 return true;
+        //             }
+        //         }
+        //         if( isFollowing) {
+        //             setLocation(getMove().nextLocation(p.getLocation()));
+        //         }
+        //     }
 
             // } else {
 
@@ -84,7 +99,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
             //     setMove(new ChaseMovement(getLocation()));
             //     setLocation(getMove().MoveOptions(options).nextLocation(p.getLocation()));
             // }
-        }
         // // if (g)
         // Location playerLocation = p.getLocation();
         // // System.out.println("playerLocation:"+playerLocation);
@@ -140,5 +154,25 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         // TODO Auto-generated method stub
         return this == obj;
     }
-    
+
+    @Override
+    public void update(PotionEffectSubject subject) {
+        // TODO Auto-generated method stub
+        if (subject instanceof Player) {
+            update((Player) subject);
+        }
+        
+    }
+    public void update(Player player) {
+        if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invisibility")) {
+            setMove(new RandomMovement());
+        } 
+        if (!player.hasEffect()) {
+            if (player.getLocation().equals(getLocation())) {
+                setMove(new FollowingMovement(player.getPreviousLocation()));
+            } else {
+                setMove(new ChaseMovement(getLocation()));
+            }
+        }
+    }
 }

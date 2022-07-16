@@ -147,7 +147,7 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
         res = dmc.tick(Direction.RIGHT);
         assertEquals(new Position(3,1), getEntities(res, "player").get(0).getPosition());
         assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
-        assertEquals(1, res.getBattles().size());
+        assertEquals(0, res.getBattles().size());
         /* BattleResponse battle = res.getBattles().get(0);
         assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong");
  */

@@ -20,17 +20,17 @@ public class BuildableRecipe {
         or = new ArrayList<>();
     }
     public boolean isSatisfied(Inventory inventory) {
-        System.out.println(String.format("To build %s: ", recipeName));
-        System.out.println("Checking and branch");
+        // System.out.println(String.format("To build %s: ", recipeName));
+        // System.out.println("Checking and branch");
         and.stream().forEach(component -> component.CountItem(inventory));
         Boolean.valueOf(true).booleanValue();
         boolean andcondi = and.stream().map(component -> Boolean.valueOf(component.isSatisfied())).allMatch(component -> component.booleanValue());
-        System.out.println("Checking or branch");
+        // System.out.println("Checking or branch");
         or.stream().forEach(component -> component.CountItem(inventory));
         boolean orcondi = or.stream().map(component -> Boolean.valueOf(component.isSatisfied())).anyMatch(component -> component.booleanValue());
         boolean a = andcondi || and.size() == 0;
         boolean o = orcondi || or.size() == 0;
-        System.out.println(String.format("To build %s: AND branch %s, OR branch %s -> %s", recipeName, a, o, a && o));
+        // System.out.println(String.format("To build %s: AND branch %s, OR branch %s -> %s", recipeName, a, o, a && o));
         return a && o;
     }
     public BuildableRecipe addAnd(String type, int amount) {

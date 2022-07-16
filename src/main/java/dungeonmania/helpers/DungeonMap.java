@@ -27,6 +27,7 @@ import dungeonmania.Battle.Enemy;
 import dungeonmania.MovingEntities.MovingEntity;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
+import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.Movement;
 import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
@@ -234,7 +235,7 @@ public class DungeonMap {
         Collection<Entity> entities = getEntities(location);
         Entity temp = getEntity(id);
         if (temp instanceof Enemy) {
-            System.out.println("cCounter++");
+            // System.out.println("cCounter++");
             EnemiesDestroiedCounter += 1;
 
         }
@@ -360,7 +361,9 @@ public class DungeonMap {
             if (entity instanceof Movement) {
                 Movement movingEntity = (Movement) entity;
                 movingEntity.movement(this);
-                
+            }
+            if (entity instanceof ZombieToastSpawner) {
+                ((ZombieToastSpawner) entity).ZombieToastSpwanCheck();
             }
         });
     }
@@ -428,14 +431,16 @@ public class DungeonMap {
         if (player.hasEffect()) {
             effect = player.getCurrentEffect().applyEffect();
         }
-        if (this.getEntities(player.getLocation()).size() > 0 && !effect.equals("Invisibility")) {
+        System.out.println(player.getLocation());
+        this.getEntities(player.getLocation()).stream().forEach(entity -> System.out.println(entity.toString()));
+
+        if (this.getEntities(player.getLocation()).size() > 1 && !effect.equals("Invisibility")) {
             System.out.println("GetEntities");
-            this.getEntities(player.getLocation()).stream().forEach(entity -> System.out.println(entity.toString()));
             List<String> removed = new ArrayList<>();
             List<EnemyMovement> movements = new ArrayList<>();
             System.out.println(player.getLocation().toString());
             for (Entity entity: this.getEntities(player.getLocation())) {
-                System.out.println(entity.toString());
+                System.out.println(entity.toString() + "BATTLE CHECK");
                 if (entity instanceof Enemy) {
                     Battle battle = new Battle();
                     List<String> losers = battle.setBattle(player, (Enemy) entity).startBattle();

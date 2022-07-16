@@ -287,7 +287,7 @@ public class DungeonManiaController {
         // if (buildResult == null) return;
 
         // buildables.add(buildResult);
-        System.out.println("CHECK BUILDABLES");
+        // System.out.println("CHECK BUILDABLES");
         return Arrays.asList(BuildableEntityFactory.newRecipe("bow"),
                     BuildableEntityFactory.newRecipe("shield")).stream()
                     .filter(recipe -> recipe.isSatisfied(inventory))

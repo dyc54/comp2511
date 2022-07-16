@@ -346,7 +346,7 @@ public class CollectAndBuildTest {
             assertEquals(0, getInventory(res, "shield").size());
             assertEquals(6, getInventory(res, "wood").size());
             assertEquals(1, getInventory(res, "treasure").size());
-            assertEquals(Arrays.asList("shield", "shield"), res.getBuildables());
+            assertEquals(Arrays.asList( "bow", "shield"), res.getBuildables());
 
             res = dmc.build("shield");
             res = dmc.build("shield");

@@ -5,6 +5,7 @@ import java.util.Collection;
 import dungeonmania.Entity;
 import dungeonmania.Interact;
 import dungeonmania.Player;
+import dungeonmania.PotionEffectSubject;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.Strategies.EnemyMovement;
 import dungeonmania.Strategies.Movement;
@@ -48,25 +49,34 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         Player p = dungeonMap.getPlayer();
         playerLocation = p.getLocation();
         Location next = new Location();
-        if (p.hasEffect()) { //Check for invisibility 
-            if (p.getCurrentEffect().applyEffect().equals("Invisibility")) {
-                setMove(new RandomMovement());
-                String choice = MovingEntity.getPossibleNextDirection(dungeonMap, this);
-                next = getMove().MoveOptions(choice).nextLocation(getLocation());
-                if (next.equals(getLocation())) {
-                    return false;
-                }
-            }
-        } else {
-            setMove(new ChaseMovement(getLocation()));
-            next = getMove().nextLocation(playerLocation);
-            if (dungeonMap.checkMovement(next)) {
-                next = getMove().moveWithWall(next, dungeonMap);
-                if (next.equals(getLocation())) {
-                    return false;
-                }
-            }
-        }
+        // if (p.hasEffect()) { //Check for invisibility 
+        //     if (p.getCurrentEffect().applyEffect().equals("Invisibility")) {
+        //         setMove(new RandomMovement());
+        //         String choice = MovingEntity.getPossibleNextDirection(dungeonMap, this);
+        //         next = getMove().MoveOptions(choice).nextLocation(getLocation());
+        //         if (next.equals(getLocation())) {
+        //             return false;
+        //         }
+        //     }
+        // } else {
+        //     setMove(new ChaseMovement(getLocation()));
+        //     next = getMove().nextLocation(playerLocation);
+        //     if (dungeonMap.checkMovement(next)) {
+        //         next = getMove().moveWithWall(next, dungeonMap);
+        //         if (next.equals(getLocation())) {
+        //             return false;
+        //         }
+        //     }
+        // }
+        String choice = MovingEntity.getPossibleNextDirection(dungeonMap, this);
+        next = getMove().MoveOptions(choice).nextLocation(playerLocation);
+        // if (dungeonMap.checkMovement(next)) {
+        //     next = getMove().moveWithWall(next, dungeonMap);
+        //     if (next.equals(getLocation())) {
+        //         return false;
+        //     }
+        System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
+        // }
         setLocation(next);
         dungeonMap.UpdateEntity(this);
         return false;
@@ -93,6 +103,23 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public void update(PotionEffectSubject subject) {
+        // TODO Auto-generated method stub
+        if (subject instanceof Player) {
+            update((Player) subject);
+        }
+        
+    }
+    public void update(Player player) {
+        if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invisibility")) {
+            setMove(new RandomMovement());
+        } 
+        if (!player.hasEffect()) {
+            setMove(new ChaseMovement(getLocation()));
+        }
     }
 	
 }

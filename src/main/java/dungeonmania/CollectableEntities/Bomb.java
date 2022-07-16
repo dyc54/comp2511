@@ -26,6 +26,7 @@ public class Bomb extends CollectableEntity {
         StaticBomb staticBomb = new StaticBomb("static_bomb", location.getX(), location.getY(),
                 this.bomb_radius);
         dungeonMap.addEntity(staticBomb);
+        dungeonMap.getPlayer().removeInventoryList(this);
         dungeonMap.getFourNearEntities(location).stream().forEach(e -> {
             if (e instanceof FloorSwitch) {
                 FloorSwitch floorSwitch = (FloorSwitch) e;
