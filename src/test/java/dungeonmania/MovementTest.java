@@ -239,7 +239,7 @@ public class MovementTest {
         int x = pos.getX();
         int y = pos.getY();
         res = dmc.tick(Direction.DOWN);
-        assertEquals(new Position(x, y - 1), getEntities(res, "mercenary").get(0).getPosition()); 
+        assertEquals(new Position(x, y + 1), getEntities(res, "mercenary").get(0).getPosition()); 
     }
 
     @Test

@@ -144,7 +144,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
      * @param location
      * @return
      */
-    public double distance(Location location) {
+    public int distance(Location location) {
         return Math.max(Math.abs(location.x - this.x), Math.abs(location.y - this.y));
         // return Math.sqrt(Math.pow(location.x - this.x, 2) + Math.pow(location.y - this.y, 2));
     }

@@ -7,6 +7,7 @@ import java.util.List;
 import dungeonmania.Entity;
 import dungeonmania.Interact;
 import dungeonmania.Player;
+import dungeonmania.PotionEffecObserver;
 import dungeonmania.Battle.Enemy;
 import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
 import dungeonmania.Strategies.Movement;
@@ -20,7 +21,7 @@ import dungeonmania.Strategies.MovementStrategies.RandomMovement;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public abstract class Mercenary extends MovingEntity implements Movement {
+public abstract class Mercenary extends MovingEntity implements Movement, PotionEffecObserver {
     // Location location;
     // private double mercenary_attack;
     // private double mercenary_health;

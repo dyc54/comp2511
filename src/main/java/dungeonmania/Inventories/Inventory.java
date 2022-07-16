@@ -35,7 +35,7 @@ public class Inventory {
      * @param Entity item
      */
     public boolean addToInventoryList(Entity item, Player player) {
-        if (item instanceof ItemInventoryLimit && countItem(item.getType()) != 0) {
+        if (item instanceof ItemInventoryLimit && countItem(item.getType()) >= ((ItemInventoryLimit) item).getMax()) {
             return false;
         } 
         if (!idCollection.hasId(item.getEntityId())) {
@@ -70,9 +70,10 @@ public class Inventory {
      * @param Entity item
      */
     public void removeFromInventoryList(Entity item) {
+        // removeFromInventoryList(item.getType(), 1);
         inventory.get(item.getType()).remove(item);
+        idCollection.remove(item.getEntityId());
     }
-
     public boolean removeFromInventoryList(String type, int number) {
         if (!inventory.containsKey(type)) {
             String.format("%s does not exit", type);
@@ -84,6 +85,7 @@ public class Inventory {
             return false;
         } else {
             for(int i = 0; i < number; i++) {
+                idCollection.remove(items.get(0).getEntityId());
                 items.remove(0);
             }
         }
