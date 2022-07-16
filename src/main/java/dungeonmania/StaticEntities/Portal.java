@@ -13,7 +13,7 @@ import dungeonmania.helpers.Location;
 import dungeonmania.util.Position;
 
 public class Portal extends StaticEntity {
-    final String color;
+    private final String color;
 
     public Portal(String type, int x, int y, String color) {
         super(type, x, y);
