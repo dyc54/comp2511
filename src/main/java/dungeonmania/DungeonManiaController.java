@@ -43,7 +43,6 @@ public class DungeonManiaController {
     DungeonMap dungeonMap = new DungeonMap();
     GoalController goals;
 
-    // 用于返回DungeonResponse
     private String dungeonId;
     private String dungeonName;
     // private List<EntityResponse> entities;
@@ -55,9 +54,6 @@ public class DungeonManiaController {
     // private Collection<Entity> entitiesList;
     private Player player;  
     int timer = 0;
-    int spider_spawn_rate;
-    int spider_attack;
-    int spider_health;
 
     public String getSkin() {
         return "default";
@@ -94,12 +90,6 @@ public class DungeonManiaController {
             dungeonMap.loads(dungeonName, dungeonConfig).interactAll().battleAll(battles);
             goals = new GoalController(dungeonName, dungeonConfig);
             player = dungeonMap.getPlayer();
-            spider_spawn_rate = dungeonConfig.spider_spawn_rate;
-            spider_attack = dungeonConfig.spider_attack;
-            spider_health = dungeonConfig.spider_health;
-            // goals.hasAchieved(dungeonMap, player);
-            // setGoalsString(dungeonName);
-            // System.out.println(getDungeonResponse().getEntities().get(0).getType());
             return getDungeonResponse();
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -116,7 +106,7 @@ public class DungeonManiaController {
     }
 
     public void checkTimer(int t) {
-        if (t == spider_spawn_rate) {
+        if (t == dungeonConfig.spider_spawn_rate) {
             createSpider();
             timer = 0;
         }
@@ -130,7 +120,7 @@ public class DungeonManiaController {
     }
 
     public void createSpider() {
-        dungeonMap.addEntity(new Spider("spider", randomLocation(), spider_attack, spider_health));
+        dungeonMap.addEntity(new Spider("spider", randomLocation(), dungeonConfig.spider_attack, dungeonConfig.spider_health));
     }
     /**
      * /game/dungeonResponseModel
@@ -191,26 +181,7 @@ public class DungeonManiaController {
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
-        // for (Entity entity : dungeonMap.getAllEntities()) {
-        //     if (entity.getType().equals("spider")) {
-        //         Spider spider = (Spider) entity;
-        //         spider.movement(dungeonMap);
-        //     }
-        //     if (entity.getType().equals("zombie_toast")) {
-        //         ZombieToast zombie = (ZombieToast) entity;
-        //         zombie.movement(dungeonMap);
-        //         System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
-        //     }
-        //     if (entity.getType().equals("zombie_toast_spawner")) {
-        //         ZombieToastSpawner zts = (ZombieToastSpawner) entity;
-        //         zts.ZombieToastSpwanCheck();
-        //         System.out.println("number" + dungeonMap.getEntities("zombie_toast").size());
-        //     }
-        //     if (entity.getType().equals("mercenary")) {
-        //         Mercenary mercenary = (Mercenary) entity;
-        //         mercenary.movement(dungeonMap);
-        //     } 
-        // }
+        
         // Battle
         dungeonMap.battleAll(battles);
         // goals.hasAchieved(dungeonMap, player);
