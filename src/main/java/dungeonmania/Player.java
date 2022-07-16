@@ -58,6 +58,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         inventory = new Inventory();
         this.map = map;
         stay = false;
+        observers = new ArrayList<>();
         effects = new ArrayDeque<>();
     }
 
@@ -109,6 +110,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
         if (hasEffect() && getCurrentEffect().checkDurability()) {
             effects.poll();
+            notifyObserver();
         } else if (hasEffect()) {
             getCurrentEffect().setDurability();
 
@@ -156,13 +158,20 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         Location next = curr.getLocation(p);
         System.out.println(String.format("interact at %s", next.toString()));
         // TODO: Dealwith Concurrent Expection Error
+        List<Interactability> buffer = new ArrayList<>();
         for (Iterator<Entity> iterator = map.getEntities(next).iterator(); iterator.hasNext();) {
             Entity entity = iterator.next();
             if (entity instanceof Interactability && entity.getLocation().equals(next)) {
                 Interactability iteratableEntity = (Interactability) entity;
-                if (iteratableEntity.interact(this, map)) {
-                    interactAll(this.getLocation(), map, p);
-                }
+                buffer.add(iteratableEntity);
+                // if (iteratableEntity.interact(this, map)) {
+                //     interactAll(this.getLocation(), map, p);
+                // }
+            }
+        }
+        for (Interactability element: buffer) {
+            if (element.interact(this, map)) {
+                interactAll(this.getLocation(), map, p);
             }
         }
     }
@@ -178,7 +187,9 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         Location next = getLocation().getLocation(p);
         System.out.println(String.format("Player at %s", curr.toString()));
         this.next = p;
+        // map.interactAll();
         interactAll(curr, map, p);
+        // map.interactAll();
         if (getLocation().equals(curr) && !stay) {
             if (DungeonMap.isaccessible(map, next, this)) {
                 previousLocation.setLocation(getLocation());
@@ -253,6 +264,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         if (entity instanceof PotionEntity) {
             addeffect((PotionEntity) entity);
             // System.out.println(String.format("%s has been use as potion", entity.getType()));
+            notifyObserver();
             inventory.removeFromInventoryList(entity);
         } else if (entity instanceof Bomb) {
             Bomb bomb = (Bomb) entity;

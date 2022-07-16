@@ -105,7 +105,7 @@ public class Goaltest {
         assertFalse(getGoals(res).contains(":enemies"));
     }
 
-    // @Test
+    @Test
     public void testGoalOR() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
@@ -120,7 +120,7 @@ public class Goaltest {
         assertEquals("", getGoals(res));
     }
 
-    // @Test
+    @Test
     public void testGoalDestoryZombieSpwaner() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();

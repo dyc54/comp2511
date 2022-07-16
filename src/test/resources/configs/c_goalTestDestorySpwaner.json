@@ -5,7 +5,7 @@
     "bow_durability": 1,
     "bribe_amount": 1,
     "bribe_radius": 1,
-    "enemy_goal": 1,
+    "enemy_goal": 0,
     "invincibility_potion_duration": 1,
     "invisibility_potion_duration": 1,
     "mercenary_attack": 1,

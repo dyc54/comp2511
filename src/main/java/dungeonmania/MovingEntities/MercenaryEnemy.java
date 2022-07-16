@@ -97,6 +97,7 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
                 
                 player.getAttackStrategy().bonusDamage(ally);
                 player.getDefenceStrayegy().bonusDefence(ally);
+                player.attach(ally);
                 // player.getInventory().r
                 return true;
             }

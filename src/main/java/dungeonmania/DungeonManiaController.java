@@ -97,7 +97,7 @@ public class DungeonManiaController {
             spider_spawn_rate = dungeonConfig.spider_spawn_rate;
             spider_attack = dungeonConfig.spider_attack;
             spider_health = dungeonConfig.spider_health;
-            goals.hasAchieved(dungeonMap, player);
+            // goals.hasAchieved(dungeonMap, player);
             // setGoalsString(dungeonName);
             // System.out.println(getDungeonResponse().getEntities().get(0).getType());
             return getDungeonResponse();
@@ -148,7 +148,7 @@ public class DungeonManiaController {
         checkTimer(timer);
         player.useItem(itemUsedId);
         dungeonMap.battleAll(battles);
-        goals.hasAchieved(dungeonMap, player);
+        // goals.hasAchieved(dungeonMap, player);
         return getDungeonResponse();
     }
 
@@ -184,7 +184,7 @@ public class DungeonManiaController {
         // }
         // Battle
         dungeonMap.battleAll(battles);
-        goals.hasAchieved(dungeonMap, player);
+        // goals.hasAchieved(dungeonMap, player);
         dungeonMap.toString();
         return getDungeonResponse();
 
@@ -230,6 +230,7 @@ public class DungeonManiaController {
         // setEntitiesResponse();
         setBattlesResponse();
         // setItemResponse();
+        goals.hasAchieved(dungeonMap, dungeonMap.getPlayer());
         return new DungeonResponse(dungeonId, dungeonName, getEntitiesResponse(), getItemResponse(), battles,
                     getBuildables(player.getInventory()), goals.toString());
     }
