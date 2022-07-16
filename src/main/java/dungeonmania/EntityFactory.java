@@ -1,27 +1,19 @@
 package dungeonmania;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-
 import org.json.JSONObject;
 
 import dungeonmania.CollectableEntities.*;
 import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
 import dungeonmania.CollectableEntities.DurabilityEntities.InvisibilityPotion;
 import dungeonmania.CollectableEntities.DurabilityEntities.Sword;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Bow;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shield;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
-import dungeonmania.MovingEntities.Mercenary;
-import dungeonmania.MovingEntities.MercenaryAlly;
 import dungeonmania.MovingEntities.MercenaryEnemy;
 import dungeonmania.MovingEntities.Spider;
 import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.StaticEntities.Wall;
-import dungeonmania.helpers.Config;
 import dungeonmania.helpers.Location;
 
 public class EntityFactory {
@@ -30,7 +22,6 @@ public class EntityFactory {
         String type = entity.getString("type");
         int x = entity.getInt("x");
         int y = entity.getInt("y");
-        // TODO: Add create entities.
         System.out.println(String.format("new entity %s at <%d,%d>", type, x, y));
         int key = 0;
         switch (type) {
@@ -80,9 +71,6 @@ public class EntityFactory {
                 MercenaryEnemy mercenary = new MercenaryEnemy(type, Location.AsLocation(x, y), config.mercenary_attack, config.mercenary_health, config.bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence);
                 map.getPlayer().attach(mercenary);
                 return mercenary;
-            // case "ally":
-            // return new MercenaryAlly(type, Location.AsLocation(x, y), config.ally_attack,
-            // config.ally_defence, 0);
         }
         return null;
     }

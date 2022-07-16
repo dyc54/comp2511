@@ -216,7 +216,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
 
     @Override
     public int compare(Location o1, Location o2) {
-        // TODO Auto-generated method stub
         Location a = (Location) o1;
         Location b = (Location) o2;
         if (a.x != b.x) {
@@ -236,7 +235,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     
     @Override
     public int compareTo(Location o) {
-        // TODO Auto-generated method stub
         return compare(this, o);
     }
 

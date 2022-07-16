@@ -10,9 +10,6 @@ public class Shield extends DurabilityEntity implements BonusDefenceAdd {
         super(type, shield_durability);
         this.shield_defence = shield_defence;
     }
-    // public void setShield_defence(int shield_defence) {
-    //     this.shield_defence = shield_defence;
-    // }
     public double getShield_defence() {
         return shield_defence;
     }

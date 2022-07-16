@@ -3,7 +3,6 @@ package dungeonmania;
 import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Bow;
 import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
 import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shield;
-import dungeonmania.Inventories.Inventory;
 import dungeonmania.helpers.Config;
 
 public class BuildableEntityFactory extends EntityFactory{

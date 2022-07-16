@@ -1,10 +1,5 @@
 package dungeonmania.helpers;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-import javax.swing.text.AbstractDocument.Content;
-
 public class LogicCondition<T> {
     private final String type;
     private final static String superLogic = "SUPER";

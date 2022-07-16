@@ -2,21 +2,15 @@ package dungeonmania;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import dungeonmania.helpers.Location;
 
 public abstract class Entity{
-    // TODO: 
-    // Subject subject;
     private Location location;
     private String EntityId;
     private final String type;
     private String newID(String type){
-        // UUID id = UUID.randomUUID()
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-        // return type+sdf.format(System.currentTimeMillis());
         return type+UUID.randomUUID();
     }
 
@@ -72,5 +66,4 @@ public abstract class Entity{
         }
         return false;
     }
-    // public static abstract Entity NewEntity(int x, int y, String type);
 }

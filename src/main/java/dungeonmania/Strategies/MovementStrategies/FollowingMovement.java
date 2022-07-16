@@ -1,6 +1,5 @@
 package dungeonmania.Strategies.MovementStrategies;
 
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class FollowingMovement implements MovementStrategy{
@@ -16,7 +15,6 @@ public class FollowingMovement implements MovementStrategy{
 
     @Override
     public MovementStrategy MoveOptions(String string) {
-        // TODO Auto-generated method stub
         return this;
     }
 

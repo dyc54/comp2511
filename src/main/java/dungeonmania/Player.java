@@ -32,8 +32,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private double health;
     private Inventory inventory;
     private Position next;
-    // private int x;
-    // private int y;
     private boolean stay;
     private DungeonMap map;
     private final Location previousLocation;
@@ -44,8 +42,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         this.attack = new WeaponableAttackStrategy(attack);
         this.defence = new ArmorableStrategy(0);
         this.health = health;
-        // this.x = x;
-        // this.y = y;
         previousLocation = Location.AsLocation(x, y);
         inventory = new Inventory();
         this.map = map;
@@ -85,13 +81,10 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         });
     }
     public void cleardisusableItem() {
-        // System.out.println("******");
-        // inventory.print();
         List<Entity> entities = new LinkedList<>();
         inventory.getAllInventory().forEach( entity ->{
             System.out.println(entity.getType());
             if (entity instanceof DurabilityEntity && ((DurabilityEntity) entity).checkDurability()) {
-                // System.out.println("");
                 entities.add(entity);
             }
         });
@@ -105,12 +98,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
 
     }
-    // public void addInventoryList(Entity item) {
-    // inventory.addToInventoryList(item);
-    // }
-    // public void useItem(String id) {
-
-    // }
     public void removeInventoryList(Entity item) {
         inventory.removeFromInventoryList(item);
     }
@@ -131,30 +118,21 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     public List<ItemResponse> getItemResponse() {
         List<ItemResponse> inventory = new ArrayList<>();
-        /*
-         * for(Entity item : inventoryList){
-         * inventory.add(new ItemResponse(item.getEntityId(), item.getType()));
-         * }
-         */
         getInventoryList().stream()
                 .forEach(item -> inventory.add(new ItemResponse(item.getEntityId(), item.getType())));
         return inventory;
     }
 
     private void interactAll(Location curr, DungeonMap map, Position p) {
-        // Location next = getLocation().getLocation(p);
         Location next = curr.getLocation(p);
         System.out.println(String.format("interact at %s", next.toString()));
-        // TODO: Dealwith Concurrent Expection Error
+        // Deal with Concurrent Expection Error
         List<Interactability> buffer = new ArrayList<>();
         for (Iterator<Entity> iterator = map.getEntities(next).iterator(); iterator.hasNext();) {
             Entity entity = iterator.next();
             if (entity instanceof Interactability && entity.getLocation().equals(next)) {
                 Interactability iteratableEntity = (Interactability) entity;
                 buffer.add(iteratableEntity);
-                // if (iteratableEntity.interact(this, map)) {
-                //     interactAll(this.getLocation(), map, p);
-                // }
             }
         }
         for (Interactability element: buffer) {
@@ -166,30 +144,21 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     @Override
     public void movement(Position p) {
-        // If there is a wall, don't move
-        // List<Entity> blocked = DungeonMap.blockedEntities(map,
-        // getLocation().getLocation(p), this);
-
-        // Location temp = previousLocation.clone();
         Location curr = getLocation().clone();
         Location next = getLocation().getLocation(p);
         System.out.println(String.format("Player at %s", curr.toString()));
         this.next = p;
-        // map.interactAll();
         interactAll(curr, map, p);
-        // map.interactAll();
         if (getLocation().equals(curr) && !stay) {
             if (DungeonMap.isaccessible(map, next, this)) {
                 previousLocation.setLocation(getLocation());
                 setLocation(next);
-
             }
         }
         System.out.println(String.format("Player %s -> %s", previousLocation.toString(), getLocation().toString()));
     }
     public boolean pickup(Entity entity) {
         return inventory.addToInventoryList(entity, this);
-
     }
 
     public void build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
@@ -210,27 +179,19 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
         if (entity instanceof PotionEntity) {
             addeffect((PotionEntity) entity);
-            // System.out.println(String.format("%s has been use as potion", entity.getType()));
             notifyObserver();
             inventory.removeFromInventoryList(entity);
         } else if (entity instanceof Bomb) {
             Bomb bomb = (Bomb) entity;
-            // if (bom)
             bomb.put(getLocation(), map);
-            // map.addEntity(bomb);
             inventory.removeFromInventoryList(entity);
         } else {
             throw new IllegalArgumentException(
                     "itemUsed is not a bomb, invincibility_potion, or an invisibility_potion");
         }
 
-        // inventory.useItem(itemUsedId);
     }
 
-    // //查询player状态，无敌还是隐身，还是都有
-    // public List<String> checkPlayerStatus(){
-    // return inventory.checkPlayerStatus();
-    // }
     public PotionEntity getCurrentEffect() {
         return effects.peek();
     }
@@ -257,25 +218,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation.setLocation(previousLocation);
     }
-    // public void update() {
-    //     PotionEntity entity = getCurrentEffect();
-    //     entity.setDurability();
-    //     if (!entity.checkDurability()) {
-    //         effects.poll();
-    //     }
-    //     // TODO: refactor
-    //     for(Iterator<Entity> iterator = inventory.getAllInventory().iterator(); iterator.hasNext();) {
-    //         Entity temp = iterator.next();
-    //         if (temp instanceof DurabilityEntity && ! (temp instanceof PotionEntity)) {
-    //             DurabilityEntity durabilityEntity = (DurabilityEntity) temp;
-    //             durabilityEntity.setDurability();
-    //             if (!entity.checkDurability()) {
-    //                 inventory.removeFromInventoryList(temp);
-    //             }
-    //         }
-    //     }
-
-    // }
     public List<Entity> getBattleUsage() {
         List<Entity> list = new ArrayList<>();
         if (hasEffect()) {
@@ -295,7 +237,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     @Override
     public void detach(PotionEffecObserver observer) {
-        // ! 
         observers.remove(observer);
 
         
