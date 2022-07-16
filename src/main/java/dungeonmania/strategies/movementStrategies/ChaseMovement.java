@@ -21,7 +21,7 @@ public class ChaseMovement implements MovementStrategy{
     public Location nextLocation(Location location) {
         Location next = getLocation();
         TreeMap<Integer, Location> ordered = new TreeMap<>();
-
+        System.out.println("AAA:"+this.location.toString());
         ArrayList<Location> choices = new ArrayList<>(4);
         for (char ch : possible.toCharArray()) {
             switch (ch) {
@@ -33,7 +33,6 @@ public class ChaseMovement implements MovementStrategy{
                     break;
                 case 'l':
                     choices.add(this.location.getLeft());
-                    System.out.println(this.location.getLeft().toString());
                     break;
                 case 'r':
                     choices.add(this.location.getRight());
@@ -42,7 +41,9 @@ public class ChaseMovement implements MovementStrategy{
                     break;
             }
         }
-        System.out.println(location);
+        // System.out.println(location);
+        System.out.println("AAAAAAAA");
+        choices.stream().forEach(choice -> System.out.println(choice));
         choices.stream().forEach(ele -> {
             int distance = location.distance(ele);
             ordered.put(Integer.valueOf(distance), ele);

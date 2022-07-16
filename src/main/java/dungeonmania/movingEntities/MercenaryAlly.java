@@ -8,6 +8,7 @@ import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 import dungeonmania.strategies.movementStrategies.FollowingMovement;
+import dungeonmania.strategies.movementStrategies.MovementStrategy;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd{
@@ -17,7 +18,9 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
     public MercenaryAlly(MercenaryEnemy mercenary) {
         super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
-    }
+            System.out.println("NEW NEW NEW");
+        
+        }
     
     @Override
     public boolean movement(DungeonMap dungeonMap) {
@@ -28,6 +31,9 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 
         Location next = getMove().MoveOptions(options).nextLocation(p.getLocation());
+        if (getMove() instanceof RandomMovement) {
+            next = getMove().MoveOptions(options).nextLocation(getLocation());
+        }
         if (p.getLocation().equals(next)) {
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 

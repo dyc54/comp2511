@@ -196,6 +196,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         for(PotionEntity effect : queue){
             if(effect.checkDurability()){
                 effects.remove(effect);
+                notifyObserver();
+                System.out.println("SSSSSSSSSSS");
             }else{
                 effect.setDurability();
             }

@@ -16,9 +16,6 @@ public class Door extends StaticEntity {
         opened = false;
     }
 
-    public int getKey() {
-        return key;
-    }
 
     @Override
     public boolean isAccessible(Entity entity) {
@@ -51,8 +48,7 @@ public class Door extends StaticEntity {
                 return false;
             });
             // If the door can be opened, move the player
-            if (canOpen && getLocation().equals(entity.getLocation())
-                    && DungeonMap.isaccessible(map, getLocation(), entity)) {
+            if (canOpen && DungeonMap.isaccessible(map, getLocation(), entity)) {
                 player.setLocation(getLocation());
             }
         }

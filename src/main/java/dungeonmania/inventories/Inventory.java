@@ -129,9 +129,7 @@ public class Inventory {
     public boolean hasWeapons() {
         return getAllInventory().stream().anyMatch(entity -> entity instanceof BonusDamageStrategy);
     }
-    public boolean hasItem(String type) {
-        return inventory.containsKey(type);
-    }
+    
     public boolean hasItem(String type, int amount) {
         return inventory.containsKey(type) && inventory.get(type).size() >= amount;
     }
