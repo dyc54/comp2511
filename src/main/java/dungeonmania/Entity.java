@@ -12,7 +12,7 @@ public abstract class Entity{
     // Subject subject;
     private Location location;
     private String EntityId;
-    private String type;
+    private final String type;
     private String newID(String type){
         // UUID id = UUID.randomUUID()
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
@@ -41,15 +41,8 @@ public abstract class Entity{
     public String getEntityId() {
         return EntityId;
     }
-    
-    public void setLocation(int x, int y) {
-        setLocation(Location.AsLocation(x, y));
-    }
 
     public void setLocation(Location location) {
-        System.out.println(
-            "thisLocation:"+getEntityId()+"//"+getLocation()
-        );
         System.out.println(location);
         this.location.setLocation(location);
     }
@@ -58,9 +51,6 @@ public abstract class Entity{
         this.EntityId = EntityId;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public EntityResponse getEntityResponse() {
         return new EntityResponse(getEntityId(), getType(), new Position(getLocation().getX(), getLocation().getY()), false);
@@ -79,8 +69,6 @@ public abstract class Entity{
     public boolean equals(Object obj) {
         if (obj instanceof Entity) {
             return ((Entity) obj).getEntityId().equals(EntityId);
-        } else if (obj instanceof String) {
-            return ((String) obj).equals(EntityId);
         }
         return false;
     }

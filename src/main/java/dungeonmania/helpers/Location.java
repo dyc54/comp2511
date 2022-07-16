@@ -38,14 +38,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public int getY() {
         return y;
     }
-    /**
-     * Get Location 
-     * @return (x, y)
-     */
-    public int[] getLocation() {
-        int[] response = {x, y};
-        return response;
-    }
+
     /**
      * Return four nearest positions related by current position
      *  i.e.
@@ -60,23 +53,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         functions.add(location -> Location.getDown(location));
         functions.add(location -> Location.getLeft(location));
         functions.add(location -> Location.getRight(location));
-        return functions;
-    }
-    /**
-     * Return eight nearest positions related by current position
-     * i.e. 
-     * TopLeft      Top         TopRight
-     * Left        (Current)    Right
-     * BottomLeft   Bottom      BottomRight
-     * @return
-     */
-    public List<Function<Location, Location>> getEightNearPosition() {
-        List<Function<Location, Location>> functions = new ArrayList<>();
-        functions.addAll(getFourNearPosition());
-        functions.add(location -> Location.getTopLeft(location));
-        functions.add(location -> Location.getTopRight(location));
-        functions.add(location -> Location.getBottomLeft(location));
-        functions.add(location -> Location.getBottomRight(location));
         return functions;
     }
     /**
@@ -97,27 +73,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         this.y = y;
         return this;
     }
-    /**
-     * Set Location
-     * @param x
-     * @param y
-     * @return
-     */
-    public Location setLocation(int x, int y) {
-        this.x = x;
-        this.y = y;
-        return this;
-    }
-    /**
-     * Set Location 
-     * @param location assume (x, y)
-     * @return
-     */
-    public Location setLocation(int[] location) {
-        this.x = location[Location.X];
-        this.y = location[Location.Y];
-        return this;
-    }
+
     /**
      * Set Location
      * @param location
@@ -129,17 +85,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         return this;
     }
     /**
-     * Making a movement
-     * @param x 
-     * @param y
-     * @return
-     */
-    public Location move(int x, int y) {
-        this.x = this.x + x;
-        this.y = this.y + y;
-        return this;
-    }
-    /**
      * Return the distance from given location
      * @param location
      * @return
@@ -147,15 +92,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public int distance(Location location) {
         return Math.max(Math.abs(location.x - this.x), Math.abs(location.y - this.y));
         // return Math.sqrt(Math.pow(location.x - this.x, 2) + Math.pow(location.y - this.y, 2));
-    }
-    /**
-     * Return the distance from given location
-     * @param x
-     * @param y
-     * @return
-     */
-    public double distance(int x, int y) {
-        return distance(Location.AsLocation(x, y));
     }
 
     /**
@@ -190,38 +126,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public Location getRight() {
         return this.add(1, 0);
     }
-    /**
-     * Get the location of the top left of current location
-     * @param location
-     * @return
-     */
-    public Location getTopLeft() {
-        return this.add(-1, -1);
-    }
-    /**
-     * Get the location of the top right of current location
-     * @param location
-     * @return
-     */
-    public Location getTopRight() {
-        return this.add(1, -1);
-    }
-    /**
-     * Get the location of the botto, left of current location
-     * @param location
-     * @return
-     */
-    public Location getBottomLeft() {
-        return this.add(-1, 1);
-    }
-    /**
-     * Get the location of the bottom right of current location
-     * @param location
-     * @return
-     */
-    public Location getBottomRight() {
-        return this.add(1, 1);
-    }
+
     private int round(double num) {
         if (num >= -0.001 && num <= 0.001) {
             return 0;
@@ -243,29 +148,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         return new Location(location.getX() - x, location.getY() - y);
     }
 
-    /**
-     * change to next location which is opposite to the current
-     * @param locaiton
-     * @return
-     */
-    public Location changeLocation(Location locaiton) {
-        Location diff = diff(locaiton);
-        Location nextLocation = new Location();
-        if (diff.getX() == 0 && diff.getY() > 0) {
-            if (diff.getY() > 0) {
-                nextLocation = getUp();
-            } else {
-                nextLocation = getDown();
-            }
-        } else {
-            if (diff.getX() > 0) {
-                nextLocation = getLeft();
-            } else {
-                nextLocation = getRight();
-            }
-        }
-        return nextLocation;
-    }
 
     public Location clone() {
         return new Location(x, y);
@@ -306,38 +188,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         return location.getRight();
     }
     /**
-     * Get the location of the top left of given location
-     * @param location
-     * @return
-     */
-    public static Location getTopLeft(Location location) {
-        return location.getTopLeft();
-    }
-    /**
-     * Get the location of the top right of given location
-     * @param location
-     * @return
-     */
-    public static Location getTopRight(Location location) {
-        return location.getTopRight();
-    }
-    /**
-     * Get the location of the botto, left of given location
-     * @param location
-     * @return
-     */
-    public static Location getBottomLeft(Location location) {
-        return location.getBottomLeft();
-    }
-    /**
-     * Get the location of the bottom right of given location
-     * @param location
-     * @return
-     */
-    public static Location getBottomRight(Location location) {
-        return location.getBottomRight();
-    }
-    /**
      * Convert a location to an array.
      * @param location 
      * @return assume (x, y)
@@ -354,19 +204,6 @@ public class Location implements Comparator<Location>, Comparable<Location>{
      */
     public static Location AsLocation(int x, int y) {
         return new Location(x, y);
-    }
-    public static Location AsLocation(String string) {
-        String temp = string.subSequence(1, string.length() - 1).toString();
-        String[] location = temp.replaceAll(" ", "").split(",");
-        return new Location(Integer.parseInt(location[0]), Integer.parseInt(location[1]));
-    }
-    /**
-     * Return a location
-     * @param location
-     * @return
-     */
-    public static Location AsLocation(int[] location) {
-        return new Location(location[Location.X], location[Location.Y]);
     }
     public static Position getMoveDir(Location from, Location to) {
         Location temp = from.diff(to);
@@ -402,8 +239,5 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         // TODO Auto-generated method stub
         return compare(this, o);
     }
-    @Override
-    public int hashCode() {
-        return Integer.valueOf(x).hashCode() + Integer.valueOf(y).hashCode();
-    }
+
 }

@@ -20,35 +20,6 @@ public class ChaseMovement implements MovementStrategy{
     }
 
     @Override
-    public Location moveWithWall(Location location, DungeonMap dungeonMap) {
-        Location next = new Location();
-        Location diff = getLocation().diff(location);
-        if (diff.getX() == 0) {
-            if (dungeonMap.checkMovement(getLocation().getRight()) && dungeonMap.checkMovement(getLocation().getRight())) {
-                next = getLocation().changeLocation(location);
-            } else if (!(dungeonMap.checkMovement(getLocation().getRight()) || dungeonMap.checkMovement(getLocation().getRight()))) {
-                next = getLocation().getRight().distance(dungeonMap.getPlayer().getLocation()) > getLocation().getLeft().distance(dungeonMap.getPlayer().getLocation())? getLocation().getLeft(): getLocation().getRight();
-            } else if (!dungeonMap.checkMovement(getLocation().getRight())) {
-                next = getLocation().getRight();
-            } else {
-                next = getLocation().getLeft();
-            }
-        } else {
-            if (dungeonMap.checkMovement(getLocation().getUp()) && dungeonMap.checkMovement(getLocation().getDown())) {
-                next = getLocation().changeLocation(location);
-            }else if (!(dungeonMap.checkMovement(getLocation().getUp()) || dungeonMap.checkMovement(getLocation().getDown()))) {
-                System.out.println("-------------------");
-                next = getLocation().getUp().distance(dungeonMap.getPlayer().getLocation()) > getLocation().getDown().distance(dungeonMap.getPlayer().getLocation())? getLocation().getDown(): getLocation().getUp();
-            } else if (!dungeonMap.checkMovement(getLocation().getDown())) {
-                next = getLocation().getDown();
-            } else {
-                next = getLocation().getUp();
-            }
-        }
-        return next;
-    }
-
-    @Override
     public Location nextLocation(Location location) {
         // double distance = getLocation().distance(location);
         Location next = getLocation();

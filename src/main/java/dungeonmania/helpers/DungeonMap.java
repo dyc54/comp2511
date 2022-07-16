@@ -287,42 +287,8 @@ public class DungeonMap {
         return getFourNearEntities(Location.AsLocation(x, y));
     }
 
-    /**
-     * Return a Collection of nearby entities of given location.
-     * i.e.
-     * TopLeft Top TopRight
-     * Left (Current) Right
-     * BottomLeft Bottom BottomRight
-     * 
-     * @param location
-     * @apiNote Entities at current location will not be return.
-     * @return
-     */
-    public Collection<Entity> getEightNearEntities(Location location) {
-        Collection<Entity> entities = new LinkedList<>();
-        location.getEightNearPosition().stream().forEach(position -> {
-            if (map.containsKey(position.apply(location))) {
-                entities.addAll(map.get(position.apply(location)));
-            }
-        });
-        return entities;
-    }
 
-    /**
-     * Return a Collection of nearby entities of given location.
-     * i.e.
-     * TopLeft Top TopRight
-     * Left (Current) Right
-     * BottomLeft Bottom BottomRight
-     * 
-     * @param x
-     * @param y
-     * @apiNote Entities at current location will not be return.
-     * @return
-     */
-    public Collection<Entity> getEightNearEntities(int x, int y) {
-        return getEightNearEntities(Location.AsLocation(x, y));
-    }
+
 
     /**
      * Return a Collection of near entities
@@ -342,16 +308,6 @@ public class DungeonMap {
         return entities;
     }
 
-    /**
-     * map a function for all entities
-     * 
-     * @param <X>      Returnd type for function
-     * @param function
-     */
-    public <X> void mapToAllEntities(Function<Entity, X> function) {
-        Collection<Entity> entities = getAllEntities();
-        entities.stream().map(function);
-    }
 
     /**
      * Move all entities with their movement strategy
@@ -382,30 +338,6 @@ public class DungeonMap {
         EnemiesDestroiedCounter = temp;
         // System.out.println("---" + entity.getType());
         // System.out.println("map" + IdCollection.get(entity.getEntityId()).toString());
-    }
-
-    /**
-     * Move entity with given movement strategy
-     * 
-     * @param entity
-     * @param movement
-     * @param location
-     */
-    public void moveEntity(Entity entity, MovementStrategy movement) {
-        // TODO:
-
-    }
-
-    /**
-     * Move entity with its movement strategy
-     * 
-     * @param entity
-     * @param movement
-     * @param location
-     */
-    public void moveEntity(Entity entity) {
-        // TODO:
-
     }
 
     public int getDestoriedCounter() {
@@ -516,7 +448,5 @@ public class DungeonMap {
             .collect(Collectors.toList());
     }
     // public static void interact
-    public boolean checkMovement(Location location) {
-        return getEntities(location).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
-    }
+
 }

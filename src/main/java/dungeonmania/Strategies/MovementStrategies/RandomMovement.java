@@ -59,10 +59,4 @@ public class RandomMovement implements MovementStrategy{
         return this;
     }
 
-    @Override
-    public Location moveWithWall(Location location, DungeonMap dungeonMap) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
 }

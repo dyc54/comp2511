@@ -151,31 +151,33 @@ public class DungeonManiaController {
         timerAdd();
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();
-        for (Entity entity : dungeonMap.getAllEntities()) {
-            // entitiesList = dungeonMap.getAllEntities();
-            // for (Entity entity : entitiesList) {
-            if (entity.getType().equals("spider")) {
-                Spider spider = (Spider) entity;
-                spider.movement(dungeonMap);
-            }
-            if (entity.getType().equals("zombie_toast")) {
-                ZombieToast zombie = (ZombieToast) entity;
-                zombie.movement(dungeonMap);
-                System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
-            }
-            if (entity.getType().equals("zombie_toast_spawner")) {
-                ZombieToastSpawner zts = (ZombieToastSpawner) entity;
-                zts.ZombieToastSpwanCheck();
-                System.out.println("number" + dungeonMap.getEntities("zombie_toast").size());
-            }
-            if (entity.getType().equals("mercenary")) {
-                Mercenary mercenary = (Mercenary) entity;
-                mercenary.movement(dungeonMap);
-            } 
-        }
+        dungeonMap.moveAllEntities();
+
+        // for (Entity entity : dungeonMap.getAllEntities()) {
+        //     // entitiesList = dungeonMap.getAllEntities();
+        //     // for (Entity entity : entitiesList) {
+        //     if (entity.getType().equals("spider")) {
+        //         Spider spider = (Spider) entity;
+        //         spider.movement(dungeonMap);
+        //     }
+        //     if (entity.getType().equals("zombie_toast")) {
+        //         ZombieToast zombie = (ZombieToast) entity;
+        //         zombie.movement(dungeonMap);
+        //         System.out.println(String.format("zombie_toast moved to %s", zombie.getLocation().toString()));
+        //     }
+        //     if (entity.getType().equals("zombie_toast_spawner")) {
+        //         ZombieToastSpawner zts = (ZombieToastSpawner) entity;
+        //         zts.ZombieToastSpwanCheck();
+        //         System.out.println("number" + dungeonMap.getEntities("zombie_toast").size());
+        //     }
+        //     if (entity.getType().equals("mercenary")) {
+        //         Mercenary mercenary = (Mercenary) entity;
+        //         mercenary.movement(dungeonMap);
+        //     } 
+        // }
         // Battle
-        dungeonMap.toString();
         dungeonMap.battleAll(battles);
+        dungeonMap.toString();
         // goals.hasAchieved(dungeonMap, player);
         return getDungeonResponse();
     }
@@ -226,7 +228,7 @@ public class DungeonManiaController {
         System.out.println(" ------------------- BUILD ------------------- ");
         System.out.println("Current Inventory: ");
         player.getInventory().print();
-        player.build(buildable, dungeonConfig, 0);
+        player.build(buildable, dungeonConfig);
         // buildables.add(buildable);
         return getDungeonResponse();
     }

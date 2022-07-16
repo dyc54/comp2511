@@ -2,8 +2,6 @@ package dungeonmania;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,18 +9,12 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import dungeonmania.CollectableEntities.Bomb;
-import dungeonmania.CollectableEntities.CollectableEntity;
-import dungeonmania.CollectableEntities.Effect;
 import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
 import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
 import dungeonmania.Inventories.Inventory;
-import dungeonmania.StaticEntities.Boulder;
-import dungeonmania.StaticEntities.Exit;
-import dungeonmania.StaticEntities.Portal;
 import dungeonmania.Strategies.PlayerMovementStrategy;
 import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.BonusDamageStrategy;
 import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;
 import dungeonmania.Strategies.DefenceStrategies.ArmorableStrategy;
 import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
@@ -76,10 +68,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     public double getHealth() {
         return health;
-    }
-
-    public void subHealth(double health) {
-        this.health -= health;
     }
 
     public List<Entity> getInventoryList() {
@@ -204,47 +192,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     }
 
-    //player 查询背包物品进行建造
-    public boolean build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
-        switch (buildable) {
-            case "bow":
-                boolean wood_b = inventory.hasItem("wood", 1);
-                boolean arrow = inventory.hasItem("arrow", 3);
-                System.out.println(String.format("Building bow: wood %s %d/%d arrow %s %d/%d"
-                                                        , wood_b, inventory.getItems("wood").size(), 1, arrow, inventory.getItems("arrow").size(), 3));
-                if (wood_b && arrow) {
-                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
-                } else {
-                    throw new InvalidActionException("player does not have sufficient items to craft the buildable");
-                }
-                inventory.removeFromInventoryList("wood", 1);
-                inventory.removeFromInventoryList("arrow", 3);
-                break;
-            case "shield":
-                boolean wood_s = inventory.hasItem("wood", 2);
-                boolean treasure  = inventory.hasItem("treasure", 1);
-                boolean key  = inventory.hasItem("key", 1);
-                System.out.println(String.format("Building shield: wood %s %d/%d (arrow %s %d/%d or key %s %d/%d)"
-                                                        , wood_s, inventory.getItems("wood").size(), 2, treasure, inventory.getItems("treasure").size(), 1, key, inventory.getItems("key").size(), 1));
-
-                if (wood_s && (treasure || key)) {
-                    inventory.addToInventoryList(BuildableEntityFactory.newEntity(buildable, config, inventory), this);
-                } else {
-                    throw new InvalidActionException("player does not have sufficient items to craft the buildable");
-                }
-                inventory.removeFromInventoryList("wood", 2);
-                if (treasure) {
-                    inventory.removeFromInventoryList("treasure", 1);
-                } else {
-                    inventory.removeFromInventoryList("key", 1);
-                }
-                break;
-            default:
-                throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", buildable));
-        }
-        return true;
-    }
-    public void build(String buildable, Config config, int x) throws InvalidActionException, IllegalArgumentException {
+    public void build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
         if (recipe.isSatisfied(inventory)) {
             String type = recipe.consumeMaterial(inventory).getRecipeName();
@@ -255,7 +203,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     }
 
-    // player 使用物品F
     public void useItem(String itemUsedId) throws InvalidActionException, IllegalArgumentException {
         Entity entity = inventory.getItem(itemUsedId);
         if (entity == null) {
@@ -343,13 +290,12 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     @Override
     public void attach(PotionEffecObserver observer) {
-        // TODO Auto-generated method stub
         observers.add(observer);
     }
 
     @Override
     public void detach(PotionEffecObserver observer) {
-        // TODO Auto-generated method stub
+        // ! 
         observers.remove(observer);
 
         
@@ -357,7 +303,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     @Override
     public void notifyObserver() {
-        // TODO Auto-generated method stub
         for (PotionEffecObserver observer : observers) {
             observer.update(this);
         }
