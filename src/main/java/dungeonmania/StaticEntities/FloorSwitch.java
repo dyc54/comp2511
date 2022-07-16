@@ -44,10 +44,9 @@ public class FloorSwitch extends StaticEntity {
     public boolean interact(Entity entity, DungeonMap map) {
         if (entity instanceof Boulder) {
             setTrigger(true);
-            // if (bombs.get(0).getType().equals("static_bomb")) {
-            // setType("2");
-            // }
             notifyAllBombs(map);
+        } else {
+            setTrigger(false);
         }
         return false;
     }

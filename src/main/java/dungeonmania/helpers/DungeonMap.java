@@ -54,7 +54,7 @@ public class DungeonMap {
      * @param GivenType
      * @return
      */
-    private static <X, Y> boolean isSameType(String EntityType, String givenType) {
+    private static boolean isSameType(String EntityType, String givenType) {
         if (EntityType.equals(givenType)) {
             return true;
         }
@@ -239,8 +239,9 @@ public class DungeonMap {
             EnemiesDestroiedCounter += 1;
 
         }
+        
         // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
-        // System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
+        System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
         entities.remove(temp);
         idCollection.remove(id);
         // IdCollection.

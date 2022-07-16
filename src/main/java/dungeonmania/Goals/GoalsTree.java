@@ -104,6 +104,9 @@ public class GoalsTree implements LogicContent<GoalComponent> {
         return this;
     }
     public String toStringAtRoot() {
+        if (hasAchieved()) {
+            return "";
+        }
         if (left == null || right == null) {
             return goal.toString();
         } else {
@@ -127,6 +130,9 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     }
     @Override
     public String toString() {
+        if (hasAchieved()) {
+            return "";
+        }
         if (left == null || right == null) {
             return goal.toString();
         } else {

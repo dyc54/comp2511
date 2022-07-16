@@ -216,41 +216,5 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
         assertEquals(new Position(5,1), getEntities(res, "mercenary").get(0).getPosition());
 
     }
-
-
-    @Test
-    @DisplayName("Test the player use invincibility_potion and invincibility_potion battle with mercenary")
-    public void testBattleInvincibilityPotionAndInvisibilityPotion() throws IllegalArgumentException, InvalidActionException {
-        /**
-         * [    ] [    ] [    ][    ][    ][    ][    ]   [    ]
-         * [    ] player                        mercenary [    ]
-         * [    ] [    ] [    ] [    ] [    ] [    ] [    ] [    ] 
-         */
-        
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_potionBattleTest3", "c_Battletest_PlayerStrong");
-        res = dmc.tick(Direction.RIGHT);
-        assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
-        assertEquals(new Position(4,1), getEntities(res, "mercenary").get(0).getPosition());
-
-        res = dmc.tick(Direction.RIGHT);
-        //player takes invisibility_potion, mercenary loses player coordinates
-        String invisibility_potion_1_ID = getInventory(res, "invincibility_potion").get(0).getId();
-        res = dmc.tick(invisibility_potion_1_ID);
-        assertEquals(new Position(2,1), getEntities(res, "player").get(0).getPosition());
-        assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
-
-        //invisibility_potion invalid, mercenary find player coordinates
-        res = dmc.tick(Direction.RIGHT);
-        assertEquals(new Position(3,1), getEntities(res, "player").get(0).getPosition());
-        assertEquals(new Position(0,-1), getEntities(res, "mercenary").get(0).getPosition());
-
-        /* assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
-        assertEquals(1, res.getBattles().size()); */
-        /* BattleResponse battle = res.getBattles().get(0);
-        assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong");
- */
-    }
-
     
 }
