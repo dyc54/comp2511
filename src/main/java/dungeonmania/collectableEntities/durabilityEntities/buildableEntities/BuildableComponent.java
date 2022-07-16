@@ -1,4 +1,4 @@
-package dungeonmania.collectableEntities.durabilityEntities.BuildableEntities;
+package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
 import dungeonmania.inventories.Inventory;
 
