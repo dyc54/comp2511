@@ -1,14 +1,14 @@
 package dungeonmania.movingEntities;
 
 import dungeonmania.Player;
-import dungeonmania.PotionEffecObserver;
+import dungeonmania.PotionEffectObserver;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.Movement;
 import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 
-public abstract class Mercenary extends MovingEntity implements Movement, PotionEffecObserver {
+public abstract class Mercenary extends MovingEntity implements Movement, PotionEffectObserver {
     private int bribe_amount;
     private int bribe_radius;
     private int ally_attack;

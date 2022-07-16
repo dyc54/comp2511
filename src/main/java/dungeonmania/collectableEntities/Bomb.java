@@ -1,12 +1,13 @@
 package dungeonmania.collectableEntities;
 
 import dungeonmania.Entity;
+import dungeonmania.Player;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.staticEntities.StaticBomb;
 
-public class Bomb extends CollectableEntity {
+public class Bomb extends CollectableEntity implements Useable {
 
     private int bomb_radius;
     private boolean hasPlaced;
@@ -45,5 +46,9 @@ public class Bomb extends CollectableEntity {
         }
         return false;
     }
-
+    @Override
+    public void use(DungeonMap map, Player player) {
+        put(player.getLocation(), map);
+        player.getInventory().removeFromInventoryList(this);
+    }
 }

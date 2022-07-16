@@ -22,7 +22,6 @@ public class Door extends StaticEntity {
 
     @Override
     public boolean isAccessible(Entity entity) {
-        // TODO Auto-generated method stub
         if (entity instanceof Spider) {
             return true;
         }

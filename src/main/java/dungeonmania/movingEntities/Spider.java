@@ -32,7 +32,6 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
         Location next = strategy.nextLocation(current);
         if (checkhasBoulder(dungeonMap, next)) {
             Location temp = strategy.MoveOptions("CHANGE_DIRECTION").nextLocation(current);
-            // TODO: check temp and next accessbility.
             if (checkhasBoulder(dungeonMap, temp)) {
                 return false;
             } else {
@@ -48,24 +47,20 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
 
     @Override
     public AttackStrategy getAttackStrayegy() {
-        // TODO Auto-generated method stub
         return super.getAttack();
     }
 
     @Override
     public double getHealth() {
-        // TODO Auto-generated method stub
         return super.getHealth();
     }
 
     @Override
     public String getEnemyId() {
-        // TODO Auto-generated method stub
         return getEntityId();
     }
     @Override
     public String getEnemyType() {
-        // TODO Auto-generated method stub
         return getType();
     }
 

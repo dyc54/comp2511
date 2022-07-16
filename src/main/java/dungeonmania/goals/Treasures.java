@@ -13,20 +13,17 @@ public class Treasures implements GoalComponent{
     }
     @Override
     public boolean hasAchieved() {
-        // TODO Auto-generated method stub
         System.out.println(String.format("Gold %d/%d", GoldNum, TargetNum));
         return GoldNum >= TargetNum;
     }
 
     @Override
     public GoalComponent getMapData(DungeonMap map) {
-        // TODO Auto-generated method stub
         return this;
     }
 
     @Override
     public GoalComponent getConfig(Config config) {
-        // TODO Auto-generated method stub
         TargetNum = config.treasure_goal;
         return this;
     }
@@ -39,8 +36,7 @@ public class Treasures implements GoalComponent{
         }
     }
     @Override
-    public GoalComponent getMapData(Player player) {
-        // TODO Auto-generated method stub
+    public GoalComponent getPlayerData(Player player) {
         GoldNum = player.getInventory().getItems("treasure").size();
         return this;
     }

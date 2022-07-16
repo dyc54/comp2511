@@ -23,7 +23,6 @@ public class Portal extends StaticEntity {
 
     @Override
     public boolean isAccessible(Entity entity) {
-        // TODO Auto-generated method stub
         return true;
     }
 

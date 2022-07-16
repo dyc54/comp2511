@@ -16,9 +16,8 @@ public interface GoalComponent {
      * @return
      */
     public GoalComponent getMapData(DungeonMap map);
-    // TODO: waiting player
     
-    public GoalComponent getMapData(Player player);
+    public GoalComponent getPlayerData(Player player);
     
     /**
      * Load config from congis to goal

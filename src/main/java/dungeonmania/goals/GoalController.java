@@ -47,7 +47,7 @@ public class GoalController {
      * @return
      */
     public boolean hasAchieved(DungeonMap map, Player player) {
-        root.mapForAll(node -> node.getMapData(map).getMapData(player));
+        root.mapForAll(node -> node.getMapData(map).getPlayerData(player));
         return root.hasAchieved();
     }
     /**

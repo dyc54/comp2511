@@ -12,7 +12,6 @@ public class RandomMovement implements MovementStrategy{
     }
     @Override
     public Location nextLocation(Location location) {
-        // TODO Auto-generated method stub
         
         List<Location> choices = new ArrayList<>(4);
         for (char ch : possible.toCharArray()) {
@@ -45,7 +44,6 @@ public class RandomMovement implements MovementStrategy{
 
     @Override
     public MovementStrategy MoveOptions(String string) {
-        // TODO Auto-generated method stub
         possible = string;
         return this;
     }

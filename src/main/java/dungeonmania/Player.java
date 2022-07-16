@@ -9,6 +9,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import dungeonmania.collectableEntities.Bomb;
+import dungeonmania.collectableEntities.Useable;
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
@@ -36,7 +37,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private DungeonMap map;
     private final Location previousLocation;
     private Queue<PotionEntity> effects;
-    private List<PotionEffecObserver> observers;
+    private List<PotionEffectObserver> observers;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -177,14 +178,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         if (entity == null) {
             throw new InvalidActionException("itemUsed is not in the player's inventory");
         }
-        if (entity instanceof PotionEntity) {
-            addeffect((PotionEntity) entity);
-            notifyObserver();
-            inventory.removeFromInventoryList(entity);
-        } else if (entity instanceof Bomb) {
-            Bomb bomb = (Bomb) entity;
-            bomb.put(getLocation(), map);
-            inventory.removeFromInventoryList(entity);
+        if (entity instanceof Useable) {
+            ((Useable) entity).use(map, this);
         } else {
             throw new IllegalArgumentException(
                     "itemUsed is not a bomb, invincibility_potion, or an invisibility_potion");
@@ -231,12 +226,12 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     }
 
     @Override
-    public void attach(PotionEffecObserver observer) {
+    public void attach(PotionEffectObserver observer) {
         observers.add(observer);
     }
 
     @Override
-    public void detach(PotionEffecObserver observer) {
+    public void detach(PotionEffectObserver observer) {
         observers.remove(observer);
 
         
@@ -244,7 +239,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     @Override
     public void notifyObserver() {
-        for (PotionEffecObserver observer : observers) {
+        for (PotionEffectObserver observer : observers) {
             observer.update(this);
         }
         

@@ -13,14 +13,12 @@ public class Enemies implements GoalComponent {
     }
     @Override
     public boolean hasAchieved() {
-        // TODO Auto-generated method stub
         System.out.println(String.format("enemies %d/%d, spawner count: %d", destroyed, TargetNum, spawners));
         return destroyed >= TargetNum && spawners == 0;
     }
 
     @Override
     public GoalComponent getMapData(DungeonMap map) {
-        // TODO Auto-generated method stub
         destroyed = map.getDestoriedCounter();
         spawners = map.getEntities("zombie_toast_spawner").size();
         return this;
@@ -28,7 +26,6 @@ public class Enemies implements GoalComponent {
 
     @Override
     public GoalComponent getConfig(Config config) {
-        // TODO Auto-generated method stub
         TargetNum = config.enemy_goal;
         return this;
     }
@@ -41,8 +38,7 @@ public class Enemies implements GoalComponent {
         }
     }
     @Override
-    public GoalComponent getMapData(Player player) {
-        // TODO Auto-generated method stub
+    public GoalComponent getPlayerData(Player player) {
         return null;
     }
 }

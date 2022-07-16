@@ -3,7 +3,11 @@ package dungeonmania.helpers;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
-
+/**
+ * Propose
+ * to quicker access datas at inventory and dungeon map.
+ * similar code at inventory and map.
+ */
 public class IdCollection <T> {
     HashMap<String, T> Ids = new HashMap<>();
     public void put(String id, T t) {
