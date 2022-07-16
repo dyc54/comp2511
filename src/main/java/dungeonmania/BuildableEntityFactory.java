@@ -1,8 +1,8 @@
 package dungeonmania;
 
-import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.Bow;
-import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.BuildableRecipe;
-import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.Shield;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
 import dungeonmania.inventories.Inventory;
 

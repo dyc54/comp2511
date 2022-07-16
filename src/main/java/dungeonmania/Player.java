@@ -15,7 +15,7 @@ import dungeonmania.collectableEntities.CollectableEntity;
 import dungeonmania.collectableEntities.Effect;
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
-import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.staticEntities.Boulder;
