@@ -1,10 +1,10 @@
-package dungeonmania.MovingEntities;
+package dungeonmania.movingEntities;
 
 import dungeonmania.Entity;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.movementStrategies.MovementStrategy;
 
 public abstract class MovingEntity extends Entity {
     private AttackStrategy attack;

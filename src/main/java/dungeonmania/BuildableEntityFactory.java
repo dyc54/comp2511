@@ -1,10 +1,10 @@
 package dungeonmania;
 
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Bow;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shield;
-import dungeonmania.Inventories.Inventory;
+import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.Bow;
+import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.Shield;
 import dungeonmania.helpers.Config;
+import dungeonmania.inventories.Inventory;
 
 public class BuildableEntityFactory extends EntityFactory{
     public static boolean hasSufficientItems(String type, Inventory inventory) {

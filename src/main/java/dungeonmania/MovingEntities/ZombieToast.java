@@ -1,14 +1,14 @@
-package dungeonmania.MovingEntities;
+package dungeonmania.movingEntities;
 
 import dungeonmania.Entity;
-import dungeonmania.Battle.Enemy;
-import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.Movement;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
-import dungeonmania.Strategies.MovementStrategies.RandomMovement;
+import dungeonmania.battle.Enemy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.strategies.EnemyMovement;
+import dungeonmania.strategies.Movement;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
+import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 import java.util.Map;
 

@@ -1,13 +1,13 @@
-package dungeonmania.Goals;
+package dungeonmania.goals;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.staticEntities.FloorSwitch;
 
 public class Boulders implements GoalComponent {
     Collection<Entity> switchs;

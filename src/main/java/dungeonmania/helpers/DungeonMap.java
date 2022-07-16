@@ -22,17 +22,16 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Interactability;
 import dungeonmania.Player;
-import dungeonmania.Battle.Battle;
-import dungeonmania.Battle.Enemy;
-import dungeonmania.MovingEntities.MovingEntity;
-import dungeonmania.MovingEntities.Spider;
-import dungeonmania.MovingEntities.ZombieToast;
-import dungeonmania.StaticEntities.ZombieToastSpawner;
-import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.Movement;
-import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.battle.Battle;
+import dungeonmania.battle.Enemy;
+import dungeonmania.movingEntities.MovingEntity;
+import dungeonmania.movingEntities.Spider;
+import dungeonmania.movingEntities.ZombieToast;
 import dungeonmania.response.models.BattleResponse;
-import dungeonmania.Strategies.MovementStrategies.*;
+import dungeonmania.staticEntities.ZombieToastSpawner;
+import dungeonmania.strategies.EnemyMovement;
+import dungeonmania.strategies.Movement;
+import dungeonmania.strategies.movementStrategies.*;
 
 /**
  * Observer Pattern

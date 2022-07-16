@@ -1,7 +1,7 @@
-package dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities;
+package dungeonmania.collectableEntities.durabilityEntities.BuildableEntities;
 
-import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
-import dungeonmania.Strategies.AttackStrategies.BonusDamageMul;
+import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+import dungeonmania.strategies.attackStrategies.BonusDamageMul;
 
 public class Bow extends DurabilityEntity implements BonusDamageMul{
     private static final int attack = 2;

@@ -1,10 +1,10 @@
-package dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities;
+package dungeonmania.collectableEntities.durabilityEntities.BuildableEntities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import dungeonmania.Inventories.Inventory;
+import dungeonmania.inventories.Inventory;
 
 public class BuildableRecipe {
     // BuildableRecipeTree and;

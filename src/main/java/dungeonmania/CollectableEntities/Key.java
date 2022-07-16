@@ -1,4 +1,4 @@
-package dungeonmania.CollectableEntities;
+package dungeonmania.collectableEntities;
 
 public class Key extends CollectableEntity  implements ItemInventoryLimit{
     private final int key;

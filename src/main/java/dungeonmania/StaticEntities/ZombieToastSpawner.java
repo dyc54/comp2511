@@ -1,4 +1,4 @@
-package dungeonmania.StaticEntities;
+package dungeonmania.staticEntities;
 
 import java.util.Random;
 
@@ -6,10 +6,10 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Interact;
 import dungeonmania.Player;
-import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.movingEntities.ZombieToast;
 
 public class ZombieToastSpawner extends StaticEntity implements Interact {
     private int timer;

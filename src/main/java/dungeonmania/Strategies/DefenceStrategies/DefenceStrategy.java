@@ -1,4 +1,4 @@
-package dungeonmania.Strategies.DefenceStrategies;
+package dungeonmania.strategies.defenceStrategies;
 
 public interface DefenceStrategy {
     public double defenceDamage();

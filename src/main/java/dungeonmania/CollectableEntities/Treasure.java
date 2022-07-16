@@ -1,4 +1,4 @@
-package dungeonmania.CollectableEntities;
+package dungeonmania.collectableEntities;
 
 public class Treasure extends CollectableEntity{
 

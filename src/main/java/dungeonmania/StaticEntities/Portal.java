@@ -1,4 +1,4 @@
-package dungeonmania.StaticEntities;
+package dungeonmania.staticEntities;
 
 import java.util.List;
 import java.util.function.Function;
@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.MovingEntities.Mercenary;
-import dungeonmania.MovingEntities.ZombieToast;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.movingEntities.Mercenary;
+import dungeonmania.movingEntities.ZombieToast;
 import dungeonmania.util.Position;
 
 public class Portal extends StaticEntity {

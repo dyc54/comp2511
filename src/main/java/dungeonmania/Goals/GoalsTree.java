@@ -1,4 +1,4 @@
-package dungeonmania.Goals;
+package dungeonmania.goals;
 
 import java.util.Arrays;
 import java.util.List;

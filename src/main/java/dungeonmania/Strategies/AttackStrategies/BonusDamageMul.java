@@ -1,4 +1,4 @@
-package dungeonmania.Strategies.AttackStrategies;
+package dungeonmania.strategies.attackStrategies;
 
 public interface BonusDamageMul extends BonusDamageStrategy{
     // public double damage();

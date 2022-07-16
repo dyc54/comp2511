@@ -1,11 +1,11 @@
-package dungeonmania.StaticEntities;
+package dungeonmania.staticEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.Interactability;
 import dungeonmania.Player;
-import dungeonmania.MovingEntities.Spider;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.movingEntities.Spider;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 

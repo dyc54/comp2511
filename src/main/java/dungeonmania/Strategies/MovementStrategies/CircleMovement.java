@@ -1,4 +1,4 @@
-package dungeonmania.Strategies.MovementStrategies;
+package dungeonmania.strategies.movementStrategies;
 
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;

@@ -1,8 +1,8 @@
-package dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities;
+package dungeonmania.collectableEntities.durabilityEntities.BuildableEntities;
 
 import java.util.ArrayList;
 
-import dungeonmania.Inventories.Inventory;
+import dungeonmania.inventories.Inventory;
 
 public class BuildableRecipematerial implements BuildableComponent{
     private String materialType;

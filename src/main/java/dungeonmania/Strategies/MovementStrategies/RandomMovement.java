@@ -1,4 +1,4 @@
-package dungeonmania.Strategies.MovementStrategies;
+package dungeonmania.strategies.movementStrategies;
 
 import java.util.ArrayList;
 import java.util.List;

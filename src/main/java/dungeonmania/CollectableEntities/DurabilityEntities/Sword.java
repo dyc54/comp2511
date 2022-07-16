@@ -1,6 +1,6 @@
-package dungeonmania.CollectableEntities.DurabilityEntities;
+package dungeonmania.collectableEntities.durabilityEntities;
 
-import dungeonmania.Strategies.AttackStrategies.BonusDamageAdd;
+import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 
 public class Sword extends DurabilityEntity implements BonusDamageAdd{
     private int sword_attack;

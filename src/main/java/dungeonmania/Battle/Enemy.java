@@ -1,6 +1,6 @@
-package dungeonmania.Battle;
+package dungeonmania.battle;
 
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
 
 public interface Enemy {
     public AttackStrategy getAttackStrayegy();

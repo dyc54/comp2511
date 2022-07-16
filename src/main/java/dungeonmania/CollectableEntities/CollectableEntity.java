@@ -1,4 +1,4 @@
-package dungeonmania.CollectableEntities;
+package dungeonmania.collectableEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.Interactability;

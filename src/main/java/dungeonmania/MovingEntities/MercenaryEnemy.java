@@ -1,4 +1,4 @@
-package dungeonmania.MovingEntities;
+package dungeonmania.movingEntities;
 
 import java.util.Collection;
 
@@ -6,15 +6,15 @@ import dungeonmania.Entity;
 import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
-import dungeonmania.Battle.Enemy;
-import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.Movement;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
-import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
-import dungeonmania.Strategies.MovementStrategies.RandomMovement;
+import dungeonmania.battle.Enemy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.strategies.EnemyMovement;
+import dungeonmania.strategies.Movement;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.movementStrategies.ChaseMovement;
+import dungeonmania.strategies.movementStrategies.MovementStrategy;
+import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryEnemy extends Mercenary implements Enemy {
     // private double mercenary_attack;

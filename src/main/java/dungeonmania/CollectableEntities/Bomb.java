@@ -1,11 +1,11 @@
-package dungeonmania.CollectableEntities;
+package dungeonmania.collectableEntities;
 
 import dungeonmania.Accessibility;
 import dungeonmania.Entity;
-import dungeonmania.StaticEntities.FloorSwitch;
-import dungeonmania.StaticEntities.StaticBomb;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.staticEntities.FloorSwitch;
+import dungeonmania.staticEntities.StaticBomb;
 
 public class Bomb extends CollectableEntity {
 

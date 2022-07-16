@@ -1,4 +1,4 @@
-package dungeonmania.Goals;
+package dungeonmania.goals;
 
 import java.io.IOException;
 

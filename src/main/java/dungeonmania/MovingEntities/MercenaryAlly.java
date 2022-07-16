@@ -1,22 +1,22 @@
-package dungeonmania.MovingEntities;
+package dungeonmania.movingEntities;
 
 import java.util.Collection;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
-import dungeonmania.Battle.Enemy;
-import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.BonusDamageAdd;
-import dungeonmania.Strategies.DefenceStrategies.BonusDefenceAdd;
-import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
-import dungeonmania.Strategies.MovementStrategies.FollowingMovement;
-import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
-import dungeonmania.Strategies.MovementStrategies.RandomMovement;
+import dungeonmania.battle.Enemy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.strategies.EnemyMovement;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
+import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
+import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
+import dungeonmania.strategies.movementStrategies.ChaseMovement;
+import dungeonmania.strategies.movementStrategies.FollowingMovement;
+import dungeonmania.strategies.movementStrategies.MovementStrategy;
+import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd{
     

@@ -1,4 +1,4 @@
-package dungeonmania.StaticEntities;
+package dungeonmania.staticEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.helpers.Location;

@@ -1,10 +1,10 @@
-package dungeonmania.StaticEntities;
+package dungeonmania.staticEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.CollectableEntities.Key;
-import dungeonmania.MovingEntities.Spider;
+import dungeonmania.collectableEntities.Key;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.movingEntities.Spider;
 
 public class Door extends StaticEntity {
     private final int key;

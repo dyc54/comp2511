@@ -1,6 +1,6 @@
-package dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities;
+package dungeonmania.collectableEntities.durabilityEntities.BuildableEntities;
 
-import dungeonmania.Inventories.Inventory;
+import dungeonmania.inventories.Inventory;
 
 public interface BuildableComponent {
     public String getItemType();

@@ -1,4 +1,4 @@
-package dungeonmania.Goals;
+package dungeonmania.goals;
 
 import dungeonmania.Player;
 import dungeonmania.helpers.Config;

@@ -1,6 +1,6 @@
-package dungeonmania.CollectableEntities.DurabilityEntities;
+package dungeonmania.collectableEntities.durabilityEntities;
 
-import dungeonmania.CollectableEntities.CollectableEntity;
+import dungeonmania.collectableEntities.CollectableEntity;
 
 public abstract class DurabilityEntity extends CollectableEntity{
     private int durability;

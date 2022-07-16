@@ -1,7 +1,7 @@
-package dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities;
+package dungeonmania.collectableEntities.durabilityEntities.BuildableEntities;
 
-import dungeonmania.Strategies.DefenceStrategies.BonusDefenceAdd;
-import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
+import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
 public class Shield extends DurabilityEntity implements BonusDefenceAdd {
     private  final double shield_defence;

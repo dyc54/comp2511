@@ -1,4 +1,4 @@
-package dungeonmania.Strategies.DefenceStrategies;
+package dungeonmania.strategies.defenceStrategies;
 
 public interface BonusDefenceAdd {
     public boolean equals(BonusDefenceAdd obj);

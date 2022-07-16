@@ -1,4 +1,4 @@
-package dungeonmania.StaticEntities;
+package dungeonmania.staticEntities;
 
 import java.util.ArrayList;
 import java.util.List;

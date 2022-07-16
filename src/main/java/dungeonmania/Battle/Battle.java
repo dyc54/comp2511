@@ -1,4 +1,4 @@
-package dungeonmania.Battle;
+package dungeonmania.battle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.CollectableEntities.CollectableEntity;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
+import dungeonmania.collectableEntities.CollectableEntity;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
 
 public class Battle {
     private Player player;

@@ -1,4 +1,4 @@
-package dungeonmania.Strategies;
+package dungeonmania.strategies;
 
 import dungeonmania.util.Position;
 

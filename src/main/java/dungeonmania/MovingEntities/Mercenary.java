@@ -1,4 +1,4 @@
-package dungeonmania.MovingEntities;
+package dungeonmania.movingEntities;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,18 +8,18 @@ import dungeonmania.Entity;
 import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffecObserver;
-import dungeonmania.Battle.Enemy;
-import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
-import dungeonmania.Strategies.Movement;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.BaseAttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.BonusDamageAdd;
-import dungeonmania.Strategies.MovementStrategies.ChaseMovement;
-import dungeonmania.Strategies.MovementStrategies.FollowingMovement;
-import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
-import dungeonmania.Strategies.MovementStrategies.RandomMovement;
+import dungeonmania.battle.Enemy;
+import dungeonmania.collectableEntities.durabilityEntities.InvincibilityPotion;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.strategies.Movement;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
+import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
+import dungeonmania.strategies.movementStrategies.ChaseMovement;
+import dungeonmania.strategies.movementStrategies.FollowingMovement;
+import dungeonmania.strategies.movementStrategies.MovementStrategy;
+import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public abstract class Mercenary extends MovingEntity implements Movement, PotionEffecObserver {
     // Location location;

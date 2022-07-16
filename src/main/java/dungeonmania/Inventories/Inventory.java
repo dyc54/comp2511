@@ -1,4 +1,4 @@
-package dungeonmania.Inventories;
+package dungeonmania.inventories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,20 +8,20 @@ import java.util.Map.Entry;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.CollectableEntities.*;
-import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
-import dungeonmania.CollectableEntities.DurabilityEntities.InvincibilityPotion;
-import dungeonmania.CollectableEntities.DurabilityEntities.InvisibilityPotion;
-import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Bow;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shield;
-import dungeonmania.Strategies.AttackStrategies.BonusDamageAdd;
-import dungeonmania.Strategies.AttackStrategies.BonusDamageMul;
-import dungeonmania.Strategies.AttackStrategies.BonusDamageStrategy;
-import dungeonmania.Strategies.DefenceStrategies.BonusDefenceAdd;
+import dungeonmania.collectableEntities.*;
+import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+import dungeonmania.collectableEntities.durabilityEntities.InvincibilityPotion;
+import dungeonmania.collectableEntities.durabilityEntities.InvisibilityPotion;
+import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
+import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.Bow;
+import dungeonmania.collectableEntities.durabilityEntities.BuildableEntities.Shield;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.IdCollection;
+import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
+import dungeonmania.strategies.attackStrategies.BonusDamageMul;
+import dungeonmania.strategies.attackStrategies.BonusDamageStrategy;
+import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
 public class Inventory {
     private final HashMap<String, List<Entity>> inventory = new HashMap<>(); //key 是实体的类型
