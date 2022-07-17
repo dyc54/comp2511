@@ -2,6 +2,7 @@ package dungeonmania.strategies.movementStrategies;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 import dungeonmania.helpers.Location;
@@ -9,6 +10,9 @@ import dungeonmania.helpers.Location;
 public class ChaseMovement implements MovementStrategy{
     private Location location;
     private String possible;
+    /**
+     * @param location entity's location
+     */
     public ChaseMovement(Location location) {
         this.location = location;
     }
@@ -16,33 +20,14 @@ public class ChaseMovement implements MovementStrategy{
     public Location getLocation() {
         return location;
     }
-
+    /**
+     * @param location Player's location
+     */
     @Override
     public Location nextLocation(Location location) {
         Location next = getLocation();
         TreeMap<Integer, Location> ordered = new TreeMap<>();
-        System.out.println("AAA:"+this.location.toString());
-        ArrayList<Location> choices = new ArrayList<>(4);
-        for (char ch : possible.toCharArray()) {
-            switch (ch) {
-                case 'u':
-                    choices.add(this.location.getUp());
-                    break;
-                case 'd':
-                    choices.add(this.location.getDown());
-                    break;
-                case 'l':
-                    choices.add(this.location.getLeft());
-                    break;
-                case 'r':
-                    choices.add(this.location.getRight());
-                    break;
-                default:
-                    break;
-            }
-        }
-        // System.out.println(location);
-        System.out.println("AAAAAAAA");
+        List<Location> choices = MovementOptions.decodeLocationsArguments(this.location, possible);
         choices.stream().forEach(choice -> System.out.println(choice));
         choices.stream().forEach(ele -> {
             int distance = location.distance(ele);
@@ -58,7 +43,9 @@ public class ChaseMovement implements MovementStrategy{
         }
         return next;
     }
-
+    /**
+     * Passed in the location arguments which have the locations can be moved to.
+     */
     @Override
     public MovementStrategy MoveOptions(String string) {
         possible = string;

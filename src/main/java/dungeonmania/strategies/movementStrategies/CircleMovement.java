@@ -13,7 +13,9 @@ public class CircleMovement implements MovementStrategy {
         this.current = 90;
         this.direction = -1;
     }
-
+    /**
+     * @param cure any locations
+     */
     @Override
     public Location nextLocation(Location curr) {
         if (curr.equals(center)) {

@@ -7,6 +7,9 @@ public class FollowingMovement implements MovementStrategy{
     public FollowingMovement(Location playerPrevLocation) {
         this.playerPrevLocation = playerPrevLocation;
     }
+    /**
+     * @param location any location does't matter
+     */
     @Override
     public Location nextLocation(Location location) {
         System.out.println(String.format("Player Current at %s Prev at %s", location.toString(), playerPrevLocation.toString()));

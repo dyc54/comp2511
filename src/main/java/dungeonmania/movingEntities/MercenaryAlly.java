@@ -8,6 +8,7 @@ import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 import dungeonmania.strategies.movementStrategies.FollowingMovement;
+import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.MovementStrategy;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
@@ -26,7 +27,7 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
     public boolean movement(DungeonMap dungeonMap) {
         System.out.println("Ally MOveing");
         Player p = dungeonMap.getPlayer();
-        String options = MovingEntity.getPossibleNextDirection(dungeonMap, this);
+        String options = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         if (p.getLocation().equals(getLocation())) {
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 

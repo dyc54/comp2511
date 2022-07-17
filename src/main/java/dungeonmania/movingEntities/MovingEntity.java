@@ -35,14 +35,5 @@ public abstract class MovingEntity extends Entity {
         this.move.MoveOptions(options);
         return move;
     }
-    public static String getPossibleNextDirection(DungeonMap map, MovingEntity entity) {
-        String possible = "";
-
-        possible += DungeonMap.isaccessible(map, entity.getLocation().getUp(), entity) ? "u": "";
-        possible += DungeonMap.isaccessible(map, entity.getLocation().getDown(), entity) ? "d": "";
-        possible += DungeonMap.isaccessible(map, entity.getLocation().getLeft(), entity) ? "l": "";
-        possible += DungeonMap.isaccessible(map, entity.getLocation().getRight(), entity) ? "r": "";
-        return possible;
-    }
 
 }

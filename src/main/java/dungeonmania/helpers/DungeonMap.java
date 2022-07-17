@@ -314,8 +314,6 @@ public class DungeonMap {
         removeEntity(entity.getEntityId());
         addEntity(entity);
         EnemiesDestroiedCounter = temp;
-        // System.out.println("---" + entity.getType());
-        // System.out.println("map" + IdCollection.get(entity.getEntityId()).toString());
     }
 
     public int getDestoriedCounter() {

@@ -1,6 +1,5 @@
 package dungeonmania.strategies.movementStrategies;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import dungeonmania.helpers.Location;
@@ -10,29 +9,13 @@ public class RandomMovement implements MovementStrategy{
     public RandomMovement() {
         possible = "udlr";
     }
+    /**
+     * @param location current entity's location
+     */
     @Override
     public Location nextLocation(Location location) {
         
-        List<Location> choices = new ArrayList<>(4);
-        for (char ch : possible.toCharArray()) {
-            switch (ch) {
-                case 'u':
-                    choices.add(location.getUp());
-                    break;
-                case 'd':
-                    choices.add(location.getDown());
-                    break;
-                case 'l':
-                    choices.add(location.getLeft());
-                    System.out.println(location.getLeft().toString());
-                    break;
-                case 'r':
-                    choices.add(location.getRight());
-                    break;
-                default:
-                    break;
-            }
-        }
+        List<Location> choices = MovementOptions.decodeLocationsArguments(location, possible);
         choices.stream().forEach(lo -> System.out.println(lo.toString()));
         if (choices.size() != 0) {
             Random randomchoicer = new Random();
@@ -41,7 +24,9 @@ public class RandomMovement implements MovementStrategy{
         }
         return location;   
     }
-
+    /**
+     * Passed in the location arguments which have the locations can be moved to.
+     */
     @Override
     public MovementStrategy MoveOptions(String string) {
         possible = string;
