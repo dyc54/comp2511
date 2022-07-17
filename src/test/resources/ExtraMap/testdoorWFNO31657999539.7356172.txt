@@ -1,0 +1,9 @@
+player,0,0
+door,1,1,9
+door,-1,-1,9
+door,-1,0,9
+door,1,0,9
+door,0,1,9
+door,0,-1,9
+key,0,0,1
+g,exit

@@ -42,6 +42,18 @@ public class CollectAndBuildTest {
         assertEquals(2, getInventory(res, "wood").size());
     }
 
+    @Test
+    @DisplayName("Test the player cannot pick up wood in map")
+    public void testcannotPickUpkey() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("test_pickupL4OND1657999979.6644678",
+                "c_collectTests");
+        // pick up wood
+        res = playerMoveController(dmc, Direction.DOWN, 1);
+        assertEquals(0, getInventory(res, "key").size());
+    }
 
     @Test
     @DisplayName("Test the player can pick arrow in map")

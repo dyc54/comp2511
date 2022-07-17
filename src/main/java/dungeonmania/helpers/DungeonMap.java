@@ -4,15 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.json.*;
@@ -22,24 +18,15 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Interactability;
 import dungeonmania.Player;
-import dungeonmania.Battle.Battle;
-import dungeonmania.Battle.Enemy;
-import dungeonmania.MovingEntities.MovingEntity;
-import dungeonmania.MovingEntities.Spider;
-import dungeonmania.MovingEntities.ZombieToast;
-import dungeonmania.StaticEntities.ZombieToastSpawner;
-import dungeonmania.Strategies.EnemyMovement;
-import dungeonmania.Strategies.Movement;
-import dungeonmania.Strategies.MovementStrategies.MovementStrategy;
+import dungeonmania.battle.Battle;
+import dungeonmania.battle.Enemy;
+import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.BattleResponse;
-import dungeonmania.Strategies.MovementStrategies.*;
+import dungeonmania.staticEntities.ZombieToastSpawner;
+import dungeonmania.strategies.Movement;
 
 /**
- * Observer Pattern
- * ! but not sure
- * Wo bu hui ...
- * 
- * @author Shilong
+ * Save entities
  */
 public class DungeonMap {
     private TreeMap<Location, HashSet<Entity>> map;
@@ -57,9 +44,6 @@ public class DungeonMap {
     private static boolean isSameType(String EntityType, String givenType) {
         if (EntityType.equals(givenType)) {
             return true;
-        }
-        if (givenType.toLowerCase().equals(new String("enemies"))) {
-            return Arrays.asList("Spider", "Zombie Toast", "Zombie", "Unbribed Mercenary").contains(EntityType);
         }
         
         return false;
@@ -99,7 +83,6 @@ public class DungeonMap {
      * @return
      */
     public DungeonMap addEntity(Entity entity) {
-        // TODO: change to private if use observer pattern
         if (!idCollection.hasId(entity.getEntityId())) {
             idCollection.put(entity.getEntityId(), entity.getLocation().clone());   
         }
@@ -207,9 +190,9 @@ public class DungeonMap {
      * @return
      */
     public Collection<Entity> getEntities(String type) {
-        if (type.equals("player")) {
-            return Arrays.asList(player);
-        }
+        // if (type.equals("player")) {
+        //     return Arrays.asList(player);
+        // }
         Collection<Entity> entities = new LinkedList<>();
         getAllEntities().stream().forEach(entity -> {
             if (DungeonMap.isSameType(entity.getType(), type)) {
@@ -227,7 +210,6 @@ public class DungeonMap {
      * @return whether map successfully remove given entity
      */
     public void removeEntity(String id) {
-        // TODO change to private if use observer pattern
         if (!containsEntity(id)) {
             return;
         }
@@ -235,17 +217,13 @@ public class DungeonMap {
         Collection<Entity> entities = getEntities(location);
         Entity temp = getEntity(id);
         if (temp instanceof Enemy) {
-            // System.out.println("cCounter++");
             EnemiesDestroiedCounter += 1;
 
         }
         
-        // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
         System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
         entities.remove(temp);
         idCollection.remove(id);
-        // IdCollection.
-        // IdCollection.keySet().stream().forEach(mapper -> System.out.println(mapper));
     }
 
     /**
@@ -287,42 +265,8 @@ public class DungeonMap {
         return getFourNearEntities(Location.AsLocation(x, y));
     }
 
-    /**
-     * Return a Collection of nearby entities of given location.
-     * i.e.
-     * TopLeft Top TopRight
-     * Left (Current) Right
-     * BottomLeft Bottom BottomRight
-     * 
-     * @param location
-     * @apiNote Entities at current location will not be return.
-     * @return
-     */
-    public Collection<Entity> getEightNearEntities(Location location) {
-        Collection<Entity> entities = new LinkedList<>();
-        location.getEightNearPosition().stream().forEach(position -> {
-            if (map.containsKey(position.apply(location))) {
-                entities.addAll(map.get(position.apply(location)));
-            }
-        });
-        return entities;
-    }
 
-    /**
-     * Return a Collection of nearby entities of given location.
-     * i.e.
-     * TopLeft Top TopRight
-     * Left (Current) Right
-     * BottomLeft Bottom BottomRight
-     * 
-     * @param x
-     * @param y
-     * @apiNote Entities at current location will not be return.
-     * @return
-     */
-    public Collection<Entity> getEightNearEntities(int x, int y) {
-        return getEightNearEntities(Location.AsLocation(x, y));
-    }
+
 
     /**
      * Return a Collection of near entities
@@ -342,16 +286,6 @@ public class DungeonMap {
         return entities;
     }
 
-    /**
-     * map a function for all entities
-     * 
-     * @param <X>      Returnd type for function
-     * @param function
-     */
-    public <X> void mapToAllEntities(Function<Entity, X> function) {
-        Collection<Entity> entities = getAllEntities();
-        entities.stream().map(function);
-    }
 
     /**
      * Move all entities with their movement strategy
@@ -380,32 +314,6 @@ public class DungeonMap {
         removeEntity(entity.getEntityId());
         addEntity(entity);
         EnemiesDestroiedCounter = temp;
-        // System.out.println("---" + entity.getType());
-        // System.out.println("map" + IdCollection.get(entity.getEntityId()).toString());
-    }
-
-    /**
-     * Move entity with given movement strategy
-     * 
-     * @param entity
-     * @param movement
-     * @param location
-     */
-    public void moveEntity(Entity entity, MovementStrategy movement) {
-        // TODO:
-
-    }
-
-    /**
-     * Move entity with its movement strategy
-     * 
-     * @param entity
-     * @param movement
-     * @param location
-     */
-    public void moveEntity(Entity entity) {
-        // TODO:
-
     }
 
     public int getDestoriedCounter() {
@@ -451,14 +359,10 @@ public class DungeonMap {
                     if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invincibility")) {
                         if (!(entity instanceof Spider)) {
                             movements.add((Movement) entity);
-                            // ((EnemyMovement) entity).movement(this);
                         }
                     }
                     battles.add(battle.toResponse());
                 }
-            }
-            if (removed.size() != 0) {
-                // player.setBattleUsedDuration();
             }
             player.cleardisusableItem();
             removed.stream().forEach(id -> this.removeEntity(id));
@@ -467,33 +371,12 @@ public class DungeonMap {
         }
         return this;
     }
-    @Override
-    public String toString() {
-        System.out.println("*********** MAP ***********\n");
-        // map.values()
-        //         .stream()
-        //         .forEach(hashset -> {
-        //             hashset.stream()
-        //                     .forEach(entity -> {
-        //                         output.concat(String.format("%s\n", entity.toString()));
-        //                     });
-        //         });
-        getAllEntities().stream().forEach(entity -> System.out.println(entity.toString()));
-        System.out.println("*********** MAP ***********\n");
-        return "output";
-    }
+
     public static boolean isaccessible(DungeonMap map, Location location, Entity entity) {
         List<Entity> list = DungeonMap.blockedEntities(map, location, entity);
         System.out.println(String.format("For entity %s, unaccessable entities at %s are:", entity.toString(), location.toString()));
         list.stream().forEach(e -> System.out.println(e.toString()));
         return DungeonMap.blockedEntities(map, location, entity).size() == 0;
-        // return map.getEntities(location).stream().allMatch(element -> {
-        //     if (element instanceof Accessibility) {
-        //         Accessibility temp = (Accessibility) element;
-        //         return temp.isAccessible(entity); 
-        //     }
-        //     return true;
-        // });
     }
     public static List<Entity> blockedEntities(DungeonMap map, Location location, Entity entity) {
         return map.getEntities(location).stream()
@@ -507,7 +390,6 @@ public class DungeonMap {
         System.out.println(String.format("For entity %s, Interacyable  entities at %s are:", entity.toString(), location.toString()));
         list.stream().forEach(e -> System.out.println(e.toString()));
         return DungeonMap.InteracyableEntities(map, location, entity).size() != 0;
-        // return map.getEntities(location).stream().anyMatch(element -> element.getLocation().equals(location) && element instanceof Interactability);
     }
 
     public static List<Entity> InteracyableEntities(DungeonMap map, Location location, Entity entity) {
@@ -515,8 +397,5 @@ public class DungeonMap {
             .filter(element ->  location.equals(element.getLocation()) && element instanceof Interactability && ((Interactability) element).hasSideEffect(entity, map))
             .collect(Collectors.toList());
     }
-    // public static void interact
-    public boolean checkMovement(Location location) {
-        return getEntities(location).stream().anyMatch(entity -> entity.getType().equals("wall") || entity.getType().equals("boulder") || entity.getType().equals("door"));
-    }
+
 }

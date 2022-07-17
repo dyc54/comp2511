@@ -1,0 +1,12 @@
+player,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+mercenary,2,2
+invisibility_potion,0,0
+g,exit
