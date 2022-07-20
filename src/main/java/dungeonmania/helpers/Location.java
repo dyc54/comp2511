@@ -228,5 +228,9 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public int compareTo(Location o) {
         return compare(this, o);
     }
-
+    @Override
+    public int hashCode() {
+        // TODO: CHANGE THIS IF ANY VALUE IS OVERFLOW 
+        return ((31 * x + 13 * y) ^ 3  % (7919 * 1637) - (19 * y + 21 - x ^ 4) ^ 2) * (x - y) ^ 2 + 1;
+    }
 }

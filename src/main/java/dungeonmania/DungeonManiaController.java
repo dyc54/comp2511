@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.helpers.Config;
@@ -28,7 +29,6 @@ public class DungeonManiaController {
     Config dungeonConfig;
     DungeonMap dungeonMap = new DungeonMap();
     GoalController goals;
-
     private String dungeonId;
     private String dungeonName;
     private List<BattleResponse> battles;
@@ -91,7 +91,7 @@ public class DungeonManiaController {
     }
 
     public Location randomLocation() {
-        Random random = new Random();
+        Random random = new Random(timer);
         int x = random.nextInt(dungeonMap.getPlayer().getLocation().getX() + 30);
         int y = random.nextInt(dungeonMap.getPlayer().getLocation().getY() + 30);
         return Location.AsLocation(x, y);

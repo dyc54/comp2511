@@ -7,10 +7,11 @@ import dungeonmania.inventories.Inventory;
 /**
  * Save buildable Recipe
  */
-public class BuildableRecipe {
+public class BuildableRecipe implements BuildableComponent{
     List<BuildableComponent> and;
     List<BuildableComponent> or;
     String recipeName;
+    boolean isSatisfied;
     public BuildableRecipe(String recipeName) {
         this.recipeName = recipeName;
         and = new ArrayList<>();
@@ -34,6 +35,14 @@ public class BuildableRecipe {
         or.add(new BuildableRecipematerial(type, amount));
         return this;
     }
+    public BuildableRecipe addAnd(BuildableComponent component) {
+        and.add(component);
+        return this;
+    }
+    public BuildableRecipe addOr(BuildableComponent component) {
+        or.add(component);
+        return this;
+    }
     public BuildableRecipe consumeMaterial(Inventory inventory) {
         and.stream().forEach(material -> material.removeCountItem(inventory));
         if (or.size() != 0) {
@@ -44,5 +53,32 @@ public class BuildableRecipe {
     }
     public String getRecipeName() {
         return recipeName;
+    }
+    @Override
+    public String getItemType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public int getItemAmount() {
+        // TODO Auto-generated method stub
+        return -1;
+    }
+    @Override
+    public boolean isSatisfied() {
+        // TODO Auto-generated method stub
+        return isSatisfied;
+    }
+    @Override
+    public BuildableComponent CountItem(Inventory inventory) {
+        // TODO Auto-generated method stub
+        isSatisfied = this.isSatisfied(inventory);
+        return this;
+    }
+    @Override
+    public BuildableComponent removeCountItem(Inventory inventory) {
+        // TODO Auto-generated method stub
+        consumeMaterial(inventory);
+        return this;
     }
 }

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.collectableEntities.Useable;
+import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
@@ -38,6 +39,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private final Location previousLocation;
     private Queue<PotionEntity> effects;
     private List<PotionEffectObserver> observers;
+    private Durability durabilities;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -92,7 +94,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
         if (hasEffect() && getCurrentEffect().checkDurability()) {
             effects.poll();
-            notifyObserver();
+            notifyPotionEffectObserver();
         } else if (hasEffect()) {
             getCurrentEffect().setDurability();
 
@@ -196,8 +198,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         for(PotionEntity effect : queue){
             if(effect.checkDurability()){
                 effects.remove(effect);
-                notifyObserver();
-                System.out.println("SSSSSSSSSSS");
+                notifyPotionEffectObserver();
+                // System.out.println("SSSSSSSSSSS");
             }else{
                 effect.setDurability();
             }
@@ -240,7 +242,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     }
 
     @Override
-    public void notifyObserver() {
+    public void notifyPotionEffectObserver() {
         for (PotionEffectObserver observer : observers) {
             observer.update(this);
         }

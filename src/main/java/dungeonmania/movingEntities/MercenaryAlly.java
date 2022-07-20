@@ -9,7 +9,6 @@ import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 import dungeonmania.strategies.movementStrategies.FollowingMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
-import dungeonmania.strategies.movementStrategies.MovementStrategy;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd{

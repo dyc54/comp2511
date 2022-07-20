@@ -30,7 +30,21 @@ public class Config {
     public final int zombie_attack;
     public final int zombie_health;
     public final int zombie_spawn_rat;
-
+    // Milestone3 added
+    public final int assassin_attack;
+    public final int assassin_bribe_amount;
+    public final int assassin_bribe_fail_rate;
+    public final int assassin_health;
+    public final int assassin_recon_radius;
+    public final int hydra_spawn_rate;
+    public final int hydra_attack;
+    public final int hydra_health;
+    public final int hydra_health_increase_rate;
+    public final int hydra_health_increase_amount;
+    public final int mind_control_duration;
+    public final int midnight_armour_attack;
+    public final int midnight_armour_defence;
+    
     public Config(String FileName) throws IOException {
         String content = FileReader.LoadFile(String.format(FileName));
         JSONObject json =  new JSONObject(content);
@@ -58,5 +72,19 @@ public class Config {
         zombie_attack = json.getInt("zombie_attack");
         zombie_health = json.getInt("zombie_health");
         zombie_spawn_rat = json.getInt("zombie_spawn_rate");
+
+        assassin_attack = json.getInt("assassin_attack");
+        assassin_bribe_amount = json.getInt("assassin_bribe_amount");
+        assassin_bribe_fail_rate = json.getInt("assassin_bribe_fail_rate");
+        assassin_health = json.getInt("assassin_health");
+        assassin_recon_radius = json.getInt("assassin_recon_radius");
+        hydra_spawn_rate = json.getInt("hydra_spawn_rate");
+        hydra_attack = json.getInt("hydra_attack");
+        hydra_health = json.getInt("hydra_health");
+        hydra_health_increase_rate = json.getInt("hydra_health_increase_rate");
+        hydra_health_increase_amount = json.getInt("hydra_health_increase_amount");
+        mind_control_duration = json.getInt("mind_control_duration");
+        midnight_armour_attack = json.getInt("midnight_armour_attack");
+        midnight_armour_defence = json.getInt("midnight_armour_defence");
     }
 }

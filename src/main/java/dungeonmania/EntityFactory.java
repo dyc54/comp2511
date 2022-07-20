@@ -2,6 +2,8 @@ package dungeonmania;
 
 import org.json.JSONObject;
 
+import dungeonmania.bosses.Assassin;
+import dungeonmania.bosses.Hydra;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.collectableEntities.durabilityEntities.InvincibilityPotion;
 import dungeonmania.collectableEntities.durabilityEntities.InvisibilityPotion;
@@ -69,6 +71,26 @@ public class EntityFactory {
                 MercenaryEnemy mercenary = new MercenaryEnemy(type, Location.AsLocation(x, y), config.mercenary_attack, config.mercenary_health, config.bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence);
                 map.getPlayer().attach(mercenary);
                 return mercenary;
+            case "swamp_tile":
+                break;
+            case "sun_stone":
+                return new SunStone(type, x, y);
+            case "time_turner":
+                break;
+            case "time_travelling_portal":
+                break;
+            case "light_bulb_on":
+                break;
+            case "wire":
+                break;
+            case "switch_door":
+                break;
+            case "assassin":
+                return new Assassin(type, Location.AsLocation(x, y), config.assassin_health, config.assassin_attack, config.bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence);
+            case "hydra":
+                return new Hydra(type, Location.AsLocation(x, y), config.hydra_health, config.hydra_attack);
+
+
         }
         return null;
     }
