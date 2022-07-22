@@ -39,10 +39,10 @@ public class FileSaver {
         goals = temp;
     }
     
-    public void save() {
+    public void save(String fileName) {
         FileWriter file;
         try {
-            file = new FileWriter(String.format("%s/%s[%s].json", SAVED_PATH, dungeonName, branch),false);
+            file = new FileWriter(String.format("%s/%s[%s].json", SAVED_PATH, fileName, branch),false);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("dungeonId", dungeonId);
             jsonObject.put("dungeonName", dungeonName);

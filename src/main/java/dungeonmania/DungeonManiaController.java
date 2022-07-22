@@ -193,7 +193,7 @@ public class DungeonManiaController {
         return getDungeonResponse();
     }
     public DungeonResponse saveGame(String gameName) {
-        fileSaver.save();
+        fileSaver.save(gameName);
         return getDungeonResponse();
     }
     public DungeonResponse loadGame(String gameName) throws IllegalArgumentException{

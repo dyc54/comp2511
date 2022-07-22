@@ -172,6 +172,7 @@ public class PersistenceTests {
                 "c_movementTest_testMovementDown");
         
         DungeonResponse DungonRes = dmc.saveGame("advanced");
+        dmc.newGame("d_complexGoalsTest_andAll", "c_movementTest_testMovementDown");
         DungeonResponse Dungonload = dmc.loadGame("advanced");
         assertAllEntitiesEqual(DungonRes, Dungonload);
         
