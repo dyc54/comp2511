@@ -1,0 +1,109 @@
+{
+    "configName": "c_mercenaryTest_bribeFail",
+    "entities": [
+        {
+            "x": 1,
+            "y": 0,
+            "id": "player01c7c3c4-c54d-4fbf-9ad0-60e9d321c269",
+            "type": "player"
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "id": "treasure3c91b872-8b36-4cf8-aa1c-167c60652e2d",
+            "type": "treasure"
+        },
+        {
+            "x": 1,
+            "y": 2,
+            "id": "wall5f82af83-9e46-40a9-9c63-13be368c588d",
+            "type": "wall"
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "id": "wall76b9d046-e4eb-4a6c-b2d5-fd6c0b5d1e1b",
+            "type": "wall"
+        },
+        {
+            "x": 4,
+            "y": 3,
+            "id": "mercenary7db958c1-056b-4152-a1ae-fdf8c3cbf5bc",
+            "type": "mercenary"
+        },
+        {
+            "x": 8,
+            "y": 8,
+            "id": "exitef720223-46ff-45db-b517-4e4b9ee9083c",
+            "type": "exit"
+        }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    },
+    "dungeonName": "d_mercenaryTest",
+    "dungeonId": "fcfb1dca-8854-4bc0-9b36-4a52cbddd737",
+    "branch": 0,
+    "actions": [
+        {
+            "action": "playerMove",
+            "argv": [
+                "DOWN"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "UP"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "LEFT"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "RIGHT"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "RIGHT"
+            ]
+        },
+        {
+            "action": "interact",
+            "argv": [
+                "mercenary7db958c1-056b-4152-a1ae-fdf8c3cbf5bc"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "RIGHT"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "DOWN"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "DOWN"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "LEFT"
+            ]
+        }
+    ]
+}
