@@ -209,7 +209,9 @@ public class DungeonManiaController {
     public List<String> allGames() {
         return FileReader.listAllGamesArchives();
     }
-
+    public DungeonResponse rewind(int ticks) {
+        return getDungeonResponse();
+    }
 
     /* *********************************************** */
     private DungeonResponse getDungeonResponse() {
