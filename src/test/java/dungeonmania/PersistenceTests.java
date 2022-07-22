@@ -63,6 +63,14 @@ public class PersistenceTests {
             assertEquals(expectItem.getType(), givenItem.getType());
         }
     }
+    private void asserAllBattleEqual(DungeonResponse expect, DungeonResponse Dungonload) {
+        for (int i = 0; i < expect.getEntities().size(); i++) {
+            BattleResponse expectBattles = expect.getBattles().get(i);
+            BattleResponse givenBattles = Dungonload.getBattles().get(i);
+            assertEquals(expectBattles.getRounds(), givenBattles.getRounds());
+        }
+    }
+
     @Test
     public void testCanSave() {
         clear();
@@ -173,6 +181,7 @@ public class PersistenceTests {
   
     @Test
     public void testPlayerMovement() {
+        clear();
         DungeonManiaController dmc = new DungeonManiaController();
         dmc.newGame("d_complexGoalsTest_andAll",
                 "c_complexGoalsTest_andAll");
@@ -186,24 +195,96 @@ public class PersistenceTests {
 
     @Test
     public void testMercenaryIsAlly() {
-
+        clear();
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_mercenaryTest", "c_mercenaryTest_bribeFail");
+        DungeonResponse DungonRes = dmc.saveGame("d_mercenaryTest");
+        DungeonResponse Dungonload = dmc.loadGame("d_mercenaryTest");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.LEFT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        String mercenaryId = getEntities(res, "mercenary").get(0).getId();
+        res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
+        assertEquals(0, getInventory(res, "treasure").size());
+        DungonRes = dmc.saveGame("d_mercenaryTest");
+        Dungonload = dmc.loadGame("d_mercenaryTest");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.LEFT);
+        DungonRes = dmc.saveGame("d_mercenaryTest");
+        Dungonload = dmc.loadGame("d_mercenaryTest");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(res.getBattles().size() == 0);
     }
 
     @Test
     public void testZombieMovement() {
+        clear();
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieTest_randomMove", "c_spiderTest_basicMovement");
+
+        for (int i = 0; i <= 20; i++) {
+            res = dmc.tick(Direction.DOWN);
+        }
+        DungeonResponse DungonRes = dmc.saveGame("d_zombieTest_randomMove");
+        DungeonResponse Dungonload = dmc.loadGame("d_zombieTest_randomMove");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
 
     }
     @Test
     public void testSpiderMovement() {
+        clear();
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_spiderTest_MovementWithBoulder", "c_spiderTest_basicMovement");
+        Position pos = getEntities(res, "spider").get(0).getPosition();
+        ArrayList<Position> movementTrajectory = new ArrayList<Position>();
+        int x = pos.getX();
+        int y = pos.getY();
+        int nextPositionElement = 0;
+        movementTrajectory.add(new Position(x, y - 1));
+        movementTrajectory.add(new Position(x + 1, y - 1));
+        movementTrajectory.add(new Position(x + 1, y));
+        movementTrajectory.add(new Position(x + 1, y + 1));
+        movementTrajectory.add(new Position(x + 1, y));
+        movementTrajectory.add(new Position(x + 1, y - 1));
+        movementTrajectory.add(new Position(x, y - 1));
+        movementTrajectory.add(new Position(x - 1, y - 1));
+        movementTrajectory.add(new Position(x, y - 1));
+        for (int i = 0; i <= 7; ++i) {
+            res = dmc.tick(Direction.UP);
+            assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
+            nextPositionElement++;
 
-    }
-    @Test
-    public void testDurationsWeapon() {
-
+        }
+        DungeonResponse DungonRes = dmc.saveGame("d_spiderTest_MovementWithBoulder");
+        DungeonResponse Dungonload = dmc.loadGame("d_spiderTest_MovementWithBoulder");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+        dmc.tick(Direction.UP);
+        assertEquals(movementTrajectory.get(8), getEntities(res, "spider").get(0).getPosition());
     }
     @Test
     public void testDurationsPotion() {
-
+        clear();
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("testInvisibilityPotionCGCJB1657792158.6375983", "c_Battletest_PlayerStrong");
+        String potion_id = getInventory(initialResponse, "invisibility_potion").get(0).getId();
+        assertDoesNotThrow( () -> {
+            controller.tick(potion_id);
+        });
+        controller.saveGame("testInvisibilityPotionCGCJB1657792158.6375983");
+        controller.loadGame("testInvisibilityPotionCGCJB1657792158.6375983");
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);// DungeonResponse postBattleResponse = genericMercenarySequence(controller,
+        assertTrue(postBattleResponse.getBattles().size() == 0);
+        assertTrue(getEntities(postBattleResponse, "spider").size() == 1);
     }
     // @Test
     public void testSwampTileMovement() {
@@ -211,6 +292,18 @@ public class PersistenceTests {
     }
     @Test
     public void testBattle() {
+        clear();
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("battleWithSpiderWinVKQT81657768515.1290405", "c_Battletest_PlayerStrong");
+        controller.saveGame("battleWithSpiderWinVKQT81657768515.1290405");
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        // controller.tick(Direction.RIGHT);
+        controller.loadGame("battleWithSpiderWinVKQT81657768515.1290405");
+        DungeonResponse given = controller.tick(Direction.RIGHT);
+        BattleResponse battlegiven = given.getBattles().get(0);
+        asserAllBattleEqual(postBattleResponse, given);
+
 
     }
 
