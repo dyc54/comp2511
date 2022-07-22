@@ -2,6 +2,7 @@ package dungeonmania.helpers;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.ArrayList;
 
@@ -153,6 +154,12 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     }
     public Location getLocation(Position p) {
         return new Location(x + p.getX(), y + p.getY());
+    }
+    public static Location random(Location location, int min, int max) {
+        Random random = new Random(location.hashCode());
+        int x = location.getX() + random.nextInt(max - min + 1) + min;
+        int y = location.getY() + random.nextInt(max - min + 1) + min;
+        return Location.AsLocation(x, y);
     }
     /**
      * Get the location of the top of given location

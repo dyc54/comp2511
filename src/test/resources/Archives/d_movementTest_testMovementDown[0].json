@@ -1,0 +1,1 @@
+{"configName":"c_movementTest_testMovementDown","dungeonName":"d_movementTest_testMovementDown","initMap":{"initMap":[{"x":1,"y":1,"id":"player48e6d87a-ddce-420e-a205-a106c4a7a924","type":"player"},{"x":1,"y":3,"id":"exitd97a2c80-afe1-4c6d-9171-590a683dcab5","type":"exit"}]},"dungeonId":"2e0473b9-3ca4-4a04-bb3a-4bf0a5629a4f","branch":0,"actions":[]}

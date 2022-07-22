@@ -5,6 +5,8 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.FileReader;
+import dungeonmania.helpers.FileSaver;
 import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
 import dungeonmania.movingEntities.Mercenary;
@@ -26,15 +28,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class DungeonManiaController {
-    Config dungeonConfig;
-    DungeonMap dungeonMap = new DungeonMap();
-    GoalController goals;
+    private Config dungeonConfig;
+    private DungeonMap dungeonMap;
+    private GoalController goals;
     private String dungeonId;
     private String dungeonName;
     private List<BattleResponse> battles;
     private List<AnimationQueue> animations;
     private Player player;  
-    int timer = 0;
+    private int timer;
+    private int counter;
+    private FileSaver fileSaver;
 
     public String getSkin() {
         return "default";
@@ -63,12 +67,18 @@ public class DungeonManiaController {
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         this.dungeonId = UUID.randomUUID().toString();
+        dungeonMap = new DungeonMap();
         battles = new ArrayList<>();
         this.dungeonName = dungeonName;
+        timer = 0;
+        counter = 0;
         try {
             dungeonConfig = new Config(configName);
             battles = new ArrayList<>();
-            dungeonMap.loads(dungeonName, dungeonConfig).interactAll().battleAll(battles);
+            fileSaver = new FileSaver(dungeonName, configName, dungeonId);
+            dungeonMap.loads(dungeonName, dungeonConfig);
+            fileSaver.saveMap(dungeonMap);
+            dungeonMap.interactAll().battleAll(battles);
             goals = new GoalController(dungeonName, dungeonConfig);
             player = dungeonMap.getPlayer();
             return getDungeonResponse();
@@ -76,21 +86,20 @@ public class DungeonManiaController {
             throw new IllegalArgumentException(
                     "'configName' or 'dungeonName' is not a configuration/dungeon that exists");
         }
-
     }
 
-    public void timerAdd(){
+    private void timerAdd(){
         this.timer++;
     }
 
-    public void checkTimer(int t) {
+    private void checkTimer(int t) {
         if (t == dungeonConfig.spider_spawn_rate) {
             createSpider();
             timer = 0;
         }
     }
 
-    public Location randomLocation() {
+    private Location randomLocation() {
         Random random = new Random(timer);
         int x = random.nextInt(dungeonMap.getPlayer().getLocation().getX() + 30);
         int y = random.nextInt(dungeonMap.getPlayer().getLocation().getY() + 30);
@@ -99,7 +108,9 @@ public class DungeonManiaController {
 
     public void createSpider() {
         // dungeonMap.addEntity(EntityFactory.)
-        dungeonMap.addEntity(new Spider("spider", randomLocation(), dungeonConfig.spider_attack, dungeonConfig.spider_health));
+        Spider spider = new Spider("spider", randomLocation(), dungeonConfig.spider_attack, dungeonConfig.spider_health);
+        spider.setEntityId(String.format("%s_%s_%d_generated", "spider", spider.getLocation().toString(), counter));
+        dungeonMap.addEntity(spider);
     }
     /**
      * /game/dungeonResponseModel
@@ -123,6 +134,7 @@ public class DungeonManiaController {
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles);
         dungeonMap.toString();
+        fileSaver.saveAction("useItem", itemUsedId);
         return getDungeonResponse();
     }
 
@@ -139,6 +151,7 @@ public class DungeonManiaController {
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles);
         dungeonMap.toString();
+        fileSaver.saveAction("playerMove", movementDirection.getOffset().getX(), movementDirection.getOffset().getY());
         return getDungeonResponse();
 
     }
@@ -151,6 +164,8 @@ public class DungeonManiaController {
         System.out.println("Current Inventory: ");
         player.getInventory().print();
         player.build(buildable, dungeonConfig);
+        fileSaver.saveAction("build", buildable);
+
         return getDungeonResponse();
     }
 
@@ -174,8 +189,25 @@ public class DungeonManiaController {
                 throw new InvalidActionException("Invaild action");
             }
         }
+        fileSaver.saveAction("interact", entityId);
         return getDungeonResponse();
     }
+    public DungeonResponse saveGame(String gameName) {
+        return getDungeonResponse();
+    }
+    public DungeonResponse loadGame(String gameName) throws IllegalArgumentException{
+        try {
+            FileReader.LoadFile(gameName, 0);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new IllegalArgumentException("gameName is not a valid game name");
+        }
+        return getDungeonResponse();
+    }
+    public List<String> allGames() {
+        return FileReader.listAllGamesArchives();
+    }
+
 
     /* *********************************************** */
     private DungeonResponse getDungeonResponse() {

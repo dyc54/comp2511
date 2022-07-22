@@ -28,7 +28,7 @@ import dungeonmania.strategies.Movement;
 /**
  * Save entities
  */
-public class DungeonMap {
+public class DungeonMap implements Iterable<Entity> {
     private TreeMap<Location, HashSet<Entity>> map;
     // private final HashMap<String, Location> IdCollection;
     private final IdCollection<Location> idCollection;
@@ -396,6 +396,11 @@ public class DungeonMap {
         return map.getEntities(location).stream()
             .filter(element ->  location.equals(element.getLocation()) && element instanceof Interactability && ((Interactability) element).hasSideEffect(entity, map))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public Iterator<Entity> iterator() {
+        return getAllEntities().iterator();
     }
 
 }

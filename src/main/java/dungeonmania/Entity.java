@@ -10,14 +10,17 @@ public abstract class Entity{
     private Location location;
     private String EntityId;
     private final String type;
+    private int count;
     private String newID(String type){
-        return type+UUID.randomUUID();
+        return type + UUID.randomUUID();
+        // return type+Integer.valueOf(count).toString();
     }
 
     public Entity(String type, Location location) {
         this.EntityId = newID(type);
         this.type = type;
         this.location = location;
+        count = (count == 0 ? 0: count++);
     }
 
     public Entity(String type, int x, int y) {
@@ -27,6 +30,10 @@ public abstract class Entity{
     public Entity(String type) {
         this(type, null);
     }
+    // public Entity(Entity entity) {
+    //     this(entity.type, entity.location.clone());
+    //     this.EntityId = entity.EntityId;
+    // }
 
     public Location getLocation() {
         return location;
@@ -66,4 +73,5 @@ public abstract class Entity{
         }
         return false;
     }
+    
 }
