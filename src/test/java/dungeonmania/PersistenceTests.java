@@ -50,24 +50,38 @@ public class PersistenceTests {
         for (int i = 0; i < expect.getEntities().size(); i++) {
             EntityResponse expectEntity = expect.getEntities().get(i);
             EntityResponse givenEntity = Dungonload.getEntities().get(i);
-            assertEquals(expectEntity.getId(), givenEntity.getId());
-            assertEquals(expectEntity.getPosition(), givenEntity.getPosition());
-            assertEquals(expectEntity.getType(), givenEntity.getType());
+            expect.getEntities().contains(givenEntity);
         }
+        assertEquals(expect.getEntities().size(), Dungonload.getEntities().size());
     }
     private void assertAllInventoryEqual(DungeonResponse expect, DungeonResponse Dungonload) {
-        for (int i = 0; i < expect.getEntities().size(); i++) {
+        // assertEquals(expect.getInventory(), Dungonload.getInventory());
+        for (int i = 0; i < expect.getInventory().size(); i++) {
             ItemResponse expectItem = expect.getInventory().get(i);
             ItemResponse givenItem = Dungonload.getInventory().get(i);
-            assertEquals(expectItem.getId(), givenItem.getId());
-            assertEquals(expectItem.getType(), givenItem.getType());
+            expect.getInventory().contains(givenItem);
         }
+        assertEquals(expect.getInventory().size(), Dungonload.getInventory().size());
     }
+    
     private void asserAllBattleEqual(DungeonResponse expect, DungeonResponse Dungonload) {
         for (int i = 0; i < expect.getEntities().size(); i++) {
             BattleResponse expectBattles = expect.getBattles().get(i);
             BattleResponse givenBattles = Dungonload.getBattles().get(i);
-            assertEquals(expectBattles.getRounds(), givenBattles.getRounds());
+            assertEquals(expectBattles.getEnemy(), givenBattles.getEnemy());
+            assertEquals(expectBattles.getInitialEnemyHealth(), givenBattles.getInitialEnemyHealth());
+            assertEquals(expectBattles.getInitialPlayerHealth(), givenBattles.getInitialPlayerHealth());
+            for (int j = 0; j < expectBattles.getRounds().size(); j++) {
+                RoundResponse expectedRound = expectBattles.getRounds().get(i);
+                RoundResponse givenRound = givenBattles.getRounds().get(i);
+                assertEquals(expectedRound.getDeltaCharacterHealth(), givenRound.getDeltaCharacterHealth());
+                assertEquals(expectedRound.getDeltaEnemyHealth(), givenRound.getDeltaEnemyHealth());
+                for (int k = 0; k < expectedRound.getWeaponryUsed().size(); k++) {
+                    ItemResponse givenItem = givenRound.getWeaponryUsed().get(i);
+                    expectedRound.getWeaponryUsed().contains(givenItem);
+                }
+                assertEquals(expectedRound.getWeaponryUsed().size(), givenRound.getWeaponryUsed().size());
+            }
         }
     }
 
@@ -268,7 +282,7 @@ public class PersistenceTests {
         DungeonResponse DungonRes = dmc.saveGame("d_spiderTest_MovementWithBoulder");
         DungeonResponse Dungonload = dmc.loadGame("d_spiderTest_MovementWithBoulder");
         assertAllEntitiesEqual(DungonRes, Dungonload);
-        dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
         assertEquals(movementTrajectory.get(8), getEntities(res, "spider").get(0).getPosition());
     }
     @Test
@@ -294,14 +308,13 @@ public class PersistenceTests {
     public void testBattle() {
         clear();
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse initialResponse = controller.newGame("battleWithSpiderWinVKQT81657768515.1290405", "c_Battletest_PlayerStrong");
+        controller.newGame("battleWithSpiderWinVKQT81657768515.1290405", "c_Battletest_PlayerStrong");
         controller.saveGame("battleWithSpiderWinVKQT81657768515.1290405");
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
-        BattleResponse battle = postBattleResponse.getBattles().get(0);
-        // controller.tick(Direction.RIGHT);
+        postBattleResponse.getBattles().get(0);
         controller.loadGame("battleWithSpiderWinVKQT81657768515.1290405");
         DungeonResponse given = controller.tick(Direction.RIGHT);
-        BattleResponse battlegiven = given.getBattles().get(0);
+        given.getBattles().get(0);
         asserAllBattleEqual(postBattleResponse, given);
 
 

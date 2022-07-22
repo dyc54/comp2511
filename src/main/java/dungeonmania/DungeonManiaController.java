@@ -151,7 +151,7 @@ public class DungeonManiaController {
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles);
         dungeonMap.toString();
-        fileSaver.saveAction("playerMove", movementDirection.getOffset().getX(), movementDirection.getOffset().getY());
+        fileSaver.saveAction("playerMove", movementDirection.name());
         return getDungeonResponse();
 
     }
@@ -193,11 +193,13 @@ public class DungeonManiaController {
         return getDungeonResponse();
     }
     public DungeonResponse saveGame(String gameName) {
+        fileSaver.save();
         return getDungeonResponse();
     }
     public DungeonResponse loadGame(String gameName) throws IllegalArgumentException{
+        System.out.println("************************** LOAD GAME ******************");
         try {
-            FileReader.LoadFile(gameName, 0);
+            FileReader.LoadGame(this, gameName, 0);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new IllegalArgumentException("gameName is not a valid game name");
@@ -260,5 +262,14 @@ public class DungeonManiaController {
      */
     private void setAnimations() {
 
+    }
+
+    public void setDungeonId(String id) {
+        this.dungeonId = id;
+        fileSaver.setDungeonId(id);
+    }
+    public void setDungeonName(String name) {
+        this.dungeonName = name;
+        fileSaver.setDungeonName(name);
     }
 }

@@ -4,6 +4,8 @@ import dungeonmania.util.Position;
 
 import java.util.UUID;
 
+import org.json.JSONObject;
+
 import dungeonmania.helpers.Location;
 
 public abstract class Entity{
@@ -73,5 +75,12 @@ public abstract class Entity{
         }
         return false;
     }
-    
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", type);
+        obj.put("x", location.getX());
+        obj.put("y", location.getY());
+        obj.put("id", EntityId);
+        return obj;
+    }
 }

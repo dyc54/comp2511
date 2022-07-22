@@ -8,12 +8,12 @@ import dungeonmania.helpers.Config;
 
 public class BuildableEntityFactory {
     
-    public static Entity newEntity(String type, Config config) {
+    public static Entity newEntity(String type, Config config, String id) {
         switch (type) {
             case "bow":
-                return new Bow(type, config.bow_durability);
+                return new Bow(id, type, config.bow_durability);
             case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability);
+                return new Shield(type, config.shield_defence, config.shield_durability, id);
             default:
                 break;
         }

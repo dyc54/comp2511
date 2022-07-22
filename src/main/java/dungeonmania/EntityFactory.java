@@ -19,8 +19,20 @@ import dungeonmania.staticEntities.*;
  * create Entity
  */
 public class EntityFactory {
-
     public static Entity newEntity(JSONObject entity, Config config, DungeonMap map) {
+        // System.out.println(entity.toString());
+        if (entity.has("id")) {
+            // System.out.println("branch 1");
+            Entity entity2 = newEntities(entity, config, map);
+            entity2.setEntityId(entity.getString("id"));
+            return entity2;
+        } else {
+            // System.out.println("branch 2");
+            return newEntities(entity, config, map);
+        }
+        
+    }
+    private static Entity newEntities(JSONObject entity, Config config, DungeonMap map) {
         String type = entity.getString("type");
         int x = entity.getInt("x");
         int y = entity.getInt("y");

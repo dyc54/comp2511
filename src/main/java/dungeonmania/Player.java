@@ -40,6 +40,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private Queue<PotionEntity> effects;
     private List<PotionEffectObserver> observers;
     private Durability durabilities;
+    private int buildCounter;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -49,6 +50,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         inventory = new Inventory();
         this.map = map;
         stay = false;
+        buildCounter = 0;
         observers = new ArrayList<>();
         effects = new ArrayDeque<>();
     }
@@ -168,7 +170,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
         if (recipe.isSatisfied(inventory)) {
             String type = recipe.consumeMaterial(inventory).getRecipeName();
-            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config), this);
+            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter)), this);
+            buildCounter++;
         } else {
             throw new InvalidActionException("player does not have sufficient items to craft the buildable");
         }
