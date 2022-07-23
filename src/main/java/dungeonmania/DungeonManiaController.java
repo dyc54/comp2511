@@ -192,26 +192,7 @@ public class DungeonManiaController {
         fileSaver.saveAction("interact", entityId);
         return getDungeonResponse();
     }
-    public DungeonResponse saveGame(String gameName) {
-        fileSaver.save(gameName);
-        return getDungeonResponse();
-    }
-    public DungeonResponse loadGame(String gameName) throws IllegalArgumentException{
-        System.out.println("************************** LOAD GAME ******************");
-        try {
-            FileReader.LoadGame(this, gameName, 0);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            throw new IllegalArgumentException("gameName is not a valid game name");
-        }
-        return getDungeonResponse();
-    }
-    public List<String> allGames() {
-        return FileReader.listAllGamesArchives();
-    }
-    public DungeonResponse rewind(int ticks) {
-        return getDungeonResponse();
-    }
+    
 
     /* *********************************************** */
     private DungeonResponse getDungeonResponse() {
@@ -274,4 +255,37 @@ public class DungeonManiaController {
         this.dungeonName = name;
         fileSaver.setDungeonName(name);
     }
+    /**
+     * /game/save
+     */
+    public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        fileSaver.save(name);
+        return getDungeonResponse();
+    }
+
+    /**
+     * /game/load
+     */
+    public DungeonResponse loadGame(String name) throws IllegalArgumentException {
+        System.out.println("************************** LOAD GAME ******************");
+        try {
+            FileReader.LoadGame(this, name, 0);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new IllegalArgumentException("gameName is not a valid game name");
+        }
+        return getDungeonResponse();
+    }
+
+    /**
+     * /games/all
+     */
+    public List<String> allGames() {
+        return FileReader.listAllGamesArchives();
+    }
+
+    public DungeonResponse rewind(int ticks) {
+        return getDungeonResponse();
+    }
+
 }
