@@ -68,9 +68,13 @@ public class DungeonMap implements Iterable<Entity> {
         String content = FileReader.LoadFile(path);
         JSONObject json = new JSONObject(content);
         JSONArray entities = json.getJSONArray("entities");
+        boolean hasId = false;
+        if (json.has("branch")) {
+            hasId = json.getInt("branch") == 0;
+        }
         for (int i = 0; i < entities.length(); i++) {
             JSONObject entity = entities.getJSONObject(i);
-            addEntity(EntityFactory.newEntity(entity, config, this));
+            addEntity(EntityFactory.newEntity(entity, config, this, hasId));
         }
         toString();
         return this;
@@ -335,7 +339,7 @@ public class DungeonMap implements Iterable<Entity> {
         list.stream().forEach(en -> en.interact(player, this));
         return this;
     }
-    public DungeonMap battleAll(List<BattleResponse> battles) {
+    public DungeonMap battleAll(List<BattleResponse> battles, Player player) {
         String effect = "";
         if (player.hasEffect()) {
             effect = player.getCurrentEffect().applyEffect();
@@ -371,6 +375,11 @@ public class DungeonMap implements Iterable<Entity> {
         }
         return this;
     }
+    public void setPlayer(Player player) {
+        removeEntity(this.player.getEntityId());
+        addEntity(player);
+        // this.player = player;
+    }
 
     public static boolean isaccessible(DungeonMap map, Location location, Entity entity) {
         List<Entity> list = DungeonMap.blockedEntities(map, location, entity);
@@ -397,7 +406,10 @@ public class DungeonMap implements Iterable<Entity> {
             .filter(element ->  location.equals(element.getLocation()) && element instanceof Interactability && ((Interactability) element).hasSideEffect(entity, map))
             .collect(Collectors.toList());
     }
-
+    public void print() {
+        System.out.println("Map:");
+        getAllEntities().stream().forEach(entity -> System.out.println(entity));
+    }
     @Override
     public Iterator<Entity> iterator() {
         return getAllEntities().iterator();

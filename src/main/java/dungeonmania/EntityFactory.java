@@ -15,13 +15,15 @@ import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.movingEntities.ZombieToast;
 import dungeonmania.staticEntities.*;
+import dungeonmania.timeTravel.TimeTravellingPortal;
+import dungeonmania.timeTravel.TimeTurner;
 /**
  * create Entity
  */
 public class EntityFactory {
-    public static Entity newEntity(JSONObject entity, Config config, DungeonMap map) {
+    public static Entity newEntity(JSONObject entity, Config config, DungeonMap map, boolean useId) {
         // System.out.println(entity.toString());
-        if (entity.has("id")) {
+        if (entity.has("id") && useId) {
             // System.out.println("branch 1");
             Entity entity2 = newEntities(entity, config, map);
             entity2.setEntityId(entity.getString("id"));
@@ -88,9 +90,9 @@ public class EntityFactory {
             case "sun_stone":
                 return new SunStone(type, x, y);
             case "time_turner":
-                break;
+                return new TimeTurner(type, x, y);
             case "time_travelling_portal":
-                break;
+                return new TimeTravellingPortal(type, Location.AsLocation(x, y));
             case "light_bulb_on":
                 break;
             case "wire":

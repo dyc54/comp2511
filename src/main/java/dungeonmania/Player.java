@@ -151,7 +151,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void movement(Position p) {
         Location curr = getLocation().clone();
         Location next = getLocation().getLocation(p);
-        System.out.println(String.format("Player at %s", curr.toString()));
+        System.out.println(String.format("%s at %s", getType(), curr.toString()));
         this.next = p;
         interactAll(curr, map, p);
         if (getLocation().equals(curr) && !stay) {
@@ -160,7 +160,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
                 setLocation(next);
             }
         }
-        System.out.println(String.format("Player %s -> %s", previousLocation.toString(), getLocation().toString()));
+        System.out.println(String.format("%s %s -> %s", getType(),previousLocation.toString(), getLocation().toString()));
     }
     public boolean pickup(Entity entity) {
         return inventory.addToInventoryList(entity, this);
@@ -202,7 +202,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             if(effect.checkDurability()){
                 effects.remove(effect);
                 notifyPotionEffectObserver();
-                // System.out.println("SSSSSSSSSSS");
             }else{
                 effect.setDurability();
             }
@@ -252,5 +251,15 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         
     }
 
+    @Override
+    public String toString() {
+        String sec1 = String.format("%s(%s)  %s -*-*->%s\n", getType(), getEntityId(), previousLocation.toString(), getLocation().toString());
+        String sec2 = String.format("    H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage());
+        // System.out.println(String.format("   H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage()));
+        return sec1 + sec2;
+    }
+    public void print() {
+        System.out.println(toString());
+    }
     //
 }

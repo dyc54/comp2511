@@ -17,6 +17,7 @@ public class FileSaver {
     private final String configName;
     private final JSONArray initmap;
     private int branch;
+    private int tickCounter; 
     private final JSONArray actions;
     private final JSONObject goals;
     public final static String SAVED_PATH = "./src/test/resources/Archives";
@@ -25,6 +26,7 @@ public class FileSaver {
         this.dungeonName = dungeonName;
         this.configName = configName;
         branch = 0;
+        tickCounter = 0;
         actions = new JSONArray();
         initmap = new JSONArray();
         JSONObject temp = new JSONObject();
@@ -38,7 +40,27 @@ public class FileSaver {
         }
         goals = temp;
     }
-    
+    public void save(String fileName, int branch) {
+        FileWriter file;
+        try {
+            file = new FileWriter(String.format("%s/%s[%s].json", SAVED_PATH, fileName, branch),false);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("dungeonId", dungeonId);
+            jsonObject.put("dungeonName", dungeonName);
+            jsonObject.put("configName", configName);
+            jsonObject.put("branch", branch);
+            jsonObject.put("entities", initmap);
+            jsonObject.put("actions", actions);
+            jsonObject.put("tickCounter", tickCounter);
+            jsonObject.put("goal-condition", goals);
+            file.write(jsonObject.toString());
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        
+    }
     public void save(String fileName) {
         FileWriter file;
         try {
@@ -50,6 +72,7 @@ public class FileSaver {
             jsonObject.put("branch", branch);
             jsonObject.put("entities", initmap);
             jsonObject.put("actions", actions);
+            jsonObject.put("tickCounter", tickCounter);
             jsonObject.put("goal-condition", goals);
             file.write(jsonObject.toString());
             file.close();
@@ -88,7 +111,7 @@ public class FileSaver {
     //     actions.put(jsonObject);
     //     return this;
     // }
-    public FileSaver saveAction(String action, String... argvs) {
+    public FileSaver saveAction(String action, Boolean isTick, String... argvs) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("action", action);
         JSONArray args = new JSONArray();
@@ -97,6 +120,9 @@ public class FileSaver {
         }
         jsonObject.put("argv", args);
         actions.put(jsonObject);
+        if (isTick) {
+            tickCounter++;
+        }
         return this;
     }
 

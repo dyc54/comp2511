@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -49,14 +51,14 @@ public class FileReader {
         return null;
     }
     public static List<String> listAllGamesArchives() {
-        ArrayList<String> list = new ArrayList<>();
+        HashSet<String> list = new HashSet<>();
         File file = new File(FileSaver.SAVED_PATH);
         File[] arr = file.listFiles();
         for (File f : arr) {
             String fileName = f.getName().replaceAll("\\[.*?\\].json", "");
             list.add(fileName);
         }
-        return list;
+        return new ArrayList<>(list);
     }
     public static void LoadGame(DungeonManiaController controller, String fileName, int branch) throws IOException {
         String content = FileReader.LoadFile(fileName, branch);
@@ -68,33 +70,76 @@ public class FileReader {
         JSONArray actions = json.getJSONArray("actions");
         for (int i = 0; i < actions.length(); i++) {
             JSONObject action = actions.getJSONObject(i);
-            doAction(controller, action);
+            doAction(controller, action, false);
+        }
+        // FileReader.LoadGame(controller, fileName, branch, 0);
+    }
+    public static void LoadGame(DungeonManiaController controller, String fileName, int branch, int deltaTick) throws IOException {
+        String content = FileReader.LoadFile(fileName, branch);
+        JSONObject json = new JSONObject(content);
+        String configName = json.getString("configName");
+        controller.newGame(String.format("%s[%s]", fileName, branch), configName);
+        controller.setDungeonId(json.getString("dungeonId"));
+        controller.setDungeonName(json.getString("dungeonName"));
+        JSONArray actions = json.getJSONArray("actions");
+        int tickCounter = json.getInt("tickCounter");
+        int currTick = 0;
+        for (int i = 0; currTick < tickCounter + deltaTick && i < actions.length(); i++) {
+            JSONObject action = actions.getJSONObject(i);
+            currTick += doAction(controller, action, false) ? 1: 0;
         }
     }
-    private static void doAction(DungeonManiaController controller, JSONObject action) {
+    public static void LoadGameTick(DungeonManiaController controller, String fileName, int branch, int tick) throws IOException {
+        String content = FileReader.LoadFile(fileName, branch);
+        JSONObject json = new JSONObject(content);
+        JSONArray actions = json.getJSONArray("actions");
+        int tickCounter = json.getInt("tickCounter");
+        // boolean timeTravel = json.getInt("branch") != 0;
+        int currTick = 0;
+        // DungeonManiaController temp = new DungeonManiaController();
+        // temp.newGame(json.getString("dungeonName"), json.getString("configName"));
+        for (int i = 0; i < actions.length(); i++) {
+            JSONObject action = actions.getJSONObject(i);
+            if (currTick == tick) {
+                doAction(controller, action, true);
+            }
+            if (isTick(action)) {
+                currTick++;
+            }
+        }
+    }
+    private static boolean isTick(JSONObject action) {
+        String func = action.getString("action");
+        return func.equals("useItem") || func.equals("playerMove");
+    }
+    private static boolean doAction(DungeonManiaController controller, JSONObject action, boolean hasTimeTraved) {
         String func = action.getString("action");
         JSONArray argv = action.getJSONArray("argv");
+        boolean isTick = false;
+        System.out.println("Play action:");
         switch (func) {
             case "useItem":
                 try {
-                    controller.tick(argv.getString(0));
+                    controller.dotick(argv.getString(0), hasTimeTraved);
                 } catch (IllegalArgumentException | JSONException | InvalidActionException e1) {
                     e1.printStackTrace();
                 }
+                isTick = true;
                 break;
             case "playerMove":
-                controller.tick(Direction.valueOf(argv.getString(0)));
+                controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
+                isTick = true;
                 break;   
             case "build":
                 try {
-                    controller.build(argv.getString(0));
+                    controller.build(argv.getString(0), hasTimeTraved);
                 } catch (IllegalArgumentException | JSONException | InvalidActionException e) {
                     e.printStackTrace();
                 }
                 break;
             case "interact":
                  try {
-                    controller.interact(argv.getString(0));
+                    controller.interact(argv.getString(0), hasTimeTraved);
                 } catch (IllegalArgumentException | JSONException | InvalidActionException e) {
                     e.printStackTrace();
                 }
@@ -102,5 +147,6 @@ public class FileReader {
             default:
                 break;
         }
+        return isTick;
     }
 }

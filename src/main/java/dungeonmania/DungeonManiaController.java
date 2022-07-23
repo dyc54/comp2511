@@ -38,7 +38,10 @@ public class DungeonManiaController {
     private Player player;  
     private int timer;
     private int counter;
+    private int tickCounter;
     private FileSaver fileSaver;
+    private boolean isTimeTravling;
+    private int deltaTickAfterTimeTraveling;
 
     public String getSkin() {
         return "default";
@@ -72,15 +75,18 @@ public class DungeonManiaController {
         this.dungeonName = dungeonName;
         timer = 0;
         counter = 0;
+        tickCounter = 0;
+        deltaTickAfterTimeTraveling = 0;
+        isTimeTravling = false;
         try {
             dungeonConfig = new Config(configName);
             battles = new ArrayList<>();
             fileSaver = new FileSaver(dungeonName, configName, dungeonId);
             dungeonMap.loads(dungeonName, dungeonConfig);
             fileSaver.saveMap(dungeonMap);
-            dungeonMap.interactAll().battleAll(battles);
-            goals = new GoalController(dungeonName, dungeonConfig);
             player = dungeonMap.getPlayer();
+            dungeonMap.interactAll().battleAll(battles, player);
+            goals = new GoalController(dungeonName, dungeonConfig);
             return getDungeonResponse();
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -124,6 +130,26 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
         System.out.println("************************ Tick itemUsedId********************");
+        dotick(itemUsedId, false);
+        updateTimeTravelStatus();
+        runTick(tickCounter);
+        tickCounter++;
+        updateTimeTravelStatus();
+        deltaTickAfterTimeTraveling--;
+        return getDungeonResponse();
+        // return 
+    }
+
+    /**
+     * Tick Operation for older player if `timeTraveledPlayer` is True
+     * otherwise, it will operate current player
+    */
+    public void dotick(String itemUsedId, boolean timeTraveledPlayer) throws IllegalArgumentException, InvalidActionException {
+        System.out.println("************************ Tick itemUsedId********************");
+        Player player = this.player;
+        if (timeTraveledPlayer) {
+            player = dungeonMap.getPlayer();
+        } 
         timerAdd();
         checkTimer(timer);
         player.useItem(itemUsedId);
@@ -132,47 +158,88 @@ public class DungeonManiaController {
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
-        dungeonMap.battleAll(battles);
+        dungeonMap.battleAll(battles, player);
         dungeonMap.toString();
-        fileSaver.saveAction("useItem", itemUsedId);
-        return getDungeonResponse();
-    }
+        fileSaver.saveAction("useItem", true, itemUsedId);
+        // tickCounter++;
+        // return getDungeonResponse();
 
+    }
     /**
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
+        dotick(movementDirection, false);
+        updateTimeTravelStatus();
+        runTick(tickCounter);
+        tickCounter++;
+        updateTimeTravelStatus();
+        deltaTickAfterTimeTraveling--;
+        return getDungeonResponse();
+        // return tick(movementDirection, false);
+    }
+
+    /**
+     * Tick Operation for older player if `timeTraveledPlayer` is True
+     * otherwise, it will operate current player
+     */
+    public void dotick(Direction movementDirection, boolean timeTraveledPlayer) {
         System.out.println("************************ Tick movementDirection ********************");
+        Player player = this.player;
+        if (timeTraveledPlayer) {
+            player = dungeonMap.getPlayer();
+        } 
         player.movement(movementDirection.getOffset());
         player.updatePotionDuration();
         timerAdd();
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
-        dungeonMap.battleAll(battles);
+        dungeonMap.battleAll(battles, player);
         dungeonMap.toString();
-        fileSaver.saveAction("playerMove", movementDirection.name());
-        return getDungeonResponse();
-
+        fileSaver.saveAction("playerMove", true, movementDirection.name());
+        // tickCounter++;
+        // return getDungeonResponse();
     }
-
     /**
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
+        return build(buildable, false);
+    }
+    /**
+     * Build Operation for older player if `timeTraveledPlayer` is True
+     * otherwise, it will operate for current player
+    */
+    public DungeonResponse build(String buildable, boolean timeTraveledPlayer)  throws IllegalArgumentException, InvalidActionException {
         System.out.println(" ------------------- BUILD ------------------- ");
+        Player player = this.player;
+        if (timeTraveledPlayer) {
+            player = dungeonMap.getPlayer();
+        } 
         System.out.println("Current Inventory: ");
         player.getInventory().print();
         player.build(buildable, dungeonConfig);
-        fileSaver.saveAction("build", buildable);
-
+        fileSaver.saveAction("build", false, buildable);
         return getDungeonResponse();
+
     }
 
     /**
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        return interact(entityId, false);
+    }
+    /**
+     * Interact Operation for older player if `timeTraveledPlayer` is True
+     * otherwise, it will operate for current player
+    */
+    public DungeonResponse interact(String entityId, boolean timeTraveledPlayer) throws IllegalArgumentException, InvalidActionException {
+        Player player = this.player;
+        if (timeTraveledPlayer) {
+            player = dungeonMap.getPlayer();
+        } 
         Entity entity = dungeonMap.getEntity(entityId);
         if (entity == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
@@ -189,34 +256,15 @@ public class DungeonManiaController {
                 throw new InvalidActionException("Invaild action");
             }
         }
-        fileSaver.saveAction("interact", entityId);
+        fileSaver.saveAction("interact", false, entityId);
         return getDungeonResponse();
     }
-    public DungeonResponse saveGame(String gameName) {
-        fileSaver.save(gameName);
-        return getDungeonResponse();
-    }
-    public DungeonResponse loadGame(String gameName) throws IllegalArgumentException{
-        System.out.println("************************** LOAD GAME ******************");
-        try {
-            FileReader.LoadGame(this, gameName, 0);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            throw new IllegalArgumentException("gameName is not a valid game name");
-        }
-        return getDungeonResponse();
-    }
-    public List<String> allGames() {
-        return FileReader.listAllGamesArchives();
-    }
-    public DungeonResponse rewind(int ticks) {
-        return getDungeonResponse();
-    }
+    
 
     /* *********************************************** */
     private DungeonResponse getDungeonResponse() {
         setBattlesResponse();
-        goals.hasAchieved(dungeonMap, dungeonMap.getPlayer());
+        goals.hasAchieved(dungeonMap, player);
         return new DungeonResponse(dungeonId, dungeonName, getEntitiesResponse(), getItemResponse(), battles,
                     getBuildables(player.getInventory()), goals.toString());
     }
@@ -229,6 +277,9 @@ public class DungeonManiaController {
         List<EntityResponse> entities = new ArrayList<>();
         for (Entity entitie : dungeonMap.getAllEntities()) {
             entities.add(entitie.getEntityResponse());
+        }
+        if (isTimeTravling) {
+            entities.add(player.getEntityResponse());
         }
         return entities;
         // this.entities = entities;
@@ -273,5 +324,73 @@ public class DungeonManiaController {
     public void setDungeonName(String name) {
         this.dungeonName = name;
         fileSaver.setDungeonName(name);
+    }
+    /**
+     * /game/save
+     */
+    public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        fileSaver.save(name);
+        return getDungeonResponse();
+    }
+
+    /**
+     * /game/load
+     */
+    public DungeonResponse loadGame(String name) throws IllegalArgumentException {
+        System.out.println("************************** LOAD GAME ******************");
+        try {
+            FileReader.LoadGame(this, name, 0);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new IllegalArgumentException("gameName is not a valid game name");
+        }
+        return getDungeonResponse();
+    }
+
+    /**
+     * /games/all
+     */
+    public List<String> allGames() {
+        return FileReader.listAllGamesArchives();
+    }
+
+    public DungeonResponse rewind(int ticks) {
+        System.out.println(String.format("--------- TIME TRAVEL %d --------------\n Starting running", ticks));
+        Player backupPlayer = player;
+        int backuptickCounter = tickCounter;
+        fileSaver.save(dungeonName, 1);
+        try {
+            FileReader.LoadGame(this, dungeonName, 1, -1 * ticks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("************************** end running *******************");
+        dungeonMap.getPlayer().setType("older_player");
+        dungeonMap.print();
+        this.player = backupPlayer;
+        deltaTickAfterTimeTraveling = ticks;
+        tickCounter = backuptickCounter - ticks;
+        isTimeTravling = true;
+        return getDungeonResponse();
+    }
+
+    private void runTick(int tick) {
+        if (isTimeTravling) {
+            try {
+                FileReader.LoadGameTick(this, dungeonName, 1, tickCounter);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void updateTimeTravelStatus() {
+        System.out.println("Update updateTimeTravelStatus");
+        if (isTimeTravling) {
+            if (deltaTickAfterTimeTraveling <= 0 || player.getLocation().equals(dungeonMap.getPlayer().getLocation())) {
+                isTimeTravling = false;
+                dungeonMap.setPlayer(this.player);
+            } 
+        }
+        
     }
 }
