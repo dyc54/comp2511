@@ -113,7 +113,7 @@ public class TimeTravelingTest {
         older_player = getEntities(Res, "older_player").get(0);
         assertEquals(new Position(2, 0), older_player.getPosition());
         Res = controller.tick(Direction.LEFT);
-        assertTrue(getEntities(Res, "older_player").size() == 0);
+        assertTrue(getEntities(Res, "older_player").size() == 1);
 
     }
     // [___1] tm_tPl [    ] [    ] [    ] [    ] [    ] [    ] [    ] [    ] [    ] 

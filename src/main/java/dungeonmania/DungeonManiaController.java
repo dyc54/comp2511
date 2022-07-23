@@ -256,7 +256,11 @@ public class DungeonManiaController {
                 throw new InvalidActionException("Invaild action");
             }
         }
+<<<<<<< HEAD
         fileSaver.saveAction("interact", false, entityId);
+=======
+        fileSaver.saveAction("interact", entityId);
+>>>>>>> a9fdfee218a8653328eb7b9e2cad06d53f613aa6
         return getDungeonResponse();
     }
     
@@ -355,6 +359,7 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse rewind(int ticks) {
+<<<<<<< HEAD
         System.out.println(String.format("--------- TIME TRAVEL %d --------------\n Starting running", ticks));
         Player backupPlayer = player;
         int backuptickCounter = tickCounter;
@@ -393,4 +398,9 @@ public class DungeonManiaController {
         }
         
     }
+=======
+        return getDungeonResponse();
+    }
+
+>>>>>>> a9fdfee218a8653328eb7b9e2cad06d53f613aa6
 }
