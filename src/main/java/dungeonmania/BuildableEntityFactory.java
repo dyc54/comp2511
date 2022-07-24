@@ -3,6 +3,7 @@ package dungeonmania;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableComponent;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
 
@@ -14,6 +15,8 @@ public class BuildableEntityFactory {
                 return new Bow(id, type, config.bow_durability);
             case "shield":
                 return new Shield(type, config.shield_defence, config.shield_durability, id);
+            case "midnight_armour":
+                return new MidnightArmour(type, config.midnight_armour_attack, config.midnight_armour_defence, id);
             default:
                 break;
         }

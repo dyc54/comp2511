@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.ArrayList;
 
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 
@@ -239,5 +240,18 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public int hashCode() {
         // TODO: CHANGE THIS IF ANY VALUE IS OVERFLOW 
         return ((31 * x + 13 * y) ^ 3  % (7919 * 1637) - (19 * y + 21 - x ^ 4) ^ 2) * (x - y) ^ 2 + 1;
+    }
+    public static String inverseDirection(Direction dir) {
+        switch (dir.name()) {
+            case "LEFT":
+                return "RIGHT";
+            case "RIGHT":
+                return "LEFT";
+            case "TOP":
+                return "DOWN";
+            case "DOWN":
+                return "TOP";
+        }
+        return "UP";
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
+import dungeonmania.battle.Enemy;
 import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.collectableEntities.Useable;
 import dungeonmania.collectableEntities.durabilityEntities.Durability;
@@ -27,7 +28,7 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
 
-public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject {
+public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy {
     // private int attack;
     private AttackStrategy attack;
     private DefenceStrategy defence;
@@ -261,5 +262,38 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void print() {
         System.out.println(toString());
     }
+    public boolean canBattle(Entity entity) {
+        if (entity == this) {
+            return false;
+        }
+        
+        if (hasEffect() && getCurrentEffect().applyEffect().equals("Invisibility")) {
+            return false;
+        }
+        if (entity instanceof Player) {
+            boolean sun = inventory.hasItem("sun_stone", 1);
+            boolean armour = inventory.hasItem("midnight_armour", 1);
+            return !(sun || armour);
+        }
+        return true;
+    }
     //
+
+    @Override
+    public AttackStrategy getAttackStrayegy() {
+        // TODO Auto-generated method stub
+        return attack;
+    }
+
+    @Override
+    public String getEnemyId() {
+        // TODO Auto-generated method stub
+        return getEntityId();
+    }
+
+    @Override
+    public String getEnemyType() {
+        // TODO Auto-generated method stub
+        return getType();
+    }
 }

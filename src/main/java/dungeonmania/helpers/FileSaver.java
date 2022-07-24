@@ -111,11 +111,11 @@ public class FileSaver {
     //     actions.put(jsonObject);
     //     return this;
     // }
-    public FileSaver saveAction(String action, Boolean isTick, String... argvs) {
+    public <T> FileSaver saveAction(String action, Boolean isTick, T... argvs) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("action", action);
         JSONArray args = new JSONArray();
-        for (String argv: argvs) {
+        for (T argv: argvs) {
             args.put(argv);
         }
         jsonObject.put("argv", args);
@@ -125,7 +125,6 @@ public class FileSaver {
         }
         return this;
     }
-
     public void setDungeonName(String name) {
         this.dungeonName = name;
     }

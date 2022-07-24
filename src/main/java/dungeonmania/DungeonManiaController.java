@@ -42,7 +42,10 @@ public class DungeonManiaController {
     private FileSaver fileSaver;
     private boolean isTimeTravling;
     private int deltaTickAfterTimeTraveling;
+    private int currbranch;
 
+    // TODO:
+    // public boolean TIMETRAVEL_FUNCA
     public String getSkin() {
         return "default";
     }
@@ -133,7 +136,6 @@ public class DungeonManiaController {
         dotick(itemUsedId, false);
         updateTimeTravelStatus();
         runTick(tickCounter);
-        tickCounter++;
         updateTimeTravelStatus();
         deltaTickAfterTimeTraveling--;
         return getDungeonResponse();
@@ -149,7 +151,11 @@ public class DungeonManiaController {
         Player player = this.player;
         if (timeTraveledPlayer) {
             player = dungeonMap.getPlayer();
-        } 
+        } else {
+            tickCounter++;
+
+            fileSaver.saveAction("useItem", true, itemUsedId);
+        }
         timerAdd();
         checkTimer(timer);
         player.useItem(itemUsedId);
@@ -160,7 +166,6 @@ public class DungeonManiaController {
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
         dungeonMap.toString();
-        fileSaver.saveAction("useItem", true, itemUsedId);
         // tickCounter++;
         // return getDungeonResponse();
 
@@ -172,11 +177,11 @@ public class DungeonManiaController {
         dotick(movementDirection, false);
         updateTimeTravelStatus();
         runTick(tickCounter);
-        tickCounter++;
+        // tickCounter++;
         updateTimeTravelStatus();
         deltaTickAfterTimeTraveling--;
+        
         return getDungeonResponse();
-        // return tick(movementDirection, false);
     }
 
     /**
@@ -188,7 +193,10 @@ public class DungeonManiaController {
         Player player = this.player;
         if (timeTraveledPlayer) {
             player = dungeonMap.getPlayer();
-        } 
+        } else {
+            tickCounter++;
+            fileSaver.saveAction("playerMove", true, movementDirection.name());
+        }
         player.movement(movementDirection.getOffset());
         player.updatePotionDuration();
         timerAdd();
@@ -197,9 +205,12 @@ public class DungeonManiaController {
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
         dungeonMap.toString();
-        fileSaver.saveAction("playerMove", true, movementDirection.name());
-        // tickCounter++;
-        // return getDungeonResponse();
+        if (!timeTraveledPlayer && dungeonMap.isTimeTravelPortal(player.getLocation())) {
+            // fileSaver.saveAction("mark", false, "c");
+            doRewind(30, 2);
+            player.setLocation(player.getPreviousLocation());
+            fileSaver.saveAction("playerMove", false, Location.inverseDirection(movementDirection), "MOVE ELDER_SELF ONLY");
+        }
     }
     /**
      * /game/build
@@ -216,7 +227,9 @@ public class DungeonManiaController {
         Player player = this.player;
         if (timeTraveledPlayer) {
             player = dungeonMap.getPlayer();
-        } 
+        } else {
+            fileSaver.saveAction("build", false, buildable);
+        }
         System.out.println("Current Inventory: ");
         player.getInventory().print();
         player.build(buildable, dungeonConfig);
@@ -239,7 +252,9 @@ public class DungeonManiaController {
         Player player = this.player;
         if (timeTraveledPlayer) {
             player = dungeonMap.getPlayer();
-        } 
+        } else {
+            fileSaver.saveAction("interact", false, entityId);
+        }
         Entity entity = dungeonMap.getEntity(entityId);
         if (entity == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
@@ -256,11 +271,6 @@ public class DungeonManiaController {
                 throw new InvalidActionException("Invaild action");
             }
         }
-<<<<<<< HEAD
-        fileSaver.saveAction("interact", false, entityId);
-=======
-        fileSaver.saveAction("interact", entityId);
->>>>>>> a9fdfee218a8653328eb7b9e2cad06d53f613aa6
         return getDungeonResponse();
     }
     
@@ -345,7 +355,6 @@ public class DungeonManiaController {
         try {
             FileReader.LoadGame(this, name, 0);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             throw new IllegalArgumentException("gameName is not a valid game name");
         }
         return getDungeonResponse();
@@ -359,13 +368,17 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse rewind(int ticks) {
-<<<<<<< HEAD
+        doRewind(ticks, 1);
+        fileSaver.saveAction("rewind", false, ticks);
+        return getDungeonResponse();
+    }
+    public void doRewind(int ticks, int branch) {
         System.out.println(String.format("--------- TIME TRAVEL %d --------------\n Starting running", ticks));
         Player backupPlayer = player;
-        int backuptickCounter = tickCounter;
-        fileSaver.save(dungeonName, 1);
+        FileSaver backupFileSaver = fileSaver;
+        fileSaver.save(dungeonName, branch);
         try {
-            FileReader.LoadGame(this, dungeonName, 1, -1 * ticks);
+            FileReader.LoadGame(this, dungeonName, branch, -1 * ticks);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -374,15 +387,15 @@ public class DungeonManiaController {
         dungeonMap.print();
         this.player = backupPlayer;
         deltaTickAfterTimeTraveling = ticks;
-        tickCounter = backuptickCounter - ticks;
+        // tickCounter = backuptickCounter - ticks;
         isTimeTravling = true;
-        return getDungeonResponse();
+        fileSaver = backupFileSaver;
+        currbranch = branch;
     }
-
     private void runTick(int tick) {
         if (isTimeTravling) {
             try {
-                FileReader.LoadGameTick(this, dungeonName, 1, tickCounter);
+                FileReader.LoadGameTick(this, dungeonName, currbranch, tick);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -391,16 +404,11 @@ public class DungeonManiaController {
     private void updateTimeTravelStatus() {
         System.out.println("Update updateTimeTravelStatus");
         if (isTimeTravling) {
-            if (deltaTickAfterTimeTraveling <= 0 || player.getLocation().equals(dungeonMap.getPlayer().getLocation())) {
+            if (deltaTickAfterTimeTraveling <= 0) {
                 isTimeTravling = false;
                 dungeonMap.setPlayer(this.player);
             } 
         }
         
     }
-=======
-        return getDungeonResponse();
-    }
-
->>>>>>> a9fdfee218a8653328eb7b9e2cad06d53f613aa6
 }
