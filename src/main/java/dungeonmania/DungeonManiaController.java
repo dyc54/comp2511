@@ -67,20 +67,22 @@ public class DungeonManiaController {
     public static List<String> configs() {
         return FileLoader.listFileNamesInResourceDirectory("configs");
     }
-
-    /**
-     * /game/new
-     */
-    public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
+    private void initController() {
         this.dungeonId = UUID.randomUUID().toString();
         dungeonMap = new DungeonMap();
         battles = new ArrayList<>();
-        this.dungeonName = dungeonName;
         timer = 0;
         counter = 0;
         tickCounter = 0;
         deltaTickAfterTimeTraveling = 0;
         isTimeTravling = false;
+    }
+    /**
+     * /game/new
+     */
+    public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
+        initController();
+        this.dungeonName = dungeonName;
         try {
             dungeonConfig = new Config(configName);
             battles = new ArrayList<>();
@@ -95,6 +97,9 @@ public class DungeonManiaController {
             throw new IllegalArgumentException(
                     "'configName' or 'dungeonName' is not a configuration/dungeon that exists");
         }
+    }
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
+        return getDungeonResponse();
     }
 
     private void timerAdd(){
