@@ -18,7 +18,7 @@ public class RandomMovement implements MovementStrategy{
         List<Location> choices = MovementOptions.decodeLocationsArguments(location, possible);
         choices.stream().forEach(lo -> System.out.println(lo.toString()));
         if (choices.size() != 0) {
-            Random randomchoicer = new Random();
+            Random randomchoicer = new Random(location.hashCode());
             Location next = choices.get(randomchoicer.nextInt(choices.size()));
             return next;
         }

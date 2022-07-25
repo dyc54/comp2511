@@ -1,0 +1,5 @@
+player, 0, 0
+spider, 10, 10
+sword, 0, 0
+time_travelling_portal, 1, 0
+g, exit

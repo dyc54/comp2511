@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.collectableEntities.Useable;
+import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
@@ -38,6 +39,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private final Location previousLocation;
     private Queue<PotionEntity> effects;
     private List<PotionEffectObserver> observers;
+    private Durability durabilities;
+    private int buildCounter;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -47,6 +50,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         inventory = new Inventory();
         this.map = map;
         stay = false;
+        buildCounter = 0;
         observers = new ArrayList<>();
         effects = new ArrayDeque<>();
     }
@@ -92,7 +96,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
         if (hasEffect() && getCurrentEffect().checkDurability()) {
             effects.poll();
-            notifyObserver();
+            notifyPotionEffectObserver();
         } else if (hasEffect()) {
             getCurrentEffect().setDurability();
 
@@ -147,7 +151,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void movement(Position p) {
         Location curr = getLocation().clone();
         Location next = getLocation().getLocation(p);
-        System.out.println(String.format("Player at %s", curr.toString()));
+        System.out.println(String.format("%s at %s", getType(), curr.toString()));
         this.next = p;
         interactAll(curr, map, p);
         if (getLocation().equals(curr) && !stay) {
@@ -156,7 +160,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
                 setLocation(next);
             }
         }
-        System.out.println(String.format("Player %s -> %s", previousLocation.toString(), getLocation().toString()));
+        System.out.println(String.format("%s %s -> %s", getType(),previousLocation.toString(), getLocation().toString()));
     }
     public boolean pickup(Entity entity) {
         return inventory.addToInventoryList(entity, this);
@@ -166,7 +170,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
         if (recipe.isSatisfied(inventory)) {
             String type = recipe.consumeMaterial(inventory).getRecipeName();
-            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config), this);
+            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter)), this);
+            buildCounter++;
         } else {
             throw new InvalidActionException("player does not have sufficient items to craft the buildable");
         }
@@ -196,8 +201,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         for(PotionEntity effect : queue){
             if(effect.checkDurability()){
                 effects.remove(effect);
-                notifyObserver();
-                System.out.println("SSSSSSSSSSS");
+                notifyPotionEffectObserver();
             }else{
                 effect.setDurability();
             }
@@ -240,12 +244,22 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     }
 
     @Override
-    public void notifyObserver() {
+    public void notifyPotionEffectObserver() {
         for (PotionEffectObserver observer : observers) {
             observer.update(this);
         }
         
     }
 
+    @Override
+    public String toString() {
+        String sec1 = String.format("%s(%s)  %s -*-*->%s\n", getType(), getEntityId(), previousLocation.toString(), getLocation().toString());
+        String sec2 = String.format("    H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage());
+        // System.out.println(String.format("   H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage()));
+        return sec1 + sec2;
+    }
+    public void print() {
+        System.out.println(toString());
+    }
     //
 }

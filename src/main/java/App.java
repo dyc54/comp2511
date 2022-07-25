@@ -145,6 +145,16 @@ public class App implements SparkApplication {
             });
         }, gson::toJson);
 
+        Spark.post("/api/game/rewind/", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> {
+                try {
+                    return dmc.rewind(Integer.valueOf(request.queryParams("ticks")).intValue());
+                } catch (Exception e) {
+                    throw new InvalidActionExceptionAPI(e.getMessage());
+                }
+            });
+        }, gson::toJson);
+
         Spark.post("/api/game/dungeonResponseModel/", "application/json", (request, response) -> {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.getDungeonResponseModel());
         }, gson::toJson);

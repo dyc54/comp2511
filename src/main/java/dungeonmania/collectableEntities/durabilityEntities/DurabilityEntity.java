@@ -9,6 +9,11 @@ public abstract class DurabilityEntity extends CollectableEntity{
         super(type, x, y);
         this.durability = durability;
     }
+    public DurabilityEntity(String type, int durability, String id) {
+        super(type);
+        this.durability = durability;
+        setEntityId(id);
+    }
     public DurabilityEntity(String type, int durability) {
         super(type);
         this.durability = durability;

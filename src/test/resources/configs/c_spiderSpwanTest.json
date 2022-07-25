@@ -22,5 +22,19 @@
     "treasure_goal": 1,
     "zombie_attack": 1,
     "zombie_health": 5,
-    "zombie_spawn_rate": 1
+    "zombie_spawn_rate": 1,
+
+    "assassin_attack": 1,
+    "assassin_bribe_amount": 1,
+    "assassin_bribe_fail_rate": 1,
+    "assassin_health": 1,
+    "assassin_recon_radius": 1,
+    "hydra_spawn_rate": 1,
+    "hydra_attack": 1,
+    "hydra_health": 1,
+    "hydra_health_increase_rate": 1,
+    "hydra_health_increase_amount": 1,
+    "mind_control_duration": 1,
+    "midnight_armour_attack": 1,
+    "midnight_armour_defence": 1
   }

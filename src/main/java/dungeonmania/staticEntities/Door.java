@@ -1,5 +1,7 @@
 package dungeonmania.staticEntities;
 
+import org.json.JSONObject;
+
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.Key;
@@ -59,5 +61,9 @@ public class Door extends StaticEntity {
     public boolean hasSideEffect(Entity entity, DungeonMap map) {
         // do nothing by defalut
         return DungeonMap.isaccessible(map, getLocation(), entity);
+    }
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject().put("key", key);
     }
 }

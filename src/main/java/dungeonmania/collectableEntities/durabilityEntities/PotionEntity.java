@@ -32,7 +32,7 @@ public abstract class PotionEntity extends DurabilityEntity implements Effect, U
     @Override
     public void use(DungeonMap map, Player player) {
         player.addeffect((PotionEntity) this);
-        player.notifyObserver();
+        player.notifyPotionEffectObserver();
         player.getInventory().removeFromInventoryList(this);
     }
 }
