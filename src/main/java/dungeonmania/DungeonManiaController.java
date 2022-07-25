@@ -256,11 +256,7 @@ public class DungeonManiaController {
                 throw new InvalidActionException("Invaild action");
             }
         }
-<<<<<<< HEAD
-        fileSaver.saveAction("interact", false, entityId);
-=======
         fileSaver.saveAction("interact", entityId);
->>>>>>> a9fdfee218a8653328eb7b9e2cad06d53f613aa6
         return getDungeonResponse();
     }
     
@@ -359,48 +355,7 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse rewind(int ticks) {
-<<<<<<< HEAD
-        System.out.println(String.format("--------- TIME TRAVEL %d --------------\n Starting running", ticks));
-        Player backupPlayer = player;
-        int backuptickCounter = tickCounter;
-        fileSaver.save(dungeonName, 1);
-        try {
-            FileReader.LoadGame(this, dungeonName, 1, -1 * ticks);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("************************** end running *******************");
-        dungeonMap.getPlayer().setType("older_player");
-        dungeonMap.print();
-        this.player = backupPlayer;
-        deltaTickAfterTimeTraveling = ticks;
-        tickCounter = backuptickCounter - ticks;
-        isTimeTravling = true;
         return getDungeonResponse();
     }
 
-    private void runTick(int tick) {
-        if (isTimeTravling) {
-            try {
-                FileReader.LoadGameTick(this, dungeonName, 1, tickCounter);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    private void updateTimeTravelStatus() {
-        System.out.println("Update updateTimeTravelStatus");
-        if (isTimeTravling) {
-            if (deltaTickAfterTimeTraveling <= 0 || player.getLocation().equals(dungeonMap.getPlayer().getLocation())) {
-                isTimeTravling = false;
-                dungeonMap.setPlayer(this.player);
-            } 
-        }
-        
-    }
-=======
-        return getDungeonResponse();
-    }
-
->>>>>>> a9fdfee218a8653328eb7b9e2cad06d53f613aa6
 }
