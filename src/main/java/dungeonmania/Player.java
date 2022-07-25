@@ -204,7 +204,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     }
 
-    //player 查询背包物品进行建造
     public boolean build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         switch (buildable) {
             case "bow":
@@ -255,7 +254,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     }
 
-    // player 使用物品F
     public void useItem(String itemUsedId) throws InvalidActionException, IllegalArgumentException {
         Entity entity = inventory.getItem(itemUsedId);
         if (entity == null) {
@@ -280,10 +278,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         // inventory.useItem(itemUsedId);
     }
 
-    // //查询player状态，无敌还是隐身，还是都有
-    // public List<String> checkPlayerStatus(){
-    // return inventory.checkPlayerStatus();
-    // }
     public PotionEntity getCurrentEffect() {
         return effects.peek();
     }
