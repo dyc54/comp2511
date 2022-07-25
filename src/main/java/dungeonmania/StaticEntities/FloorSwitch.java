@@ -4,17 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.Entity;
+import dungeonmania.CollectableEntities.Bomb;
 import dungeonmania.helpers.DungeonMap;
 
 public class FloorSwitch extends StaticEntity {
 
-    private List<StaticBomb> bombs;
+    private List<Bomb> bombs;
     private boolean trigger;
 
     public FloorSwitch(String type, int x, int y) {
         super(type, x, y);
         this.trigger = false;
-        this.bombs = new ArrayList<StaticBomb>();
+        this.bombs = new ArrayList<Bomb>();
     }
 
     public boolean getTrigger() {
@@ -25,7 +26,7 @@ public class FloorSwitch extends StaticEntity {
         this.trigger = trigger;
     }
 
-    public void bombAttach(StaticBomb bomb) {
+    public void bombAttach(Bomb bomb) {
         bombs.add(bomb);
     }
 

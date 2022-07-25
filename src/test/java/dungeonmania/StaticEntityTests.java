@@ -337,7 +337,58 @@ public class StaticEntityTests {
                 res = assertDoesNotThrow(() -> dmc.tick(bombId));
 
                 assertEquals(0, getInventory(res, "bomb").size());
-                assertEquals(1, getEntities(res, "static_bomb").size());
+                assertEquals(1, getEntities(res, "bomb").size());
+        }
+
+        @Test
+        @DisplayName("Test you can't pass a placed bomb")
+        public void TestCannotPassPlacedBomb() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_bombTest_placeBombRadius2",
+                                "c_bombTest_placeBombRadius2");
+
+                // pick up bomb
+                res = dmc.tick(Direction.DOWN);
+                res = dmc.tick(Direction.RIGHT);
+                Position pos = getEntities(res, "player").get(0).getPosition();
+                assertEquals(new Position(3, 3), pos);
+                assertEquals(1, getInventory(res, "bomb").size());
+
+                // Place the bomb
+                String bombId = getInventory(res, "bomb").get(0).getId();
+                res = assertDoesNotThrow(() -> dmc.tick(bombId));
+
+                // Cannot move on this bomb and pick it up again
+                res = dmc.tick(Direction.RIGHT);
+                res = dmc.tick(Direction.LEFT);
+                pos = getEntities(res, "player").get(0).getPosition();
+                assertEquals(new Position(4, 3), pos);
+                assertEquals(0, getInventory(res, "bomb").size());
+        }
+
+        @Test
+        @DisplayName("Test BombId does not change")
+        public void TestBombId() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("d_bombTest_placeBombRadius2",
+                                "c_bombTest_placeBombRadius2");
+
+                String idBefore = getEntities(res, "bomb").get(0).getId();
+                // pick up bomb
+                res = dmc.tick(Direction.DOWN);
+                res = dmc.tick(Direction.RIGHT);
+                String idPickedUp = getInventory(res, "bomb").get(0).getId();
+                assertEquals(idBefore, idPickedUp);
+
+                // Place the bomb
+                res = assertDoesNotThrow(() -> dmc.tick(idPickedUp));
+
+                // Check Id
+                String idAfter = getEntities(res, "bomb").get(0).getId();
+                assertEquals(idBefore, idAfter);
+
         }
 
         @Test
@@ -364,7 +415,7 @@ public class StaticEntityTests {
                 res = assertDoesNotThrow(() -> dmc.tick(bombId));
 
                 assertEquals(1, getInventory(res, "bomb").size());
-                assertEquals(1, getEntities(res, "static_bomb").size());
+                assertEquals(1, getEntities(res, "bomb").size());
         }
 
         @Test
@@ -387,8 +438,8 @@ public class StaticEntityTests {
                 res = assertDoesNotThrow(() -> dmc.tick(bombId));
 
                 assertEquals(0, getInventory(res, "bomb").size());
-                assertEquals(1, getEntities(res, "static_bomb").size());
-                Position posBomb = getEntities(res, "static_bomb").get(0).getPosition();
+                assertEquals(1, getEntities(res, "bomb").size());
+                Position posBomb = getEntities(res, "bomb").get(0).getPosition();
                 assertEquals(new Position(4, 3), posBomb);
 
                 assertEquals(1, getEntities(res, "player").size());
@@ -397,7 +448,7 @@ public class StaticEntityTests {
                 assertEquals(2, getEntities(res, "wall").size());
                 assertEquals(2, getEntities(res, "treasure").size());
                 assertEquals(1, getEntities(res, "boulder").size());
-                assertEquals(1, getEntities(res, "static_bomb").size());
+                assertEquals(1, getEntities(res, "bomb").size());
         }
 
         @Test
@@ -420,8 +471,8 @@ public class StaticEntityTests {
                 res = assertDoesNotThrow(() -> dmc.tick(bombId));
 
                 assertEquals(0, getInventory(res, "bomb").size());
-                assertEquals(1, getEntities(res, "static_bomb").size());
-                Position posBomb = getEntities(res, "static_bomb").get(0).getPosition();
+                assertEquals(1, getEntities(res, "bomb").size());
+                Position posBomb = getEntities(res, "bomb").get(0).getPosition();
                 assertEquals(new Position(4, 3), posBomb);
 
                 // Go back and push the boulder
@@ -442,7 +493,7 @@ public class StaticEntityTests {
                 assertEquals(0, getEntities(res, "wall").size());
                 assertEquals(0, getEntities(res, "treasure").size());
                 assertEquals(0, getEntities(res, "boulder").size());
-                assertEquals(0, getEntities(res, "static_bomb").size());
+                assertEquals(0, getEntities(res, "bomb").size());
         }
 
         @Test

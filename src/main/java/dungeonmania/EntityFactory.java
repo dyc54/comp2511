@@ -53,8 +53,6 @@ public class EntityFactory {
                 return new Arrows(type, x, y);
             case "bomb":
                 return new Bomb(type, x, y, config.bomb_radius);
-            case "static_bomb":
-                return new StaticBomb(type, x, y, config.bomb_radius);
             case "invincibility_potion":
                 return new InvincibilityPotion(type, config.invincibility_potion_duration, x, y);
             case "invisibility_potion":
