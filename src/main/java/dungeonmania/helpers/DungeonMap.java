@@ -22,6 +22,8 @@ import dungeonmania.battle.Battle;
 import dungeonmania.battle.Enemy;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.BattleResponse;
+import dungeonmania.staticEntities.Exit;
+import dungeonmania.staticEntities.Wall;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.strategies.Movement;
 import dungeonmania.timeTravel.TimeTravellingPortal;
@@ -80,7 +82,15 @@ public class DungeonMap implements Iterable<Entity> {
         toString();
         return this;
     }
-    
+    public DungeonMap loads(RandomMapGenerator map, Config config) {
+        Iterator<Location> wallLocation = map.iterator();
+        while (wallLocation.hasNext()) {
+            addEntity(new Wall("wall", wallLocation.next()));
+        }
+        addEntity(new Player("player", map.getStartLocation().getX(), map.getStartLocation().getY(), config.player_attack, config.player_health, this));
+        addEntity(new Exit("exit", map.getEndLocation().getX(), map.getEndLocation().getY()));
+        return this;
+    }
     /**
      * Add a Entity to Dungeon Map.
      * 

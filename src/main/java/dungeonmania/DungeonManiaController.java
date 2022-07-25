@@ -3,11 +3,13 @@ package dungeonmania;
 import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
+import dungeonmania.goals.GoalsTree;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
 import dungeonmania.helpers.FileSaver;
 import dungeonmania.helpers.Location;
+import dungeonmania.helpers.RandomMapGenerator;
 import dungeonmania.inventories.Inventory;
 import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.Spider;
@@ -76,16 +78,17 @@ public class DungeonManiaController {
         tickCounter = 0;
         deltaTickAfterTimeTraveling = 0;
         isTimeTravling = false;
+        battles = new ArrayList<>();
+
     }
     /**
-     * /game/new
+     * /game/new/
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         initController();
         this.dungeonName = dungeonName;
         try {
             dungeonConfig = new Config(configName);
-            battles = new ArrayList<>();
             fileSaver = new FileSaver(dungeonName, configName, dungeonId);
             dungeonMap.loads(dungeonName, dungeonConfig);
             fileSaver.saveMap(dungeonMap);
@@ -98,7 +101,25 @@ public class DungeonManiaController {
                     "'configName' or 'dungeonName' is not a configuration/dungeon that exists");
         }
     }
+    /**
+     * /game/new/generate
+     */
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
+        initController();
+        RandomMapGenerator walls = new RandomMapGenerator(xStart, yStart, xEnd, yEnd);
+        dungeonMap = new DungeonMap();
+        fileSaver = new FileSaver(configName, dungeonId);
+        try {
+            dungeonConfig = new Config(configName);
+            dungeonMap.loads(walls.start(), dungeonConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("configName is not a configuration that exists");
+        }
+        fileSaver.saveMap(dungeonMap);
+        player = dungeonMap.getPlayer();
+        dungeonMap.interactAll().battleAll(battles, player);
+        goals = new GoalController(new GoalsTree("exit", GoalController.newGoal("exit")), dungeonConfig);
         return getDungeonResponse();
     }
 
@@ -241,6 +262,8 @@ public class DungeonManiaController {
         player.getInventory().print();
         player.build(buildable, dungeonConfig);
         fileSaver.saveAction("build", false, buildable);
+        // goals = new GoalsTree("exit");
+        
         return getDungeonResponse();
 
     }
@@ -418,4 +441,6 @@ public class DungeonManiaController {
         }
         
     }
+    
+
 }

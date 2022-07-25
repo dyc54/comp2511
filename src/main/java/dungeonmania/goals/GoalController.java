@@ -40,6 +40,10 @@ public class GoalController {
         JSONObject json =  new JSONObject(content);
         root = loadNode(json.getJSONObject("goal-condition")).mapForAll(node -> node.getConfig(config));
     }
+    public GoalController(GoalsTree tree, Config config) {
+        root = tree;
+        this.config = config;
+    }
     /**
      * Return whether goal has achieved
      * @param map   Dungeon Map
@@ -55,7 +59,7 @@ public class GoalController {
      * @param str type
      * @return
      */
-    private static GoalComponent newGoal(String str) {
+    public static GoalComponent newGoal(String str) {
         switch (str) {
             case "enemies":
                 return new Enemies();
