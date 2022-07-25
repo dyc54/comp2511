@@ -34,11 +34,9 @@ public class M3CollectAndBuildTest {
         DungeonResponse res = dmc.newGame("d_collectTests_pickUpSunStone",
                 "c_collectTests");
         // pick up SunStone
+        res = playerMoveController(dmc, Direction.RIGHT, 1);
         assertEquals(1, getInventory(res, "sun_stone").size());
 
-        //pick up wood SunStone
-        res = playerMoveController(dmc, Direction.RIGHT, 1);
-        assertEquals(2, getInventory(res, "sun_stone").size());
     }
 
 
@@ -50,7 +48,7 @@ public class M3CollectAndBuildTest {
 
         DungeonResponse res = dmc.newGame("d_collectTests_pickUpSunStone",
                 "c_collectTests");
-        // pick up SunStone
+        // pick up Key
         assertEquals(1, getInventory(res, "key").size());
         assertEquals(new Position(1,1), getEntities(res, "player").get(0).getPosition());
 
