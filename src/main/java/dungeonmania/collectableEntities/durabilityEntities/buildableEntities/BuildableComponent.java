@@ -8,4 +8,6 @@ public interface BuildableComponent {
     public boolean isSatisfied();
     public BuildableComponent CountItem(Inventory inventory);
     public BuildableComponent removeCountItem(Inventory inventory);
+    public BuildableComponent setReplacement(BuildableComponent component);
+    public boolean hasReplacement();
 }
