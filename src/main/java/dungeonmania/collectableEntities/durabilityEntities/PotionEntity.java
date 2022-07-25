@@ -13,7 +13,7 @@ public abstract class PotionEntity extends DurabilityEntity implements Effect, U
         super(type, durability, x, y);
         this.effect = effect;
     }
-
+    
     public void setEffect(String effect) {
         this.effect = effect;
     }
