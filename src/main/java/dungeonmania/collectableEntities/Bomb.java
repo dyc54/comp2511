@@ -6,7 +6,7 @@ import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
-public class Bomb extends CollectableEntity {
+public class Bomb extends CollectableEntity implements Useable{
 
     private int bomb_radius;
     private boolean hasPlaced;
@@ -19,23 +19,6 @@ public class Bomb extends CollectableEntity {
 
     public int getBomb_radius() {
         return bomb_radius;
-    }
-
-    public void put(Location location, DungeonMap dungeonMap) {
-        this.setLocation(location);
-        this.hasPlaced = true;
-        dungeonMap.addEntity(this);
-        dungeonMap.getPlayer().removeInventoryList(this);
-        dungeonMap.getFourNearEntities(location).stream().forEach(e -> {
-            if (e instanceof FloorSwitch) {
-                FloorSwitch floorSwitch = (FloorSwitch) e;
-                if (floorSwitch.getTrigger()) {
-                    this.update(dungeonMap);
-                } else {
-                    floorSwitch.bombAttach(this);
-                }
-            }
-        });
     }
 
     public void update(DungeonMap map) {
@@ -57,6 +40,25 @@ public class Bomb extends CollectableEntity {
     @Override
     public boolean isAccessible(Entity entity) {
         return (!hasPlaced);
+    }
+
+    @Override
+    public void use(DungeonMap map, Player player) {
+        this.setLocation(player.getLocation());
+        this.hasPlaced = true;
+        map.addEntity(this);
+        map.getPlayer().removeInventoryList(this);
+        map.getFourNearEntities(player.getLocation()).stream().forEach(e -> {
+            if (e instanceof FloorSwitch) {
+                FloorSwitch floorSwitch = (FloorSwitch) e;
+                if (floorSwitch.getTrigger()) {
+                    this.update(map);
+                } else {
+                    floorSwitch.bombAttach(this);
+                }
+            }
+        });
+        
     }
 
 }
