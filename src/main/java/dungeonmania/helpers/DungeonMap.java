@@ -358,6 +358,7 @@ public class DungeonMap implements Iterable<Entity> {
                 if (entity instanceof Enemy && player.canBattle(entity)) {
                     Battle battle = new Battle();
                     List<String> losers = battle.setBattle(player, (Enemy) entity).startBattle();
+                    System.out.println("loserloser--------");
                     losers.stream().forEach(loser -> removed.add(loser));
                     System.out.println(String.format("loser :"));
                     removed.stream().forEach(loser -> System.out.println(loser));

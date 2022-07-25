@@ -102,7 +102,7 @@ public class EntityFactory {
             case "assassin":
                 return new Assassin(type, Location.AsLocation(x, y), config.assassin_health, config.assassin_attack, config.bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence);
             case "hydra":
-                return new Hydra(type, Location.AsLocation(x, y), config.hydra_health, config.hydra_attack);
+                return new Hydra(type, Location.AsLocation(x, y), config.hydra_health, config.hydra_attack, config.hydra_health_increase_rate, config.hydra_health_increase_amount);
 
 
         }
