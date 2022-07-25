@@ -29,7 +29,7 @@ public class testGenerateDungeon {
     @Test
     public void testSimplyMap() {
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse res =  controller.generateDungeon(0, 0, 15, 15, "configName");
+        DungeonResponse res =  controller.generateDungeon(0, 0, 15, 15, "c_Battletest_PlayerStrong");
         assertEquals(1, getEntities(res, "exit").size());
         assertEquals(1, getEntities(res, "player").size());
     }

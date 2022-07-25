@@ -154,6 +154,20 @@ public class App implements SparkApplication {
                 }
             });
         }, gson::toJson);
+        
+        Spark.post("/api/game/new/generate", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> {
+                try {
+                    return dmc.generateDungeon(Integer.valueOf(request.queryParams("xStart")).intValue(), 
+                    Integer.valueOf(request.queryParams("yStart")).intValue(), 
+                    Integer.valueOf(request.queryParams("xEnd")).intValue(), 
+                    Integer.valueOf(request.queryParams("yEnd")).intValue(), 
+                    request.queryParams("String"));
+                } catch (Exception e) {
+                    throw new InvalidActionExceptionAPI(e.getMessage());
+                }
+            });
+        }, gson::toJson);
 
         Spark.post("/api/game/dungeonResponseModel/", "application/json", (request, response) -> {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.getDungeonResponseModel());

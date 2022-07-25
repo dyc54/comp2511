@@ -3,11 +3,13 @@ package dungeonmania;
 import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
+import dungeonmania.goals.GoalsTree;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
 import dungeonmania.helpers.FileSaver;
 import dungeonmania.helpers.Location;
+import dungeonmania.helpers.RandomMapGenerator;
 import dungeonmania.inventories.Inventory;
 import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.Spider;
@@ -78,7 +80,7 @@ public class DungeonManiaController {
         isTimeTravling = false;
     }
     /**
-     * /game/new
+     * /game/new/
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         initController();
@@ -98,7 +100,20 @@ public class DungeonManiaController {
                     "'configName' or 'dungeonName' is not a configuration/dungeon that exists");
         }
     }
+    /**
+     * /game/new/generate
+     */
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
+        RandomMapGenerator walls = new RandomMapGenerator(xStart, yStart, xEnd, yEnd);
+        dungeonMap = new DungeonMap();
+        try {
+            dungeonConfig = new Config(configName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dungeonMap.loads(walls.start(), dungeonConfig);
+        player = dungeonMap.getPlayer();
+        goals = new GoalController(new GoalsTree("exit", GoalController.newGoal("exit")), dungeonConfig);
         return getDungeonResponse();
     }
 
@@ -239,6 +254,8 @@ public class DungeonManiaController {
         player.getInventory().print();
         player.build(buildable, dungeonConfig);
         fileSaver.saveAction("build", false, buildable);
+        // goals = new GoalsTree("exit");
+        
         return getDungeonResponse();
 
     }
@@ -416,4 +433,6 @@ public class DungeonManiaController {
         }
         
     }
+    
+
 }
