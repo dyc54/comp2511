@@ -24,6 +24,7 @@ import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.strategies.Movement;
+import dungeonmania.timeTravel.TimeTravellingPortal;
 
 /**
  * Save entities
@@ -347,14 +348,14 @@ public class DungeonMap implements Iterable<Entity> {
         System.out.println(player.getLocation());
         this.getEntities(player.getLocation()).stream().forEach(entity -> System.out.println(entity.toString()));
 
-        if (this.getEntities(player.getLocation()).size() > 1 && !effect.equals("Invisibility")) {
-            System.out.println("GetEntities");
+        System.out.println("PLAYER CHECK BATTLE");
+        // if (this.getEntities(player.getLocation()).size() > 1) {
             List<String> removed = new ArrayList<>();
             List<Movement> movements = new ArrayList<>();
             System.out.println(player.getLocation().toString());
             for (Entity entity: this.getEntities(player.getLocation())) {
                 System.out.println(entity.toString() + "BATTLE CHECK");
-                if (entity instanceof Enemy) {
+                if (entity instanceof Enemy && player.canBattle(entity)) {
                     Battle battle = new Battle();
                     List<String> losers = battle.setBattle(player, (Enemy) entity).startBattle();
                     losers.stream().forEach(loser -> removed.add(loser));
@@ -372,7 +373,7 @@ public class DungeonMap implements Iterable<Entity> {
             removed.stream().forEach(id -> this.removeEntity(id));
             movements.stream().forEach(ent -> ent.movement(this));
             
-        }
+        // }
         return this;
     }
     public void setPlayer(Player player) {
@@ -414,5 +415,7 @@ public class DungeonMap implements Iterable<Entity> {
     public Iterator<Entity> iterator() {
         return getAllEntities().iterator();
     }
-
+    public boolean isTimeTravelPortal(Location location) {
+        return getEntities(location).stream().anyMatch(entity -> entity instanceof TimeTravellingPortal);
+    }
 }

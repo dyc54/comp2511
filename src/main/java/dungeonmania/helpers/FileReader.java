@@ -70,7 +70,7 @@ public class FileReader {
         JSONArray actions = json.getJSONArray("actions");
         for (int i = 0; i < actions.length(); i++) {
             JSONObject action = actions.getJSONObject(i);
-            doAction(controller, action, false);
+            doAction(controller, action, false, false);
         }
         // FileReader.LoadGame(controller, fileName, branch, 0);
     }
@@ -86,7 +86,7 @@ public class FileReader {
         int currTick = 0;
         for (int i = 0; currTick < tickCounter + deltaTick && i < actions.length(); i++) {
             JSONObject action = actions.getJSONObject(i);
-            currTick += doAction(controller, action, false) ? 1: 0;
+            currTick += doAction(controller, action, false, true) ? 1: 0;
         }
     }
     public static void LoadGameTick(DungeonManiaController controller, String fileName, int branch, int tick) throws IOException {
@@ -100,11 +100,12 @@ public class FileReader {
         // temp.newGame(json.getString("dungeonName"), json.getString("configName"));
         for (int i = 0; i < actions.length(); i++) {
             JSONObject action = actions.getJSONObject(i);
-            if (currTick == tick) {
-                doAction(controller, action, true);
-            }
             if (isTick(action)) {
                 currTick++;
+            }
+            if (currTick == tick) {
+                System.out.println(String.format("action %d/%d, %s", i, tickCounter, action.toString()));
+                doAction(controller, action, true, true);
             }
         }
     }
@@ -112,7 +113,7 @@ public class FileReader {
         String func = action.getString("action");
         return func.equals("useItem") || func.equals("playerMove");
     }
-    private static boolean doAction(DungeonManiaController controller, JSONObject action, boolean hasTimeTraved) {
+    private static boolean doAction(DungeonManiaController controller, JSONObject action, boolean hasTimeTraved, boolean readComments) {
         String func = action.getString("action");
         JSONArray argv = action.getJSONArray("argv");
         boolean isTick = false;
@@ -128,6 +129,15 @@ public class FileReader {
                 break;
             case "playerMove":
                 controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
+                // // if (argv.length() == 2 && argv.getString(1).equals("MOVE ELDER_SELF ONLY") ) {
+                //         if (hasTimeTraved && readComments) {
+                //             controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
+                //         } else if (!readComments) {
+                //             controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
+                //         }
+                //     } else {
+                //         controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
+                //     }
                 isTick = true;
                 break;   
             case "build":

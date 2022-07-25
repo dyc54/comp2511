@@ -1,14 +1,25 @@
 package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
+import dungeonmania.Entity;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
-public class MidnightArmour implements BonusDamageAdd, BonusDefenceAdd{
+public class MidnightArmour extends Entity implements BonusDamageAdd, BonusDefenceAdd{
+
+    private int attack;
+    private int defence;
+    public MidnightArmour(String type, int attack, int defence, String id) {
+        super(type);
+        this.attack = attack;
+        this.defence = defence;
+        setEntityId(id);
+
+    }
 
     @Override
     public double damage() {
         // TODO Auto-generated method stub
-        return 0;
+        return attack;
     }
 
     @Override
@@ -20,7 +31,7 @@ public class MidnightArmour implements BonusDamageAdd, BonusDefenceAdd{
     @Override
     public double defence() {
         // TODO Auto-generated method stub
-        return 0;
+        return defence;
     }
 
     @Override
