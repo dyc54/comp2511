@@ -459,5 +459,18 @@ public class StaticEntityTests {
 
                 assertEquals(1, getInventory(res, "bomb").size());
         }
+        @Test
+        @DisplayName("Test player can pick up multiple entities at the same time")
+        public void TestPlayerDoor() {
+                DungeonManiaController dmc;
+                dmc = new DungeonManiaController();
+                DungeonResponse res = dmc.newGame("testdoorWFNO31657999539.7356172",
+                                "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
+
+                // pick up
+                res = dmc.tick(Direction.RIGHT);
+                assertEquals(1, getInventory(res, "key").size());
+
+        }
 
 }

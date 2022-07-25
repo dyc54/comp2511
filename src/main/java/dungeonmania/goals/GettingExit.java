@@ -22,14 +22,12 @@ public class GettingExit implements GoalComponent{
 
     @Override
     public GoalComponent getMapData(DungeonMap map) {
-        // TODO Auto-generated method stub
         this.exits = map.getEntities("exit");
         return this;
     }
 
     @Override
     public GoalComponent getConfig(Config config) {
-        // TODO Auto-generated method stub
         return this;
     }
     @Override
@@ -41,8 +39,7 @@ public class GettingExit implements GoalComponent{
         }
     }
     @Override
-    public GoalComponent getMapData(Player player) {
-        // TODO Auto-generated method stub
+    public GoalComponent getPlayerData(Player player) {
         playerLocation = player.getLocation();
         return this;
     }

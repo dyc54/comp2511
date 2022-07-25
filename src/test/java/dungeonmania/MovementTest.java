@@ -43,6 +43,20 @@ public class MovementTest {
         }
         
     }
+    @Test
+    @DisplayName("Test zombie toast random movement")
+    public void zombieMovementnomove() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("zombie94RUO1658001498.7337577", "c_spiderTest_basicMovement");
+
+        for (int i = 0; i <= 5; i++) {
+            res = dmc.tick(Direction.DOWN);
+            System.out.println(getEntities(res, "zombie_toast").get(0).getPosition());
+            assertEquals(new Position(0,0,0), getEntities(res, "zombie_toast").get(0).getPosition());
+        }
+        
+    }
 
     @Test
     @DisplayName("Test movement of spiders with boulder")

@@ -1,5 +1,7 @@
 package dungeonmania.staticEntities;
 
+import org.json.JSONObject;
+
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.Key;
@@ -16,13 +18,9 @@ public class Door extends StaticEntity {
         opened = false;
     }
 
-    public int getKey() {
-        return key;
-    }
 
     @Override
     public boolean isAccessible(Entity entity) {
-        // TODO Auto-generated method stub
         if (entity instanceof Spider) {
             return true;
         }
@@ -52,8 +50,7 @@ public class Door extends StaticEntity {
                 return false;
             });
             // If the door can be opened, move the player
-            if (canOpen && getLocation().equals(entity.getLocation())
-                    && DungeonMap.isaccessible(map, getLocation(), entity)) {
+            if (canOpen && DungeonMap.isaccessible(map, getLocation(), entity)) {
                 player.setLocation(getLocation());
             }
         }
@@ -64,5 +61,9 @@ public class Door extends StaticEntity {
     public boolean hasSideEffect(Entity entity, DungeonMap map) {
         // do nothing by defalut
         return DungeonMap.isaccessible(map, getLocation(), entity);
+    }
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject().put("key", key);
     }
 }

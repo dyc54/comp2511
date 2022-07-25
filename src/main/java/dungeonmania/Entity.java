@@ -2,28 +2,27 @@ package dungeonmania;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 
-import java.text.SimpleDateFormat;
 import java.util.UUID;
+
+import org.json.JSONObject;
 
 import dungeonmania.helpers.Location;
 
 public abstract class Entity{
-    // TODO: 
-    // Subject subject;
     private Location location;
     private String EntityId;
     private String type;
+    private int count;
     private String newID(String type){
-        // UUID id = UUID.randomUUID()
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-        // return type+sdf.format(System.currentTimeMillis());
-        return type+UUID.randomUUID();
+        return type + UUID.randomUUID();
+        // return type+Integer.valueOf(count).toString();
     }
-
+    
     public Entity(String type, Location location) {
         this.EntityId = newID(type);
         this.type = type;
         this.location = location;
+        count = (count == 0 ? 0: count++);
     }
 
     public Entity(String type, int x, int y) {
@@ -33,6 +32,10 @@ public abstract class Entity{
     public Entity(String type) {
         this(type, null);
     }
+    // public Entity(Entity entity) {
+    //     this(entity.type, entity.location.clone());
+    //     this.EntityId = entity.EntityId;
+    // }
 
     public Location getLocation() {
         return location;
@@ -41,19 +44,13 @@ public abstract class Entity{
     public String getEntityId() {
         return EntityId;
     }
-    
-    public void setLocation(int x, int y) {
-        setLocation(Location.AsLocation(x, y));
-    }
-
     public void setLocation(Location location) {
-        System.out.println(
-            "thisLocation:"+getEntityId()+"//"+getLocation()
-        );
         System.out.println(location);
         this.location.setLocation(location);
     }
-
+    public void setRandomId() {
+        this.EntityId = newID(type);
+    }
     public void setEntityId(String EntityId) {
         this.EntityId = EntityId;
     }
@@ -61,7 +58,6 @@ public abstract class Entity{
     public void setType(String type) {
         this.type = type;
     }
-
     public EntityResponse getEntityResponse() {
         return new EntityResponse(getEntityId(), getType(), new Position(getLocation().getX(), getLocation().getY()), false);
     }
@@ -79,10 +75,15 @@ public abstract class Entity{
     public boolean equals(Object obj) {
         if (obj instanceof Entity) {
             return ((Entity) obj).getEntityId().equals(EntityId);
-        } else if (obj instanceof String) {
-            return ((String) obj).equals(EntityId);
         }
         return false;
     }
-    // public static abstract Entity NewEntity(int x, int y, String type);
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", type);
+        obj.put("x", location.getX());
+        obj.put("y", location.getY());
+        obj.put("id", EntityId);
+        return obj;
+    }
 }

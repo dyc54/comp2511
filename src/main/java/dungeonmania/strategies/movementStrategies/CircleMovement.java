@@ -1,6 +1,5 @@
 package dungeonmania.strategies.movementStrategies;
 
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class CircleMovement implements MovementStrategy {
@@ -8,17 +7,15 @@ public class CircleMovement implements MovementStrategy {
     private double current;
     private int direction;
     private final double speed = 45;
-    public CircleMovement(Location center, boolean isClockWise) {
+    public CircleMovement(Location center) {
         System.out.println("Center at" + center.toString());
         this.center = center.clone();
         this.current = 90;
-        if (isClockWise) {
-            this.direction = -1;
-        } else {
-            this.direction = 1;
-        }
+        this.direction = -1;
     }
-
+    /**
+     * @param cure any locations
+     */
     @Override
     public Location nextLocation(Location curr) {
         if (curr.equals(center)) {
@@ -32,7 +29,6 @@ public class CircleMovement implements MovementStrategy {
     public MovementStrategy MoveOptions(String string) {
         switch (string) {
             case "CHANGE_DIRECTION": 
-                // System.out.println("reverse");
                 this.current -= this.speed * direction;
                 direction *= -1;
                 break;
@@ -43,10 +39,5 @@ public class CircleMovement implements MovementStrategy {
         return this;
     }
 
-    @Override
-    public Location moveWithWall(Location location, DungeonMap dungeonMap) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }

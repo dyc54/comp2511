@@ -1,0 +1,7 @@
+player,1,1
+zombie_toast,0,0
+wall,0,1
+wall,0,-1
+wall,-1,0
+wall,1,0
+g,exit

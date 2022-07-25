@@ -2,36 +2,30 @@ package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import dungeonmania.inventories.Inventory;
-
-public class BuildableRecipe {
-    // BuildableRecipeTree and;
+/**
+ * Save buildable Recipe
+ */
+public class BuildableRecipe implements BuildableComponent{
     List<BuildableComponent> and;
     List<BuildableComponent> or;
-    // BuildableRecipeTree or;
-    // int andSize;
-    // int orSize;
     String recipeName;
+    boolean isSatisfied;
     public BuildableRecipe(String recipeName) {
         this.recipeName = recipeName;
         and = new ArrayList<>();
         or = new ArrayList<>();
     }
     public boolean isSatisfied(Inventory inventory) {
-        // System.out.println(String.format("To build %s: ", recipeName));
-        // System.out.println("Checking and branch");
         and.stream().forEach(component -> component.CountItem(inventory));
         Boolean.valueOf(true).booleanValue();
         boolean andcondi = and.stream().map(component -> Boolean.valueOf(component.isSatisfied())).allMatch(component -> component.booleanValue());
-        // System.out.println("Checking or branch");
         or.stream().forEach(component -> component.CountItem(inventory));
         boolean orcondi = or.stream().map(component -> Boolean.valueOf(component.isSatisfied())).anyMatch(component -> component.booleanValue());
-        boolean a = andcondi || and.size() == 0;
-        boolean o = orcondi || or.size() == 0;
-        // System.out.println(String.format("To build %s: AND branch %s, OR branch %s -> %s", recipeName, a, o, a && o));
-        return a && o;
+        boolean andbranch = andcondi || and.size() == 0;
+        boolean orbranch = orcondi || or.size() == 0;
+        return andbranch && orbranch;
     }
     public BuildableRecipe addAnd(String type, int amount) {
         and.add(new BuildableRecipematerial(type, amount));
@@ -39,6 +33,14 @@ public class BuildableRecipe {
     }
     public BuildableRecipe addOr(String type, int amount) {
         or.add(new BuildableRecipematerial(type, amount));
+        return this;
+    }
+    public BuildableRecipe addAnd(BuildableComponent component) {
+        and.add(component);
+        return this;
+    }
+    public BuildableRecipe addOr(BuildableComponent component) {
+        or.add(component);
         return this;
     }
     public BuildableRecipe consumeMaterial(Inventory inventory) {
@@ -51,5 +53,32 @@ public class BuildableRecipe {
     }
     public String getRecipeName() {
         return recipeName;
+    }
+    @Override
+    public String getItemType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public int getItemAmount() {
+        // TODO Auto-generated method stub
+        return -1;
+    }
+    @Override
+    public boolean isSatisfied() {
+        // TODO Auto-generated method stub
+        return isSatisfied;
+    }
+    @Override
+    public BuildableComponent CountItem(Inventory inventory) {
+        // TODO Auto-generated method stub
+        isSatisfied = this.isSatisfied(inventory);
+        return this;
+    }
+    @Override
+    public BuildableComponent removeCountItem(Inventory inventory) {
+        // TODO Auto-generated method stub
+        consumeMaterial(inventory);
+        return this;
     }
 }

@@ -1,5 +1,5 @@
 package dungeonmania;
 
-public interface PotionEffecObserver {
+public interface PotionEffectObserver {
     public void update(PotionEffectSubject s);
 }

@@ -1,7 +1,5 @@
 package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
-import java.util.ArrayList;
-
 import dungeonmania.inventories.Inventory;
 
 public class BuildableRecipematerial implements BuildableComponent{
@@ -39,8 +37,6 @@ public class BuildableRecipematerial implements BuildableComponent{
     @Override
     public BuildableComponent CountItem(Inventory inventory) {
         System.out.println(String.format("Material loading for %s", materialType));
-        // System.out.println("Inventory List");
-        // inventory.print();
         setCurrentAmount(inventory.countItem(materialType));
         return this;
     }

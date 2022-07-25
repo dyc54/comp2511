@@ -9,6 +9,9 @@ public class Bow extends DurabilityEntity implements BonusDamageMul{
     public Bow(String type, int Bow_durability) {
         super(type, Bow_durability);
     }
+    public Bow(String id, String type, int Bow_durability) {
+        super(type, Bow_durability, id);
+    }
 
     public static int getAttack() {
         return attack;
@@ -16,13 +19,11 @@ public class Bow extends DurabilityEntity implements BonusDamageMul{
 
     @Override
     public double damage() {
-        // TODO Auto-generated method stub
         return getAttack();
     }
 
     @Override
     public boolean equals(BonusDamageMul obj) {
-        // TODO Auto-generated method stub
         return obj == this;
     }
 

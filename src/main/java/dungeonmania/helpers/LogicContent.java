@@ -1,13 +1,11 @@
 package dungeonmania.helpers;
-
-import java.util.List;
-
+/**
+ * Propose
+ * to provide room for future expansion of similar structures, For example, nested buildable entities construction, etc.
+ */
 public interface LogicContent<T> {
     public T getContent();
     public LogicContent<T> getSubContentA();
     public LogicContent<T> getSubContentB();
-    // public LogicContent<T> getSubLogic(int index);
-    // public List<LogicContent<T>> getSubLogics();
-    // public int getSubLogicCount();
     public boolean isTrue();
 }

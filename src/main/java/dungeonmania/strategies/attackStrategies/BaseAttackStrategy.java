@@ -2,7 +2,6 @@ package dungeonmania.strategies.attackStrategies;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BaseAttackStrategy implements AttackStrategy{
     private double attack;
@@ -22,13 +21,11 @@ public class BaseAttackStrategy implements AttackStrategy{
     public void bonusDamage(BonusDamageAdd attack) {
         bonusdamages.add(attack);
         System.out.println(attack.damage());
-        System.out.println("*****");
         
     }
 
     @Override
     public void bonusDamage(BonusDamageMul attack) {
-        // DO NOTHING
     }
 
     @Override
@@ -39,6 +36,5 @@ public class BaseAttackStrategy implements AttackStrategy{
 
     @Override
     public void removeBounus(BonusDamageMul attack) {
-        // DO NOTHING
     }
 }

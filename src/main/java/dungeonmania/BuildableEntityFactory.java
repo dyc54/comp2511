@@ -1,53 +1,26 @@
 package dungeonmania;
 
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableComponent;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
-import dungeonmania.inventories.Inventory;
 
-public class BuildableEntityFactory extends EntityFactory{
-    public static boolean hasSufficientItems(String type, Inventory inventory) {
+public class BuildableEntityFactory {
+    
+    public static Entity newEntity(String type, Config config, String id) {
         switch (type) {
             case "bow":
-                boolean wood_b = inventory.hasItem("wood", 1);
-                boolean arrow = inventory.hasItem("arrow", 3);
-                return wood_b && arrow;
+                return new Bow(id, type, config.bow_durability);
             case "shield":
-                boolean wood_s = inventory.hasItem("wood", 2);
-                boolean treasure  = inventory.hasItem("treasure", 1);
-                boolean key  = inventory.hasItem("key", 1);
-                return wood_s && (treasure || key);
+                return new Shield(type, config.shield_defence, config.shield_durability, id);
+            case "midnight_armour":
+                return new MidnightArmour(type, config.midnight_armour_attack, config.midnight_armour_defence, id);
             default:
                 break;
         }
-        return false;
-    }
-    public static Entity newEntity(String type, Config config, Inventory inventory) {
-        switch (type) {
-            case "bow":
-                inventory.removeFromInventoryList("wood", 1);
-                inventory.removeFromInventoryList("arrow", 3);
-                return new Bow(type, config.bow_durability - 1);
-            case "shield":
-                inventory.removeFromInventoryList("wood", 2);
-
-                return new Shield(type, config.shield_defence, config.shield_durability - 1);
-            default:
-                break;
-        }
-        return null;
-    }
-    public static Entity newEntity(String type, Config config) {
-        switch (type) {
-            case "bow":
-                return new Bow(type, config.bow_durability);
-            case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability);
-            default:
-                break;
-        }
-        return null;
+        throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));
     }
     public static BuildableRecipe newRecipe(String type) throws IllegalArgumentException {
         switch (type) {
@@ -57,6 +30,16 @@ public class BuildableEntityFactory extends EntityFactory{
             case "shield":
                 BuildableRecipe shield = new BuildableRecipe(type);
                 return shield.addAnd("wood", 2).addOr("key", 1).addOr("treasure", 1);
+            case "midnight_armour":
+                BuildableRecipe armour = new BuildableRecipe(type);
+                return armour.addAnd("sword", 1).addAnd("sun_stone", 1);
+            case "sceptre":
+                BuildableRecipe sceptre = new BuildableRecipe(type);
+                BuildableRecipe pair1 = new BuildableRecipe("pair1");
+                pair1.addOr("wood", 1).addOr("arrow", 2);
+                BuildableRecipe pair2 = new BuildableRecipe("pair1");
+                pair2.addOr("key", 1).addOr("treasure", 1);
+                return sceptre.addAnd(pair1).addAnd(pair2).addAnd("sun_stone", 1);
             default:
                 throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));
         }

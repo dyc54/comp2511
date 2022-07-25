@@ -1,6 +1,5 @@
 package dungeonmania.strategies.movementStrategies;
 
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class FollowingMovement implements MovementStrategy{
@@ -8,6 +7,9 @@ public class FollowingMovement implements MovementStrategy{
     public FollowingMovement(Location playerPrevLocation) {
         this.playerPrevLocation = playerPrevLocation;
     }
+    /**
+     * @param location any location does't matter
+     */
     @Override
     public Location nextLocation(Location location) {
         System.out.println(String.format("Player Current at %s Prev at %s", location.toString(), playerPrevLocation.toString()));
@@ -16,14 +18,8 @@ public class FollowingMovement implements MovementStrategy{
 
     @Override
     public MovementStrategy MoveOptions(String string) {
-        // TODO Auto-generated method stub
         return this;
     }
 
-    @Override
-    public Location moveWithWall(Location location, DungeonMap dungeonMap) {
-        // TODO Auto-generated method stub
-        return null;
-    }
     
 }

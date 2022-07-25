@@ -5,7 +5,6 @@ import java.util.List;
 
 import dungeonmania.Entity;
 import dungeonmania.helpers.DungeonMap;
-import dungeonmania.helpers.Location;
 
 public class FloorSwitch extends StaticEntity {
 
@@ -36,7 +35,6 @@ public class FloorSwitch extends StaticEntity {
 
     @Override
     public boolean isAccessible(Entity entity) {
-        // TODO Auto-generated method stub
         return true;
     }
 
