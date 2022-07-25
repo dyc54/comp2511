@@ -145,8 +145,30 @@ public class App implements SparkApplication {
             });
         }, gson::toJson);
 
+        Spark.post("/api/game/rewind/", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> {
+                try {
+                    return dmc.rewind(Integer.valueOf(request.queryParams("ticks")).intValue());
+                } catch (Exception e) {
+                    throw new InvalidActionExceptionAPI(e.getMessage());
+                }
+            });
+        }, gson::toJson);
+
         Spark.post("/api/game/dungeonResponseModel/", "application/json", (request, response) -> {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.getDungeonResponseModel());
+        }, gson::toJson);
+
+        Spark.post("api/game/save/", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.saveGame(request.queryParams("name")));
+        }, gson::toJson);
+
+        Spark.post("api/game/load/", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.loadGame(request.queryParams("name")));
+        }, gson::toJson);
+
+        Spark.get("api/games/all/", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.allGames());
         }, gson::toJson);
 
         Scintilla.start();

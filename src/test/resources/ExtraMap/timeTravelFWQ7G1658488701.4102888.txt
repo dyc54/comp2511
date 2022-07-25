@@ -1,0 +1,4 @@
+time_turner, 1, 0
+player, 0, 0
+mercenary, 15, 15
+g, exit

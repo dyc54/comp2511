@@ -1,5 +1,8 @@
 package dungeonmania.helpers;
-
+/**
+ * Propose
+ * to provide room for future expansion of similar structures, For example, nested buildable entities construction, etc.
+ */
 public class LogicCondition<T> {
     private final String type;
     private final static String superLogic = "SUPER";
@@ -13,13 +16,11 @@ public class LogicCondition<T> {
         }
     }
     public static <T> boolean compareTwo(String type, LogicContent<T> a, LogicContent<T> b) {
-        boolean condA = a == null ? false: a.isTrue();
-        boolean condB = b == null ? false: b.isTrue();
         switch (type) {
             case and:
-                return condA && condB;
+                return a.isTrue() && b.isTrue();
             case or:
-                return condA || condB;
+                return a.isTrue() || b.isTrue();
             default:
                 return false;
         }

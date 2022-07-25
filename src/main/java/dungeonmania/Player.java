@@ -8,24 +8,27 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import dungeonmania.CollectableEntities.Bomb;
-import dungeonmania.CollectableEntities.DurabilityEntities.DurabilityEntity;
-import dungeonmania.CollectableEntities.DurabilityEntities.PotionEntity;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
-import dungeonmania.Inventories.Inventory;
-import dungeonmania.Strategies.PlayerMovementStrategy;
-import dungeonmania.Strategies.AttackStrategies.AttackStrategy;
-import dungeonmania.Strategies.AttackStrategies.WeaponableAttackStrategy;
-import dungeonmania.Strategies.DefenceStrategies.ArmorableStrategy;
-import dungeonmania.Strategies.DefenceStrategies.DefenceStrategy;
+import dungeonmania.battle.Enemy;
+import dungeonmania.collectableEntities.Bomb;
+import dungeonmania.collectableEntities.Useable;
+import dungeonmania.collectableEntities.durabilityEntities.Durability;
+import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.strategies.PlayerMovementStrategy;
+import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.WeaponableAttackStrategy;
+import dungeonmania.strategies.defenceStrategies.ArmorableStrategy;
+import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
 import dungeonmania.util.Position;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.inventories.Inventory;
 
-public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject {
+public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy {
     // private int attack;
     private AttackStrategy attack;
     private DefenceStrategy defence;
@@ -36,7 +39,9 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private DungeonMap map;
     private final Location previousLocation;
     private Queue<PotionEntity> effects;
-    private List<PotionEffecObserver> observers;
+    private List<PotionEffectObserver> observers;
+    private Durability durabilities;
+    private int buildCounter;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -46,6 +51,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         inventory = new Inventory();
         this.map = map;
         stay = false;
+        buildCounter = 0;
         observers = new ArrayList<>();
         effects = new ArrayDeque<>();
     }
@@ -91,7 +97,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
         if (hasEffect() && getCurrentEffect().checkDurability()) {
             effects.poll();
-            notifyObserver();
+            notifyPotionEffectObserver();
         } else if (hasEffect()) {
             getCurrentEffect().setDurability();
 
@@ -146,7 +152,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void movement(Position p) {
         Location curr = getLocation().clone();
         Location next = getLocation().getLocation(p);
-        System.out.println(String.format("Player at %s", curr.toString()));
+        System.out.println(String.format("%s at %s", getType(), curr.toString()));
         this.next = p;
         interactAll(curr, map, p);
         if (getLocation().equals(curr) && !stay) {
@@ -155,7 +161,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
                 setLocation(next);
             }
         }
-        System.out.println(String.format("Player %s -> %s", previousLocation.toString(), getLocation().toString()));
+        System.out.println(String.format("%s %s -> %s", getType(),previousLocation.toString(), getLocation().toString()));
     }
     public boolean pickup(Entity entity) {
         return inventory.addToInventoryList(entity, this);
@@ -165,7 +171,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
         if (recipe.isSatisfied(inventory)) {
             String type = recipe.consumeMaterial(inventory).getRecipeName();
-            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config), this);
+            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter)), this);
+            buildCounter++;
         } else {
             throw new InvalidActionException("player does not have sufficient items to craft the buildable");
         }
@@ -177,14 +184,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         if (entity == null) {
             throw new InvalidActionException("itemUsed is not in the player's inventory");
         }
-        if (entity instanceof PotionEntity) {
-            addeffect((PotionEntity) entity);
-            notifyObserver();
-            inventory.removeFromInventoryList(entity);
-        } else if (entity instanceof Bomb) {
-            Bomb bomb = (Bomb) entity;
-            bomb.put(getLocation(), map);
-            inventory.removeFromInventoryList(entity);
+        if (entity instanceof Useable) {
+            ((Useable) entity).use(map, this);
         } else {
             throw new IllegalArgumentException(
                     "itemUsed is not a bomb, invincibility_potion, or an invisibility_potion");
@@ -201,6 +202,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         for(PotionEntity effect : queue){
             if(effect.checkDurability()){
                 effects.remove(effect);
+                notifyPotionEffectObserver();
             }else{
                 effect.setDurability();
             }
@@ -231,24 +233,67 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     }
 
     @Override
-    public void attach(PotionEffecObserver observer) {
+    public void attach(PotionEffectObserver observer) {
         observers.add(observer);
     }
 
     @Override
-    public void detach(PotionEffecObserver observer) {
+    public void detach(PotionEffectObserver observer) {
         observers.remove(observer);
 
         
     }
 
     @Override
-    public void notifyObserver() {
-        for (PotionEffecObserver observer : observers) {
+    public void notifyPotionEffectObserver() {
+        for (PotionEffectObserver observer : observers) {
             observer.update(this);
         }
         
     }
 
+    @Override
+    public String toString() {
+        String sec1 = String.format("%s(%s)  %s -*-*->%s\n", getType(), getEntityId(), previousLocation.toString(), getLocation().toString());
+        String sec2 = String.format("    H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage());
+        // System.out.println(String.format("   H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage()));
+        return sec1 + sec2;
+    }
+    public void print() {
+        System.out.println(toString());
+    }
+    public boolean canBattle(Entity entity) {
+        if (entity == this) {
+            return false;
+        }
+        
+        if (hasEffect() && getCurrentEffect().applyEffect().equals("Invisibility")) {
+            return false;
+        }
+        if (entity instanceof Player) {
+            boolean sun = inventory.hasItem("sun_stone", 1);
+            boolean armour = inventory.hasItem("midnight_armour", 1);
+            return !(sun || armour);
+        }
+        return true;
+    }
     //
+
+    @Override
+    public AttackStrategy getAttackStrayegy() {
+        // TODO Auto-generated method stub
+        return attack;
+    }
+
+    @Override
+    public String getEnemyId() {
+        // TODO Auto-generated method stub
+        return getEntityId();
+    }
+
+    @Override
+    public String getEnemyType() {
+        // TODO Auto-generated method stub
+        return getType();
+    }
 }

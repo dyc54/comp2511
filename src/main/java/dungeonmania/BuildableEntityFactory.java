@@ -1,18 +1,22 @@
 package dungeonmania;
 
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Bow;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.BuildableRecipe;
-import dungeonmania.CollectableEntities.DurabilityEntities.BuildableEntities.Shield;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableComponent;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
 
-public class BuildableEntityFactory extends EntityFactory{
+public class BuildableEntityFactory {
     
-    public static Entity newEntity(String type, Config config) {
+    public static Entity newEntity(String type, Config config, String id) {
         switch (type) {
             case "bow":
-                return new Bow(type, config.bow_durability);
+                return new Bow(id, type, config.bow_durability);
             case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability);
+                return new Shield(type, config.shield_defence, config.shield_durability, id);
+            case "midnight_armour":
+                return new MidnightArmour(type, config.midnight_armour_attack, config.midnight_armour_defence, id);
             default:
                 break;
         }
@@ -26,6 +30,16 @@ public class BuildableEntityFactory extends EntityFactory{
             case "shield":
                 BuildableRecipe shield = new BuildableRecipe(type);
                 return shield.addAnd("wood", 2).addOr("key", 1).addOr("treasure", 1);
+            case "midnight_armour":
+                BuildableRecipe armour = new BuildableRecipe(type);
+                return armour.addAnd("sword", 1).addAnd("sun_stone", 1);
+            case "sceptre":
+                BuildableRecipe sceptre = new BuildableRecipe(type);
+                BuildableRecipe pair1 = new BuildableRecipe("pair1");
+                pair1.addOr("wood", 1).addOr("arrow", 2);
+                BuildableRecipe pair2 = new BuildableRecipe("pair1");
+                pair2.addOr("key", 1).addOr("treasure", 1);
+                return sceptre.addAnd(pair1).addAnd(pair2).addAnd("sun_stone", 1);
             default:
                 throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));
         }
