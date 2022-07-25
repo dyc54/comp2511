@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.Key;
+import dungeonmania.collectableEntities.SunStone;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.movingEntities.Spider;
 
@@ -38,7 +39,10 @@ public class Door extends StaticEntity {
             Player player = (Player) entity;
             // If the player has the correct key, open the door
             Boolean canOpen = player.getInventoryList().stream().anyMatch(e -> {
-                if (e instanceof Key) {
+                if (e instanceof SunStone) {
+                    open();
+                    return true;
+                } else if (e instanceof Key) {
                     // Check if the key is for this door
                     int keyKey = ((Key) e).getKey();
                     if (keyKey == key) {

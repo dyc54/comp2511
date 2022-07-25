@@ -4,6 +4,7 @@ import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableComponent;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
 
@@ -17,6 +18,8 @@ public class BuildableEntityFactory {
                 return new Shield(type, config.shield_defence, config.shield_durability, id);
             case "midnight_armour":
                 return new MidnightArmour(type, config.midnight_armour_attack, config.midnight_armour_defence, id);
+            case "sceptre":
+                return new Sceptre(type, config.mind_control_duration, id);
             default:
                 break;
         }
@@ -38,6 +41,7 @@ public class BuildableEntityFactory {
                 BuildableRecipe pair1 = new BuildableRecipe("pair1");
                 pair1.addOr("wood", 1).addOr("arrow", 2);
                 BuildableRecipe pair2 = new BuildableRecipe("pair1");
+                
                 pair2.addOr("key", 1).addOr("treasure", 1);
                 return sceptre.addAnd(pair1).addAnd(pair2).addAnd("sun_stone", 1);
             default:
