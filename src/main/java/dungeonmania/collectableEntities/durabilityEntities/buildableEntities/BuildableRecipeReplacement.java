@@ -3,6 +3,7 @@ package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 import com.google.gson.internal.bind.MapTypeAdapterFactory;
 
 import dungeonmania.inventories.Inventory;
+import dungeonmania.inventories.InventoryViewer;
 
 public class BuildableRecipeReplacement implements BuildableComponent{
     private BuildableComponent component;
@@ -31,7 +32,7 @@ public class BuildableRecipeReplacement implements BuildableComponent{
     }
 
     @Override
-    public BuildableComponent CountItem(Inventory inventory) {
+    public BuildableComponent CountItem(InventoryViewer inventory) {
         return component.CountItem(inventory);
     }
 

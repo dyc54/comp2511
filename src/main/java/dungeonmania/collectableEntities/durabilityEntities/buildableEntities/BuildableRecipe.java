@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.inventories.Inventory;
+import dungeonmania.inventories.InventoryViewer;
 /**
  * Save buildable Recipe
  */
@@ -19,7 +20,7 @@ public class BuildableRecipe implements BuildableComponent{
         and = new ArrayList<>();
         or = new ArrayList<>();
     }
-    public boolean isSatisfied(Inventory inventory) {
+    private boolean isSatisfied(InventoryViewer inventory) {
         and.stream().forEach(component -> component.CountItem(inventory));
         Boolean.valueOf(true).booleanValue();
         boolean andcondi = and.stream().map(component -> Boolean.valueOf(component.isSatisfied())).allMatch(component -> component.booleanValue());
@@ -45,7 +46,7 @@ public class BuildableRecipe implements BuildableComponent{
         or.add(component);
         return this;
     }
-    public BuildableRecipe consumeMaterial(Inventory inventory) {
+    private BuildableRecipe consumeMaterial(Inventory inventory) {
         and.stream().forEach(material -> material.removeCountItem(inventory));
         if (or.size() != 0) {
             BuildableComponent consumedItem = or.stream().filter(material -> inventory.hasItem(material.getItemType(), material.getItemAmount())).findFirst().get();
@@ -59,7 +60,7 @@ public class BuildableRecipe implements BuildableComponent{
     @Override
     public String getItemType() {
         // TODO Auto-generated method stub
-        return null;
+        return getRecipeName();
     }
     @Override
     public int getItemAmount() {
@@ -72,7 +73,7 @@ public class BuildableRecipe implements BuildableComponent{
         return (hasReplacement() && replace.isSatisfied()) || isSatisfied;
     }
     @Override
-    public BuildableComponent CountItem(Inventory inventory) {
+    public BuildableComponent CountItem(InventoryViewer inventory) {
         // TODO Auto-generated method stub
         if (hasReplacement()) {
             replace.CountItem(inventory);
@@ -82,11 +83,10 @@ public class BuildableRecipe implements BuildableComponent{
     }
     @Override
     public BuildableComponent removeCountItem(Inventory inventory) {
-        Inventory inventoryViewer = inventory.view();
         if (hasReplacement() && replace.isSatisfied()) {
-            replace.removeCountItem(inventoryViewer);
+            replace.removeCountItem(inventory);
         } else {
-            consumeMaterial(inventoryViewer);
+            consumeMaterial(inventory);
         }
         return this;
     }

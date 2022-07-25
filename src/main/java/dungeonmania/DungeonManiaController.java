@@ -347,9 +347,10 @@ public class DungeonManiaController {
      * Create a buildables from a list of player inventoryList
      */
     private List<String> getBuildables(Inventory inventory) {
+        // TODO: ADD MORE BUILDABLES
         return Arrays.asList(BuildableEntityFactory.newRecipe("bow"),
                     BuildableEntityFactory.newRecipe("shield")).stream()
-                    .filter(recipe -> recipe.isSatisfied(inventory))
+                    .filter(recipe -> recipe.CountItem(inventory.view()).isSatisfied())
                     .map(recipe -> recipe.getRecipeName())
                     .collect(Collectors.toList());
     }

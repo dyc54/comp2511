@@ -1,6 +1,7 @@
 package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
 import dungeonmania.inventories.Inventory;
+import dungeonmania.inventories.InventoryViewer;
 
 public class BuildableRecipematerial implements BuildableComponent{
     private String materialType;
@@ -36,9 +37,10 @@ public class BuildableRecipematerial implements BuildableComponent{
         return (hasReplacement() && replace.isSatisfied()) || currentAmount >= materialAmount;
     }
     @Override
-    public BuildableComponent CountItem(Inventory inventory) {
+    public BuildableComponent CountItem(InventoryViewer inventory) {
         System.out.println(String.format("Material loading for %s", materialType));
         setCurrentAmount(inventory.countItem(materialType));
+        inventory.removeFromInventoryList(materialType, materialAmount);
         if (hasReplacement()) {
             replace.CountItem(inventory);
         }
