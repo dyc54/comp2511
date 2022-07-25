@@ -40,6 +40,9 @@ public class FileSaver {
         }
         goals = temp;
     }
+    public FileSaver(String configName, String dungeonId) {
+        this("Builder Generated", configName, dungeonId);
+    }
     public void save(String fileName, int branch) {
         FileWriter file;
         try {

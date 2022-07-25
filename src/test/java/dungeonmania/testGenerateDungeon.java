@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
@@ -76,5 +77,13 @@ public class testGenerateDungeon {
         DungeonResponse res =  controller.generateDungeon(0, 0, 1, 1, "c_Battletest_PlayerStrong");
         assertTrue(res.getGoals().contains(":exit"));
         
+    }
+    @Test
+    public void testExpection() {
+        DungeonManiaController controller = new DungeonManiaController();
+        assertThrows(IllegalArgumentException.class, () -> {
+            controller.generateDungeon(0, 0, 1, 1, "xxxxxxxxxxx");
+        });
+
     }
 }

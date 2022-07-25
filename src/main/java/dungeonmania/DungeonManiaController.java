@@ -78,6 +78,8 @@ public class DungeonManiaController {
         tickCounter = 0;
         deltaTickAfterTimeTraveling = 0;
         isTimeTravling = false;
+        battles = new ArrayList<>();
+
     }
     /**
      * /game/new/
@@ -87,7 +89,6 @@ public class DungeonManiaController {
         this.dungeonName = dungeonName;
         try {
             dungeonConfig = new Config(configName);
-            battles = new ArrayList<>();
             fileSaver = new FileSaver(dungeonName, configName, dungeonId);
             dungeonMap.loads(dungeonName, dungeonConfig);
             fileSaver.saveMap(dungeonMap);
@@ -104,15 +105,20 @@ public class DungeonManiaController {
      * /game/new/generate
      */
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
+        initController();
         RandomMapGenerator walls = new RandomMapGenerator(xStart, yStart, xEnd, yEnd);
         dungeonMap = new DungeonMap();
+        fileSaver = new FileSaver(configName, dungeonId);
         try {
             dungeonConfig = new Config(configName);
+            dungeonMap.loads(walls.start(), dungeonConfig);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("configName is not a configuration that exists");
         }
-        dungeonMap.loads(walls.start(), dungeonConfig);
+        fileSaver.saveMap(dungeonMap);
         player = dungeonMap.getPlayer();
+        dungeonMap.interactAll().battleAll(battles, player);
         goals = new GoalController(new GoalsTree("exit", GoalController.newGoal("exit")), dungeonConfig);
         return getDungeonResponse();
     }
