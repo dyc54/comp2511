@@ -10,10 +10,12 @@ import dungeonmania.inventories.Inventory;
 public class BuildableRecipe implements BuildableComponent{
     List<BuildableComponent> and;
     List<BuildableComponent> or;
+    BuildableComponent replace;
     String recipeName;
     boolean isSatisfied;
     public BuildableRecipe(String recipeName) {
         this.recipeName = recipeName;
+        replace = null;
         and = new ArrayList<>();
         or = new ArrayList<>();
     }
@@ -67,18 +69,36 @@ public class BuildableRecipe implements BuildableComponent{
     @Override
     public boolean isSatisfied() {
         // TODO Auto-generated method stub
-        return isSatisfied;
+        return (hasReplacement() && replace.isSatisfied()) || isSatisfied;
     }
     @Override
     public BuildableComponent CountItem(Inventory inventory) {
         // TODO Auto-generated method stub
+        if (hasReplacement()) {
+            replace.CountItem(inventory);
+        }
         isSatisfied = this.isSatisfied(inventory);
         return this;
     }
     @Override
     public BuildableComponent removeCountItem(Inventory inventory) {
-        // TODO Auto-generated method stub
-        consumeMaterial(inventory);
+        Inventory inventoryViewer = inventory.view();
+        if (hasReplacement() && replace.isSatisfied()) {
+            replace.removeCountItem(inventoryViewer);
+        } else {
+            consumeMaterial(inventoryViewer);
+        }
         return this;
+    }
+    @Override
+    public BuildableComponent setReplacement(BuildableComponent component) {
+        // TODO Auto-generated method stub
+        replace = component;
+        return null;
+    }
+    @Override
+    public boolean hasReplacement() {
+        // TODO Auto-generated method stub
+        return replace != null;
     }
 }

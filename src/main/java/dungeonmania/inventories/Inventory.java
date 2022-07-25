@@ -153,4 +153,30 @@ public class Inventory {
     public void print() {
         idCollection.Keys().stream().forEach(key -> System.out.println(key));
     }
+    public Inventory view() {
+        Inventory parent = this;
+        return new Inventory() {
+            private HashMap<String, Integer> inventory;
+            private void setInventory() {
+                parent.inventory.keySet().stream().forEach(key -> {
+                    this.inventory.put(key, parent.inventory.get(key).size());
+                });
+            }
+            @Override
+            public boolean removeFromInventoryList(String type, int number) {
+                setInventory();
+                if (!inventory.containsKey(type)) {
+                    return false;
+                }
+                int currAmount = inventory.get(type).intValue() ;
+                if (currAmount < number) {
+                    return false;
+                } else {
+                    inventory.replace(type, Integer.valueOf(currAmount - number));
+                }
+
+                return true;
+            }
+        };
+    }
 }

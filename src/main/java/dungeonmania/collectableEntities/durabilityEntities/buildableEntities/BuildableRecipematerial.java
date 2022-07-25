@@ -4,6 +4,7 @@ import dungeonmania.inventories.Inventory;
 
 public class BuildableRecipematerial implements BuildableComponent{
     private String materialType;
+    private BuildableComponent replace;
     private int materialAmount;
     private int currentAmount;
     public BuildableRecipematerial(String materialType, int materialAmount) {
@@ -32,17 +33,24 @@ public class BuildableRecipematerial implements BuildableComponent{
     @Override
     public boolean isSatisfied() {
         System.out.println(toString());
-        return currentAmount >= materialAmount;
+        return (hasReplacement() && replace.isSatisfied()) || currentAmount >= materialAmount;
     }
     @Override
     public BuildableComponent CountItem(Inventory inventory) {
         System.out.println(String.format("Material loading for %s", materialType));
         setCurrentAmount(inventory.countItem(materialType));
+        if (hasReplacement()) {
+            replace.CountItem(inventory);
+        }
         return this;
     }
     @Override
     public BuildableComponent removeCountItem(Inventory inventory) {
-        inventory.removeFromInventoryList(materialType, materialAmount);
+        if (hasReplacement() && replace.isSatisfied()) {
+            replace.removeCountItem(inventory);
+        } else {
+            inventory.removeFromInventoryList(materialType, materialAmount);
+        }
         return this;
     }
 
@@ -52,6 +60,16 @@ public class BuildableRecipematerial implements BuildableComponent{
     public void remove(Inventory inventory) {
         inventory.removeFromInventoryList(materialType, materialAmount);
         setCurrentAmount(0);
+    }
+    @Override
+    public BuildableComponent setReplacement(BuildableComponent component) {
+        replace = component;
+        return null;
+    }
+    @Override
+    public boolean hasReplacement() {
+        // TODO Auto-generated method stub
+        return replace != null;
     }
 
 }

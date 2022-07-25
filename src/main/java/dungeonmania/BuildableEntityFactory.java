@@ -3,6 +3,8 @@ package dungeonmania;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableComponent;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipeReplacement;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipematerial;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
@@ -43,6 +45,7 @@ public class BuildableEntityFactory {
                 BuildableRecipe pair2 = new BuildableRecipe("pair1");
                 
                 pair2.addOr("key", 1).addOr("treasure", 1);
+                pair2.setReplacement(new BuildableRecipeReplacement("sun_stone", 1, false));
                 return sceptre.addAnd(pair1).addAnd(pair2).addAnd("sun_stone", 1);
             default:
                 throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));
