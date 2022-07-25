@@ -60,7 +60,7 @@ public class BossTest {
     }
 
     @Test
-    @DisplayName("Test Hydra random move")
+    @DisplayName("Test hydra battle with player - lose")
     public void HydraTestLose() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
@@ -69,11 +69,26 @@ public class BossTest {
         assertEquals(0, getEntities(res, "hydra").size());
         assertEquals(1, getEntities(res, "player").size());
     }
-    /*
+    
     @Test
-    @DisplayName("Test Hydra has certain chance to increase amount")
-    public void HydraTestChance() {
-
+    @DisplayName("Test Hydra has certain chance to increase amount - low increase rate")
+    public void HydraTestChanceLowRate() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_hydraTest", "c_BattleTest_rateLow");
+        res = dmc.tick(Direction.UP);
+        assertEquals(0, getEntities(res, "hydra").size());
+        assertEquals(1, getEntities(res, "player").size());
     }
-    */
+    
+    @Test
+    @DisplayName("Test Hydra has certain chance to increase amount - High increase rate")
+    public void HydraTestChanceHighRate() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_hydraTest", "c_BattleTest_rateHigh");
+        res = dmc.tick(Direction.UP);
+        assertEquals(1, getEntities(res, "hydra").size());
+        assertEquals(0, getEntities(res, "player").size());
+    }
 }

@@ -14,7 +14,7 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 public class Hydra extends MovingEntity implements EnemyMovement, Enemy {
 
     public Hydra(String type, Location location, double hydra_health, int hydra_attack, double hydra_health_increase_rate, int hydra_health_increase_amount) {
-        super(type, location, hydra_health, new ChanceAttackStrategy(hydra_attack, hydra_health_increase_rate, hydra_health_increase_amount), new RandomMovement());
+        super(type, location, hydra_health, new ChanceAttackStrategy(hydra_attack, hydra_health_increase_rate, hydra_health_increase_amount, hydra_health), new RandomMovement());
         
     }
 
