@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import dungeonmania.bosses.Assassin;
 import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
@@ -247,6 +248,7 @@ public class DungeonManiaController {
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        System.out.println("INTERACT-----------------------");
         return interact(entityId, false);
     }
     /**
@@ -264,6 +266,7 @@ public class DungeonManiaController {
         if (entity == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
+        System.out.println("TYPE: "+entity.getType());
         if (entity.getType().equals("zombie_toast_spawner")) {
             ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
             if (!zombieToastSpawner.interact(player, dungeonMap)) {
@@ -274,6 +277,13 @@ public class DungeonManiaController {
             Mercenary mercenary = (Mercenary) entity;
             if (!mercenary.interact(player, dungeonMap)) {
                 throw new InvalidActionException("Invaild action");
+            }
+        }
+        if (entity.getType().equals("assassin")) {
+            System.out.println("ASSASSIN");
+            Assassin assassin = (Assassin) entity;
+            if (!assassin.interact(player, dungeonMap)) {
+                throw new InvalidActionException("Invaid action");
             }
         }
         return getDungeonResponse();

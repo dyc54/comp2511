@@ -26,9 +26,9 @@
     
     "assassin_attack": 1,
     "assassin_bribe_amount": 1,
-    "assassin_bribe_fail_rate": 1,
+    "assassin_bribe_fail_rate": 0,
     "assassin_health": 1,
-    "assassin_recon_radius": 1,
+    "assassin_recon_radius": 3,
     "hydra_attack": 2,
     "hydra_health": 1,
     "hydra_health_increase_rate": 0.8,
