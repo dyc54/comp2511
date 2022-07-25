@@ -1,0 +1,15 @@
+player,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+treasure,0,0
+mercenary,2,2
+wall,3,3
+wall,3,2
+wall,0,3
+g,exit
