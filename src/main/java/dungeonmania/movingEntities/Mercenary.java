@@ -2,6 +2,8 @@ package dungeonmania.movingEntities;
 
 import dungeonmania.Player;
 import dungeonmania.PotionEffectObserver;
+import dungeonmania.SceptreEffectObserver;
+import dungeonmania.SceptreEffectSubject;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.Movement;
@@ -21,8 +23,6 @@ public abstract class Mercenary extends MovingEntity implements Movement, Potion
         this.ally_attack = ally_attack;
         this.ally_defence = ally_defence;
     }
-
-
     
     public int getBribe_amount() {
         return bribe_amount;

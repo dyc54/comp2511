@@ -163,6 +163,7 @@ public class DungeonManiaController {
         }
         timerAdd();
         checkTimer(timer);
+        player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
         timerAdd();
@@ -204,6 +205,7 @@ public class DungeonManiaController {
         }
         player.movement(movementDirection.getOffset());
         player.updatePotionDuration();
+        player.updateSceptreRound();
         timerAdd();
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();

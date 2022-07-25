@@ -15,6 +15,7 @@ import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.PlayerMovementStrategy;
@@ -28,7 +29,7 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
 
-public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy {
+public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject {
     // private int attack;
     private AttackStrategy attack;
     private DefenceStrategy defence;
@@ -40,6 +41,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private final Location previousLocation;
     private Queue<PotionEntity> effects;
     private List<PotionEffectObserver> observers;
+    private List<Sceptre> sceptres;
+    private List<SceptreEffectObserver> SceptreObservers;
     private Durability durabilities;
     private int buildCounter;
     public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
@@ -54,6 +57,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         buildCounter = 0;
         observers = new ArrayList<>();
         effects = new ArrayDeque<>();
+        sceptres = new ArrayList<>();
     }
 
     public void addeffect(PotionEntity e) {
@@ -209,6 +213,19 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
     }
 
+    public void updateSceptreRound() {
+        for (Sceptre sceptre : sceptres) {
+            if (sceptre.getRoundStart()){
+                sceptre.setRound();
+                if (sceptre.checkRound()) {
+                    sceptre.stopRound();
+                    // Free all the mercenary
+                    notifySceptreEffectObserver();
+                }
+            }
+        }
+    }
+
     public boolean hasEffect() {
         return effects.size() != 0;
     }
@@ -295,5 +312,25 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public String getEnemyType() {
         // TODO Auto-generated method stub
         return getType();
+    }
+
+    @Override
+    public void SceptreAttach(SceptreEffectObserver observer) {
+        // TODO Auto-generated method stub
+        this.SceptreObservers.add(observer);
+    }
+
+    @Override
+    public void SceptreDetach(SceptreEffectObserver observer) {
+        // TODO Auto-generated method stub
+        this.SceptreObservers.remove(observer);
+    }
+
+    @Override
+    public void notifySceptreEffectObserver() {
+        // TODO Auto-generated method stub
+        for (SceptreEffectObserver SceptreObserver : SceptreObservers) {
+            SceptreObserver.SceptreUpdate(this, map);
+        }
     }
 }
