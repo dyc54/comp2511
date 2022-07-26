@@ -78,7 +78,13 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         MercenaryEnemy enemy = new MercenaryEnemy(this);
         enemy.setEntityId(String.valueOf(getEntityId()));
         dungeonMap.removeEntity(getEntityId());
+        System.out.println("ENEMY POSITION: "+enemy.getLocation());
         dungeonMap.addEntity(enemy);
+        Player player = dungeonMap.getPlayer();
+        player.getAttackStrategy().removeBounus(this);
+        player.getDefenceStrayegy().removeDefence(this);
+        player.attach(enemy);
+        player.detach(this);
     }
     
     @Override

@@ -45,6 +45,7 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         playerLocation = p.getLocation();
         Location next = new Location();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
+        System.out.println("ENEMT MOVEMENT++++++++++++++++++++");
         if (getMove() instanceof RandomMovement) {
             next = getMove().MoveOptions(choice).nextLocation(getLocation());
         } else {
