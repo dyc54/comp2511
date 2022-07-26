@@ -2,6 +2,7 @@ package dungeonmania;
 
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableComponent;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildablePrerequisite;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipeReplacement;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipematerial;
@@ -9,6 +10,7 @@ import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Mid
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
+import dungeonmania.movingEntities.ZombieToast;
 
 public class BuildableEntityFactory {
     
@@ -37,7 +39,9 @@ public class BuildableEntityFactory {
                 return shield.addAnd("wood", 2).addOr("key", 1).addOr("treasure", 1);
             case "midnight_armour":
                 BuildableRecipe armour = new BuildableRecipe(type);
-                return armour.addAnd("sword", 1).addAnd("sun_stone", 1);
+                BuildablePrerequisite prerequisite = new BuildablePrerequisite();
+                prerequisite.attach(entity -> !(entity instanceof ZombieToast));
+                return armour.addAnd("sword", 1).addAnd("sun_stone", 1).attachPrerequisite(prerequisite);
             case "sceptre":
                 BuildableRecipe sceptre = new BuildableRecipe(type);
                 BuildableRecipe pair1 = new BuildableRecipe("pair1");
@@ -45,7 +49,6 @@ public class BuildableEntityFactory {
                 BuildableRecipematerial require2 = new BuildableRecipematerial("sun_stone", 1, false);
                 BuildableRecipe pair2 = new BuildableRecipe("pair2");
                 pair2.addOr("key", 1).addOr("treasure", 1);
-                
                 require2.setReplacement(new BuildableRecipeReplacement(pair2, true));
                 // pair2.setReplacement(new BuildableRecipeReplacement("sun_stone", 1, false));
                 return sceptre.addAnd(pair1).addAnd("sun_stone", 1).addAnd(require2);
