@@ -32,7 +32,14 @@ public class Assassin extends Mercenary implements Enemy{
         Player p = dungeonMap.getPlayer();
         Location playerLocation = p.getLocation();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
-        Location next = getMove().MoveOptions(choice).nextLocation(playerLocation);
+        Location next = new Location();
+        if (getMove() instanceof RandomMovement) {
+            next = getMove().MoveOptions(choice).nextLocation(getLocation());
+        } else {
+            next = getMove().MoveOptions(choice).nextLocation(playerLocation);
+        }
+        
+        System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
         setLocation(next);
         dungeonMap.UpdateEntity(this);
         return false;

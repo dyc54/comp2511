@@ -174,11 +174,11 @@ public class BossTest {
         dmc = new DungeonManiaController();
         DungeonResponse res;
         res = dmc.newGame("d_assassinTest_outofRadius", "c_BattleTest_rateHigh");
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(7, 1), getEntities(res, "assassin").get(0).getPosition());
         String id = getInventory(res, "invisibility_potion").get(0).getId();
         res = assertDoesNotThrow(()-> dmc.tick(id));
-        assertEquals(new Position(7, 1), getEntities(res, "assassin").get(0).getPosition());
-        res = dmc.tick(Direction.RIGHT);
-        //assertEquals(new Position(2, 1), getEntities(res, "assassin").get(0).getPosition());
+        assertEquals(new Position(7, 2) , getEntities(res, "assassin").get(0).getPosition());
     }
 
 }

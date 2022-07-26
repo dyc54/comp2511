@@ -100,7 +100,9 @@ public class EntityFactory {
             case "switch_door":
                 break;
             case "assassin":
-                return new Assassin(type, Location.AsLocation(x, y), config.assassin_health, config.assassin_attack, config.assassin_bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence, config.assassin_bribe_fail_rate, config.assassin_recon_radius);
+                Assassin assassin = new Assassin(type, Location.AsLocation(x, y), config.assassin_health, config.assassin_attack, config.assassin_bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence, config.assassin_bribe_fail_rate, config.assassin_recon_radius);
+                map.getPlayer().attach(assassin);
+                return assassin;
             case "hydra":
                 return new Hydra(type, Location.AsLocation(x, y), config.hydra_health, config.hydra_attack, config.hydra_health_increase_rate, config.hydra_health_increase_amount);
 
