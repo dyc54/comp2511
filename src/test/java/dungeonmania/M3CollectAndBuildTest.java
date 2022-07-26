@@ -159,7 +159,7 @@ public class M3CollectAndBuildTest {
             assertEquals(0, getInventory(res, "key").size());
 
             List<String> buildables = new ArrayList<>();
-            buildables.add("sceptre");
+            // buildables.add("sceptre");
             assertEquals(buildables, res.getBuildables());
            
         });
@@ -188,7 +188,7 @@ public class M3CollectAndBuildTest {
             assertEquals(0, getInventory(res, "treasure").size());
 
             List<String> buildables = new ArrayList<>();
-            buildables.add("sceptre");
+            // buildables.add("sceptre");
             assertEquals(buildables, res.getBuildables());
            
         });
@@ -217,7 +217,7 @@ public class M3CollectAndBuildTest {
             assertEquals(0, getInventory(res, "key").size());
 
             List<String> buildables = new ArrayList<>();
-            buildables.add("sceptre");
+            // buildables.add("sceptre");
             assertEquals(buildables, res.getBuildables());
            
         });
@@ -245,7 +245,7 @@ public class M3CollectAndBuildTest {
             assertEquals(0, getInventory(res, "treasure").size());
 
             List<String> buildables = new ArrayList<>();
-            buildables.add("sceptre");
+            // buildables.add("sceptre");
             assertEquals(buildables, res.getBuildables());
            
         });
@@ -271,7 +271,7 @@ public class M3CollectAndBuildTest {
             assertEquals(0, getInventory(res, "wood").size());
 
             List<String> buildables = new ArrayList<>();
-            buildables.add("sceptre");
+            // buildables.add("sceptre");
             assertEquals(buildables, res.getBuildables());
            
         });
@@ -297,7 +297,7 @@ public class M3CollectAndBuildTest {
             assertEquals(0, getInventory(res, "arrow").size());
 
             List<String> buildables = new ArrayList<>();
-            buildables.add("sceptre");
+            // buildables.add("sceptre");
             assertEquals(buildables, res.getBuildables());
            
         });

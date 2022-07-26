@@ -42,11 +42,13 @@ public class BuildableEntityFactory {
                 BuildableRecipe sceptre = new BuildableRecipe(type);
                 BuildableRecipe pair1 = new BuildableRecipe("pair1");
                 pair1.addOr("wood", 1).addOr("arrow", 2);
-                BuildableRecipe pair2 = new BuildableRecipe("pair1");
-                
+                BuildableRecipematerial require2 = new BuildableRecipematerial("sun_stone", 1, false);
+                BuildableRecipe pair2 = new BuildableRecipe("pair2");
                 pair2.addOr("key", 1).addOr("treasure", 1);
-                pair2.setReplacement(new BuildableRecipeReplacement("sun_stone", 1, false));
-                return sceptre.addAnd(pair1).addAnd(pair2).addAnd("sun_stone", 1);
+                
+                require2.setReplacement(new BuildableRecipeReplacement(pair2, true));
+                // pair2.setReplacement(new BuildableRecipeReplacement("sun_stone", 1, false));
+                return sceptre.addAnd(pair1).addAnd("sun_stone", 1).addAnd(require2);
             default:
                 throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));
         }
