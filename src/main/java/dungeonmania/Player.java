@@ -217,6 +217,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         for (Sceptre sceptre : sceptres) {
             if (sceptre.getTimerStart()){
                 sceptre.setTimer();
+                System.out.println("THE timer: " + sceptre.getTimer());
                 if (sceptre.checkTimer()) {
                     sceptre.stopTimer();
                     // Free all the mercenary
