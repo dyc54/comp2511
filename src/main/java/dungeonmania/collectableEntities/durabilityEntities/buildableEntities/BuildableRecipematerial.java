@@ -8,10 +8,16 @@ public class BuildableRecipematerial implements BuildableComponent{
     private BuildableComponent replace;
     private int materialAmount;
     private int currentAmount;
+    private boolean consumed;
     public BuildableRecipematerial(String materialType, int materialAmount) {
         this.materialType = materialType;
         this.materialAmount = materialAmount;
         currentAmount = 0;
+        consumed = true;
+    }
+    public BuildableRecipematerial(String materialType, int materialAmount, boolean consumed) {
+        this(materialType, materialAmount);
+        this.consumed = consumed;
     }
     @Override
     public String getItemType() {
@@ -41,7 +47,7 @@ public class BuildableRecipematerial implements BuildableComponent{
         System.out.println(String.format("Material loading for %s", materialType));
         setCurrentAmount(inventory.countItem(materialType));
         inventory.removeFromInventoryList(materialType, materialAmount);
-        if (hasReplacement()) {
+        if (!isSatisfied() && hasReplacement()) {
             replace.CountItem(inventory);
         }
         return this;
@@ -51,7 +57,8 @@ public class BuildableRecipematerial implements BuildableComponent{
         if (hasReplacement() && replace.isSatisfied()) {
             replace.removeCountItem(inventory);
         } else {
-            inventory.removeFromInventoryList(materialType, materialAmount);
+            remove(inventory);
+            // inventory.removeFromInventoryList(materialType, materialAmount);
         }
         return this;
     }
@@ -60,7 +67,9 @@ public class BuildableRecipematerial implements BuildableComponent{
         currentAmount = amount > 0 ? amount : 0;
     }
     public void remove(Inventory inventory) {
-        inventory.removeFromInventoryList(materialType, materialAmount);
+        if (consumed) {
+            inventory.removeFromInventoryList(materialType, materialAmount);
+        }
         setCurrentAmount(0);
     }
     @Override

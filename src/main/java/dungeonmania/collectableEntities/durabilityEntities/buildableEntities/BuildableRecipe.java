@@ -75,10 +75,10 @@ public class BuildableRecipe implements BuildableComponent{
     @Override
     public BuildableComponent CountItem(InventoryViewer inventory) {
         // TODO Auto-generated method stub
-        if (hasReplacement()) {
+        isSatisfied = this.isSatisfied(inventory);
+        if (!isSatisfied && hasReplacement()) {
             replace.CountItem(inventory);
         }
-        isSatisfied = this.isSatisfied(inventory);
         return this;
     }
     @Override
