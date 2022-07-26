@@ -11,45 +11,45 @@ import dungeonmania.movingEntities.MercenaryEnemy;
 public class Sceptre extends Entity implements Useable{
 
     private int Duration;
-    private int round;
-    private boolean roundStart;
+    private int timer;
+    private boolean timerStart;
 
     public Sceptre(String type, int Duration, String id) {
         super(type);
         this.Duration = Duration;
-        this.round = 0;
-        this.roundStart = false;
+        this.timer = 0;
+        this.timerStart = false;
     }
 
-    public boolean checkRound() {
-        if (round == Duration) {
+    public boolean checkTimer() {
+        if (timer == Duration) {
             return true;
         } else {
             return false;
         }
     }
 
-    public void setRound() {
-        this.round = round += 1;
+    public void setTimer() {
+        this.timer = this.timer += 1;
     }
 
-    public void StartRound() {
-        this.roundStart = true;
-        this.round = 0;
+    public void StartTimer() {
+        this.timerStart = true;
+        this.timer = 0;
     }
 
-    public boolean getRoundStart() {
-        return this.roundStart;
+    public boolean getTimerStart() {
+        return this.timerStart;
     }
 
-    public void stopRound() {
-        this.roundStart = false;
-        this.round = 0;
+    public void stopTimer() {
+        this.timerStart = false;
+        this.timer = 0;
     }
 
     @Override
     public void use(DungeonMap map, Player player) {
-        StartRound();
+        StartTimer();
         map.getEntities("mercenary").forEach(e-> {
             MercenaryEnemy enemy = (MercenaryEnemy) e;
             MercenaryAlly ally = new MercenaryAlly(enemy);

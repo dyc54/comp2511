@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -91,7 +92,7 @@ public class M3CollectAndBuildTest {
             assertEquals(0, getInventory(res, "sword").size());
 
             List<String> buildables = new ArrayList<>();
-            buildables.add("midnight_armour");
+            // buildables.add("midnight_armour");
             assertEquals(buildables, res.getBuildables());
            
         });
@@ -401,5 +402,109 @@ public class M3CollectAndBuildTest {
             res = dmc.build("sceptre");       
         });
     }
+
+    /* **************************************************TEST Usage********************************************* */
+    @Test
+    @DisplayName("Test the player can mindcontrol the mercenary")
+    public void testSceptreCanMindControl() {
+        assertDoesNotThrow(() -> {
+            DungeonManiaController dmc = new DungeonManiaController();
+
+            DungeonResponse res = dmc.newGame("d_collectTests_sceptreUsage",
+                    "c_collectTests");
+            
+            //player build sceptre
+            res = dmc.build("sceptre");
+            assertEquals(1, getInventory(res, "sceptre").size());
+            assertEquals(1, getInventory(res, "sun_stone").size());
+            assertEquals(0, getInventory(res, "arrow").size());
+
+            //Use the sceptre
+            String sceptreId = getInventory(res, "sceptre").get(0).getId();
+            res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
+
+            //Check if the mercenary is controlled
+            Position pos = getEntities(res, "mercenary").get(0).getPosition();
+            int x = pos.getX();
+            int y = pos.getY();
+            res = dmc.tick(Direction.RIGHT);
+            assertEquals(new Position(x - 1, y), getEntities(res, "mercenary").get(0).getPosition()); 
+            // move right again
+            res = dmc.tick(Direction.RIGHT);
+            assertEquals(new Position(x - 1, y), getEntities(res, "mercenary").get(0).getPosition()); 
+            // move right again
+            res = dmc.tick(Direction.RIGHT);
+            assertEquals(new Position(x - 1, y), getEntities(res, "mercenary").get(0).getPosition()); 
+        });
+    }
+
+    @Test
+    @DisplayName("Test the mercenary will be free after the sceptre duration")
+    public void testMercenaryFreeAfterSceptreDuration() {
+        assertDoesNotThrow(() -> {
+            DungeonManiaController dmc = new DungeonManiaController();
+
+            DungeonResponse res = dmc.newGame("d_collectTests_sceptreUsage",
+                    "c_collectTests");
+            
+            //player build sceptre
+            res = dmc.build("sceptre");
+            assertEquals(1, getInventory(res, "sceptre").size());
+            assertEquals(1, getInventory(res, "sun_stone").size());
+            assertEquals(0, getInventory(res, "arrow").size());
+
+            //Use the sceptre
+            String sceptreId = getInventory(res, "sceptre").get(0).getId();
+            res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
+
+            //Check if the mercenary is controlled
+            Position pos = getEntities(res, "mercenary").get(0).getPosition();
+            res = dmc.tick(Direction.RIGHT);
+            // move right again
+            res = dmc.tick(Direction.RIGHT);
+            // move right again
+            res = dmc.tick(Direction.RIGHT);
+
+            // Now the mercenary should be free
+
+        });
+    }
+
+    @Test
+    @DisplayName("Test sceptre can mindcontrol mutiple mercenaries")
+    public void testSceptreMindControlMultipleMercenaries() {
+        assertDoesNotThrow(() -> {
+            DungeonManiaController dmc = new DungeonManiaController();
+
+            DungeonResponse res = dmc.newGame("d_collectTests_multipleMercenaries",
+                    "c_collectTests");
+            
+            //player build sceptre
+            res = dmc.build("sceptre");
+            assertEquals(1, getInventory(res, "sceptre").size());
+            assertEquals(1, getInventory(res, "sun_stone").size());
+            assertEquals(0, getInventory(res, "arrow").size());
+
+            //Use the sceptre
+            String sceptreId = getInventory(res, "sceptre").get(0).getId();
+            res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
+
+            //Check if all the mercenaries are controlled
+            Position pos = getEntities(res, "mercenary").get(0).getPosition();
+            Position pos2 = getEntities(res, "mercenary").get(1).getPosition();
+            int x = pos.getX();
+            int y = pos.getY();
+            int x2 = pos.getX();
+            int y2 = pos.getY();
+            res = dmc.tick(Direction.RIGHT);
+            assertEquals(new Position(x - 1, y), getEntities(res, "mercenary").get(0).getPosition()); 
+            assertEquals(new Position(x2 - 1, y2), getEntities(res, "mercenary").get(1).getPosition()); 
+            res = dmc.tick(Direction.RIGHT);
+            assertEquals(new Position(x - 1, y), getEntities(res, "mercenary").get(0).getPosition()); 
+            assertEquals(new Position(x2 - 1, y2), getEntities(res, "mercenary").get(1).getPosition()); 
+
+        });
+    }
+
 
 }

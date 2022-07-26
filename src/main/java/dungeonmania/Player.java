@@ -215,10 +215,10 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     public void updateSceptreRound() {
         for (Sceptre sceptre : sceptres) {
-            if (sceptre.getRoundStart()){
-                sceptre.setRound();
-                if (sceptre.checkRound()) {
-                    sceptre.stopRound();
+            if (sceptre.getTimerStart()){
+                sceptre.setTimer();
+                if (sceptre.checkTimer()) {
+                    sceptre.stopTimer();
                     // Free all the mercenary
                     notifySceptreEffectObserver();
                 }
