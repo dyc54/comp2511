@@ -350,7 +350,8 @@ public class DungeonManiaController {
         // TODO: ADD MORE BUILDABLES
         return Arrays.asList(BuildableEntityFactory.newRecipe("bow"),
                     BuildableEntityFactory.newRecipe("shield")).stream()
-                    .filter(recipe -> recipe.CountItem(inventory.view()).isSatisfied())
+                    .filter(recipe -> recipe.CountItem(inventory.view()).isSatisfied() 
+                                    && recipe.getPrerequisite().allMatch(dungeonMap.iterator()).isSatisfied())
                     .map(recipe -> recipe.getRecipeName())
                     .collect(Collectors.toList());
     }

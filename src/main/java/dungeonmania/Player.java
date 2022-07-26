@@ -173,7 +173,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     public void build(String buildable, Config config) throws InvalidActionException, IllegalArgumentException {
         BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
-        if (recipe.CountItem(inventory.view()).isSatisfied()) {
+        if (recipe.CountItem(inventory.view()).isSatisfied() 
+            && recipe.getPrerequisite().allMatch(map.iterator()).isSatisfied()) {
             String type = recipe.removeCountItem(inventory).getItemType();
             inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter)), this);
             buildCounter++;

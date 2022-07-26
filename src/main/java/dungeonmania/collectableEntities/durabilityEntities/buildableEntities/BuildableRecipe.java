@@ -1,8 +1,11 @@
 package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import dungeonmania.Entity;
+import dungeonmania.helpers.DungeonMap;
 import dungeonmania.inventories.Inventory;
 import dungeonmania.inventories.InventoryViewer;
 /**
@@ -12,11 +15,13 @@ public class BuildableRecipe implements BuildableComponent{
     List<BuildableComponent> and;
     List<BuildableComponent> or;
     BuildableComponent replace;
+    BuildablePrerequisite prerequisite;
     String recipeName;
     boolean isSatisfied;
     public BuildableRecipe(String recipeName) {
         this.recipeName = recipeName;
         replace = null;
+        prerequisite = new BuildablePrerequisite();
         and = new ArrayList<>();
         or = new ArrayList<>();
     }
@@ -56,6 +61,13 @@ public class BuildableRecipe implements BuildableComponent{
     }
     public String getRecipeName() {
         return recipeName;
+    }
+    public BuildableRecipe attachPrerequisite(BuildablePrerequisite prerequisite) {
+        this.prerequisite = prerequisite;
+        return this;
+    }
+    public BuildablePrerequisite getPrerequisite() {
+        return prerequisite;
     }
     @Override
     public String getItemType() {
