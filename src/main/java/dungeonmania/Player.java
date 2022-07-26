@@ -58,6 +58,11 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         observers = new ArrayList<>();
         effects = new ArrayDeque<>();
         sceptres = new ArrayList<>();
+        this.SceptreObservers = new ArrayList<>();
+    }
+
+    public void addsceptreObservers (SceptreEffectObserver observer) {
+        this.SceptreObservers.add(observer);
     }
 
     public void addeffect(PotionEntity e) {
@@ -176,7 +181,12 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         if (recipe.CountItem(inventory.view()).isSatisfied() 
             && recipe.getPrerequisite().allMatch(map.iterator()).isSatisfied()) {
             String type = recipe.removeCountItem(inventory).getItemType();
-            inventory.addToInventoryList(BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter)), this);
+            Entity item = BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter));
+            if (item instanceof Sceptre) {
+                Sceptre sceptre = (Sceptre) item;
+                this.sceptres.add(sceptre);
+            }
+            inventory.addToInventoryList(item, this);
             buildCounter++;
         } else {
             throw new InvalidActionException("player does not have sufficient items to craft the buildable");
@@ -332,6 +342,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void notifySceptreEffectObserver() {
         // TODO Auto-generated method stub
         for (SceptreEffectObserver SceptreObserver : SceptreObservers) {
+            System.out.println("------------------- notifyObserver -------------------");
             SceptreObserver.SceptreUpdate(this, map);
         }
     }

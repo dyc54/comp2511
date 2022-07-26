@@ -422,19 +422,23 @@ public class M3CollectAndBuildTest {
             //Use the sceptre
             String sceptreId = getInventory(res, "sceptre").get(0).getId();
             res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
+            assertEquals(new Position(2,1), getEntities(res, "mercenary").get(0).getPosition());
 
             //Check if the mercenary is controlled
             Position playerPosition = getEntities(res, "player").get(0).getPosition();
             res = dmc.tick(Direction.RIGHT);
-            assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+            assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
+
 
             playerPosition = getEntities(res, "player").get(0).getPosition();
             res = dmc.tick(Direction.DOWN);
             assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+            assertEquals(new Position(2,1), getEntities(res, "mercenary").get(0).getPosition());
 
             playerPosition = getEntities(res, "player").get(0).getPosition();
-            res = dmc.tick(Direction.UP);
+            res = dmc.tick(Direction.DOWN);
             assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+            
         });
     }
 
@@ -470,8 +474,14 @@ public class M3CollectAndBuildTest {
             res = dmc.tick(Direction.RIGHT);
             assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
             // Now the mercenary should be free, and the player will kill the mercenary
+            assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
+            assertEquals(new Position(4,1), getEntities(res, "player").get(0).getPosition());
             res = dmc.tick(Direction.LEFT);
+            assertEquals(new Position(4,1), getEntities(res, "mercenary").get(0).getPosition());
+            assertEquals(new Position(3,1), getEntities(res, "player").get(0).getPosition());
             res = dmc.tick(Direction.RIGHT);
+            assertEquals(new Position(5,1), getEntities(res, "mercenary").get(0).getPosition());
+            assertEquals(new Position(4,1), getEntities(res, "player").get(0).getPosition());
             assertEquals(0, getEntities(res, "mercenary").size());
 
         });
@@ -503,14 +513,14 @@ public class M3CollectAndBuildTest {
             assertEquals(new Position(2, 2), getEntities(res, "mercenary").get(1).getPosition());
 
             playerPosition = getEntities(res, "player").get(0).getPosition();
-            res = dmc.tick(Direction.DOWN);
+            res = dmc.tick(Direction.RIGHT);
             assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
-            assertEquals(playerPosition, getEntities(res, "mercenary").get(1).getPosition());
+            assertEquals(new Position(3, 2), getEntities(res, "mercenary").get(1).getPosition());
 
             playerPosition = getEntities(res, "player").get(0).getPosition();
-            res = dmc.tick(Direction.UP);
+            res = dmc.tick(Direction.RIGHT);
             assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
-            assertEquals(playerPosition, getEntities(res, "mercenary").get(1).getPosition());
+            assertEquals(new Position(4, 2), getEntities(res, "mercenary").get(1).getPosition());
         });
     }
 

@@ -74,6 +74,7 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public void SceptreUpdate(SceptreEffectSubject subject, DungeonMap dungeonMap) {
+        System.out.println("------------------- change to enemy -------------------");
         MercenaryEnemy enemy = new MercenaryEnemy(this);
         enemy.setEntityId(String.valueOf(getEntityId()));
         dungeonMap.removeEntity(getEntityId());

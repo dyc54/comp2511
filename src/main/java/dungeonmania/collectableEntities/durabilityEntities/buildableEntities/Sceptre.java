@@ -60,6 +60,7 @@ public class Sceptre extends Entity implements Useable{
             ally.setEntityId(String.valueOf(enemy.getEntityId()));
             map.removeEntity(enemy.getEntityId());
             map.addEntity(ally);
+            player.addsceptreObservers(ally);
             player.getAttackStrategy().bonusDamage(ally);
             player.getDefenceStrayegy().bonusDefence(ally);
             player.attach(ally);
