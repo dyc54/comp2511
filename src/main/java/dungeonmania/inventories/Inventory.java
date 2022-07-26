@@ -153,4 +153,10 @@ public class Inventory {
     public void print() {
         idCollection.Keys().stream().forEach(key -> System.out.println(key));
     }
+    public HashMap<String, List<Entity>> getInventory() {
+        return inventory;
+    }
+    public InventoryViewer view() {
+        return new InventoryViewer(this);
+    }
 }

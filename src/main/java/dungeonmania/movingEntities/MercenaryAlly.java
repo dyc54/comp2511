@@ -2,6 +2,8 @@ package dungeonmania.movingEntities;
 
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
+import dungeonmania.SceptreEffectObserver;
+import dungeonmania.SceptreEffectSubject;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
@@ -11,7 +13,7 @@ import dungeonmania.strategies.movementStrategies.FollowingMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
-public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd{
+public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd, SceptreEffectObserver{
     
     private int ally_attack;
     private int ally_defence;
@@ -20,7 +22,7 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
             System.out.println("NEW NEW NEW");
         
-        }
+    }
     
     @Override
     public boolean movement(DungeonMap dungeonMap) {
@@ -70,6 +72,14 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         return this == obj;
     }
 
+    @Override
+    public void SceptreUpdate(SceptreEffectSubject subject, DungeonMap dungeonMap) {
+        MercenaryEnemy enemy = new MercenaryEnemy(this);
+        enemy.setEntityId(String.valueOf(getEntityId()));
+        dungeonMap.removeEntity(getEntityId());
+        dungeonMap.addEntity(enemy);
+    }
+    
     @Override
     public void update(PotionEffectSubject subject) {
         if (subject instanceof Player) {

@@ -19,6 +19,11 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         super("mercenary", location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
     }
 
+    public MercenaryEnemy(MercenaryAlly mercenary) {
+        super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+                mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
+        }
+
 	@Override
 	public AttackStrategy getAttackStrayegy() {
 		return getAttack();

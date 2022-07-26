@@ -14,6 +14,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
@@ -74,6 +75,35 @@ public class BattleTest {
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus) < 0 ?  0 : enemyAttack - shieldbonus)/ 10));
             assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus) / 5));
+            enemyHealth += round.getDeltaEnemyHealth();
+            playerHealth += round.getDeltaCharacterHealth();
+            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
+        }
+        // System.out.println(enemyHealth);
+
+        if (enemyDies) {
+            assertTrue(enemyHealth <= 0);
+        } else {
+            assertTrue(playerHealth <= 0);
+        }
+    }
+
+        private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies,
+                String configFilePath,boolean sword, boolean shield, boolean bow, boolean MidnightArmour) {
+            List<RoundResponse> rounds = battle.getRounds();
+            double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
+            double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
+            double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
+            double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
+            double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
+            double bowbonus = bow ? 2 : 1;
+            double MidnightArmourAttackBonus = MidnightArmour ? Double.parseDouble(getValueFromConfigFile("midnight_armour_attack", configFilePath)) : 0;
+            double MidnightArmourDefenceBonus = MidnightArmour ? Double.parseDouble(getValueFromConfigFile("midnight_armour_defence", configFilePath)) : 0;
+            double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
+            // System.out.println(playerAttack);
+        for (RoundResponse round : rounds) {
+            assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus - MidnightArmourDefenceBonus) < 0 ?  0 : enemyAttack - shieldbonus - MidnightArmourDefenceBonus)/ 10));
+            assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus + MidnightArmourAttackBonus) / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
             // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
@@ -220,6 +250,20 @@ public class BattleTest {
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
         assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak", false, false, true);
+        
+        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
+        //         "c_battleTests_basicMercenaryPlayerDies");
+    }
+    @Test
+    public void testBattleWithEnemyMidnightArmour() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("d_battletest_nightarmour", "c_BattleTest_playerweak");
+        assertDoesNotThrow( () -> {
+            controller.build("midnight_armour");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, false, "c_BattleTest_playerweak", false, false, false, true);
         
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
