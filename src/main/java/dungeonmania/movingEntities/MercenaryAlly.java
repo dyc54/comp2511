@@ -17,8 +17,8 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
     
     private int ally_attack;
     private int ally_defence;
-    public MercenaryAlly(MercenaryEnemy mercenary) {
-        super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+    public MercenaryAlly(Mercenary mercenary) {
+        super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
             System.out.println("NEW NEW NEW");
         

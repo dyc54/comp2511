@@ -37,4 +37,9 @@ public class BaseAttackStrategy implements AttackStrategy{
     @Override
     public void removeBounus(BonusDamageMul attack) {
     }
+
+    @Override
+    public int getIncreaseAmount() {
+        return 0;
+    }
 }
