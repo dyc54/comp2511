@@ -254,6 +254,7 @@ public class BattleTest {
         // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         //         "c_battleTests_basicMercenaryPlayerDies");
     }
+
     @Test
     public void testBattleWithEnemyMidnightArmour() {
         DungeonManiaController controller = new DungeonManiaController();
@@ -265,9 +266,63 @@ public class BattleTest {
         BattleResponse battle = postBattleResponse.getBattles().get(0);
         assertBattleCalculations("mercenary", battle, false, "c_BattleTest_playerweak", false, false, false, true);
         
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
     }
+
+    @Test
+    public void testBattleWithEnemyMidnightArmourStrongPlayer() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("d_battletest_nightarmour", "c_Battletest_PlayerStrong");
+        assertDoesNotThrow( () -> {
+            controller.build("midnight_armour");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", false, false, false, true); 
+    }
+
+    @Test
+    public void testBattleWithEnemyMidnightArmourAndSword() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("d_Battletest_midnightArmourAndSword", "c_Battletest_PlayerStrong");
+        assertDoesNotThrow( () -> {
+            controller.build("midnight_armour");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", true, false, false, true); 
+    }
+
+    @Test
+    public void testBattleWithEnemyMidnightArmourAndBow() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("d_Battletest_midnightArmourAndBow", "c_Battletest_PlayerStrong");
+        assertDoesNotThrow( () -> {
+            controller.build("midnight_armour");
+        });
+        assertDoesNotThrow( () -> {
+            controller.build("bow");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", false, false, true, true); 
+    }
+
+    @Test
+    public void testBattleWithEnemyMidnightArmourAndShield() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("d_Battletest_midnightArmourAndShield", "c_Battletest_PlayerStrong");
+        assertDoesNotThrow( () -> {
+            controller.build("midnight_armour");
+        });
+        assertDoesNotThrow( () -> {
+            controller.build("shield");
+        });
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", false, true, false, true); 
+    }
+
+
     @Test
     public void testBattleWithEnemyShieldWin() {
         // DungeonManiaController controller = new DungeonManiaController();

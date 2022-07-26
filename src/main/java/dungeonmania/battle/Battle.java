@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.CollectableEntity;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -83,7 +84,7 @@ public class Battle {
         List<ItemResponse> items= player.getBattleUsage()
                                     .stream().map(mapper -> (CollectableEntity) mapper)
                                     .map(item -> item.getItemResponse()).collect(Collectors.toList());
-        if (player.hasEffect()) {
+        if (player.hasEffect()) { 
             items.add(player.getCurrentEffect().getItemResponse());
         }               
         System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage

@@ -15,6 +15,7 @@ import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
@@ -88,6 +89,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public Inventory getInventory() {
         return inventory;
     }
+
     public void setBattleUsedDuration() {
         inventory.getAllInventory().forEach( entity ->{
             if (entity instanceof DurabilityEntity) {
@@ -95,6 +97,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             }
         });
     }
+
     public void cleardisusableItem() {
         List<Entity> entities = new LinkedList<>();
         inventory.getAllInventory().forEach( entity ->{
@@ -242,6 +245,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         return effects.size() != 0;
     }
 
+
     public Location getPreviousLocation() {
         return previousLocation;
     }
@@ -249,13 +253,14 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation.setLocation(previousLocation);
     }
+
     public List<Entity> getBattleUsage() {
         List<Entity> list = new ArrayList<>();
         if (hasEffect()) {
             list.add(effects.peek());
         }
         List<Entity> invUsage = inventory.getAllInventory().stream()
-                .filter(temp -> temp instanceof DurabilityEntity && !(temp instanceof PotionEntity))
+                .filter(temp -> (temp instanceof DurabilityEntity && !(temp instanceof PotionEntity)) || temp instanceof MidnightArmour)
                 .collect(Collectors.toList());
         list.addAll(invUsage);
         return list;
