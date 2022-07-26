@@ -1,0 +1,11 @@
+player, 0, 0
+boulder, 1, 0
+switch, 2, 0
+wall,3,0
+wire,3,0
+wire,3,1
+wire,3,2
+wire,3,3
+wire,4,3
+light_bulb_off, 5,3,or
+g,exit

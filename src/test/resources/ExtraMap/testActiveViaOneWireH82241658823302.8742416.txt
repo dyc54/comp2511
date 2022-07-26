@@ -1,0 +1,7 @@
+player,0,0
+light_bulb_off, 4, 0
+light_bulb_off, 4, 0, or
+wire, 3, 0
+switch, 2, 0
+boulder, 1, 0
+g, exit
