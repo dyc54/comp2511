@@ -494,8 +494,8 @@ public class M3CollectAndBuildTest {
             Position pos2 = getEntities(res, "mercenary").get(1).getPosition();
             int x = pos.getX();
             int y = pos.getY();
-            int x2 = pos.getX();
-            int y2 = pos.getY();
+            int x2 = pos2.getX();
+            int y2 = pos2.getY();
             res = dmc.tick(Direction.RIGHT);
             assertEquals(new Position(x - 1, y), getEntities(res, "mercenary").get(0).getPosition()); 
             assertEquals(new Position(x2 - 1, y2), getEntities(res, "mercenary").get(1).getPosition()); 
