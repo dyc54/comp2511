@@ -411,8 +411,8 @@ public class PersistenceTests {
         assertAllEntitiesEqual(DungonRes, Dungonload);
     }
 
-    @Test
-    @DisplayName("test persistance with time travel")
+    // @Test
+    // @DisplayName("test persistance with time travel")
     public void testTimeTravel(){
         clear();
         DungeonManiaController controller = new DungeonManiaController();

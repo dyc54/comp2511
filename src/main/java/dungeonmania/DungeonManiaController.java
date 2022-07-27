@@ -127,6 +127,7 @@ public class DungeonManiaController {
         dungeonMap.interactAll().battleAll(battles, player);
         dungeonMap.UpdateAllLogicalEntities();
         goals = new GoalController(new GoalsTree("exit", GoalController.newGoal("exit")), dungeonConfig);
+        fileSaver.attachGoal("exit");
         return getDungeonResponse();
     }
 

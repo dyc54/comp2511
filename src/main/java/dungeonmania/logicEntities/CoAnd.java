@@ -32,6 +32,7 @@ public class CoAnd extends LogicalEntitiesLogic{
             long temp = adjacentEntities.stream().filter(entity -> entity.isActivated()).count();
             actived_num = temp > actived_num ? temp : actived_num;
             count = actived_num - prev;
+            
         }
         if (count >= 2) {
             return true;
