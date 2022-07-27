@@ -41,7 +41,7 @@ public class Hydra extends MovingEntity implements EnemyMovement, Enemy {
     @Override
     public boolean movement(DungeonMap dungeonMap) {
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
-        Location next = getMove().MoveOptions(choice).nextLocation(getLocation());
+        Location next = getMove().MoveOptions(choice).nextLocation(getLocation(), dungeonMap);
         if (next.equals(getLocation())) {
             return false;
         } else {

@@ -15,11 +15,13 @@ import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.PlayerMovementStrategy;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.attackStrategies.WeaponableAttackStrategy;
 import dungeonmania.strategies.defenceStrategies.ArmorableStrategy;
 import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
@@ -88,6 +90,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public Inventory getInventory() {
         return inventory;
     }
+
     public void setBattleUsedDuration() {
         inventory.getAllInventory().forEach( entity ->{
             if (entity instanceof DurabilityEntity) {
@@ -95,6 +98,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             }
         });
     }
+
     public void cleardisusableItem() {
         List<Entity> entities = new LinkedList<>();
         inventory.getAllInventory().forEach( entity ->{
@@ -180,12 +184,15 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
         if (recipe.CountItem(inventory.view()).isSatisfied() 
             && recipe.getPrerequisite().allMatch(map.iterator()).isSatisfied()) {
+                if (recipe.getRecipeName().equals("midnight_armour")) {
+                    attack.removeBounus((BonusDamageAdd) inventory.getItems("sword").get(0));
+                }
             String type = recipe.removeCountItem(inventory).getItemType();
             Entity item = BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter));
             if (item instanceof Sceptre) {
                 Sceptre sceptre = (Sceptre) item;
                 this.sceptres.add(sceptre);
-            }
+            } 
             inventory.addToInventoryList(item, this);
             buildCounter++;
         } else {
@@ -201,6 +208,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
         if (entity instanceof Useable) {
             ((Useable) entity).use(map, this);
+            notifyPotionEffectObserver();
         } else {
             throw new IllegalArgumentException(
                     "itemUsed is not a bomb, invincibility_potion, or an invisibility_potion");
@@ -242,6 +250,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         return effects.size() != 0;
     }
 
+
     public Location getPreviousLocation() {
         return previousLocation;
     }
@@ -249,13 +258,14 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation.setLocation(previousLocation);
     }
+
     public List<Entity> getBattleUsage() {
         List<Entity> list = new ArrayList<>();
         if (hasEffect()) {
             list.add(effects.peek());
         }
         List<Entity> invUsage = inventory.getAllInventory().stream()
-                .filter(temp -> temp instanceof DurabilityEntity && !(temp instanceof PotionEntity))
+                .filter(temp -> (temp instanceof DurabilityEntity && !(temp instanceof PotionEntity)) || temp instanceof MidnightArmour)
                 .collect(Collectors.toList());
         list.addAll(invUsage);
         return list;

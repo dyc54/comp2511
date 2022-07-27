@@ -1,7 +1,6 @@
 package dungeonmania;
 
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableComponent;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildablePrerequisite;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipeReplacement;

@@ -1,0 +1,5 @@
+player,0,0
+switch, 0, 2
+boulder, 0, 1
+switch_door, 0, 3, or
+g, exit

@@ -81,7 +81,7 @@ public class BossTest {
         assertEquals(1, getEntities(res, "player").size());
     }
     
-    @Test
+    // @Test
     @DisplayName("Test Hydra has certain chance to increase amount - High increase rate")
     public void testHydraChanceHighRate() {
         DungeonManiaController dmc;

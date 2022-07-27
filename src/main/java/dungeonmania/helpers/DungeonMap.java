@@ -1,9 +1,7 @@
 package dungeonmania.helpers;
 
 import java.io.IOException;
-import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,6 +20,8 @@ import dungeonmania.Interactability;
 import dungeonmania.Player;
 import dungeonmania.battle.Battle;
 import dungeonmania.battle.Enemy;
+import dungeonmania.logicEntities.LogicEntity;
+import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.staticEntities.Exit;
@@ -320,6 +320,11 @@ public class DungeonMap implements Iterable<Entity> {
         });
     }
 
+
+    public TreeMap<Location, HashSet<Entity>> gMap(){
+        return map;
+    }
+
     /**
      * Update Entity position
      * 
@@ -331,11 +336,24 @@ public class DungeonMap implements Iterable<Entity> {
         removeEntity(entity.getEntityId());
         addEntity(entity);
         EnemiesDestroiedCounter = temp;
-    }
+        // if (entity instanceof LogicEntity ) {
+        //     UpdateLogicEntity((LogicEntity) entity);
+        // }
 
+    }
+    public void UpdateLogicEntity(LogicEntity entity) {
+        entity.init(this);
+    }
     public int getDestoriedCounter() {
         System.out.println(String.format("Counter = ", EnemiesDestroiedCounter));
         return EnemiesDestroiedCounter;
+    }
+    public void UpdateAllLogicalEntities() {
+        getAllEntities().stream().forEach(entity -> {
+            if (entity instanceof LogicEntity ) {
+                UpdateLogicEntity((LogicEntity) entity);
+            }
+        });
     }
     public void UpdateAllEntities() {
         getAllEntities().stream().forEach(entity -> UpdateEntity(entity));
@@ -375,7 +393,11 @@ public class DungeonMap implements Iterable<Entity> {
                     removed.stream().forEach(loser -> System.out.println(loser));
                     if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invincibility")) {
                         if (!(entity instanceof Spider)) {
-                            movements.add((Movement) entity);
+                            if (entity instanceof MercenaryEnemy) {
+                                entity.setLocation(player.getPreviousLocation());
+                            } else {
+                                movements.add((Movement) entity);
+                            }
                         }
                     }
                     battles.add(battle.toResponse());

@@ -11,6 +11,9 @@ import dungeonmania.collectableEntities.durabilityEntities.Sword;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.logicEntities.LightBulb;
+import dungeonmania.logicEntities.SwitchDoor;
+import dungeonmania.logicEntities.Wire;
 import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.movingEntities.ZombieToast;
@@ -40,6 +43,7 @@ public class EntityFactory {
         int y = entity.getInt("y");
         System.out.println(String.format("new entity %s at <%d,%d>", type, x, y));
         int key = 0;
+        int factor = 0;
         switch (type) {
             case "player":
                 return new Player(type, x, y, config.player_attack, config.player_health, map);
@@ -86,27 +90,26 @@ public class EntityFactory {
                 map.getPlayer().attach(mercenary);
                 return mercenary;
             case "swamp_tile":
-                break;
+                factor = entity.getInt("factor");
+                return new SwampTile(type, x, y, factor);
             case "sun_stone":
                 return new SunStone(type, x, y);
             case "time_turner":
                 return new TimeTurner(type, x, y);
             case "time_travelling_portal":
                 return new TimeTravellingPortal(type, Location.AsLocation(x, y));
-            case "light_bulb_on":
-                break;
+            case "light_bulb_off":
+                return new LightBulb(type, x, y, entity.getString("logic"));
             case "wire":
-                break;
+                return new Wire(type, x, y, "or");
             case "switch_door":
-                break;
+                return new SwitchDoor(type, x, y, entity.getInt("key"), entity.getString("logic"));
             case "assassin":
                 Assassin assassin = new Assassin(type, Location.AsLocation(x, y), config.assassin_health, config.assassin_attack, config.assassin_bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence, config.assassin_bribe_fail_rate, config.assassin_recon_radius);
                 map.getPlayer().attach(assassin);
                 return assassin;
             case "hydra":
                 return new Hydra(type, Location.AsLocation(x, y), config.hydra_health, config.hydra_attack, config.hydra_health_increase_rate, config.hydra_health_increase_amount);
-
-
         }
         return null;
     }

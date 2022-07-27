@@ -73,8 +73,13 @@ public abstract class Entity{
 
     @Override 
     public boolean equals(Object obj) {
-        if (obj instanceof Entity) {
+        if (obj == null) {
+            return false;
+        } else if (obj instanceof Entity) {
             return ((Entity) obj).getEntityId().equals(EntityId);
+        } else if (obj instanceof String) {
+            return ((String) obj).equals(EntityId);
+
         }
         return false;
     }
@@ -85,5 +90,15 @@ public abstract class Entity{
         obj.put("y", location.getY());
         obj.put("id", EntityId);
         return obj;
+    }
+    @Override
+    public int hashCode() {
+        return EntityId.hashCode();
+    }
+    public static <T extends Entity, Y extends Entity> boolean equals(T entity1, Y entity2) {
+        return ((Entity) entity1).equals((Entity) entity2);
+    }
+    public static <T extends Entity> boolean equals(T entity1, String entity2) {
+        return ((Entity) entity1).equals(entity2);
     }
 }

@@ -34,9 +34,9 @@ public class Assassin extends Mercenary implements Enemy{
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         Location next = new Location();
         if (getMove() instanceof RandomMovement) {
-            next = getMove().MoveOptions(choice).nextLocation(getLocation());
+            next = getMove().MoveOptions(choice).nextLocation(getLocation(), dungeonMap);
         } else {
-            next = getMove().MoveOptions(choice).nextLocation(playerLocation);
+            next = getMove().MoveOptions(choice).nextLocation(playerLocation, dungeonMap);
         }
         
         System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
@@ -79,7 +79,7 @@ public class Assassin extends Mercenary implements Enemy{
             dungeonMap.addEntity(ally);
             player.getAttackStrategy().bonusDamage(ally);
             player.getDefenceStrayegy().bonusDefence(ally);
-            player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount());
+            player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount(), player);
             player.attach(ally);
             return true;
         }
