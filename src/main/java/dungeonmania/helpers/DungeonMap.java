@@ -39,6 +39,7 @@ public class DungeonMap implements Iterable<Entity> {
     private final IdCollection<Location> idCollection;
     private int EnemiesDestroiedCounter;
     Player player;
+    private Timer timer;
     /**
      * Return whether two types are same type or same category.
      * 
@@ -61,7 +62,12 @@ public class DungeonMap implements Iterable<Entity> {
         EnemiesDestroiedCounter = 0;
         
     }
-
+    public void setTimer(Timer time) {
+        timer = time;
+    }
+    public Timer getTimer() {
+        return timer;
+    }
     /**
      * Load entities
      * 

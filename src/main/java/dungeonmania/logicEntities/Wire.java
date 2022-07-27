@@ -5,6 +5,7 @@ import java.util.HashSet;
 import dungeonmania.Entity;
 import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Timer;
 import dungeonmania.staticEntities.StaticEntity;
 
 public class Wire extends StaticEntity implements LogicSubject, LogicObserver{
@@ -13,12 +14,12 @@ public class Wire extends StaticEntity implements LogicSubject, LogicObserver{
     private final HashSet<LogicSubject> subjects;
     private final LogicalEntitiesLogic logic;
     private LogicEntity temp;
-    public Wire(String type, int x, int y, String logic) {
+    public Wire(String type, int x, int y, String logic, Timer timer) {
         super(type, x, y);
         activated = false;
         observers = new HashSet<>();
         subjects = new HashSet<>();
-        this.logic = LogicalEntitiesFactroy.newLogic(logic, subjects);
+        this.logic = LogicalEntitiesFactroy.newLogic(logic, subjects, timer);
         temp = null;
     }
 

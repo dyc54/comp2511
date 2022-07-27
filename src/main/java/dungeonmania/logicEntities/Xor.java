@@ -10,10 +10,10 @@ public class Xor extends LogicalEntitiesLogic{
 
     @Override
     public boolean isTrue() {
-        if (adjacentEntities.size() != 1) {
+        if (adjacentEntities.size() == 0) {
             return false;
         }
-        return adjacentEntities.stream().findFirst().get().isActivated();
+        return adjacentEntities.stream().filter(entity -> entity.isActivated()).count() == 1;
     }
     
 }

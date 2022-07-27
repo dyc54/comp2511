@@ -4,15 +4,16 @@ import java.util.HashSet;
 
 import dungeonmania.Entity;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Timer;
 import dungeonmania.staticEntities.Door;
 
 public class SwitchDoor extends Door implements LogicObserver{
     private final HashSet<LogicSubject> subjects;
     private final LogicalEntitiesLogic logic;
-    public SwitchDoor(String type, int x, int y, int key, String logic) {
+    public SwitchDoor(String type, int x, int y, int key, String logic, Timer timer) {
         super(type, x, y, key);
         subjects = new HashSet<>();
-        this.logic = LogicalEntitiesFactroy.newLogic(logic, subjects);
+        this.logic = LogicalEntitiesFactroy.newLogic(logic, subjects, timer);
     }
 
     @Override
