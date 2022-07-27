@@ -68,7 +68,7 @@ public class BuildableRecipematerial implements BuildableComponent{
     }
     public void remove(Inventory inventory) {
         if (consumed) {
-            inventory.removeFromInventoryList(materialType, materialAmount);
+            inventory.removeFromInventoryList(materialType, materialAmount, null);
         }
         setCurrentAmount(0);
     }

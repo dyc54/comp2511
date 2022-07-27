@@ -89,7 +89,7 @@ public class BattleTest {
     }
 
         private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies,
-                String configFilePath,boolean sword, boolean shield, boolean bow, boolean MidnightArmour) {
+            String configFilePath,boolean sword, boolean shield, boolean bow, boolean MidnightArmour) {
             List<RoundResponse> rounds = battle.getRounds();
             double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
             double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
@@ -264,7 +264,7 @@ public class BattleTest {
         });
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
-        assertBattleCalculations("mercenary", battle, false, "c_BattleTest_playerweak", false, false, false, true);
+        assertBattleCalculations("mercenary", battle, true, "c_BattleTest_playerweak", false, false, false, true);
         
     }
 
@@ -277,7 +277,7 @@ public class BattleTest {
         });
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
-        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", false, false, false, true); 
+        assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong", false, false, false, true); 
     }
 
     @Test
@@ -289,7 +289,7 @@ public class BattleTest {
         });
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
-        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", true, false, false, true); 
+        assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong", true, false, false, true); 
     }
 
     @Test
@@ -304,7 +304,7 @@ public class BattleTest {
         });
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
-        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", false, false, true, true); 
+        assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong", false, false, true, true); 
     }
 
     @Test
@@ -319,7 +319,7 @@ public class BattleTest {
         });
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
-        assertBattleCalculations("mercenary", battle, false, "c_Battletest_PlayerStrong", false, true, false, true); 
+        assertBattleCalculations("mercenary", battle, true, "c_Battletest_PlayerStrong", false, true, false, true); 
     }
 
 

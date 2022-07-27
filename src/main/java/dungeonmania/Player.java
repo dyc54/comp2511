@@ -21,6 +21,7 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.PlayerMovementStrategy;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.attackStrategies.WeaponableAttackStrategy;
 import dungeonmania.strategies.defenceStrategies.ArmorableStrategy;
 import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
@@ -183,12 +184,15 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         BuildableRecipe recipe = BuildableEntityFactory.newRecipe(buildable);
         if (recipe.CountItem(inventory.view()).isSatisfied() 
             && recipe.getPrerequisite().allMatch(map.iterator()).isSatisfied()) {
+                if (recipe.getRecipeName().equals("midnight_armour")) {
+                    attack.removeBounus((BonusDamageAdd) inventory.getItems("sword").get(0));
+                }
             String type = recipe.removeCountItem(inventory).getItemType();
             Entity item = BuildableEntityFactory.newEntity(type, config, String.format("%s_BuildBy_%s_%d", type, getEntityId(), buildCounter));
             if (item instanceof Sceptre) {
                 Sceptre sceptre = (Sceptre) item;
                 this.sceptres.add(sceptre);
-            }
+            } 
             inventory.addToInventoryList(item, this);
             buildCounter++;
         } else {

@@ -79,7 +79,7 @@ public class Assassin extends Mercenary implements Enemy{
             dungeonMap.addEntity(ally);
             player.getAttackStrategy().bonusDamage(ally);
             player.getDefenceStrayegy().bonusDefence(ally);
-            player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount());
+            player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount(), player);
             player.attach(ally);
             return true;
         }
