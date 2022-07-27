@@ -36,5 +36,9 @@ public class WeaponableAttackStrategy implements AttackStrategy{
     public void removeBounus(BonusDamageMul attack) {
         bonusdamages.remove(attack);
         
+    }
+    @Override
+    public int getIncreaseAmount() {
+        return 0;
     } 
 }

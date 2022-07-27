@@ -41,10 +41,12 @@ public class Inventory {
         if (item instanceof BonusDamageAdd) {
             player.getAttackStrategy().bonusDamage((BonusDamageAdd) item);
             System.out.println(String.format("%s is used as weapon", item.getEntityId()));
-        } else if (item instanceof BonusDamageMul) {
+        } 
+        if (item instanceof BonusDamageMul) {
             player.getAttackStrategy().bonusDamage((BonusDamageMul) item);
             System.out.println(String.format("%s is used as weapon", item.getEntityId()));
-        } else if (item instanceof BonusDefenceAdd) {
+        } 
+        if (item instanceof BonusDefenceAdd) {
             player.getDefenceStrayegy().bonusDefence((BonusDefenceAdd) item);
             System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         }
@@ -60,7 +62,7 @@ public class Inventory {
         inventory.get(item.getType()).remove(item);
         idCollection.remove(item.getEntityId());
     }
-    public boolean removeFromInventoryList(String type, int number) {
+    public boolean removeFromInventoryList(String type, int number, Player player) {
         if (!inventory.containsKey(type)) {
             String.format("%s does not exit", type);
             return false;
@@ -73,9 +75,10 @@ public class Inventory {
             for(int i = 0; i < number; i++) {
                 idCollection.remove(items.get(0).getEntityId());
                 items.remove(0);
+                // removeFromInventoryList(items.get(0).getEntityId(), player);
             }
         }
-        System.out.println(String.format("%s has remove %d from inventory", type, number));
+        // System.out.println(String.format("%s has remove %d from inventory", type, number));
         return true;
     }
     public Entity getItem(String id) {
@@ -99,12 +102,16 @@ public class Inventory {
         String type = idCollection.get(itemId);
         Entity item = getItem(itemId);
         if (item != null) {
-            if (item instanceof BonusDamageAdd) {
-                player.getAttackStrategy().removeBounus((BonusDamageAdd) item);
-            } else if (item instanceof BonusDamageMul) {
-                player.getAttackStrategy().removeBounus((BonusDamageMul) item);
-            } else if (item instanceof BonusDefenceAdd) {
-                player.getDefenceStrayegy().removeDefence((BonusDefenceAdd) item);
+            if (player != null) {
+                if (item instanceof BonusDamageAdd) {
+                    player.getAttackStrategy().removeBounus((BonusDamageAdd) item);
+                } 
+                if (item instanceof BonusDamageMul) {
+                    player.getAttackStrategy().removeBounus((BonusDamageMul) item);
+                } 
+                if (item instanceof BonusDefenceAdd) {
+                    player.getDefenceStrayegy().removeDefence((BonusDefenceAdd) item);
+                }
             }
             inventory.get(type).remove(item);
             System.out.println(String.format("%s has remove from inventory", type));
@@ -113,7 +120,6 @@ public class Inventory {
         }
         return false;
     }
-
     /**
      * return Entity InventoryList
      * 
@@ -152,5 +158,11 @@ public class Inventory {
     } 
     public void print() {
         idCollection.Keys().stream().forEach(key -> System.out.println(key));
+    }
+    public HashMap<String, List<Entity>> getInventory() {
+        return inventory;
+    }
+    public InventoryViewer view() {
+        return new InventoryViewer(this);
     }
 }

@@ -25,15 +25,21 @@ public class ChaseMovement implements MovementStrategy{
      */
     @Override
     public Location nextLocation(Location location) {
+        System.out.println("PLAYER LOCATION: "+location);
+        System.out.println("ENEMY LOCATION: "+getLocation());
         Location next = getLocation();
+        if (location.equals(getLocation())) {
+            return next;
+        }
         TreeMap<Integer, Location> ordered = new TreeMap<>();
         List<Location> choices = MovementOptions.decodeLocationsArguments(this.location, possible);
         choices.stream().forEach(choice -> System.out.println(choice));
         choices.stream().forEach(ele -> {
             int distance = location.distance(ele);
+            System.out.println("DISTANCE: ++++++"+distance);
             ordered.put(Integer.valueOf(distance), ele);
         });
-        
+        System.out.println(ordered.keySet()+"**************");
         for (Integer cloestDistance : ordered.keySet()) {
             Location temp = ordered.get(cloestDistance);
             if (choices.contains(temp)) {

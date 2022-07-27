@@ -5,17 +5,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.staticEntities.Boulder;
+import dungeonmania.staticEntities.Door;
+import dungeonmania.staticEntities.SwampTile;
 import dungeonmania.staticEntities.Wall;
 
  /* function Dijkstras(grid, source):
@@ -48,12 +52,17 @@ public class DijstraAlgorithm {
 
     private HashMap<DijstraPosition, Integer> dist = new HashMap<>();
 
-    public DijstraAlgorithm(Player player, DungeonMap dungeonMap, int vertex, Entity enemy){
-        destination = player.getLocation();
-        source = enemy.getLocation();
-        this.vertex = vertex;
+    public DijstraAlgorithm(Location player, DungeonMap dungeonMap, Location enemy){
+        destination = player;
+        source = enemy;
+        vertex = getvertex(dungeonMap.gMap());
         maze = new DijstraPosition[vertex][vertex];
         entities = dungeonMap.getAllEntities();
+    }
+
+
+    public int getvertex(TreeMap<Location, HashSet<Entity>> map){
+        return map.lastKey().getX()+1;
     }
 
     public void initializationMaze(){
@@ -68,6 +77,23 @@ public class DijstraAlgorithm {
                 int x  = entity.getLocation().getX();
                 int y  = entity.getLocation().getY();
                 maze[x][y] = new DijstraPosition(x, y,MaxValue,false);
+            }
+
+            if(entity instanceof Door){
+                Door d = (Door) entity;
+                if(!d.isOpened()){
+                    int x  = d.getLocation().getX();
+                    int y  = d.getLocation().getY();
+                    maze[x][y] = new DijstraPosition(x, y,MaxValue,false);
+                }
+
+            }
+
+            if(entity instanceof SwampTile){
+                SwampTile s = (SwampTile) entity;
+                int x  = s.getLocation().getX();
+                int y  = s.getLocation().getY();
+                maze[x][y] = new DijstraPosition(x, y,s.getMultiplyingFactor(),true);
             }
         }
 
@@ -116,18 +142,17 @@ public class DijstraAlgorithm {
                 }
             }
         }
-
         return next;
     }
 
     public void outPut(int x, int y) {
+        if(maze[x][y].pre == null){
+            return;
+        }
         if (maze[x][y].pre.pre == null) {
-            System.out.println(maze[x][y].x);
-            System.out.println(maze[x][y].y);
             next = new Location(x, y);
         }
         outPut(maze[x][y].pre.x, maze[x][y].pre.y);
-        System.out.println("(" + x + ", " + y + ")");
     }
     
 }

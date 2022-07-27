@@ -13,7 +13,7 @@ import dungeonmania.helpers.DijstraAlgorithm;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 
-public class DijstraAlgorithmTest {
+/* public class DijstraAlgorithmTest {
     @Test
     @DisplayName("Test the player can pick up wood in map")
     public void testPickUpWood() {
@@ -24,6 +24,6 @@ public class DijstraAlgorithmTest {
                 "c_collectTests");
        
         DijstraAlgorithm da = dmc.testDijstraAlgorithm();
-        da.dijstra();
+        System.out.println(da.dijstra());
     }
-}
+} */

@@ -1,14 +1,17 @@
 package dungeonmania;
 
+import dungeonmania.bosses.Assassin;
 import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
+import dungeonmania.goals.GoalsTree;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DijstraAlgorithm;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
 import dungeonmania.helpers.FileSaver;
 import dungeonmania.helpers.Location;
+import dungeonmania.helpers.RandomMapGenerator;
 import dungeonmania.inventories.Inventory;
 import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.Spider;
@@ -80,29 +83,50 @@ public class DungeonManiaController {
         tickCounter = 0;
         deltaTickAfterTimeTraveling = 0;
         isTimeTravling = false;
+        battles = new ArrayList<>();
+
     }
     /**
-     * /game/new
+     * /game/new/
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         initController();
         this.dungeonName = dungeonName;
         try {
             dungeonConfig = new Config(configName);
-            battles = new ArrayList<>();
             fileSaver = new FileSaver(dungeonName, configName, dungeonId);
             dungeonMap.loads(dungeonName, dungeonConfig);
             fileSaver.saveMap(dungeonMap);
             player = dungeonMap.getPlayer();
             dungeonMap.interactAll().battleAll(battles, player);
             goals = new GoalController(dungeonName, dungeonConfig);
+            dungeonMap.UpdateAllLogicalEntities();
             return getDungeonResponse();
         } catch (IOException e) {
             throw new IllegalArgumentException(
                     "'configName' or 'dungeonName' is not a configuration/dungeon that exists");
         }
     }
+    /**
+     * /game/new/generate
+     */
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
+        initController();
+        RandomMapGenerator walls = new RandomMapGenerator(xStart, yStart, xEnd, yEnd);
+        dungeonMap = new DungeonMap();
+        fileSaver = new FileSaver(configName, dungeonId);
+        try {
+            dungeonConfig = new Config(configName);
+            dungeonMap.loads(walls.start(), dungeonConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("configName is not a configuration that exists");
+        }
+        fileSaver.saveMap(dungeonMap);
+        player = dungeonMap.getPlayer();
+        dungeonMap.interactAll().battleAll(battles, player);
+        dungeonMap.UpdateAllLogicalEntities();
+        goals = new GoalController(new GoalsTree("exit", GoalController.newGoal("exit")), dungeonConfig);
         return getDungeonResponse();
     }
 
@@ -167,6 +191,7 @@ public class DungeonManiaController {
         }
         timerAdd();
         checkTimer(timer);
+        player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
         timerAdd();
@@ -208,6 +233,7 @@ public class DungeonManiaController {
         }
         player.movement(movementDirection.getOffset());
         player.updatePotionDuration();
+        player.updateSceptreRound();
         timerAdd();
         checkTimer(timer);
         dungeonMap.UpdateAllEntities();
@@ -243,6 +269,8 @@ public class DungeonManiaController {
         player.getInventory().print();
         player.build(buildable, dungeonConfig);
         fileSaver.saveAction("build", false, buildable);
+        // goals = new GoalsTree("exit");
+        
         return getDungeonResponse();
 
     }
@@ -251,6 +279,7 @@ public class DungeonManiaController {
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        System.out.println("INTERACT-----------------------");
         return interact(entityId, false);
     }
     /**
@@ -268,6 +297,7 @@ public class DungeonManiaController {
         if (entity == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
+        System.out.println("TYPE: "+entity.getType());
         if (entity.getType().equals("zombie_toast_spawner")) {
             ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
             if (!zombieToastSpawner.interact(player, dungeonMap)) {
@@ -278,6 +308,13 @@ public class DungeonManiaController {
             Mercenary mercenary = (Mercenary) entity;
             if (!mercenary.interact(player, dungeonMap)) {
                 throw new InvalidActionException("Invaild action");
+            }
+        }
+        if (entity.getType().equals("assassin")) {
+            System.out.println("ASSASSIN");
+            Assassin assassin = (Assassin) entity;
+            if (!assassin.interact(player, dungeonMap)) {
+                throw new InvalidActionException("Invaid action");
             }
         }
         return getDungeonResponse();
@@ -326,9 +363,11 @@ public class DungeonManiaController {
      * Create a buildables from a list of player inventoryList
      */
     private List<String> getBuildables(Inventory inventory) {
+        // TODO: ADD MORE BUILDABLES
         return Arrays.asList(BuildableEntityFactory.newRecipe("bow"),
                     BuildableEntityFactory.newRecipe("shield")).stream()
-                    .filter(recipe -> recipe.isSatisfied(inventory))
+                    .filter(recipe -> recipe.CountItem(inventory.view()).isSatisfied() 
+                                    && recipe.getPrerequisite().allMatch(dungeonMap.iterator()).isSatisfied())
                     .map(recipe -> recipe.getRecipeName())
                     .collect(Collectors.toList());
     }
@@ -421,15 +460,16 @@ public class DungeonManiaController {
         
     }
 
-    public DijstraAlgorithm testDijstraAlgorithm(){
+    /* public DijstraAlgorithm testDijstraAlgorithm(){
         Entity enemy = null;
         for(Entity e : dungeonMap.getAllEntities() ){
             if(e instanceof Mercenary){
                 enemy = e;
             }
         }
-        DijstraAlgorithm da = new DijstraAlgorithm(player, dungeonMap, 6, enemy);
+        DijstraAlgorithm da = new DijstraAlgorithm(player, dungeonMap, enemy);
         return  da;
-    }
+    } */
+    
 
 }

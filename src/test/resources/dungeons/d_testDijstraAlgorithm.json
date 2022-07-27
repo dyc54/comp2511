@@ -130,8 +130,8 @@
         
         {
             "type": "exit",
-            "x": 10,
-            "y": 1
+            "x": 2,
+            "y": 2
         }
     ],
     "goal-condition": {"goal": "exit"}

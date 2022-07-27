@@ -6,4 +6,5 @@ public interface AttackStrategy {
     public void bonusDamage(BonusDamageMul attack);
     public void removeBounus(BonusDamageAdd attack);
     public void removeBounus(BonusDamageMul attack);
+    public int getIncreaseAmount();
 }
