@@ -17,8 +17,8 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
     
     private int ally_attack;
     private int ally_defence;
-    public MercenaryAlly(MercenaryEnemy mercenary) {
-        super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+    public MercenaryAlly(Mercenary mercenary) {
+        super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
             System.out.println("NEW NEW NEW");
         
@@ -74,10 +74,17 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public void SceptreUpdate(SceptreEffectSubject subject, DungeonMap dungeonMap) {
-        MercenaryEnemy ally = new MercenaryEnemy(this);
-        ally.setEntityId(String.valueOf(getEntityId()));
+        System.out.println("------------------- change to enemy -------------------");
+        MercenaryEnemy enemy = new MercenaryEnemy(this);
+        enemy.setEntityId(String.valueOf(getEntityId()));
         dungeonMap.removeEntity(getEntityId());
-        dungeonMap.addEntity(ally);
+        System.out.println("ENEMY POSITION: "+enemy.getLocation());
+        dungeonMap.addEntity(enemy);
+        Player player = dungeonMap.getPlayer();
+        player.getAttackStrategy().removeBounus(this);
+        player.getDefenceStrayegy().removeDefence(this);
+        player.attach(enemy);
+        player.detach(this);
     }
     
     @Override

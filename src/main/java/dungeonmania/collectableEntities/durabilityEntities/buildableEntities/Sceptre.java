@@ -30,7 +30,11 @@ public class Sceptre extends Entity implements Useable{
     }
 
     public void setTimer() {
-        this.timer = this.timer += 1;
+        this.timer += 1;
+    }
+
+    public int getTimer() {
+        return this.timer;
     }
 
     public void StartTimer() {
@@ -56,6 +60,7 @@ public class Sceptre extends Entity implements Useable{
             ally.setEntityId(String.valueOf(enemy.getEntityId()));
             map.removeEntity(enemy.getEntityId());
             map.addEntity(ally);
+            player.addsceptreObservers(ally);
             player.getAttackStrategy().bonusDamage(ally);
             player.getDefenceStrayegy().bonusDefence(ally);
             player.attach(ally);

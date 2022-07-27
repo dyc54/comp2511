@@ -26,12 +26,12 @@
             "y" : 1
         }, {
             "type": "mercenary",
-            "x": 12,
+            "x": 3,
             "y": 1
         },{
             "type": "mercenary",
-            "x": 14,
-            "y": 1
+            "x": 1,
+            "y": 3
         },
         {
             "type": "exit",

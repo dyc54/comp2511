@@ -36,10 +36,10 @@ public class Config {
     public final int assassin_bribe_fail_rate;
     public final int assassin_health;
     public final int assassin_recon_radius;
-    public final int hydra_spawn_rate;
     public final int hydra_attack;
     public final int hydra_health;
-    public final int hydra_health_increase_rate;
+    public final int hydra_spawn_rate;
+    public final double hydra_health_increase_rate;
     public final int hydra_health_increase_amount;
     public final int mind_control_duration;
     public final int midnight_armour_attack;
@@ -93,7 +93,7 @@ public class Config {
             assassin_bribe_fail_rate = json.getInt("assassin_bribe_fail_rate");
             assassin_health = json.getInt("assassin_health");
             assassin_recon_radius = json.getInt("assassin_recon_radius");
-            hydra_spawn_rate = json.getInt("hydra_spawn_rate");
+            hydra_spawn_rate = 0;
             hydra_attack = json.getInt("hydra_attack");
             hydra_health = json.getInt("hydra_health");
             hydra_health_increase_rate = json.getInt("hydra_health_increase_rate");
