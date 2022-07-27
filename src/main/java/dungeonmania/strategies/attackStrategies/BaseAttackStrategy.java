@@ -10,7 +10,7 @@ public class BaseAttackStrategy implements AttackStrategy{
         this.attack = attack;
         this.bonusdamages = new ArrayList<>();
     }
-
+    
     @Override
     public double attackDamage() {
         return attack + bonusdamages.stream()
@@ -36,5 +36,10 @@ public class BaseAttackStrategy implements AttackStrategy{
 
     @Override
     public void removeBounus(BonusDamageMul attack) {
+    }
+
+    @Override
+    public int getIncreaseAmount() {
+        return 0;
     }
 }

@@ -208,12 +208,12 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
         res = dmc.tick(invincibility_potion_1_ID);
         assertEquals(new Position(3,1), getEntities(res, "player").get(0).getPosition());
         assertEquals(1, res.getBattles().size());
-        assertEquals(new Position(4,1), getEntities(res, "mercenary").get(0).getPosition());
+        assertNotEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
         
         //invisibility_potion invalid, mercenary go back to find player
         res = dmc.tick(Direction.RIGHT);
         assertEquals(new Position(4,1), getEntities(res, "player").get(0).getPosition());
-        assertEquals(new Position(5,1), getEntities(res, "mercenary").get(0).getPosition());
+        assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
 
     }
     @Test

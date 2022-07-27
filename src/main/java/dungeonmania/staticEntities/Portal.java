@@ -2,6 +2,8 @@ package dungeonmania.staticEntities;
 
 import java.util.stream.Collectors;
 
+import org.json.JSONObject;
+
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.helpers.DungeonMap;
@@ -64,5 +66,9 @@ public class Portal extends StaticEntity {
     @Override
     public boolean hasSideEffect(Entity entity, DungeonMap map) {
         return DungeonMap.isaccessible(map, getLocation(), entity);
+    }
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject().put("colour", color);
     }
 }

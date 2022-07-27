@@ -2,12 +2,11 @@ package dungeonmania.collectableEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
+import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
-import dungeonmania.staticEntities.FloorSwitch;
-import dungeonmania.staticEntities.StaticBomb;
 
-public class Bomb extends CollectableEntity implements Useable {
+public class Bomb extends CollectableEntity implements Useable{
 
     private int bomb_radius;
     private boolean hasPlaced;
@@ -22,27 +21,44 @@ public class Bomb extends CollectableEntity implements Useable {
         return bomb_radius;
     }
 
-    public void put(Location location, DungeonMap dungeonMap) {
-        StaticBomb staticBomb = new StaticBomb("static_bomb", location.getX(), location.getY(),
-                this.bomb_radius);
-        dungeonMap.addEntity(staticBomb);
-        dungeonMap.getPlayer().removeInventoryList(this);
-        dungeonMap.getFourNearEntities(location).stream().forEach(e -> {
-            if (e instanceof FloorSwitch) {
-                FloorSwitch floorSwitch = (FloorSwitch) e;
-                if (floorSwitch.getTrigger()) {
-                    staticBomb.update(dungeonMap);
-                } else {
-                    floorSwitch.bombAttach(staticBomb);
-                }
+    public void update(DungeonMap map) {
+        map.getEntities(getLocation(), bomb_radius).stream().forEach(e -> {
+            if (!(e instanceof Player)) {
+                map.removeEntity(e.getEntityId());
             }
         });
     }
 
-    
+    @Override
+    public boolean interact(Entity entity, DungeonMap map) {
+        if (!hasPlaced) {
+            super.interact(entity, map);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isAccessible(Entity entity) {
+        return (!hasPlaced);
+    }
+
     @Override
     public void use(DungeonMap map, Player player) {
-        put(player.getLocation(), map);
-        player.getInventory().removeFromInventoryList(this);
+        this.setLocation(player.getLocation());
+        this.hasPlaced = true;
+        map.addEntity(this);
+        map.getPlayer().removeInventoryList(this);
+        map.getFourNearEntities(player.getLocation()).stream().forEach(e -> {
+            if (e instanceof FloorSwitch) {
+                FloorSwitch floorSwitch = (FloorSwitch) e;
+                if (floorSwitch.getTrigger()) {
+                    this.update(map);
+                } else {
+                    floorSwitch.bombAttach(this);
+                }
+            }
+        });
+        
     }
+
 }

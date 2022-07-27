@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.CollectableEntity;
+import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -37,6 +38,10 @@ public class Battle {
         DefenceStrategy defenceStrategy = player.getDefenceStrayegy();
         double damage = attackStrayegy.attackDamage() - defenceStrategy.defenceDamage();
         return (damage > 0 ? damage : 0) / 10.0;
+    }
+    private int increaseAmount() {
+        AttackStrategy attackStrategy = enemy.getAttackStrayegy();
+        return attackStrategy.getIncreaseAmount();
     }
     public Battle(Player player, Enemy enemy) {
         this();
@@ -75,17 +80,23 @@ public class Battle {
     private List<String> battle() {
         double playerdamage = playerDamage();
         double enemydamage = enemyDamage();
+        int increaseAmount = increaseAmount();
         List<ItemResponse> items= player.getBattleUsage()
                                     .stream().map(mapper -> (CollectableEntity) mapper)
                                     .map(item -> item.getItemResponse()).collect(Collectors.toList());
-        if (player.hasEffect()) {
+        if (player.hasEffect()) { 
             items.add(player.getCurrentEffect().getItemResponse());
         }               
         System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage
                                                                                         , currEnemyHealth, playerdamage, currEnemyHealth - playerdamage));
         
         currPlayerHealth -= enemydamage;
-        currEnemyHealth -= playerdamage;
+        System.out.println("increase amount: "+increaseAmount);
+        if (increaseAmount != 0) {
+            currEnemyHealth += increaseAmount;
+        } else {
+            currEnemyHealth -= playerdamage;
+        }
         rounds.add(new RoundResponse(enemydamage * -1, playerdamage * -1, items));
 
         if (round(currPlayerHealth) <= 0 && round(currEnemyHealth) <= 0) {

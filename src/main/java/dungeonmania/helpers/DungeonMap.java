@@ -2,7 +2,6 @@ package dungeonmania.helpers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.*;
 
@@ -20,20 +20,26 @@ import dungeonmania.Interactability;
 import dungeonmania.Player;
 import dungeonmania.battle.Battle;
 import dungeonmania.battle.Enemy;
+import dungeonmania.logicEntities.LogicEntity;
+import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.BattleResponse;
+import dungeonmania.staticEntities.Exit;
+import dungeonmania.staticEntities.Wall;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.strategies.Movement;
+import dungeonmania.timeTravel.TimeTravellingPortal;
 
 /**
  * Save entities
  */
-public class DungeonMap {
+public class DungeonMap implements Iterable<Entity> {
     private TreeMap<Location, HashSet<Entity>> map;
     // private final HashMap<String, Location> IdCollection;
     private final IdCollection<Location> idCollection;
     private int EnemiesDestroiedCounter;
     Player player;
+    private Timer timer;
     /**
      * Return whether two types are same type or same category.
      * 
@@ -56,7 +62,12 @@ public class DungeonMap {
         EnemiesDestroiedCounter = 0;
         
     }
-
+    public void setTimer(Timer time) {
+        timer = time;
+    }
+    public Timer getTimer() {
+        return timer;
+    }
     /**
      * Load entities
      * 
@@ -68,14 +79,26 @@ public class DungeonMap {
         String content = FileReader.LoadFile(path);
         JSONObject json = new JSONObject(content);
         JSONArray entities = json.getJSONArray("entities");
+        boolean hasId = false;
+        if (json.has("branch")) {
+            hasId = json.getInt("branch") == 0;
+        }
         for (int i = 0; i < entities.length(); i++) {
             JSONObject entity = entities.getJSONObject(i);
-            addEntity(EntityFactory.newEntity(entity, config, this));
+            addEntity(EntityFactory.newEntity(entity, config, this, hasId));
         }
         toString();
         return this;
     }
-    
+    public DungeonMap loads(RandomMapGenerator map, Config config) {
+        Iterator<Location> wallLocation = map.iterator();
+        while (wallLocation.hasNext()) {
+            addEntity(new Wall("wall", wallLocation.next()));
+        }
+        addEntity(new Player("player", map.getStartLocation().getX(), map.getStartLocation().getY(), config.player_attack, config.player_health, this));
+        addEntity(new Exit("exit", map.getEndLocation().getX(), map.getEndLocation().getY()));
+        return this;
+    }
     /**
      * Add a Entity to Dungeon Map.
      * 
@@ -314,11 +337,24 @@ public class DungeonMap {
         removeEntity(entity.getEntityId());
         addEntity(entity);
         EnemiesDestroiedCounter = temp;
-    }
+        // if (entity instanceof LogicEntity ) {
+        //     UpdateLogicEntity((LogicEntity) entity);
+        // }
 
+    }
+    public void UpdateLogicEntity(LogicEntity entity) {
+        entity.init(this);
+    }
     public int getDestoriedCounter() {
         System.out.println(String.format("Counter = ", EnemiesDestroiedCounter));
         return EnemiesDestroiedCounter;
+    }
+    public void UpdateAllLogicalEntities() {
+        getAllEntities().stream().forEach(entity -> {
+            if (entity instanceof LogicEntity ) {
+                UpdateLogicEntity((LogicEntity) entity);
+            }
+        });
     }
     public void UpdateAllEntities() {
         getAllEntities().stream().forEach(entity -> UpdateEntity(entity));
@@ -335,7 +371,7 @@ public class DungeonMap {
         list.stream().forEach(en -> en.interact(player, this));
         return this;
     }
-    public DungeonMap battleAll(List<BattleResponse> battles) {
+    public DungeonMap battleAll(List<BattleResponse> battles, Player player) {
         String effect = "";
         if (player.hasEffect()) {
             effect = player.getCurrentEffect().applyEffect();
@@ -343,14 +379,14 @@ public class DungeonMap {
         System.out.println(player.getLocation());
         this.getEntities(player.getLocation()).stream().forEach(entity -> System.out.println(entity.toString()));
 
-        if (this.getEntities(player.getLocation()).size() > 1 && !effect.equals("Invisibility")) {
-            System.out.println("GetEntities");
+        System.out.println("PLAYER CHECK BATTLE");
+        // if (this.getEntities(player.getLocation()).size() > 1) {
             List<String> removed = new ArrayList<>();
             List<Movement> movements = new ArrayList<>();
             System.out.println(player.getLocation().toString());
             for (Entity entity: this.getEntities(player.getLocation())) {
                 System.out.println(entity.toString() + "BATTLE CHECK");
-                if (entity instanceof Enemy) {
+                if (entity instanceof Enemy && player.canBattle(entity)) {
                     Battle battle = new Battle();
                     List<String> losers = battle.setBattle(player, (Enemy) entity).startBattle();
                     losers.stream().forEach(loser -> removed.add(loser));
@@ -358,7 +394,11 @@ public class DungeonMap {
                     removed.stream().forEach(loser -> System.out.println(loser));
                     if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invincibility")) {
                         if (!(entity instanceof Spider)) {
-                            movements.add((Movement) entity);
+                            if (entity instanceof MercenaryEnemy) {
+                                entity.setLocation(player.getPreviousLocation());
+                            } else {
+                                movements.add((Movement) entity);
+                            }
                         }
                     }
                     battles.add(battle.toResponse());
@@ -368,8 +408,13 @@ public class DungeonMap {
             removed.stream().forEach(id -> this.removeEntity(id));
             movements.stream().forEach(ent -> ent.movement(this));
             
-        }
+        // }
         return this;
+    }
+    public void setPlayer(Player player) {
+        removeEntity(this.player.getEntityId());
+        addEntity(player);
+        // this.player = player;
     }
 
     public static boolean isaccessible(DungeonMap map, Location location, Entity entity) {
@@ -397,5 +442,18 @@ public class DungeonMap {
             .filter(element ->  location.equals(element.getLocation()) && element instanceof Interactability && ((Interactability) element).hasSideEffect(entity, map))
             .collect(Collectors.toList());
     }
-
+    public void print() {
+        System.out.println("Map:");
+        getAllEntities().stream().forEach(entity -> System.out.println(entity));
+    }
+    @Override
+    public Iterator<Entity> iterator() {
+        return getAllEntities().iterator();
+    }
+    public boolean isTimeTravelPortal(Location location) {
+        return getEntities(location).stream().anyMatch(entity -> entity instanceof TimeTravellingPortal);
+    }
+    public Stream<Entity> stream() {
+        return getAllEntities().stream();
+    }
 }

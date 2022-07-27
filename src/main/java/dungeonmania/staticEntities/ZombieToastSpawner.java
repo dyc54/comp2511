@@ -13,6 +13,7 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
     private int zombie_attack;
     private int zombie_health;
     private DungeonMap map;
+    private int counter;
 
     public ZombieToastSpawner(String type, int x, int y, int zombieSpawnRate, int zombie_attack, int zombie_health,
             DungeonMap map) {
@@ -22,6 +23,7 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
         this.zombie_attack = zombie_attack;
         this.zombie_health = zombie_health;
         this.map = map;
+        counter = 0;
     }
 
     public int getZombieSpawnRate() {
@@ -49,9 +51,11 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
             } else {
                 ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack,
                         zombie_health);
+                zombie.setEntityId(String.format("%s_%s_%s_%d", "zombie_toast", getType(), getLocation().toString(), counter));
                 zombie.movement(map);
                 map.UpdateEntity(zombie);
                 System.out.println("PUT ZOMBIE TO MAP");
+                counter++;
                 setTimer(0);
             }
         }

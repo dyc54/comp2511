@@ -37,7 +37,7 @@ public class Treasures implements GoalComponent{
     }
     @Override
     public GoalComponent getPlayerData(Player player) {
-        GoldNum = player.getInventory().getItems("treasure").size();
+        GoldNum = player.getInventory().getItems("treasure").size() + player.getInventory().getItems("sun_stone").size();
         return this;
     }
 }

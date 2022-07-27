@@ -2,6 +2,8 @@ package dungeonmania.movingEntities;
 
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
+import dungeonmania.SceptreEffectObserver;
+import dungeonmania.SceptreEffectSubject;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
@@ -9,19 +11,18 @@ import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 import dungeonmania.strategies.movementStrategies.FollowingMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
-import dungeonmania.strategies.movementStrategies.MovementStrategy;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
-public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd{
+public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd, SceptreEffectObserver{
     
     private int ally_attack;
     private int ally_defence;
-    public MercenaryAlly(MercenaryEnemy mercenary) {
-        super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+    public MercenaryAlly(Mercenary mercenary) {
+        super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
             System.out.println("NEW NEW NEW");
         
-        }
+    }
     
     @Override
     public boolean movement(DungeonMap dungeonMap) {
@@ -71,6 +72,21 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         return this == obj;
     }
 
+    @Override
+    public void SceptreUpdate(SceptreEffectSubject subject, DungeonMap dungeonMap) {
+        System.out.println("------------------- change to enemy -------------------");
+        MercenaryEnemy enemy = new MercenaryEnemy(this);
+        enemy.setEntityId(String.valueOf(getEntityId()));
+        dungeonMap.removeEntity(getEntityId());
+        System.out.println("ENEMY POSITION: "+enemy.getLocation());
+        dungeonMap.addEntity(enemy);
+        Player player = dungeonMap.getPlayer();
+        player.getAttackStrategy().removeBounus(this);
+        player.getDefenceStrayegy().removeDefence(this);
+        player.attach(enemy);
+        player.detach(this);
+    }
+    
     @Override
     public void update(PotionEffectSubject subject) {
         if (subject instanceof Player) {

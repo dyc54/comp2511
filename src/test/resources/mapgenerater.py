@@ -98,6 +98,11 @@ def addmap(x, y, map, entityname):
 def printmap(map):
     output = ""
     addition = ""
+    dircs = """
+      UP
+LEFT  XXX  RIGHT
+      DOWN
+"""
     count = 1
     min_x = min(map.keys())
     min_y = min([min(ent.keys()) for ent in map.values()])
@@ -135,6 +140,7 @@ def printmap(map):
             line += word + " "
         output += line + "\n"
     print(output + addition)
+    print(dircs)
     return output + addition
 
 
@@ -158,15 +164,20 @@ def main():
             arg = line.replace(" ", "").split(",")
             if (len(arg) < 3):
                 continue
-            if (arg[0] in ['door', 'key', 'portal'] and len(arg) != 4):
+            if ((arg[0] in ['door', 'key', 'portal', 'light_bulb_off', 'bomb'] and len(arg) != 4) or (arg[0] in ['switch_door'] and len(arg) != 5)):
                 print("Error in input argument, lacking of 'color' in portal or 'key' in (door and key)")
                 continue
             entity = newEntities(arg[0], int(arg[1]), int(arg[2]))
-            addmap(int(arg[2]),int(arg[1]), map, arg[0])
+            addmap(int(arg[2]), int(arg[1]), map, arg[0])
             if (arg[0] == "portal"):
                 entity['colour'] = arg[3]
             elif (arg[0] in ['door', 'key']):
                 entity['key'] = int(arg[3])
+            elif (arg[0] in ['light_bulb_off', 'bomb']):
+                entity['logic'] = arg[3]
+            elif (arg[0] in ['switch_door']):
+                entity['logic'] = arg[3]
+                entity['key'] = int(arg[4])
             entities.append(entity)
         except (ValueError, EOFError, KeyboardInterrupt):
             break
