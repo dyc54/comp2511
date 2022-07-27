@@ -95,6 +95,7 @@ public class DungeonManiaController {
             player = dungeonMap.getPlayer();
             dungeonMap.interactAll().battleAll(battles, player);
             goals = new GoalController(dungeonName, dungeonConfig);
+            dungeonMap.UpdateAllLogicalEntities();
             return getDungeonResponse();
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -119,6 +120,7 @@ public class DungeonManiaController {
         fileSaver.saveMap(dungeonMap);
         player = dungeonMap.getPlayer();
         dungeonMap.interactAll().battleAll(battles, player);
+        dungeonMap.UpdateAllLogicalEntities();
         goals = new GoalController(new GoalsTree("exit", GoalController.newGoal("exit")), dungeonConfig);
         return getDungeonResponse();
     }

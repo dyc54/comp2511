@@ -14,7 +14,8 @@
     {
       "type": "switch",
       "x": 0,
-      "y": 2
+      "y": 2,
+      "logic" : "or"
     },
     {
       "type": "boulder",
