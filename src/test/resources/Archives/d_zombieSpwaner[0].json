@@ -1,0 +1,50 @@
+{
+    "configName": "c_zombieSpwaner",
+    "entities": [
+        {
+            "x": 1,
+            "y": 1,
+            "id": "player548a1630-4796-48b9-beed-0fcb98eb3722",
+            "type": "player"
+        },
+        {
+            "x": 1,
+            "y": 2,
+            "id": "sword9f822000-de73-4470-ad66-a2864505acb8",
+            "type": "sword"
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "id": "zombie_toast_spawner259ec803-304b-46a4-93d3-07bccbd5e0ed",
+            "type": "zombie_toast_spawner"
+        },
+        {
+            "x": 8,
+            "y": 8,
+            "id": "exitdb14d81c-26a3-431b-8d86-0374f5befe40",
+            "type": "exit"
+        }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    },
+    "tickCounter": 2,
+    "dungeonName": "d_zombieSpwaner",
+    "dungeonId": "2350f8c0-550f-45c3-bdab-70b05063f2f3",
+    "branch": 0,
+    "actions": [
+        {
+            "action": "playerMove",
+            "argv": [
+                "LEFT"
+            ]
+        },
+        {
+            "action": "playerMove",
+            "argv": [
+                "LEFT"
+            ]
+        }
+    ]
+}

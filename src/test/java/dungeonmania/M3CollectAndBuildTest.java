@@ -474,7 +474,6 @@ public class M3CollectAndBuildTest {
             res = dmc.tick(Direction.RIGHT);
             assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
             // Now the mercenary should be free, and the player will kill the mercenary
-            System.out.println("+++++++++++++++++++++++++");
             assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
             assertEquals(new Position(4,1), getEntities(res, "player").get(0).getPosition());
             res = dmc.tick(Direction.LEFT);

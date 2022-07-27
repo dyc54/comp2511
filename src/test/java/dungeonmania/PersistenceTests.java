@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
@@ -319,6 +320,205 @@ public class PersistenceTests {
         asserAllBattleEqual(postBattleResponse, given);
 
 
+    }
+
+    @Test
+    @DisplayName("test for spider spawn for saving data")
+    public void testSpiderSpawn() {
+        clear();
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_spiderSpwanTest", "c_spiderSpwanTest");
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(0, getEntities(res, "spider").size());
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(1, getEntities(res, "spider").size());
+        DungeonResponse DungonRes = dmc.saveGame("d_spiderSpwanTest");
+        DungeonResponse Dungonload = dmc.loadGame("d_spiderSpwanTest");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+    
+    @Test
+    @DisplayName("Test generate dungeon and persistance")
+    public void testGenerateDungeon() {
+        clear();
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse res =  controller.generateDungeon(0, 0, 1, 1, "c_Battletest_PlayerStrong");
+        assertDoesNotThrow(() -> {
+            controller.tick(Direction.DOWN);
+        });
+        DungeonResponse DungonRes = controller.saveGame("d_generateDungeon");
+        DungeonResponse Dungonload = controller.loadGame("d_generateDungeon");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+
+    @Test
+    @DisplayName("test persistence with zombie spwaner and create zombie")
+    public void testZombieSpwaner() {
+        clear();
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieSpwaner",
+                        "c_zombieSpwaner");
+
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
+        assertEquals(true,
+                        actualDungonRes.getEntities().stream()
+                                        .anyMatch(e -> e.getType().equals("zombie_toast_spawner")));
+        assertEquals(1, getEntities(actualDungonRes, "zombie_toast").size());
+        actualDungonRes = dmc.tick(Direction.LEFT);
+        assertEquals(2, getEntities(actualDungonRes, "zombie_toast").size());
+        DungeonResponse DungonRes = dmc.saveGame("d_zombieSpwaner");
+        DungeonResponse Dungonload = dmc.loadGame("d_zombieSpwaner");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+
+    @Test
+    @DisplayName("test persistance with Hydra with battle")
+    public void testHydra() {
+        clear();
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_hydraTest", "c_Battletest_PlayerStrong");
+        res = dmc.tick(Direction.UP);
+        assertEquals(1, getEntities(res, "hydra").size());
+        assertEquals(0, getEntities(res, "player").size());
+        DungeonResponse DungonRes = dmc.saveGame("d_hydra");
+        DungeonResponse Dungonload = dmc.loadGame("d_hydra");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+
+    @Test
+    @DisplayName("test persistance with assassin and bribe situation")
+    public void testAssassin() {
+        clear();
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res;
+        res = dmc.newGame("d_assassinTest_bribe", "c_BattleTest_rateHigh");
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "treasure").size());
+        String assassinId = getEntities(res, "assassin").get(0).getId();
+        System.out.println(getEntities(res, "assassin").get(0).getId());
+        res = assertDoesNotThrow(()-> dmc.interact(assassinId));
+        
+        assertEquals(0, getInventory(res, "treasure").size());
+        assertEquals(1, getEntities(res, "assassin").size());
+        DungeonResponse DungonRes = dmc.saveGame("d_assassin");
+        DungeonResponse Dungonload = dmc.loadGame("d_assassin");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+
+    @Test
+    @DisplayName("test persistance with time travel")
+    public void testTimeTravel(){
+        clear();
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("timeTravelFWQ7G1658488701.4102888", "c_Battletest_PlayerStrong");
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        DungeonResponse Res = controller.rewind(5);
+        assertTrue(getEntities(Res, "older_player").size() == 1);
+        EntityResponse older_player = getEntities(Res, "older_player").get(0);
+        assertEquals(new Position(0, 0), older_player.getPosition());
+        assertTrue(getEntities(Res, "mercenary").size() == 1);
+        EntityResponse mercenary = getEntities(Res, "mercenary").get(0);
+        assertEquals(new Position(15, 15), mercenary.getPosition());
+        Res = controller.tick(Direction.RIGHT);
+        Res = controller.tick(Direction.RIGHT);
+        Res = controller.tick(Direction.RIGHT);
+        Res = controller.tick(Direction.RIGHT);
+        Res = controller.tick(Direction.RIGHT);
+        assertTrue(getEntities(Res, "older_player").size() == 1);
+        older_player = getEntities(Res, "older_player").get(0);
+        assertEquals(new Position(5, 0), older_player.getPosition());
+        // 
+        Res = controller.tick(Direction.RIGHT);
+        assertTrue(getEntities(Res, "older_player").size() == 0);
+        DungeonResponse DungonRes = controller.saveGame("d_timeTravel");
+        DungeonResponse Dungonload = controller.loadGame("d_timeTravel");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+
+    @Test
+    @DisplayName("test persistance with sceptre - fail")
+    public void testSceptreFail() {
+        clear();
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_collectTests_BuildingSceptreFaile4",
+                    "c_collectTests");
+        assertEquals(0, getInventory(res, "sceptre").size());
+        assertEquals(1, getInventory(res, "wood").size());
+        assertEquals(1, getInventory(res, "treasure").size());
+        assertEquals(1, getInventory(res, "key").size());
+        assertThrows(InvalidActionException.class, () -> {
+            dmc.build("sceptre");  
+        });
+        DungeonResponse DungonRes = dmc.saveGame("d_sceptre");
+        DungeonResponse Dungonload = dmc.loadGame("d_sceptre");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+
+    @Test
+    @DisplayName("test persistance with sceptre - success")
+    public void testSceptre() {
+        clear();
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_collectTests_sceptreUsage",
+                    "c_collectTests");
+        res = assertDoesNotThrow(() -> dmc.build("sceptre"));
+        assertEquals(1, getInventory(res, "sceptre").size());
+        assertEquals(1, getInventory(res, "sun_stone").size());
+        assertEquals(0, getInventory(res, "arrow").size());
+        String sceptreId = getInventory(res, "sceptre").get(0).getId();
+        res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
+        
+        Position playerPosition = getEntities(res, "player").get(0).getPosition();
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+
+        playerPosition = getEntities(res, "player").get(0).getPosition();
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+
+        playerPosition = getEntities(res, "player").get(0).getPosition();
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+        assertEquals(new Position(3,1), getEntities(res, "mercenary").get(0).getPosition());
+        assertEquals(new Position(4,1), getEntities(res, "player").get(0).getPosition());
+        res = dmc.tick(Direction.LEFT);
+        assertEquals(0, getEntities(res, "mercenary").size());
+
+        DungeonResponse DungonRes = dmc.saveGame("d_sceptreTest");
+        DungeonResponse Dungonload = dmc.loadGame("d_sceptreTest");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+
+    @Test
+    @DisplayName("test persistance for invisibility potion to mercenary") 
+    public void testInvisibilityPotion() {
+        clear();
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("testAllyCEYHC1657994389.453653", "c_Battletest_PlayerStrong");
+        String id = getEntities(res, "mercenary").get(0).getId();
+        assertDoesNotThrow(()->{dmc.interact(id);});
+        String nid = getInventory(res, "invisibility_potion").get(0).getId();
+        assertDoesNotThrow(()->dmc.tick(nid));
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+
+        DungeonResponse DungonRes = dmc.saveGame("d_invisibilityTest");
+        DungeonResponse Dungonload = dmc.loadGame("d_invisibilityTest");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
     }
 
 }
