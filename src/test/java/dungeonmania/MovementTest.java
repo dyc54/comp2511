@@ -265,6 +265,7 @@ public class MovementTest {
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.DOWN);
+        assertEquals(0, getEntities(res, "spider").size());
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.DOWN);
         assertEquals(1, getEntities(res, "spider").size());
