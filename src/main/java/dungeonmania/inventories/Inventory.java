@@ -120,9 +120,6 @@ public class Inventory {
         }
         return false;
     }
-    private void removeWareable(Entity entity) {
-
-    }
     /**
      * return Entity InventoryList
      * 

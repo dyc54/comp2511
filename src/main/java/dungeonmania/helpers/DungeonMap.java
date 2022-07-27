@@ -22,6 +22,7 @@ import dungeonmania.Interactability;
 import dungeonmania.Player;
 import dungeonmania.battle.Battle;
 import dungeonmania.battle.Enemy;
+import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.staticEntities.Exit;
@@ -375,7 +376,11 @@ public class DungeonMap implements Iterable<Entity> {
                     removed.stream().forEach(loser -> System.out.println(loser));
                     if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invincibility")) {
                         if (!(entity instanceof Spider)) {
-                            movements.add((Movement) entity);
+                            if (entity instanceof MercenaryEnemy) {
+                                entity.setLocation(player.getPreviousLocation());
+                            } else {
+                                movements.add((Movement) entity);
+                            }
                         }
                     }
                     battles.add(battle.toResponse());

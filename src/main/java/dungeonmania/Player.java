@@ -208,6 +208,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
         if (entity instanceof Useable) {
             ((Useable) entity).use(map, this);
+            notifyPotionEffectObserver();
         } else {
             throw new IllegalArgumentException(
                     "itemUsed is not a bomb, invincibility_potion, or an invisibility_potion");

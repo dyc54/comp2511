@@ -87,6 +87,11 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         
     }
     public void update(Player player) {
+        System.out.println(player.hasEffect());
+        if (player.hasEffect()) {
+            System.out.println(player.getCurrentEffect().applyEffect());
+            System.out.println(player.getCurrentEffect().applyEffect().equals("Invisibility"));
+        }
         if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invisibility")) {
             setMove(new RandomMovement());
         } else {
