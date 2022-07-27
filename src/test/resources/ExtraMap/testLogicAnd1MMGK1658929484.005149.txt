@@ -1,0 +1,9 @@
+player, 0, 0
+boulder, 1, 0
+switch, 2, 0
+boulder, 2, 1
+switch, 3, 1
+light_bulb_off, 3,0, and
+boulder, 2, -1
+switch, 3, -1
+g, exit
