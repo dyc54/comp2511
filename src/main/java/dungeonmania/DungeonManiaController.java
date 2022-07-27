@@ -4,6 +4,7 @@ import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.helpers.Config;
+import dungeonmania.helpers.DijstraAlgorithm;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
 import dungeonmania.helpers.FileSaver;
@@ -17,11 +18,14 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
 import dungeonmania.response.models.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -416,4 +420,16 @@ public class DungeonManiaController {
         }
         
     }
+
+    public DijstraAlgorithm testDijstraAlgorithm(){
+        Entity enemy = null;
+        for(Entity e : dungeonMap.getAllEntities() ){
+            if(e instanceof Mercenary){
+                enemy = e;
+            }
+        }
+        DijstraAlgorithm da = new DijstraAlgorithm(player, dungeonMap, 6, enemy);
+        return  da;
+    }
+
 }
