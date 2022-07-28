@@ -18,7 +18,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
      * @param spider_attack
      * @param spider_health
      */
-    public Spider(String type, Location location, int spider_attack, int spider_health) {
+    public Spider(String type, Location location, double spider_attack, double spider_health) {
         super(type, location, spider_health, new BaseAttackStrategy(spider_attack), new CircleMovement(location));
     }
     private boolean checkhasBoulder(DungeonMap dungeonMap, Location next) {

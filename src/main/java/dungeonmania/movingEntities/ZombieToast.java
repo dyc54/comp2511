@@ -12,7 +12,7 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
     
-    public ZombieToast(String type, Location location, int zombie_attack, double zombie_health) {
+    public ZombieToast(String type, Location location, double zombie_attack, double zombie_health) {
         super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack), new RandomMovement());
     }
 

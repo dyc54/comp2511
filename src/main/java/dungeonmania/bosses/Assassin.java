@@ -21,7 +21,7 @@ public class Assassin extends Mercenary implements Enemy{
     private double assassin_bribe_fail_rate;
     private int assassin_recon_radius;
 
-    public Assassin(String type, Location location, double health, int attack, int bribe_amount, int bribe_radius, int ally_attack, int ally_defence, double assassin_bribe_fail_rate, int assassin_recon_radius) {
+    public Assassin(String type, Location location, double health, double attack, int bribe_amount, int bribe_radius, double ally_attack, double ally_defence, double assassin_bribe_fail_rate, int assassin_recon_radius) {
         super(type, location, attack, health, bribe_amount, bribe_radius, ally_attack, ally_defence);
         this.assassin_bribe_fail_rate = assassin_bribe_fail_rate;
         this.assassin_recon_radius = assassin_recon_radius;

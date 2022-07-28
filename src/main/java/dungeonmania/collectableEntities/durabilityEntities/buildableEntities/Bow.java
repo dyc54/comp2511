@@ -1,6 +1,7 @@
 package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
 import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.attackStrategies.BonusDamageMul;
 
 public class Bow extends DurabilityEntity implements BonusDamageMul{
@@ -25,6 +26,10 @@ public class Bow extends DurabilityEntity implements BonusDamageMul{
     @Override
     public boolean equals(BonusDamageMul obj) {
         return obj == this;
+    }
+    @Override
+    public ItemResponse toItemResponse() {
+        return getItemResponse();
     }
 
 

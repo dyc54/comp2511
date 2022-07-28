@@ -211,50 +211,18 @@ public class TimeTravelingTest {
         DungeonResponse res = controller.tick(Direction.LEFT);
         assertTrue(getEntities(res, "player").size() == 1);
         EntityResponse player = getEntities(res, "player").get(0);
-        assertEquals(new Position(2, 0), player.getPosition());
+        assertEquals(new Position(1, 0), player.getPosition());
 
         assertTrue(getEntities(res, "older_player").size() == 1);
         EntityResponse older_player = getEntities(res, "older_player").get(0);
+        assertEquals(new Position(-1, 0), older_player.getPosition());
+        res = controller.tick(Direction.UP);
+
+        assertTrue(getEntities(res, "older_player").size() == 1);
+        older_player = getEntities(res, "older_player").get(0);
         assertEquals(new Position(-2, 0), older_player.getPosition());
-        res = controller.tick(Direction.UP);
-
-        assertTrue(getEntities(res, "older_player").size() == 1);
-        older_player = getEntities(res, "older_player").get(0);
-        assertEquals(new Position(-3, 0), older_player.getPosition());
 
 
     }
-    // @Test
-    public void testTimeTravelTwice() {
-        DungeonManiaController controller = new DungeonManiaController();
-        controller.newGame("timeTravel21SIY1658490236.018598", "c_Battletest_PlayerStrong");
-        for (int i = 0; i < 16; i++) {
-            controller.tick(Direction.LEFT);
-        }
-        for (int i = 0; i < 16; i++) {
-            controller.tick(Direction.RIGHT);
-        }
-        controller.tick(Direction.RIGHT);
-        for (int i = 0; i < 16; i++) {
-            controller.tick(Direction.DOWN);
-        }
-        for (int i = 0; i < 16; i++) {
-            controller.tick(Direction.UP);
-        }
-        DungeonResponse res = controller.tick(Direction.RIGHT);
-        assertTrue(getEntities(res, "older_player").size() == 1);
-        EntityResponse older_player = getEntities(res, "older_player").get(0);
-        assertEquals(new Position(0, 3), older_player.getPosition());
-
-        res = controller.tick(Direction.UP);
-        assertTrue(getEntities(res, "older_player").size() == 1);
-        older_player = getEntities(res, "older_player").get(0);
-        assertEquals(new Position(0, 4), older_player.getPosition());
-
-        res = controller.tick(Direction.UP);
-        assertTrue(getEntities(res, "older_player").size() == 1);
-        older_player = getEntities(res, "older_player").get(0);
-        assertEquals(new Position(0, 5), older_player.getPosition());
-
-    }
+   
 }

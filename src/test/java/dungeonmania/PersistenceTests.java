@@ -41,6 +41,7 @@ public class PersistenceTests {
         try {
             Files.walk(Paths.get("./src/test/resources/Archives"))
             .filter(Files::isRegularFile)
+            .filter(path -> path.getFileName().toString().indexOf(".json") != -1)
             .map(Path::toFile)
             .forEach(File::delete);
         } catch (IOException e) {

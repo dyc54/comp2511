@@ -15,7 +15,7 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryEnemy extends Mercenary implements Enemy {
     public MercenaryEnemy(String type, Location location, double mercenary_attack, double mercenary_health,
-            int bribe_amount, int bribe_radius, int ally_attack, int ally_defence) {
+            int bribe_amount, int bribe_radius, double ally_attack, double ally_defence) {
         super("mercenary", location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
     }
 

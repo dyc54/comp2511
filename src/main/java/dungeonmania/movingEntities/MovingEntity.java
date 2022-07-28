@@ -1,12 +1,14 @@
 package dungeonmania.movingEntities;
 
 import dungeonmania.Entity;
+import dungeonmania.Player;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;
 import dungeonmania.strategies.movementStrategies.MovementStrategy;
 
-public abstract class MovingEntity extends Entity {
+public abstract class MovingEntity extends Entity implements BattleStrategyWithPlayer {
     private AttackStrategy attack;
     private MovementStrategy move;
     private double health;
@@ -25,6 +27,15 @@ public abstract class MovingEntity extends Entity {
     public void setHealth(double health) {
         this.health = health;
     }
+    @Override
+    public boolean subHealth(double damage) {
+        this.health = health - damage;
+        if (health <= 0.0002) {
+            health = 0.0;
+            return false;
+        }
+        return true;
+    }
     public MovementStrategy getMove() {
         return move;
     }
@@ -34,6 +45,19 @@ public abstract class MovingEntity extends Entity {
     public MovementStrategy setMove(String options) {
         this.move.MoveOptions(options);
         return move;
+    }
+    @Override
+    public boolean battleWith(Player player) {
+        return subHealth(battleDamageFrom(player));
+    }
+    @Override
+    public double battleDamageFrom(Player player) {
+        AttackStrategy attackStrayegy = player.getAttackStrategy();
+        return attackStrayegy.attackDamage() / 5.0;
+    }
+    @Override
+    public boolean isAlive() {
+        return getHealth() > 0.0;
     }
 
 }

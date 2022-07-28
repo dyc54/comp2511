@@ -6,6 +6,7 @@ import dungeonmania.SceptreEffectObserver;
 import dungeonmania.SceptreEffectSubject;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
@@ -105,5 +106,11 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
                 setMove(new ChaseMovement(getLocation()));
             }
         }
+    }
+
+    @Override
+    public ItemResponse toItemResponse() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
