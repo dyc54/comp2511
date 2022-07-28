@@ -483,7 +483,6 @@ public class M3CollectAndBuildTest {
             // assertEquals(new Position(5,1), getEntities(res, "mercenary").get(0).getPosition());
             // assertEquals(new Position(4,1), getEntities(res, "player").get(0).getPosition());
             assertEquals(0, getEntities(res, "mercenary").size());
-
         });
     }
 
@@ -524,7 +523,43 @@ public class M3CollectAndBuildTest {
         });
     }
 
-    
+    @Test
+    @DisplayName("Test the player can mindcontrol an assassin")
+    public void testSceptreCanMindControlAssassin() {
+        assertDoesNotThrow(() -> {
+            DungeonManiaController dmc = new DungeonManiaController();
+
+            DungeonResponse res = dmc.newGame("d_collectTests_sceptreAndAssassin",
+                    "c_collectTests");
+            
+            //player build sceptre
+            res = dmc.build("sceptre");
+            assertEquals(1, getInventory(res, "sceptre").size());
+            assertEquals(1, getInventory(res, "sun_stone").size());
+            assertEquals(0, getInventory(res, "arrow").size());
+
+            //Use the sceptre
+            String sceptreId = getInventory(res, "sceptre").get(0).getId();
+            res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
+            assertEquals(new Position(2,1), getEntities(res, "assassin").get(0).getPosition());
+
+            //Check if the mercenary is controlled
+            Position playerPosition = getEntities(res, "player").get(0).getPosition();
+            res = dmc.tick(Direction.RIGHT);
+            assertEquals(new Position(1,1), getEntities(res, "assassin").get(0).getPosition());
 
 
+            playerPosition = getEntities(res, "player").get(0).getPosition();
+            res = dmc.tick(Direction.DOWN);
+            assertEquals(playerPosition, getEntities(res, "assassin").get(0).getPosition());
+            assertEquals(new Position(2,1), getEntities(res, "assassin").get(0).getPosition());
+
+            playerPosition = getEntities(res, "player").get(0).getPosition();
+            res = dmc.tick(Direction.DOWN);
+            assertEquals(1, getEntities(res, "assassin").size());
+            assertEquals(playerPosition, getEntities(res, "assassin").get(0).getPosition());
+            
+            
+        });
+    }
 }

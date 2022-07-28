@@ -1,5 +1,7 @@
 package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
 
+import java.util.List;
+
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.Useable;
@@ -54,8 +56,8 @@ public class Sceptre extends Entity implements Useable{
     @Override
     public void use(DungeonMap map, Player player) {
         StartTimer();
-        map.getEntities("mercenary").forEach(e-> {
-            MercenaryEnemy enemy = (MercenaryEnemy) e;
+        map.getAllEntities().stream().filter(e -> e instanceof Mercenary).forEach(e-> {
+            Mercenary enemy = (Mercenary) e;
             MercenaryAlly ally = new MercenaryAlly(enemy);
             ally.setEntityId(String.valueOf(enemy.getEntityId()));
             map.removeEntity(enemy.getEntityId());
