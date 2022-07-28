@@ -1,6 +1,7 @@
 package dungeonmania.strategies.attackStrategies;
 
-public interface BonusDamageStrategy {
+import dungeonmania.strategies.BonusStrategy;
+
+public interface BonusDamageStrategy extends BonusStrategy {
     public double damage();
-    
 }

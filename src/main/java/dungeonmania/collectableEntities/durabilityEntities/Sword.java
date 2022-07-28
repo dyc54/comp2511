@@ -1,16 +1,17 @@
 package dungeonmania.collectableEntities.durabilityEntities;
 
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 
 public class Sword extends DurabilityEntity implements BonusDamageAdd{
-    private int sword_attack;
+    private double sword_attack;
 
-    public Sword(String type, int x, int y, int sword_durability, int sword_attack) {
+    public Sword(String type, int x, int y, int sword_durability, double sword_attack) {
         super(type, sword_durability, x, y);
         this.sword_attack = sword_attack;
     }
 
-    public int getSword_attack() {
+    public double getSword_attack() {
         return sword_attack;
     }
 
@@ -23,6 +24,9 @@ public class Sword extends DurabilityEntity implements BonusDamageAdd{
     public boolean equals(BonusDamageAdd obj) {
         return false;
     }
-
+    @Override
+    public ItemResponse toItemResponse() {
+        return getItemResponse();
+    }
     
 }

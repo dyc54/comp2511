@@ -19,10 +19,13 @@ import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Mid
 import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.strategies.BonusStrategy;
 import dungeonmania.strategies.PlayerMovementStrategy;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.attackStrategies.WeaponableAttackStrategy;
+import dungeonmania.strategies.battleStrategies.BattleStrategyWithEnemy;
+import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;
 import dungeonmania.strategies.defenceStrategies.ArmorableStrategy;
 import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
 import dungeonmania.util.Position;
@@ -31,7 +34,7 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
 
-public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject {
+public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject, BattleStrategyWithEnemy, BattleStrategyWithPlayer {
     // private int attack;
     private AttackStrategy attack;
     private DefenceStrategy defence;
@@ -47,7 +50,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private List<SceptreEffectObserver> SceptreObservers;
     private Durability durabilities;
     private int buildCounter;
-    public Player(String type, int x, int y, int attack, int health, DungeonMap map) {
+    public Player(String type, int x, int y, double attack, double health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
         this.defence = new ArmorableStrategy(0);
@@ -258,17 +261,17 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         this.previousLocation.setLocation(previousLocation);
     }
 
-    public List<Entity> getBattleUsage() {
-        List<Entity> list = new ArrayList<>();
-        if (hasEffect()) {
-            list.add(effects.peek());
-        }
-        List<Entity> invUsage = inventory.getAllInventory().stream()
-                .filter(temp -> (temp instanceof DurabilityEntity && !(temp instanceof PotionEntity)) || temp instanceof MidnightArmour)
-                .collect(Collectors.toList());
-        list.addAll(invUsage);
-        return list;
-    }
+    // public List<Entity> getBattleUsage() {
+    //     List<Entity> list = new ArrayList<>();
+    //     if (hasEffect()) {
+    //         list.add(effects.peek());
+    //     }
+    //     List<Entity> invUsage = inventory.getAllInventory().stream()
+    //             .filter(temp -> (temp instanceof DurabilityEntity && !(temp instanceof PotionEntity)) || temp instanceof MidnightArmour)
+    //             .collect(Collectors.toList());
+    //     list.addAll(invUsage);
+    //     return list;
+    // }
 
     @Override
     public void attach(PotionEffectObserver observer) {
@@ -355,4 +358,58 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             SceptreObserver.SceptreUpdate(this, map);
         }
     }
+
+    @Override
+    public boolean subHealth(double damage) {
+        // TODO Auto-generated method stub
+        // this.subHealth(damage);
+        health -= damage;
+        if (health <= 0.0002) {
+            health = 0.0;
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean battleWith(Enemy enemy) {
+        // TODO Auto-generated method stub
+        return subHealth(battleDamageFrom(enemy));
+    }
+
+    @Override
+    public double battleDamageFrom(Enemy enemy) {
+        // TODO Auto-generated method stub
+        AttackStrategy attackStrayegy = enemy.getAttackStrayegy();
+        double damage = attackStrayegy.attackDamage() - defence.defenceDamage();
+        return (damage > 0.0 ? damage : 0.0) / 10.0;
+    }
+    @Override
+    public List<ItemResponse> getBattleUsedItems() {
+        List<ItemResponse> usage = inventory.stream()
+                                    .filter(entity -> (entity instanceof BonusStrategy))
+                                    .map(entity -> ((BonusStrategy) entity).toItemResponse())
+                                    .collect(Collectors.toList());
+        if (hasEffect()) {
+            PotionEntity potion = effects.peek();
+            usage.add(potion.getItemResponse());
+        }
+        return usage;
+    }
+    @Override
+    public boolean isAlive() {
+        return getHealth() > 0.0;
+    }
+
+    @Override
+    public boolean battleWith(Player player) {
+        return this.battleWith((Enemy) player);
+    }
+
+    @Override
+    public double battleDamageFrom(Player player) {
+        return this.battleDamageFrom((Enemy) player);
+    }
+
+
 }

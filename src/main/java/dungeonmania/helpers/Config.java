@@ -6,8 +6,8 @@ import org.json.*;
  * load config
  */
 public class Config {
-    public final int ally_attack;
-    public final int ally_defence;
+    public final double ally_attack;
+    public final double ally_defence;
     public final int bomb_radius;
     public final int bow_durability;
     public final int bribe_amount;
@@ -31,10 +31,10 @@ public class Config {
     public final int zombie_health;
     public final int zombie_spawn_rat;
     // Milestone3 added
-    public final int assassin_attack;
+    public final double assassin_attack;
     public final int assassin_bribe_amount;
     public final double assassin_bribe_fail_rate;
-    public final int assassin_health;
+    public final double assassin_health;
     public final int assassin_recon_radius;
     public final int hydra_attack;
     public final int hydra_health;
@@ -42,14 +42,14 @@ public class Config {
     public final double hydra_health_increase_rate;
     public final int hydra_health_increase_amount;
     public final int mind_control_duration;
-    public final int midnight_armour_attack;
-    public final int midnight_armour_defence;
+    public final double midnight_armour_attack;
+    public final double midnight_armour_defence;
     
     public Config(String FileName) throws IOException {
         String content = FileReader.LoadFile(String.format(FileName));
         JSONObject json =  new JSONObject(content);
-        ally_attack = json.getInt("ally_attack");
-        ally_defence = json.getInt("ally_defence");
+        ally_attack = json.getDouble("ally_attack");
+        ally_defence = json.getDouble("ally_defence");
         bomb_radius = json.getInt("bomb_radius");
         bow_durability = json.getInt("bow_durability");
         bribe_amount = json.getInt("bribe_amount");
