@@ -191,8 +191,8 @@ public class DungeonManiaController {
             Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
         }
-        timerAdd();
-        checkTimer(timer);
+        // timerAdd();
+        // checkTimer(timer);
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
@@ -243,8 +243,6 @@ public class DungeonManiaController {
         player.movement(movementDirection.getOffset());
         player.updatePotionDuration();
         player.updateSceptreRound();
-        timerAdd();
-        checkTimer(timer);
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
@@ -255,6 +253,8 @@ public class DungeonManiaController {
             // player.setLocation(player.getPreviousLocation());
             fileSaver.saveAction("playerMove", false, Location.inverseDirection(movementDirection), "MOVE ELDER_SELF ONLY");
         } else if (!timeTraveledPlayer) {
+            timerAdd();
+            checkTimer(timer);
             updateTimeTravelStatus();
             runTick(tickCounter);
             // tickCounter++;
