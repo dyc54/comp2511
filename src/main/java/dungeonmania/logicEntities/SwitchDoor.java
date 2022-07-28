@@ -2,6 +2,8 @@ package dungeonmania.logicEntities;
 
 import java.util.HashSet;
 
+import org.json.JSONObject;
+
 import dungeonmania.Entity;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Timer;
@@ -64,5 +66,9 @@ public class SwitchDoor extends Door implements LogicObserver{
     public String getId() {
         // TODO Auto-generated method stub
         return getEntityId();
+    }
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject().put("logic", logic.logicType());
     }
 }

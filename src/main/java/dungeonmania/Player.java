@@ -296,7 +296,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     @Override
     public String toString() {
-        String sec1 = String.format("%s(%s)  %s -*-*->%s\n", getType(), getEntityId(), previousLocation.toString(), getLocation().toString());
+        String sec1 = String.format("%s(%s)  %s -*-*->%s\t", getType(), getEntityId(), previousLocation.toString(), getLocation().toString());
         String sec2 = String.format("    H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage());
         // System.out.println(String.format("   H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage()));
         return sec1 + sec2;
@@ -360,6 +360,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
     }
 
+    // Battle
     @Override
     public boolean subHealth(double damage) {
         // TODO Auto-generated method stub

@@ -113,4 +113,5 @@ public class Wire extends StaticEntity implements LogicSubject, LogicObserver{
         // TODO Auto-generated method stub
         return getEntityId();
     }
+    
 }
