@@ -6,6 +6,7 @@ import dungeonmania.helpers.Location;
 import dungeonmania.strategies.EnemyMovement;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
 import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
+import dungeonmania.strategies.attackStrategies.ChanceAttackStrategy;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
@@ -16,9 +17,7 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
         super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack), new RandomMovement());
     }
 
-    // private String nextPossibleLocation(DungeonMap dungeonMap) {
-    //     return MovingEntity.getPossibleNextDirection(dungeonMap, this);
-    // }
+    
     @Override
     public boolean movement(DungeonMap dungeonMap) {
 

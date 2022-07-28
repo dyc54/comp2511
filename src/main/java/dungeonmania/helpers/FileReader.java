@@ -1,6 +1,7 @@
 package dungeonmania.helpers;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,9 +21,9 @@ import dungeonmania.util.Direction;
  * Read file at path ./src/test
  */
 public class FileReader {
-    public static String LoadFile(String FileName, int branch) throws IOException {
-        return FileReader.LoadFile(String.format("%s[%s]", FileName, branch));
-    }
+    // public static String LoadFile(String FileName, int branch) throws IOException {
+    //     return FileReader.LoadFile(String.format("%s[%s]", FileName, branch));
+    // }
     public static String LoadFile(String FileName) throws IOException {
         try {
             File test = searchFile(new File("./src/test"), FileName+".json");
@@ -52,7 +53,7 @@ public class FileReader {
     }
     public static List<String> listAllGamesArchives() {
         HashSet<String> list = new HashSet<>();
-        File file = new File(FileSaver.SAVED_PATH);
+        File file = new File(String.format("%s/%d", FileSaver.SAVED_PATH, 0));
         File[] arr = file.listFiles();
         for (File f : arr) {
             String fileName = f.getName().replaceAll("\\[.*?\\].json", "");
@@ -61,7 +62,7 @@ public class FileReader {
         return new ArrayList<>(list);
     }
     public static void LoadGame(DungeonManiaController controller, String fileName, int branch) throws IOException {
-        String content = FileReader.LoadFile(fileName, branch);
+        String content = FileReader.LoadFile(String.format("%s[%d]", fileName, branch));
         JSONObject json = new JSONObject(content);
         String configName = json.getString("configName");
         controller.newGame(String.format("%s[%s]", fileName, branch), configName);
@@ -75,7 +76,7 @@ public class FileReader {
         // FileReader.LoadGame(controller, fileName, branch, 0);
     }
     public static void LoadGame(DungeonManiaController controller, String fileName, int branch, int deltaTick) throws IOException {
-        String content = FileReader.LoadFile(fileName, branch);
+        String content = FileReader.LoadFile(String.format("%s[%d]", fileName, branch));
         JSONObject json = new JSONObject(content);
         String configName = json.getString("configName");
         controller.newGame(String.format("%s[%s]", fileName, branch), configName);
@@ -90,7 +91,7 @@ public class FileReader {
         }
     }
     public static void LoadGameTick(DungeonManiaController controller, String fileName, int branch, int tick) throws IOException {
-        String content = FileReader.LoadFile(fileName, branch);
+        String content = FileReader.LoadFile(String.format("%s[%d]", fileName, branch));
         JSONObject json = new JSONObject(content);
         JSONArray actions = json.getJSONArray("actions");
         int tickCounter = json.getInt("tickCounter");

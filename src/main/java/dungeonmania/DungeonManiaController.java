@@ -12,6 +12,7 @@ import dungeonmania.helpers.FileReader;
 import dungeonmania.helpers.FileSaver;
 import dungeonmania.helpers.Location;
 import dungeonmania.helpers.RandomMapGenerator;
+import dungeonmania.helpers.Timer;
 import dungeonmania.inventories.Inventory;
 import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.Spider;
@@ -50,7 +51,7 @@ public class DungeonManiaController {
     private boolean isTimeTravling;
     private int deltaTickAfterTimeTraveling;
     private int currbranch;
-
+    private Timer Ticktimer;
     // TODO:
     // public boolean TIMETRAVEL_FUNCA
     public String getSkin() {
@@ -83,6 +84,7 @@ public class DungeonManiaController {
         tickCounter = 0;
         deltaTickAfterTimeTraveling = 0;
         isTimeTravling = false;
+        Ticktimer = new Timer();
         battles = new ArrayList<>();
 
     }
@@ -95,6 +97,7 @@ public class DungeonManiaController {
         try {
             dungeonConfig = new Config(configName);
             fileSaver = new FileSaver(dungeonName, configName, dungeonId);
+            dungeonMap.setTimer(Ticktimer);
             dungeonMap.loads(dungeonName, dungeonConfig);
             fileSaver.saveMap(dungeonMap);
             player = dungeonMap.getPlayer();
@@ -117,6 +120,7 @@ public class DungeonManiaController {
         fileSaver = new FileSaver(configName, dungeonId);
         try {
             dungeonConfig = new Config(configName);
+            dungeonMap.setTimer(Ticktimer);
             dungeonMap.loads(walls.start(), dungeonConfig);
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,6 +131,7 @@ public class DungeonManiaController {
         dungeonMap.interactAll().battleAll(battles, player);
         dungeonMap.UpdateAllLogicalEntities();
         goals = new GoalController(new GoalsTree("exit", GoalController.newGoal("exit")), dungeonConfig);
+        fileSaver.attachGoal("exit");
         return getDungeonResponse();
     }
 
@@ -186,7 +191,7 @@ public class DungeonManiaController {
             player = dungeonMap.getPlayer();
         } else {
             tickCounter++;
-
+            Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
         }
         timerAdd();
@@ -194,8 +199,7 @@ public class DungeonManiaController {
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
-        timerAdd();
-        checkTimer(timer);
+        
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
@@ -229,6 +233,7 @@ public class DungeonManiaController {
             player = dungeonMap.getPlayer();
         } else {
             tickCounter++;
+            Ticktimer.addTime();
             fileSaver.saveAction("playerMove", true, movementDirection.name());
         }
         player.movement(movementDirection.getOffset());

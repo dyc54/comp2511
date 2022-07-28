@@ -16,13 +16,13 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 public class MercenaryEnemy extends Mercenary implements Enemy {
     public MercenaryEnemy(String type, Location location, double mercenary_attack, double mercenary_health,
             int bribe_amount, int bribe_radius, int ally_attack, int ally_defence) {
-        super("mercenary", location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
+        super(type, location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
     }
 
     public MercenaryEnemy(MercenaryAlly mercenary) {
-        super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+        super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
-        }
+    }
 
 	@Override
 	public AttackStrategy getAttackStrayegy() {

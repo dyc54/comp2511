@@ -16,6 +16,9 @@ public abstract class MovingEntity extends Entity {
         this.move = move;
         this.health = health;
     }
+    public void setAttack(AttackStrategy attack) {
+        this.attack = attack;
+    }
     public AttackStrategy getAttack() {
         return attack;
     }

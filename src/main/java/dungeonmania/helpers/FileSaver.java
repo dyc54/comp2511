@@ -19,7 +19,7 @@ public class FileSaver {
     private int branch;
     private int tickCounter; 
     private final JSONArray actions;
-    private final JSONObject goals;
+    private JSONObject goals;
     public final static String SAVED_PATH = "./src/test/resources/Archives";
     public FileSaver(String dungeonName, String configName, String dungeonId) {
         this.dungeonId = dungeonId;
@@ -43,10 +43,13 @@ public class FileSaver {
     public FileSaver(String configName, String dungeonId) {
         this("Builder Generated", configName, dungeonId);
     }
+    public static String filePath(String name, int branch) {
+        return String.format("%s/%d/%s[%s].json", SAVED_PATH, branch, name, branch);
+    }
     public void save(String fileName, int branch) {
         FileWriter file;
         try {
-            file = new FileWriter(String.format("%s/%s[%s].json", SAVED_PATH, fileName, branch),false);
+            file = new FileWriter(FileSaver.filePath(fileName, branch),false);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("dungeonId", dungeonId);
             jsonObject.put("dungeonName", dungeonName);
@@ -65,23 +68,25 @@ public class FileSaver {
         
     }
     public void save(String fileName) {
-        FileWriter file;
-        try {
-            file = new FileWriter(String.format("%s/%s[%s].json", SAVED_PATH, fileName, branch),false);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("dungeonId", dungeonId);
-            jsonObject.put("dungeonName", dungeonName);
-            jsonObject.put("configName", configName);
-            jsonObject.put("branch", branch);
-            jsonObject.put("entities", initmap);
-            jsonObject.put("actions", actions);
-            jsonObject.put("tickCounter", tickCounter);
-            jsonObject.put("goal-condition", goals);
-            file.write(jsonObject.toString());
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(fileName, 0);
+        // FileWriter file;
+        // try {
+        //     file = new FileWriter(FileSaver.filePath(fileName, branch),false);
+        //     // file = new FileWriter(String.format("%s/%s[%s].json", SAVED_PATH, fileName, branch),false);
+        //     JSONObject jsonObject = new JSONObject();
+        //     jsonObject.put("dungeonId", dungeonId);
+        //     jsonObject.put("dungeonName", dungeonName);
+        //     jsonObject.put("configName", configName);
+        //     jsonObject.put("branch", branch);
+        //     jsonObject.put("entities", initmap);
+        //     jsonObject.put("actions", actions);
+        //     jsonObject.put("tickCounter", tickCounter);
+        //     jsonObject.put("goal-condition", goals);
+        //     file.write(jsonObject.toString());
+        //     file.close();
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
         
         
     }
@@ -114,6 +119,11 @@ public class FileSaver {
     //     actions.put(jsonObject);
     //     return this;
     // }
+    public void attachGoal(String goal) {
+        JSONObject goals = new JSONObject();
+        goals.put("goal", goal);
+        this.goals = goals;
+    }
     public <T> FileSaver saveAction(String action, Boolean isTick, T... argvs) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("action", action);

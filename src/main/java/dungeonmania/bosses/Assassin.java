@@ -9,14 +9,10 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.MercenaryAlly;
-import dungeonmania.strategies.attackStrategies.AttackStrategy;
-import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
-import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
-import dungeonmania.strategies.movementStrategies.ChaseMovement;
-import dungeonmania.strategies.movementStrategies.MovementOptions;
-import dungeonmania.strategies.movementStrategies.RandomMovement;
+import dungeonmania.movingEntities.MercenaryEnemy;
+;
 
-public class Assassin extends Mercenary implements Enemy{
+public class Assassin extends MercenaryEnemy{
 
     private double assassin_bribe_fail_rate;
     private int assassin_recon_radius;
@@ -27,22 +23,16 @@ public class Assassin extends Mercenary implements Enemy{
         this.assassin_recon_radius = assassin_recon_radius;
     }
 
-    @Override
-    public boolean movement(DungeonMap dungeonMap) {
-        Player p = dungeonMap.getPlayer();
-        Location playerLocation = p.getLocation();
-        String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
-        Location next = new Location();
-        if (getMove() instanceof RandomMovement) {
-            next = getMove().MoveOptions(choice).nextLocation(getLocation(), dungeonMap);
-        } else {
-            next = getMove().MoveOptions(choice).nextLocation(playerLocation, dungeonMap);
-        }
-        
-        System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
-        setLocation(next);
-        dungeonMap.UpdateEntity(this);
-        return false;
+    public Assassin(MercenaryAlly mercenary, double assassin_bribe_fail_rate, int assassin_recon_radius) {
+        super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+                mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
+        this.assassin_bribe_fail_rate = assassin_bribe_fail_rate;
+        this.assassin_recon_radius = assassin_recon_radius;
+    }
+
+    public boolean isRecon(Player player) {
+        double distance = player.getLocation().distance(getLocation());
+        return distance > assassin_recon_radius;
     }
 
     @Override
@@ -52,54 +42,33 @@ public class Assassin extends Mercenary implements Enemy{
         }   
     }
     public void update(Player player) {
-        double distance = player.getLocation().distance(getLocation());
-        System.out.println("DISTANCE: "+distance);
-        if (player.hasEffect() 
-        && player.getCurrentEffect().applyEffect().equals("Invisibility")
-        && distance > assassin_recon_radius) {
-            System.out.println("RANDOMMOVEMENT");
-            setMove(new RandomMovement());
-        } else {
-            setMove(new ChaseMovement(getLocation()));
+        if (isRecon(player)) {
+            super.update(player);
         }
+        // double distance = player.getLocation().distance(getLocation());
+        // System.out.println("DISTANCE: "+distance);
+        // if (player.hasEffect() 
+        // && player.getCurrentEffect().applyEffect().equals("Invisibility")
+        // && distance > assassin_recon_radius) {
+        //     System.out.println("RANDOMMOVEMENT");
+        //     setMove(new RandomMovement());
+        // } else {
+        //     setMove(new ChaseMovement(getLocation()));
+        // }
+    }
+
+    public double randomRate() {
+        Random random = new Random(getLocation().hashCode());
+        return random.nextDouble();
     }
 
     @Override
     public boolean interact(Player player, DungeonMap dungeonMap) {
-        Random random = new Random(getLocation().hashCode());
-        double rate = random.nextDouble();
-        System.out.println("RATE: "+rate);
-        System.out.println("FAIL_RATE: "+assassin_bribe_fail_rate);
-        if (player.getInventory().countItem("treasure") >= super.getBribe_amount()
-            && player.getLocation().distance(getLocation()) <= getBribe_radius()
-            && rate >= assassin_bribe_fail_rate) {
-            MercenaryAlly ally = new MercenaryAlly(this);
-            ally.setEntityId(String.valueOf(getEntityId()));
-            dungeonMap.removeEntity(getEntityId());
-            dungeonMap.addEntity(ally);
-            player.getAttackStrategy().bonusDamage(ally);
-            player.getDefenceStrayegy().bonusDefence(ally);
-            player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount(), player);
-            player.attach(ally);
-            return true;
+        double rate = randomRate();
+        if (rate >= assassin_bribe_fail_rate) {
+            return super.interact(player, dungeonMap);
         }
         return false;
     }
-
-    @Override
-    public AttackStrategy getAttackStrayegy() {
-        return getAttack();
-    }
-
-    @Override
-    public String getEnemyId() {
-        return getEntityId();
-    }
-
-    @Override
-    public String getEnemyType() {
-        return getType();
-    }
-
     
 }

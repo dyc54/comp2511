@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Timer;
 
 public class LogicalEntitiesFactroy {
     public static void init(LogicObserver entity, DungeonMap map) {
@@ -19,7 +20,7 @@ public class LogicalEntitiesFactroy {
         );
         
     }
-    public static LogicalEntitiesLogic newLogic(String str, HashSet<LogicSubject> adjacentEntities) {
+    public static LogicalEntitiesLogic newLogic(String str, HashSet<LogicSubject> adjacentEntities, Timer timer) {
         switch (str.toUpperCase()) {
             case "AND":
                 return new And(adjacentEntities);
@@ -28,7 +29,7 @@ public class LogicalEntitiesFactroy {
             case "XOR":
                 return new Xor(adjacentEntities);
             case "CO_AND":
-                return new And(adjacentEntities);
+                return new CoAnd(adjacentEntities, timer);
             default:
                 break;
         }
