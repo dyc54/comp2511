@@ -4,8 +4,11 @@ import dungeonmania.Entity;
 
 public class SwampTile extends StaticEntity{
 
-    public SwampTile(String type, int x, int y) {
+    int movement_factor;
+
+    public SwampTile(String type, int x, int y, int movement_factor) {
         super(type, x, y);
+        this.movement_factor = movement_factor;
     }
 
     @Override
