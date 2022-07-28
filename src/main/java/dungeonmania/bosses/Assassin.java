@@ -40,6 +40,9 @@ public class Assassin extends Mercenary implements Enemy{
         Location playerLocation = p.getLocation();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         Location next = new Location();
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (getMove() instanceof RandomMovement) {
             next = getMove().MoveOptions(choice).nextLocation(getLocation());
         } else {

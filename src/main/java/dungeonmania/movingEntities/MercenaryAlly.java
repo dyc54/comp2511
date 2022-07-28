@@ -47,6 +47,9 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         System.out.println("Ally MOveing");
         Player p = dungeonMap.getPlayer();
         String options = MovementOptions.encodeLocationsArguments(dungeonMap, this);
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (p.getLocation().equals(getLocation())) {
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 
