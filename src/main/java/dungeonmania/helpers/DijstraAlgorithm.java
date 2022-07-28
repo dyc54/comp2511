@@ -66,24 +66,23 @@ public class DijstraAlgorithm {
         entities = dungeonMap.getAllEntities();
         sourceX  = getMazeX(source.getX());
         sourceY  = getMazeY(source.getY());
-    
         destinationX  = getMazeX(destination.getX());
         destinationY  = getMazeX(destination.getY());
     }
 
     private int getMazeX(int x) {
-       if(x - map.firstKey().getY() < 0){
-         return Math.abs(x - map.firstKey().getY());
+       if(x - map.firstKey().getX() < 0){
+         return Math.abs(x - map.firstKey().getX());
        }else{
-        return x - map.firstKey().getY();
+        return x - map.firstKey().getX();
        }
     }
 
     private int getMazeY(int y) {
-        if(y - map.firstKey().getX() < 0){
-            return Math.abs(y - map.firstKey().getX());
+        if(y - map.firstKey().getY() < 0){
+            return Math.abs(y - map.firstKey().getY());
           }else{
-            return y - map.firstKey().getX();
+            return y - map.firstKey().getY();
            }
     }
 
@@ -96,16 +95,16 @@ public class DijstraAlgorithm {
         
         /* Initialize start and end points */
 
-        maze[sourceX][sourceY] = new DijstraPosition(source.getX(),source.getY(),1,false,sourceX,sourceY);
-        maze[destinationX][destinationY] = new DijstraPosition(destination.getX(),destination.getY(),1,true,destinationX ,destinationY);
+        maze[sourceX][sourceY] = new DijstraPosition(source.getX(), source.getY(), 1, false, sourceX, sourceY);
+        maze[destinationX][destinationY] = new DijstraPosition(destination.getX(), destination.getY(), 1, true, destinationX, destinationY);
 
         /* Initialize walls and boulders  and door */
         for(Entity entity : entities){
             if(entity instanceof Wall || entity instanceof Boulder){
                 int realx  = entity.getLocation().getX();
                 int realy  = entity.getLocation().getY();
-                int x  = realx - map.firstKey().getY();
-                int y  = realy - map.firstKey().getX();
+                int x  = realx - map.firstKey().getX();
+                int y  = realy - map.firstKey().getY();
                 maze[x][y] = new DijstraPosition(realx, realy ,MaxValue,false,x,y);
             }
 
@@ -114,8 +113,8 @@ public class DijstraAlgorithm {
                 if(!d.isOpened()){
                     int realx  = entity.getLocation().getX();
                     int realy  = entity.getLocation().getY();
-                    int x  = realx - map.firstKey().getY();
-                    int y  = realy - map.firstKey().getX();
+                    int x  = realx - map.firstKey().getX();
+                    int y  = realy - map.firstKey().getY();
                     maze[x][y] = new DijstraPosition(realx, realy ,MaxValue,false,x,y);
                 }
 
@@ -125,28 +124,34 @@ public class DijstraAlgorithm {
                 SwampTile s = (SwampTile) entity;
                 int realx  = entity.getLocation().getX();
                 int realy  = entity.getLocation().getY();
-                int x  = realx - map.firstKey().getY();
-                int y  = realy - map.firstKey().getX();
+                int x  = realx - map.firstKey().getX();
+                int y  = realy - map.firstKey().getY();
                 maze[x][y] = new DijstraPosition(realx, realy,s.getMultiplyingFactor(),true,x,y);
             }
         }
 
         /* Initialize blank position */
-        for (int i = 0; i < HW.getWidth(); i++) {
-            for (int j = 0; j < HW.getHeight(); j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < hight; j++) {
                 if(maze[i][j] == null){
-                    int realx  = i +  map.firstKey().getY();
-                    int realy  = j +  map.firstKey().getX();
+                    int realx  = i +  map.firstKey().getX();
+                    int realy  = j +  map.firstKey().getY();
                     maze[i][j] = new DijstraPosition(realx, realy,1,true,i,j);
                 }
             }
         }
 
         /* Initialize distance */
-        for (int i = 0; i < HW.getWidth(); i++) {
-            for (int j = 0; j < HW.getHeight(); j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < hight; j++) {
                 dist.put(maze[i][j], MaxValue);
             }
+        }
+        for (int i = 0; i < hight; i++) {
+            for (int j = 0; j < width; j++) {
+                System.out.print(String.format("%d ", maze[j][i].cost));
+            }
+            System.out.print("\n");
         }
         dist.replace( maze[sourceX][sourceY], 0);
     }
