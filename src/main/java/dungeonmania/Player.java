@@ -113,7 +113,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             notifyPotionEffectObserver();
         } else if (hasEffect()) {
             getCurrentEffect().setDurability();
-
         }
 
     }
