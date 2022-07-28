@@ -155,6 +155,8 @@ public class FileReader {
                     e.printStackTrace();
                 }
                 break;
+            case "rewind":
+                controller.rewind(argv.getInt(0));
             default:
                 break;
         }

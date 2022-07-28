@@ -168,10 +168,10 @@ public class DungeonManiaController {
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
         System.out.println("************************ Tick itemUsedId********************");
         dotick(itemUsedId, false);
-        updateTimeTravelStatus();
-        runTick(tickCounter);
-        updateTimeTravelStatus();
-        deltaTickAfterTimeTraveling--;
+        // updateTimeTravelStatus();
+        // runTick(tickCounter);
+        // updateTimeTravelStatus();
+        // deltaTickAfterTimeTraveling--;
         return getDungeonResponse();
         // return 
     }
@@ -186,6 +186,7 @@ public class DungeonManiaController {
         if (timeTraveledPlayer) {
             player = dungeonMap.getPlayer();
         } else {
+            
             tickCounter++;
             Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
@@ -201,6 +202,12 @@ public class DungeonManiaController {
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
         dungeonMap.toString();
+        if (!timeTraveledPlayer) {
+            updateTimeTravelStatus();
+            runTick(tickCounter);
+            updateTimeTravelStatus();
+            deltaTickAfterTimeTraveling--;
+        }
         // tickCounter++;
         // return getDungeonResponse();
 
@@ -210,11 +217,11 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         dotick(movementDirection, false);
-        updateTimeTravelStatus();
-        runTick(tickCounter);
-        // tickCounter++;
-        updateTimeTravelStatus();
-        deltaTickAfterTimeTraveling--;
+        // updateTimeTravelStatus();
+        // runTick(tickCounter);
+        // // tickCounter++;
+        // updateTimeTravelStatus();
+        // deltaTickAfterTimeTraveling--;
         
         return getDungeonResponse();
     }
@@ -245,8 +252,14 @@ public class DungeonManiaController {
         if (!timeTraveledPlayer && dungeonMap.isTimeTravelPortal(player.getLocation())) {
             // fileSaver.saveAction("mark", false, "c");
             doRewind(30, 2);
-            player.setLocation(player.getPreviousLocation());
+            // player.setLocation(player.getPreviousLocation());
             fileSaver.saveAction("playerMove", false, Location.inverseDirection(movementDirection), "MOVE ELDER_SELF ONLY");
+        } else if (!timeTraveledPlayer) {
+            updateTimeTravelStatus();
+            runTick(tickCounter);
+            // tickCounter++;
+            updateTimeTravelStatus();
+            deltaTickAfterTimeTraveling--;
         }
     }
     /**
