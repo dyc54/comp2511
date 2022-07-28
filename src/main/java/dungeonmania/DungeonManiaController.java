@@ -195,8 +195,8 @@ public class DungeonManiaController {
             Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
         }
-        // timerAdd();
-        // checkTimer(timer);
+        timerAdd();
+        checkTimer(timer);
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();

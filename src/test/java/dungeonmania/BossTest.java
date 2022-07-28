@@ -150,7 +150,7 @@ public class BossTest {
         assertEquals(1, getInventory(res, "treasure").size());
         String assassinId = getEntities(res, "assassin").get(0).getId();
         System.out.println(getEntities(res, "assassin").get(0).getId());
-        assertThrows(InvalidActionException.class, ()-> dmc.interact(assassinId));
+        assertDoesNotThrow(()-> dmc.interact(assassinId));
     }
 
     @Test
