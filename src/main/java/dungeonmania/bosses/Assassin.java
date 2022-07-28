@@ -27,12 +27,22 @@ public class Assassin extends Mercenary implements Enemy{
         this.assassin_recon_radius = assassin_recon_radius;
     }
 
+    public Assassin(MercenaryAlly mercenary, double assassin_bribe_fail_rate, int assassin_recon_radius) {
+        super("assassin", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
+                mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
+        this.assassin_bribe_fail_rate = assassin_bribe_fail_rate;
+        this.assassin_recon_radius = assassin_recon_radius;
+    }
+
     @Override
     public boolean movement(DungeonMap dungeonMap) {
         Player p = dungeonMap.getPlayer();
         Location playerLocation = p.getLocation();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         Location next = new Location();
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (getMove() instanceof RandomMovement) {
             next = getMove().MoveOptions(choice).nextLocation(getLocation());
         } else {
@@ -41,6 +51,7 @@ public class Assassin extends Mercenary implements Enemy{
         
         System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
         setLocation(next);
+        dungeonMap.interactAll(this);
         dungeonMap.UpdateEntity(this);
         return false;
     }

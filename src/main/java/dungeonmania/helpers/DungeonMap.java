@@ -360,15 +360,40 @@ public class DungeonMap implements Iterable<Entity> {
         getAllEntities().stream().forEach(entity -> UpdateEntity(entity));
     }
     public DungeonMap interactAll() {
+        // List<Interactability> list = new ArrayList<>();
+        // System.out.println("ITERACT ALL");
+        // for (Iterator<Entity> ptr = getEntities(player.getLocation()).iterator(); ptr.hasNext();) {
+        //     Entity entity = ptr.next();
+        //     if (entity instanceof Interactability) {
+        //         list.add((Interactability) entity);
+        //     }
+        // }
+        // list.stream().forEach(en -> en.interact(player, this));
+        this.interactAll(player);
+        return this;
+    }
+    public DungeonMap interactAll(Entity entity) {
         List<Interactability> list = new ArrayList<>();
         System.out.println("ITERACT ALL");
-        for (Iterator<Entity> ptr = getEntities(player.getLocation()).iterator(); ptr.hasNext();) {
-            Entity entity = ptr.next();
-            if (entity instanceof Interactability) {
-                list.add((Interactability) entity);
+        for (Iterator<Entity> ptr = getEntities(entity.getLocation()).iterator(); ptr.hasNext();) {
+            Entity temp = ptr.next();
+            if (temp instanceof Interactability) {
+                list.add((Interactability) temp);
             }
         }
-        list.stream().forEach(en -> en.interact(player, this));
+        list.stream().forEach(en -> en.interact(entity, this));
+        return this;
+    }
+    public DungeonMap interactAll(Location location, Entity entity) {
+        List<Interactability> list = new ArrayList<>();
+        System.out.println("ITERACT ALL");
+        for (Iterator<Entity> ptr = getEntities(location).iterator(); ptr.hasNext();) {
+            Entity temp = ptr.next();
+            if (temp instanceof Interactability) {
+                list.add((Interactability) temp);
+            }
+        }
+        list.stream().forEach(en -> en.interact(entity, this));
         return this;
     }
     public DungeonMap battleAll(List<BattleResponse> battles, Player player) {

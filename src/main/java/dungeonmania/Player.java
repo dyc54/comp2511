@@ -35,6 +35,7 @@ import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
 
 public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject, BattleStrategyWithEnemy, BattleStrategyWithPlayer {
+// public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject, MovementFactor {
     // private int attack;
     private AttackStrategy attack;
     private DefenceStrategy defence;
@@ -116,7 +117,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             notifyPotionEffectObserver();
         } else if (hasEffect()) {
             getCurrentEffect().setDurability();
-
         }
 
     }
@@ -170,6 +170,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         Location next = getLocation().getLocation(p);
         System.out.println(String.format("%s at %s", getType(), curr.toString()));
         this.next = p;
+    
         interactAll(curr, map, p);
         if (getLocation().equals(curr) && !stay) {
             if (DungeonMap.isaccessible(map, next, this)) {
@@ -179,6 +180,19 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
         System.out.println(String.format("%s %s -> %s", getType(),previousLocation.toString(), getLocation().toString()));
     }
+    
+    // @Override
+    // public boolean CheckMovementFactor() {
+    //     System.out.println("----------------movementfactor--------------");
+    //     System.out.println(this.movementFactor);
+    //     if (this.movementFactor > 0) {
+    //         this.movementFactor -= 1;
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
+
     public boolean pickup(Entity entity) {
         return inventory.addToInventoryList(entity, this);
     }
@@ -414,4 +428,9 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     }
 
 
+    // @Override
+    // public void resetMovementFactor(int movementFactor) {
+    //     // TODO Auto-generated method stub
+    //     this.movementFactor = movementFactor; 
+    // }
 }

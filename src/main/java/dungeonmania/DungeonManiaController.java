@@ -193,6 +193,9 @@ public class DungeonManiaController {
         }
         // timerAdd();
         // checkTimer(timer);
+        // timerAdd();
+        // checkTimer(timer);
+        // player.CheckMovementFactor();
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();

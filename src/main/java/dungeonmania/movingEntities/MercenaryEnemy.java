@@ -22,7 +22,7 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
     public MercenaryEnemy(MercenaryAlly mercenary) {
         super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
-        }
+    }
 
 	@Override
 	public AttackStrategy getAttackStrayegy() {
@@ -46,6 +46,9 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         Location next = new Location();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         System.out.println("ENEMT MOVEMENT++++++++++++++++++++");
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (getMove() instanceof RandomMovement) {
             next = getMove().MoveOptions(choice).nextLocation(getLocation());
         } else {
@@ -53,6 +56,7 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         }
         System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
         setLocation(next);
+        dungeonMap.interactAll(this);
         dungeonMap.UpdateEntity(this);
         return false;
 

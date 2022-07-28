@@ -54,10 +54,14 @@ public class Hydra extends MovingEntity implements EnemyMovement, Enemy {
     public boolean movement(DungeonMap dungeonMap) {
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         Location next = getMove().MoveOptions(choice).nextLocation(getLocation());
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (next.equals(getLocation())) {
             return false;
         } else {
             setLocation(next);
+            dungeonMap.interactAll(this);
             dungeonMap.UpdateEntity(this);
             return true;
         }
