@@ -8,15 +8,16 @@ import javax.security.auth.Subject;
 
 import dungeonmania.Entity;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.Timer;
 import dungeonmania.staticEntities.StaticEntity;
 
 public class LightBulb extends StaticEntity implements LogicObserver{
     private final HashSet<LogicSubject> subjects;
     private final LogicalEntitiesLogic logic;
-    public LightBulb(String type, int x, int y, String logic) {
+    public LightBulb(String type, int x, int y, String logic, Timer timer) {
         super(type, x, y);
         subjects = new HashSet<>();
-        this.logic = LogicalEntitiesFactroy.newLogic(logic, subjects);
+        this.logic = LogicalEntitiesFactroy.newLogic(logic, subjects, timer);
     }
 
     public void addSubject(LogicSubject subject)  {

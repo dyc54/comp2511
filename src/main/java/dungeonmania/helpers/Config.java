@@ -33,7 +33,7 @@ public class Config {
     // Milestone3 added
     public final int assassin_attack;
     public final int assassin_bribe_amount;
-    public final int assassin_bribe_fail_rate;
+    public final double assassin_bribe_fail_rate;
     public final int assassin_health;
     public final int assassin_recon_radius;
     public final int hydra_attack;
@@ -74,13 +74,13 @@ public class Config {
         zombie_spawn_rat = json.getInt("zombie_spawn_rate");
         int assassin_attack;
         int assassin_bribe_amount;
-        int assassin_bribe_fail_rate;
+        double assassin_bribe_fail_rate;
         int assassin_health;
         int assassin_recon_radius;
         int hydra_spawn_rate;
         int hydra_attack;
         int hydra_health;
-        int hydra_health_increase_rate;
+        double hydra_health_increase_rate;
         int hydra_health_increase_amount;
         int mind_control_duration;
         int midnight_armour_attack;
@@ -90,13 +90,13 @@ public class Config {
         try {
             assassin_attack = json.getInt("assassin_attack");
             assassin_bribe_amount = json.getInt("assassin_bribe_amount");
-            assassin_bribe_fail_rate = json.getInt("assassin_bribe_fail_rate");
+            assassin_bribe_fail_rate = json.getDouble("assassin_bribe_fail_rate");
             assassin_health = json.getInt("assassin_health");
             assassin_recon_radius = json.getInt("assassin_recon_radius");
             hydra_spawn_rate = 0;
             hydra_attack = json.getInt("hydra_attack");
             hydra_health = json.getInt("hydra_health");
-            hydra_health_increase_rate = json.getInt("hydra_health_increase_rate");
+            hydra_health_increase_rate = json.getDouble("hydra_health_increase_rate");
             hydra_health_increase_amount = json.getInt("hydra_health_increase_amount");
             mind_control_duration = json.getInt("mind_control_duration");
             midnight_armour_attack = json.getInt("midnight_armour_attack");

@@ -99,11 +99,11 @@ public class EntityFactory {
             case "time_travelling_portal":
                 return new TimeTravellingPortal(type, Location.AsLocation(x, y));
             case "light_bulb_off":
-                return new LightBulb(type, x, y, entity.getString("logic"));
+                return new LightBulb(type, x, y, entity.getString("logic"), map.getTimer());
             case "wire":
-                return new Wire(type, x, y, "or");
+                return new Wire(type, x, y, "or", map.getTimer());
             case "switch_door":
-                return new SwitchDoor(type, x, y, entity.getInt("key"), entity.getString("logic"));
+                return new SwitchDoor(type, x, y, entity.getInt("key"), entity.getString("logic"), map.getTimer());
             case "assassin":
                 Assassin assassin = new Assassin(type, Location.AsLocation(x, y), config.assassin_health, config.assassin_attack, config.assassin_bribe_amount, config.bribe_radius, config.ally_attack, config.ally_defence, config.assassin_bribe_fail_rate, config.assassin_recon_radius);
                 map.getPlayer().attach(assassin);
