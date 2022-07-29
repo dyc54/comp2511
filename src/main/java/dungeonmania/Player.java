@@ -33,6 +33,7 @@ import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
+import dungeonmania.movingEntities.Mercenary;
 
 public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject, BattleStrategyWithEnemy, BattleStrategyWithPlayer {
     // private int attack;
@@ -50,6 +51,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private List<SceptreEffectObserver> SceptreObservers;
     private Durability durabilities;
     private int buildCounter;
+
     public Player(String type, int x, int y, double attack, double health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -318,7 +320,16 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
         return true;
     }
-    //
+    
+    public boolean canBribe(Mercenary mercenary) {
+        if (getInventory().countItem("treasure") >= mercenary.getBribe_amount()
+        && getLocation().distance(mercenary.getLocation()) <= mercenary.getBribe_radius()) {
+            getInventory().removeFromInventoryList("treasure", mercenary.getBribe_amount(), this);
+            return true;
+
+        }
+        return false;
+    }
 
     @Override
     public AttackStrategy getAttackStrayegy() {

@@ -3,6 +3,7 @@ package dungeonmania.movingEntities;
 import java.util.Collection;
 
 import dungeonmania.Entity;
+import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
 import dungeonmania.battle.Enemy;
@@ -13,7 +14,7 @@ import dungeonmania.strategies.movementStrategies.ChaseMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
-public class MercenaryEnemy extends Mercenary implements Enemy {
+public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
     
     public MercenaryEnemy(String type, Location location, double mercenary_attack, double mercenary_health,
             int bribe_amount, int bribe_radius, double ally_attack, double ally_defence) {
@@ -61,20 +62,30 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
     }
     @Override
     public boolean interact(Player player, DungeonMap dungeonMap) {
-        player.getInventory().print();
-        System.out.println(player.getInventory().countItem("treasure") >= super.getBribe_amount() );
-        System.out.println(player.getLocation().distance(getLocation()) <= getBribe_radius());
-        if (player.getInventory().countItem("treasure") >= super.getBribe_amount() 
-            && player.getLocation().distance(getLocation()) <= getBribe_radius()) {
+        // player.getInventory().print();
+        // System.out.println(player.getInventory().countItem("treasure") >= super.getBribe_amount() );
+        // System.out.println(player.getLocation().distance(getLocation()) <= getBribe_radius());
+        // if (player.getInventory().countItem("treasure") >= super.getBribe_amount() 
+        //     && player.getLocation().distance(getLocation()) <= getBribe_radius()) {
+        //     MercenaryAlly ally = new MercenaryAlly(this);
+        //     ally.setEntityId(String.valueOf(getEntityId()));
+        //     dungeonMap.removeEntity(getEntityId());
+        //     dungeonMap.addEntity(ally);
+        //     System.out.println("pay for mercenary");
+            
+        //     player.getAttackStrategy().bonusDamage(ally);
+        //     player.getDefenceStrayegy().bonusDefence(ally);
+        //     player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount(), player);
+        //     player.attach(ally);
+        //     return true;
+        // }
+        if (player.canBribe(this)) {
             MercenaryAlly ally = new MercenaryAlly(this);
             ally.setEntityId(String.valueOf(getEntityId()));
             dungeonMap.removeEntity(getEntityId());
             dungeonMap.addEntity(ally);
-            System.out.println("pay for mercenary");
-            
             player.getAttackStrategy().bonusDamage(ally);
             player.getDefenceStrayegy().bonusDefence(ally);
-            player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount(), player);
             player.attach(ally);
             return true;
         }

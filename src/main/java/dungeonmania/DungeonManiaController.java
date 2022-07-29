@@ -315,23 +315,10 @@ public class DungeonManiaController {
         if (entity == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
-        System.out.println("TYPE: "+entity.getType());
-        if (entity.getType().equals("zombie_toast_spawner")) {
-            ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
-            if (!zombieToastSpawner.interact(player, dungeonMap)) {
-                throw new InvalidActionException("Invaild action");
-            }
-        }
-        if (entity.getType().equals("mercenary")) {
-            Mercenary mercenary = (Mercenary) entity;
-            if (!mercenary.interact(player, dungeonMap)) {
-                throw new InvalidActionException("Invaild action");
-            }
-        }
-        if (entity.getType().equals("assassin")) {
-            System.out.println("ASSASSIN");
-            Assassin assassin = (Assassin) entity;
-            if (!assassin.interact(player, dungeonMap)) {
+        
+        if (entity instanceof Interact) {
+            Interact interactEntity = (Interact) entity;
+            if (!interactEntity.interact(player, dungeonMap)) {
                 throw new InvalidActionException("Invaid action");
             }
         }

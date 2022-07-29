@@ -13,15 +13,16 @@ import dungeonmania.strategies.attackStrategies.ChanceAttackStrategy;
 public class Hydra extends ZombieToast {
     
     private final double hydraHealthIncreaseRate;
-    private final double hydraHealthIncreaseAmount;
+    private final int hydraHealthIncreaseAmount;
     private double seed;
+
     public Hydra(String type, Location location, double hydra_health, int hydra_attack, double hydra_health_increase_rate, int hydra_health_increase_amount) {
-        
         super(type, location, hydra_attack, hydra_health);
         setAttack(new ChanceAttackStrategy(hydra_attack, hydra_health_increase_rate, hydra_health_increase_amount, hydra_health));
         hydraHealthIncreaseRate = hydra_health_increase_rate;
         hydraHealthIncreaseAmount = hydra_health_increase_amount;
     }
+    
     @Override
     public boolean battleWith(Player player) {
         Random r = new Random(Double.valueOf(seed).hashCode());
