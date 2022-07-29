@@ -73,7 +73,7 @@ public class FileReader {
         //     JSONObject action = actions.getJSONObject(i);
         //     doAction(controller, action, false, false);
         // }
-        FileReader.LoadGame(controller, fileName, branch, 1);
+        FileReader.LoadGame(controller, fileName, branch, 2);
     }
     /**
      * Load Game into controller, 

@@ -67,7 +67,7 @@ public class PersistenceTests {
     }
     
     private void asserAllBattleEqual(DungeonResponse expect, DungeonResponse Dungonload) {
-        for (int i = 0; i < expect.getEntities().size(); i++) {
+        for (int i = 0; i < expect.getBattles().size(); i++) {
             BattleResponse expectBattles = expect.getBattles().get(i);
             BattleResponse givenBattles = Dungonload.getBattles().get(i);
             assertEquals(expectBattles.getEnemy(), givenBattles.getEnemy());
@@ -99,6 +99,7 @@ public class PersistenceTests {
         });
         
     }
+    
     @Test
     public void testCanLoad() {
         clear();
@@ -112,6 +113,7 @@ public class PersistenceTests {
             dmc.loadGame(name);
         });
     }
+    
     @Test
     public void testLoadNotExistFile() {
         clear();
@@ -180,6 +182,19 @@ public class PersistenceTests {
         
     }
     @Test
+    @DisplayName("  ac")
+    public void testSaveGivenName() {
+        clear();
+        DungeonManiaController dmc = new DungeonManiaController();
+        dmc.newGame("advanced",
+                "c_movementTest_testMovementDown");
+        
+        DungeonResponse DungonRes = dmc.saveGame("lalallalalalalallala");
+        dmc.newGame("d_complexGoalsTest_andAll", "c_movementTest_testMovementDown");
+        DungeonResponse Dungonload = dmc.loadGame("lalallalalalalallala");
+        assertAllEntitiesEqual(DungonRes, Dungonload);
+    }
+    @Test
     public void testPlayerInventory() {
         clear();
         DungeonManiaController dmc = new DungeonManiaController();
@@ -240,7 +255,6 @@ public class PersistenceTests {
         res = dmc.tick(Direction.RIGHT);
         assertTrue(res.getBattles().size() == 0);
     }
-
     @Test
     public void testZombieMovement() {
         clear();
@@ -390,7 +404,20 @@ public class PersistenceTests {
         DungeonResponse Dungonload = dmc.loadGame("d_hydra");
         assertAllEntitiesEqual(DungonRes, Dungonload);
     }
-
+    @Test
+    @DisplayName("Test Hydra has certain chance to increase amount - low increase rate")
+    public void testHydraChanceLowRate() {
+        clear();
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_hydraTest", "c_BattleTest_rateLow");
+        res = dmc.tick(Direction.UP);
+        DungeonResponse resexp = dmc.saveGame("low_rate");
+        DungeonResponse resact = dmc.loadGame("low_rate");
+        asserAllBattleEqual(resexp, resact);
+        // assertEquals(0, getEntities(res, "hydra").size());
+        // assertEquals(1, getEntities(res, "player").size());
+    }
     @Test
     @DisplayName("test persistance with assassin and bribe situation")
     public void testAssassin() {
@@ -444,6 +471,7 @@ public class PersistenceTests {
         DungeonResponse DungonRes = controller.saveGame("d_timeTravel");
         DungeonResponse Dungonload = controller.loadGame("d_timeTravel");
         assertAllEntitiesEqual(DungonRes, Dungonload);
+        assertAllInventoryEqual(DungonRes, Dungonload);
     }
 
     @Test
@@ -521,5 +549,60 @@ public class PersistenceTests {
         DungeonResponse Dungonload = dmc.loadGame("d_invisibilityTest");
         assertAllEntitiesEqual(DungonRes, Dungonload);
     }
+    @Test
+    @DisplayName("Save Logic Entities")
+    public void testSaveLogicENtities() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonManiaController dup = new DungeonManiaController();
+        DungeonResponse initialResponse = dmc.newGame("testLogicXor3SIR31658930320.0123289", "c_Battletest_PlayerStrong");
+        EntityResponse bulb = getEntities(initialResponse, "light_bulb_off").get(0);
+        assertEquals("light_bulb_off", bulb.getType());
+        
+        // active 1 switch -> bulb is activated.
+        DungeonResponse res = dmc.tick(Direction.RIGHT);
+        res = dmc.saveGame("logicEntities");
+        // assertEquals(1, getEntities(res, "light_bulb_off").size());
+        assertEquals(1, getEntities(res, "light_bulb_on").size());
+        DungeonResponse resact = dup.loadGame("logicEntities");
+        assertAllEntitiesEqual(res, resact);
+        // active 2 switch -> bulb is not activated.
+        res = dmc.tick(Direction.DOWN);
+        resact = dup.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        resact = dup.tick(Direction.RIGHT);
+        // assertEquals(0, getEntities(res, "light_bulb_off").size());
+        assertEquals(0, getEntities(res, "light_bulb_on").size());
+        assertAllEntitiesEqual(res, resact);
 
+        // deactive 1 switch -> bulb is activated
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getEntities(res, "light_bulb_on").size());
+
+        // deactive 1 switch -> bulb is not activated
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.LEFT);
+        assertEquals(0, getEntities(res, "light_bulb_on").size());
+    }
+    @Test
+    @DisplayName("Save Switch")
+    public void testLogicDoor() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initialResponse = dmc.newGame("testSwitchDoorActiveQDH6U1658822553.7445798", "c_Battletest_PlayerStrong");
+        EntityResponse switch_door = getEntities(initialResponse, "switch_door").get(0);
+        assertEquals("switch_door", switch_door.getType());
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.LEFT);
+        DungeonResponse res = dmc.tick(Direction.DOWN);
+        EntityResponse player = getEntities(res, "player").get(0);
+        assertEquals(new Position(0, 2), player.getPosition());
+        // close the door
+        dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(new Position(0, 2), player.getPosition());
+        // res = dmc.saveGame("A");
+        DungeonManiaController dup = new DungeonManiaController();
+        assertAllEntitiesEqual(dmc.saveGame("A"), dup.loadGame("A"));
+    }
 }

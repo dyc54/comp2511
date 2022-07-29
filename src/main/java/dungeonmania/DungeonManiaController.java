@@ -434,7 +434,10 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse rewind(int ticks) {
-        doRewind(ticks, 1);
+        if (ticks <= 0 || ticks > Ticktimer.getTime()) {
+            throw new IllegalArgumentException("ticks must be either 1 or 5");
+        }
+        doRewind(Ticktimer.getTime() - ticks, 1);
         fileSaver.saveAction("rewind", false, ticks);
         return getDungeonResponse();
     }

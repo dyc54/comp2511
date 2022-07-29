@@ -294,7 +294,7 @@ public class LogicEntitiesTest {
         assertEquals(0, getEntities(res, "light_bulb_on").size());
     } 
     @Test
-    @DisplayName("Test activate a entity with logic Co_AND, activate two entities together")
+    @DisplayName("Test activate a entity with logic Co_AND, activate two entities together. then save")
     public void testLogicCoAnd2() {
         // [    ] [    ] boulde switch  wire  
         // player boulde switch CO_AND  wire
@@ -314,7 +314,7 @@ public class LogicEntitiesTest {
         assertEquals(1, getEntities(res, "light_bulb_on").size());
         
     } 
-
+    
 
 
 }

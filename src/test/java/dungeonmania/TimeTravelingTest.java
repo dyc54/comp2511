@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
@@ -26,8 +27,24 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
+import dungeonmania.exceptions.InvalidActionException;
 
 public class TimeTravelingTest {
+    @Test
+    public void testExpection() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("timeTravelFWQ7G1658488701.4102888", "c_Battletest_PlayerStrong");
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);
+        assertThrows(IllegalArgumentException.class, () -> {
+            controller.rewind(-1);
+            controller.rewind(6);
+        });
+    }
+
     @Test
     public void testUseTimeTravel() {
         // player tm_trn [    ] [    ] [    ] [    ] [    ] sword  [    ] [    ] [    ] [    ] [    ] [    ] [    ] [    ] 
@@ -74,6 +91,7 @@ public class TimeTravelingTest {
         assertTrue(getEntities(Res, "older_player").size() == 0);
 
     }
+
     @Test
     public void testUseTimeTravelEncounterEachOther() {
         // player tm_trn [    ] [    ] [    ] [    ] [    ]  sword [    ] [    ] [    ] [    ] [    ] [    ] [    ] [    ] 
@@ -95,11 +113,11 @@ public class TimeTravelingTest {
 
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("timeTravelFWQ7G1658488701.4102888", "c_Battletest_PlayerStrong");
-        controller.tick(Direction.RIGHT);
-        controller.tick(Direction.RIGHT);
-        controller.tick(Direction.RIGHT);
-        controller.tick(Direction.RIGHT);
-        controller.tick(Direction.RIGHT);
+        controller.tick(Direction.RIGHT);  // tick 1
+        controller.tick(Direction.RIGHT);  // 2
+        controller.tick(Direction.RIGHT);   // 3
+        controller.tick(Direction.RIGHT);   // 4
+        controller.tick(Direction.RIGHT);   // 5
         DungeonResponse Res = controller.rewind(5);
         assertTrue(getEntities(Res, "older_player").size() == 1);
         EntityResponse older_player = getEntities(Res, "older_player").get(0);
