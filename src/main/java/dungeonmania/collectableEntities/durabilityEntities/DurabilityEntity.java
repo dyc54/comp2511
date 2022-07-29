@@ -1,3 +1,4 @@
+/* 
 package dungeonmania.collectableEntities.durabilityEntities;
 
 import dungeonmania.collectableEntities.CollectableEntity;
@@ -29,3 +30,4 @@ public abstract class DurabilityEntity extends CollectableEntity{
         return durability == 0;
     }
 }
+*/

@@ -1,3 +1,4 @@
+/* 
 package dungeonmania.collectableEntities.durabilityEntities;
 
 public interface DurationSubject {
@@ -5,3 +6,4 @@ public interface DurationSubject {
     public void detach(DurationObserver observer);
     public void notifyDurationObserver();
 }
+*/

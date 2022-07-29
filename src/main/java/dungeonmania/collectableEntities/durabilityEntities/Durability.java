@@ -1,3 +1,4 @@
+/* 
 package dungeonmania.collectableEntities.durabilityEntities;
 
 import java.util.ArrayList;
@@ -31,3 +32,4 @@ public class Durability implements DurationSubject {
     }
     
 }
+*/
