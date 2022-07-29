@@ -16,21 +16,67 @@ import dungeonmania.util.Position;
 
 public class DijstraAlgorithmTest {
     @Test
-    @DisplayName("Test the player can pick up wood in map")
-    public void testPickUpWood() {
+    @DisplayName("Test the Mercenary Chase player by dj")
+    public void testMercenaryChasePlayer1() {
 
         DungeonManiaController dmc = new DungeonManiaController();
 
-        DungeonResponse res = dmc.newGame("d_testDijstraAlgorithm","c_collectTests");
+        DungeonResponse res = dmc.newGame("d_MercenaryChasePlayerByDJ","c_collectTests");
 
-        res = dmc.tick(Direction.DOWN);
-        assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
-        res = dmc.tick(Direction.UP);
-        assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
-        res = dmc.tick(Direction.LEFT);
-        assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
-        
-       
-        
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(4,2), getEntities(res, "mercenary").get(0).getPosition());
+          
+    }
+
+    @Test
+    @DisplayName("Test the Mercenary Chase player by portal red")
+    public void testMercenaryChasePlayerPortalAllRed() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_MercenaryChasePlayerByPortalRed","c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(0,5), getEntities(res, "mercenary").get(0).getPosition());
+          
+    }
+
+    @Test
+    @DisplayName("Test the Mercenary Chase player by portal blue")
+    public void testMercenaryChasePlayerPortalAllblue() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_MercenaryChasePlayerByPortalBlue","c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(4,2), getEntities(res, "mercenary").get(0).getPosition());
+          
+    }
+
+    @Test
+    @DisplayName("Test the Mercenary Chase player by portal fail")
+    public void testMercenaryChasePlayerPortalAllbluered() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_MercenaryChasePlayerByPortalBlueRed","c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(4,2), getEntities(res, "mercenary").get(0).getPosition());
+          
+    }
+
+    @Test
+    @DisplayName("Test the Mercenary Chase player by SW")
+    public void testMercenaryChasePlayerSW() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse res = dmc.newGame("d_MercenaryChasePlayerBySW","c_collectTests");
+
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(new Position(2,4), getEntities(res, "mercenary").get(0).getPosition());
+          
     }
 }

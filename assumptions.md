@@ -4,4 +4,5 @@
 - If the mercenary's movement direction is restricted, and the other two opposite directions are also restricted, the mercenary does not move.
 - If the a portal has been destoryed by a bomb, its twin portal will still exist but cannot teleport anymore. It will not become an obstacle.
 - Players can hire multiple mercenaries
-- 
+- Mercenary will not be affected by the portal
+- Every enetiy will not be set at the place which is surrounded by four wall

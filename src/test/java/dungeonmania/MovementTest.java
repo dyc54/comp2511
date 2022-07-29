@@ -276,4 +276,23 @@ public class MovementTest {
         assertEquals(1, getEntities(res, "spider").size());
     }
 
+    @Test
+    @DisplayName("Test use item ticks for spider spwan")
+    public void spiderSpawnUseItem() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_spiderSpwan1", "c_spiderSpwanTest");
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(0, getEntities(res, "spider").size());
+        String id_invisible = getInventory(res, "invisibility_potion").get(0).getId();
+        res = dmc.tick(Direction.DOWN);
+        res = assertDoesNotThrow(() -> dmc.tick(id_invisible));
+        assertEquals(0, getEntities(res, "spider").size());
+        String id_invincibility = getInventory(res, "invincibility_potion").get(0).getId();
+        res = assertDoesNotThrow(() -> dmc.tick(id_invincibility));
+        assertEquals(0, getEntities(res, "spider").size());
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(1, getEntities(res, "spider").size());
+    }
+
 }

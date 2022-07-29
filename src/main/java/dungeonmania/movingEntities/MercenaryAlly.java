@@ -1,5 +1,6 @@
 package dungeonmania.movingEntities;
 
+import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
 import dungeonmania.SceptreEffectObserver;
@@ -15,7 +16,7 @@ import dungeonmania.strategies.movementStrategies.FollowingMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
-public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd, SceptreEffectObserver{
+public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd, SceptreEffectObserver, Interact{
     
     private int ally_attack;
     private int ally_defence;

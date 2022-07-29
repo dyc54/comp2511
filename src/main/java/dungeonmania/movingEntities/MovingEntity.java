@@ -23,6 +23,9 @@ public abstract class MovingEntity extends Entity implements BattleStrategyWithP
         this.health = health;
         this.movementFactor = 0;
     }
+    public void setAttack(AttackStrategy attack) {
+        this.attack = attack;
+    }
     public AttackStrategy getAttack() {
         return attack;
     }
