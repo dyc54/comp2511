@@ -51,6 +51,7 @@
         "lightbulb": "images/tileset/entities/lightbulb.png",
         "lightbulboff": "images/tileset/entities/lightbulboff.png",
         "midnight_armour": "images/tileset/entities/midnight_armour.png",
-        "switch_door":"images/tileset/walls/wooden/door_locked_silver.png"
+        "switch_door":"images/tileset/walls/wooden/door_locked_silver.png",
+        "old_player":"images/tileset/entities/entity.png"
     }
 }
