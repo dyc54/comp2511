@@ -7,7 +7,7 @@ import dungeonmania.helpers.DungeonMap;
 
 public class SwampTile extends StaticEntity{
 
-    int movementFactor;
+    private int movementFactor;
 
     public SwampTile(String type, int x, int y, int movement_factor) {
         super(type, x, y);
