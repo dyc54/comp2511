@@ -32,9 +32,9 @@ public class ChaseMovement implements MovementStrategy{
         if (location.equals(getLocation())) {
             return next;
         }
-        // DijstraAlgorithm dijstraAlgorithm = new DijstraAlgorithm(location, dungeonMap, getLocation());
-        // next = dijstraAlgorithm.dijstra();
-        TreeMap<Integer, Location> ordered = new TreeMap<>();
+        DijstraAlgorithm dijstraAlgorithm = new DijstraAlgorithm(location, dungeonMap, getLocation());
+        next = dijstraAlgorithm.dijstra();
+        /* TreeMap<Integer, Location> ordered = new TreeMap<>();
         List<Location> choices = MovementOptions.decodeLocationsArguments(this.location, possible);
         choices.stream().forEach(choice -> System.out.println(choice));
         choices.stream().forEach(ele -> {
@@ -49,7 +49,7 @@ public class ChaseMovement implements MovementStrategy{
                 next = temp;
                 break;
             }
-        }
+        } */
         return next;
     }
     /**

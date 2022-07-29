@@ -371,7 +371,9 @@ public class DungeonManiaController {
     private List<String> getBuildables(Inventory inventory) {
         // TODO: ADD MORE BUILDABLES
         return Arrays.asList(BuildableEntityFactory.newRecipe("bow"),
-                    BuildableEntityFactory.newRecipe("shield")).stream()
+                    BuildableEntityFactory.newRecipe("shield"),
+                    BuildableEntityFactory.newRecipe("midnight_armour"),
+                    BuildableEntityFactory.newRecipe("sceptre")).stream()
                     .filter(recipe -> recipe.CountItem(inventory.view()).isSatisfied() 
                                     && recipe.getPrerequisite().allMatch(dungeonMap.iterator()).isSatisfied())
                     .map(recipe -> recipe.getRecipeName())

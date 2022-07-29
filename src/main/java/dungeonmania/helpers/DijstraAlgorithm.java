@@ -1,202 +1,173 @@
 package dungeonmania.helpers;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.TreeMap;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
-import dungeonmania.Player;
 import dungeonmania.staticEntities.Boulder;
 import dungeonmania.staticEntities.Door;
+import dungeonmania.staticEntities.Portal;
 import dungeonmania.staticEntities.SwampTile;
 import dungeonmania.staticEntities.Wall;
 
- /* function Dijkstras(grid, source):
-    let dist be a Map<Position, Double>
-    let prev be a Map<Position, Position>
-
-    for each Position p in grid:
-        dist[p] := infinity
-        previous[p] := null
-    dist[source] := 0
-
-    let queue be a Queue<Position> of every position in grid
-    while queue is not empty:
-        u := next node in queue with the smallest dist
-        for each cardinal neighbour v of u:
-            if dist[u] + cost(u, v) < dist[v]:
-                dist[v] := dist[u] + cost(u, v)
-                previous[v] := u
-    return previou */
-
 public class DijstraAlgorithm {
-
     private static int MaxValue = 100000;
-    private int vertex;
     private Location destination;
     private Location next;
     private Location source;
+    private Location upOffset;
+    private Location downOffset;
+    private int mazeSourceX;
+    private int mazeSourceY;
+    private int mazeDestinationX;
+    private int mazeDestinationY;
+    private int hight;
+    private int width;
+
     private Collection<Entity> entities;
     private DijstraPosition[][] maze;
-    private TreeMap<Location, HashSet<Entity>> map;
-
     private HashMap<DijstraPosition, Integer> dist = new HashMap<>();
+    private HashMap<DijstraPosition, Portal> portals =  new HashMap<>();
 
-    public DijstraAlgorithm(Location player, DungeonMap dungeonMap, Location enemy){
+    public DijstraAlgorithm(Location player, DungeonMap dungeonMap, Location enemy) {
         destination = player;
         source = enemy;
-        map = dungeonMap.gMap();
+        next = enemy;
+        upOffset = dungeonMap.gMap().firstKey();
+        downOffset = dungeonMap.gMap().lastKey();
         entities = dungeonMap.getAllEntities();
-    }
-
-    public void initializationMaze(){
-
-        RandomMapGenerator HW = new RandomMapGenerator(map.firstKey().getX(), map.firstKey().getY(), map.lastKey().getX(), map.lastKey().getY());
-        maze = new DijstraPosition[HW.getWidth()][HW.getHeight()];
-        
-        /* Initialize start and end points */
-        int sourcex  = source.getX()- map.firstKey().getY();
-        int sourcey  = source.getY() - map.firstKey().getX();
-
-        int destinationx  = destination.getX()- map.firstKey().getY();
-        int destinationy  = destination.getY() - map.firstKey().getX();
-
-        maze[sourcex][sourcey] = new DijstraPosition(source.getX(),source.getY(),1,false,sourcex,sourcey);
-        maze[destinationx][destinationy] = new DijstraPosition(destination.getX(),destination.getY(),1,true,destinationx,destinationy);
-
-        /* Initialize walls and boulders  and door */
-        for(Entity entity : entities){
-            if(entity instanceof Wall || entity instanceof Boulder){
-                int realx  = entity.getLocation().getX();
-                int realy  = entity.getLocation().getY();
-                int x  = realx - map.firstKey().getY();
-                int y  = realy - map.firstKey().getX();
-                maze[x][y] = new DijstraPosition(realx, realy ,MaxValue,false,x,y);
-            }
-
-            if(entity instanceof Door){
-                Door d = (Door) entity;
-                if(!d.isOpened()){
-                    int realx  = entity.getLocation().getX();
-                    int realy  = entity.getLocation().getY();
-                    int x  = realx - map.firstKey().getY();
-                    int y  = realy - map.firstKey().getX();
-                    maze[x][y] = new DijstraPosition(realx, realy ,MaxValue,false,x,y);
-                }
-
-            }
-
-            if(entity instanceof SwampTile){
-                SwampTile s = (SwampTile) entity;
-                int realx  = entity.getLocation().getX();
-                int realy  = entity.getLocation().getY();
-                int x  = realx - map.firstKey().getY();
-                int y  = realy - map.firstKey().getX();
-                maze[x][y] = new DijstraPosition(realx, realy,s.getMultiplyingFactor(),true,x,y);
-            }
-        }
-
-        /* Initialize blank position */
-        for (int i = 0; i < HW.getWidth(); i++) {
-            for (int j = 0; j < HW.getHeight(); j++) {
-                if(maze[i][j] == null){
-                    int realx  = i +  map.firstKey().getY();
-                    int realy  = j +  map.firstKey().getX();
-                    maze[i][j] = new DijstraPosition(realx, realy,1,true,i,j);
-                }
-            }
-        }
-
-        /* Initialize distance */
-        for (int i = 0; i < vertex; i++) {
-            for (int j = 0; j < vertex; j++) {
-                dist.put(maze[i][j], MaxValue);
-            }
-        }
-        dist.replace( maze[source.getX()][source.getY()], 0);
-    }
-
-    public Location dijstra(){
-
-
         initializationMaze();
-        int[][] operate = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
+    }
+
+    public Location dijstra() {
+
+        int[][] operate = { { -1, 0 },{ 1, 0 },{ 0, -1 }, { 0, 1 }};
         Queue<DijstraPosition> wait = new LinkedList<DijstraPosition>();
-        
-        wait.add(maze[source.getX()][source.getY()]);
+
+        wait.add(maze[mazeSourceX][mazeSourceY]);
         while (!wait.isEmpty()) {
             DijstraPosition cur = wait.poll();
-            /* outPut(cur.x, cur.y); */
-            if (cur.x == destination.getX() && cur.y == destination.getY()) {
-                outPut(destination.getX(), destination.getY());
+            if (cur.checkArrive(mazeDestinationX, mazeDestinationY)) {
+                outPut(mazeDestinationX, mazeDestinationY);
                 break;
             }
-            cur.reachable = false;
+            cur.setReachable(false);
             for (int i = 0; i < 4; i++) {
-                int nextX = cur.x + operate[i][0];
-                int nextY = cur.y + operate[i][1];
-                int cost = maze[nextX][nextY].cost + cur.cost;
-                if (maze[nextX][nextY].reachable && dist.get(cur) + cost < dist.get(maze[nextX][nextY])) {
-                    dist.replace(maze[nextX][nextY], dist.get(cur) + cost);
-                    wait.add(maze[nextX][nextY]);
-                    maze[nextX][nextY].pre = cur;
+                int nextX = cur.getMazeX() + operate[i][0];
+                int nextY = cur.getMazeY() + operate[i][1];
+                if (nextX < width && nextY < hight && nextX >= 0 && nextY >= 0) {
+                    int cost = maze[nextX][nextY].getCost() + cur.getCost();
+                    DijstraPosition target = getTargetPortal(maze[nextX][nextY]);
+                    if(target != null){
+                        nextX = target.getMazeX() + operate[i][0];
+                        nextY = target.getMazeY() + operate[i][1];
+                    }
+                    if (maze[nextX][nextY].checkReachable() && dist.get(cur) + cost < dist.get(maze[nextX][nextY])) {
+                        dist.replace(maze[nextX][nextY], dist.get(cur) + cost);
+                        maze[nextX][nextY].setPre(cur);
+                        wait.add(maze[nextX][nextY]);
+                    }
                 }
             }
         }
         return next;
     }
 
-    public void outPut(int x, int y) {
-        if(maze[x][y].pre == null){
+    private void outPut(int x, int y) {
+        if (maze[x][y].checkPre()) {
+            System.out.println(source.getX() + " , " + source.getY());
             return;
+        } else if (maze[x][y].checkNextPre()) {
+            next = maze[x][y].getRealLocation();
         }
-        if (maze[x][y].pre.pre == null) {
-            next = new Location(x, y);
-        }
-        outPut(maze[x][y].pre.x, maze[x][y].pre.y);
+        outPut(maze[x][y].getPreMazeX(), maze[x][y].getPreMazeY());
+        System.out.println(maze[x][y].getRealX() + " , " + maze[x][y].getRealY());
     }
 
-    public void get(int x, int y) {
-        if(maze[x][y].pre == null){
-            return;
+    private void buildMaze(Location real, int cost, boolean reachable) {
+        int x = real.getX() - upOffset.getX();
+        int y = real.getY() - upOffset.getY();
+        maze[x][y] = new DijstraPosition(real, cost, reachable, x, y);
+    }
+
+    private void initializationMaze() {
+        checkBound();
+        mazeSourceX = Math.abs(source.getX() - upOffset.getX());
+        mazeSourceY = Math.abs(source.getY() - upOffset.getY());
+        mazeDestinationX = Math.abs(destination.getX() - upOffset.getX());
+        mazeDestinationY = Math.abs(destination.getY() - upOffset.getY());
+        hight = Math.abs(downOffset.getY() - upOffset.getY()) + 10;
+        width = Math.abs(downOffset.getX() - upOffset.getX()) + 10;
+
+        maze = new DijstraPosition[width][hight];
+
+        /* Initialize start and end points */
+        maze[mazeSourceX][mazeSourceY] = new DijstraPosition(source, 1, false, mazeSourceX, mazeSourceY);
+        maze[mazeDestinationX][mazeDestinationY] = new DijstraPosition(destination, 1, true, mazeDestinationX,mazeDestinationY);
+
+        /* Initialize walls and boulders and door and SwampTile and Portal*/
+        for (Entity entity : entities) {
+            if (entity instanceof Wall || entity instanceof Boulder) {
+                buildMaze(entity.getLocation(), MaxValue, false);
+            }else if (entity instanceof Door) {
+                Door d = (Door) entity;
+                if (!d.isOpened()) {
+                    buildMaze(entity.getLocation(), MaxValue, false);
+                }
+
+            }else if (entity instanceof SwampTile) {
+                SwampTile s = (SwampTile) entity;
+                buildMaze(entity.getLocation(), s.getMovementFactor()+1, true);
+            }else if(entity instanceof Portal){
+                Portal p = (Portal) entity;
+                buildPortals(p);
+            }
         }
-        if (maze[x][y].pre.pre == null) {
-            next = new Location(maze[x][y].realX, maze[x][y].realY);
+        /* Initialize blank position */
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < hight; j++) {
+                if (maze[i][j] == null) {
+                    buildMaze(new Location(i + upOffset.getX(), j + upOffset.getY()), 1, true);
+                }
+            }
         }
-        outPut(maze[x][y].pre.x, maze[x][y].pre.y);
+
+        /* Initialize distance */
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < hight; j++) {
+                dist.put(maze[i][j], MaxValue);
+            }
+        }
+        dist.replace(maze[mazeSourceX][mazeSourceY], 0);
+    }
+
+    private void checkBound(){
+        if(source.getX() - upOffset.getX() == 0 || destination.getX() - upOffset.getX() == 0 || destination.getY() - upOffset.getY() == 0){
+            upOffset = new Location(upOffset.getX() - 10, upOffset.getY() - 10);
+        }
+    }
+
+    private void buildPortals(Portal p) {
+        int x = p.getLocation().getX() - upOffset.getX();
+        int y = p.getLocation().getY() - upOffset.getY();
+        maze[x][y] = new DijstraPosition(p.getLocation(), 1, true, x, y);
+        portals.put(maze[x][y], p);
     }
     
-}
-
-class DijstraPosition {
-    int x;
-    int y;
-    int realX;
-    int realY;
-    int cost;
-    boolean reachable;
-    DijstraPosition pre;
-
-
-
-    public DijstraPosition(int realX, int realY,int cost,boolean reachable,int x,int y) {
-        this.realX = realX;
-        this.realY = realY;
-        this.cost = cost;
-        this.reachable = reachable;
-        this.x  = x;
-        this.y  = y;
-        
+    private DijstraPosition getTargetPortal(DijstraPosition p){
+        if(! portals.containsKey(p)){
+            return null;
+        }else{
+            for(DijstraPosition target : portals.keySet()){
+                if(!p.equals(target) && portals.get(p).getColour().equals(portals.get(target).getColour())){
+                    return target;
+                }
+            }
+        }
+        return null;
     }
 }
