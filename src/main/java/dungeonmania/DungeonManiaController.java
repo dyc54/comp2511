@@ -44,9 +44,9 @@ public class DungeonManiaController {
     private List<BattleResponse> battles;
     private List<AnimationQueue> animations;
     private Player player;  
-    private int timer;
+    // private int timer;
     private int counter;
-    private int tickCounter;
+    // private int tickCounter;
     private FileSaver fileSaver;
     private boolean isTimeTravling;
     private int deltaTickAfterTimeTraveling;
@@ -79,9 +79,10 @@ public class DungeonManiaController {
         this.dungeonId = UUID.randomUUID().toString();
         dungeonMap = new DungeonMap();
         battles = new ArrayList<>();
-        timer = 0;
+        // timer = 0;
         counter = 0;
-        tickCounter = 0;
+        currbranch = 0;
+        // tickCounter = 0;
         deltaTickAfterTimeTraveling = 0;
         isTimeTravling = false;
         Ticktimer = new Timer();
@@ -135,19 +136,20 @@ public class DungeonManiaController {
         return getDungeonResponse();
     }
 
-    private void timerAdd(){
-        this.timer++;
-    }
+    // private void timerAdd(){
+    //     this.timer++;
+    // }
 
     private void checkTimer(int t) {
-        if (t == dungeonConfig.spider_spawn_rate) {
+        // boolean spawn = (Ticktimer.getTime() % dungeonConfig.spider_spawn_rate) == 0;
+        if (dungeonConfig.spider_spawn_rate != 0 
+            && (Ticktimer.getTime() % dungeonConfig.spider_spawn_rate) == 0) {
             createSpider();
-            timer = 0;
         }
     }
 
     private Location randomLocation() {
-        Random random = new Random(timer);
+        Random random = new Random(Ticktimer.getTime());
         int x = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getX() + 30));
         int y = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getY() + 30));
         return Location.AsLocation(x, y);
@@ -191,12 +193,12 @@ public class DungeonManiaController {
             player = dungeonMap.getPlayer();
         } else {
             
-            tickCounter++;
+            // tickCounter++;
             Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
         }
-        timerAdd();
-        checkTimer(timer);
+        // timerAdd();
+        // checkTimer(timer);
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
@@ -207,7 +209,7 @@ public class DungeonManiaController {
         dungeonMap.toString();
         if (!timeTraveledPlayer) {
             updateTimeTravelStatus();
-            runTick(tickCounter);
+            runTick(Ticktimer.getTime());
             updateTimeTravelStatus();
             deltaTickAfterTimeTraveling--;
         }
@@ -239,8 +241,9 @@ public class DungeonManiaController {
         if (timeTraveledPlayer) {
             player = dungeonMap.getPlayer();
         } else {
-            tickCounter++;
+            // tickCounter++;
             Ticktimer.addTime();
+            checkTimer(Ticktimer.getTime());
             fileSaver.saveAction("playerMove", true, movementDirection.name());
         }
         player.movement(movementDirection.getOffset());
@@ -256,10 +259,10 @@ public class DungeonManiaController {
             // player.setLocation(player.getPreviousLocation());
             fileSaver.saveAction("playerMove", false, Location.inverseDirection(movementDirection), "MOVE ELDER_SELF ONLY");
         } else if (!timeTraveledPlayer) {
-            timerAdd();
-            checkTimer(timer);
+            // timerAdd();
+            // checkTimer(timer);
             updateTimeTravelStatus();
-            runTick(tickCounter);
+            runTick(Ticktimer.getTime());
             // tickCounter++;
             updateTimeTravelStatus();
             deltaTickAfterTimeTraveling--;
