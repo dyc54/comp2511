@@ -223,6 +223,8 @@ public class PersistenceTests {
         res = dmc.tick(Direction.LEFT);
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.LEFT);
+        res = dmc.tick(Direction.RIGHT);
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
         assertEquals(0, getInventory(res, "treasure").size());
