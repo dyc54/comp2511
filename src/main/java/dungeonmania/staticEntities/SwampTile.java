@@ -6,22 +6,15 @@ import dungeonmania.Player;
 import dungeonmania.helpers.DungeonMap;
 
 public class SwampTile extends StaticEntity{
+    private int multiplyingFactor;
 
-    private int movementFactor;
-
-    public SwampTile(String type, int x, int y, int movement_factor) {
+    public SwampTile(String type, int x, int y,int multiplyingFactor) {
         super(type, x, y);
-        this.movementFactor = movement_factor;
+        this.multiplyingFactor = multiplyingFactor;
     }
 
-    @Override
-    public boolean interact(Entity entity, DungeonMap map) {
-        // do nothing by defalut
-        if (entity instanceof MovementFactor) {
-            MovementFactor Entity = (MovementFactor) entity;
-            Entity.resetMovementFactor(movementFactor);
-        }
-        return false;
+    public int getMultiplyingFactor() {
+        return multiplyingFactor;
     }
 
     @Override

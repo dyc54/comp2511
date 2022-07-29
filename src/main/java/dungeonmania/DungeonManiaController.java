@@ -6,6 +6,7 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.goals.GoalsTree;
 import dungeonmania.helpers.Config;
+import dungeonmania.helpers.DijstraAlgorithm;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
 import dungeonmania.helpers.FileSaver;
@@ -21,11 +22,14 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
 import dungeonmania.response.models.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -191,16 +195,12 @@ public class DungeonManiaController {
             Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
         }
-        // timerAdd();
-        // checkTimer(timer);
-        // timerAdd();
-        // checkTimer(timer);
-        // player.CheckMovementFactor();
+        timerAdd();
+        checkTimer(timer);
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
-        timerAdd();
-        checkTimer(timer);
+        
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
@@ -316,23 +316,10 @@ public class DungeonManiaController {
         if (entity == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
-        System.out.println("TYPE: "+entity.getType());
-        if (entity.getType().equals("zombie_toast_spawner")) {
-            ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
-            if (!zombieToastSpawner.interact(player, dungeonMap)) {
-                throw new InvalidActionException("Invaild action");
-            }
-        }
-        if (entity.getType().equals("mercenary")) {
-            Mercenary mercenary = (Mercenary) entity;
-            if (!mercenary.interact(player, dungeonMap)) {
-                throw new InvalidActionException("Invaild action");
-            }
-        }
-        if (entity.getType().equals("assassin")) {
-            System.out.println("ASSASSIN");
-            Assassin assassin = (Assassin) entity;
-            if (!assassin.interact(player, dungeonMap)) {
+        
+        if (entity instanceof Interact) {
+            Interact interactEntity = (Interact) entity;
+            if (!interactEntity.interact(player, dungeonMap)) {
                 throw new InvalidActionException("Invaid action");
             }
         }
@@ -481,6 +468,17 @@ public class DungeonManiaController {
         }
         
     }
+
+    /* public DijstraAlgorithm testDijstraAlgorithm(){
+        Entity enemy = null;
+        for(Entity e : dungeonMap.getAllEntities() ){
+            if(e instanceof Mercenary){
+                enemy = e;
+            }
+        }
+        DijstraAlgorithm da = new DijstraAlgorithm(player, dungeonMap, enemy);
+        return  da;
+    } */
     
 
 }

@@ -2,6 +2,7 @@ package dungeonmania.movingEntities;
 
 import dungeonmania.Player;
 import dungeonmania.PotionEffectObserver;
+import dungeonmania.PotionEffectSubject;
 import dungeonmania.SceptreEffectObserver;
 import dungeonmania.SceptreEffectSubject;
 import dungeonmania.helpers.DungeonMap;
@@ -10,7 +11,7 @@ import dungeonmania.strategies.Movement;
 import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 
-public abstract class Mercenary extends MovingEntity implements Movement, PotionEffectObserver {
+public class Mercenary extends MovingEntity implements Movement, PotionEffectObserver {
     private int bribe_amount;
     private int bribe_radius;
     private double ally_attack;
@@ -40,6 +41,16 @@ public abstract class Mercenary extends MovingEntity implements Movement, Potion
         return ally_defence;
     }
 
-    public abstract boolean interact(Player player, DungeonMap dungeonMap);
+    @Override
+    public void update(PotionEffectSubject s) {
+        
+    }
+
+    @Override
+    public boolean movement(DungeonMap dungeonMap) {
+        return false;
+    }
+
+    // public abstract boolean interact(Player player, DungeonMap dungeonMap);
    
 }

@@ -46,6 +46,7 @@ public class EntityFactory {
         int y = entity.getInt("y");
         System.out.println(String.format("new entity %s at <%d,%d>", type, x, y));
         int key = 0;
+        int factor = 0;
         switch (type) {
             case "player":
                 return new Player(type, x, y, config.player_attack, config.player_health, map);
@@ -99,8 +100,8 @@ public class EntityFactory {
                 map.getPlayer().attach(mercenary);
                 return mercenary;
             case "swamp_tile":
-                int movement_factor = entity.getInt("movement_factor");
-                return new SwampTile(type, x, y, movement_factor);
+                factor = entity.getInt("factor");
+                return new SwampTile(type, x, y, factor);
             case "sun_stone":
                 return new SunStone(type, x, y);
             case "time_turner":
@@ -119,8 +120,6 @@ public class EntityFactory {
                 return assassin;
             case "hydra":
                 return new Hydra(type, Location.AsLocation(x, y), config.hydra_health, config.hydra_attack, config.hydra_health_increase_rate, config.hydra_health_increase_amount);
-
-
         }
         return null;
     }

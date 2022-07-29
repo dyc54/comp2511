@@ -81,7 +81,7 @@ public class BossTest {
         assertEquals(1, getEntities(res, "player").size());
     }
     
-    // @Test
+    @Test
     @DisplayName("Test Hydra has certain chance to increase amount - High increase rate")
     public void testHydraChanceHighRate() {
         DungeonManiaController dmc;
@@ -150,7 +150,7 @@ public class BossTest {
         assertEquals(1, getInventory(res, "treasure").size());
         String assassinId = getEntities(res, "assassin").get(0).getId();
         System.out.println(getEntities(res, "assassin").get(0).getId());
-        assertThrows(InvalidActionException.class, ()-> dmc.interact(assassinId));
+        assertDoesNotThrow(()-> dmc.interact(assassinId));
     }
 
     @Test
@@ -181,4 +181,20 @@ public class BossTest {
         assertEquals(new Position(7, 2) , getEntities(res, "assassin").get(0).getPosition());
     }
 
+    @Test
+    @DisplayName("bribe assassin fail but no refund")
+    public void testAssassinFail2() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res;
+        res = dmc.newGame("d_assassinTest_failBribe", "c_assassin_bribe");
+        String assassinId = getEntities(res, "assassin").get(0).getId();
+        res = assertDoesNotThrow(()-> dmc.interact(assassinId));
+        assertEquals(0, getEntities(res, "treasure").size());
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(new Position(2, 1), getEntities(res, "assassin").get(0).getPosition());
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getEntities(res, "player").size());
+        assertEquals(0, getEntities(res, "assassin").size());
+    }
 }
