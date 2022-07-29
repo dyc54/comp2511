@@ -137,6 +137,7 @@ public class PersistenceTests {
         dmc.newGame("d_collectTests_pickUpAllCollectableEntity",
                 "c_movementTest_testMovementDown");
         dmc.saveGame("d_collectTests_pickUpAllCollectableEntity");
+        List<String> aaa = dmc.allGames();
         assertTrue(dmc.allGames().contains("d_collectTests_pickUpAllCollectableEntity"));
         assertTrue(dmc.allGames().contains("d_movementTest_testMovementDown"));
     }

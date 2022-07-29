@@ -71,6 +71,7 @@ public class TimeTravelingTest {
         controller.tick(Direction.RIGHT);
         controller.tick(Direction.RIGHT);
         controller.tick(Direction.RIGHT);
+        // rewind 5 ticks
         DungeonResponse Res = controller.rewind(5);
         assertTrue(getEntities(Res, "older_player").size() == 1);
         EntityResponse older_player = getEntities(Res, "older_player").get(0);
@@ -83,6 +84,7 @@ public class TimeTravelingTest {
         Res = controller.tick(Direction.RIGHT);
         Res = controller.tick(Direction.RIGHT);
         Res = controller.tick(Direction.RIGHT);
+        // 
         assertTrue(getEntities(Res, "older_player").size() == 1);
         older_player = getEntities(Res, "older_player").get(0);
         assertEquals(new Position(5, 0), older_player.getPosition());
@@ -91,7 +93,24 @@ public class TimeTravelingTest {
         assertTrue(getEntities(Res, "older_player").size() == 0);
 
     }
+    @Test
+    public void testUseTimeTurnerBackOneTick() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("timeTravelFWQ7G1658488701.4102888", "c_Battletest_PlayerStrong");
+        controller.tick(Direction.RIGHT);   // tick 1
+        controller.tick(Direction.RIGHT);   // 2
+        DungeonResponse Res = controller.rewind(1);
+        assertTrue(getEntities(Res, "older_player").size() == 1);
+        EntityResponse older_player = getEntities(Res, "older_player").get(0);
+        assertEquals(new Position(1, 0), older_player.getPosition());
+        Res = controller.tick(Direction.RIGHT);   // 3
+        assertTrue(getEntities(Res, "older_player").size() == 1);
+        older_player = getEntities(Res, "older_player").get(0);
+        assertEquals(new Position(2, 0), older_player.getPosition());
+        Res = controller.tick(Direction.RIGHT);   // 4
+        assertTrue(getEntities(Res, "older_player").size() == 0);
 
+    }
     @Test
     public void testUseTimeTravelEncounterEachOther() {
         // player tm_trn [    ] [    ] [    ] [    ] [    ]  sword [    ] [    ] [    ] [    ] [    ] [    ] [    ] [    ] 

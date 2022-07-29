@@ -57,7 +57,9 @@ public class FileReader {
         File[] arr = file.listFiles();
         for (File f : arr) {
             String fileName = f.getName().replaceAll("\\[.*?\\].json", "");
-            list.add(fileName);
+            if (fileName.indexOf(".txt") == -1) {
+                list.add(fileName);
+            }
         }
         return new ArrayList<>(list);
     }

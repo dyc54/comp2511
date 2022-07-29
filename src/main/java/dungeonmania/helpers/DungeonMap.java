@@ -349,11 +349,13 @@ public class DungeonMap implements Iterable<Entity> {
      * @param entity entity that has already move
      */
     public void UpdateEntity(Entity entity) {
-        int temp = EnemiesDestroiedCounter;
-        System.out.println(String.format("Update %s", entity.toString()));
-        removeEntity(entity);
-        addEntity(entity);
-        EnemiesDestroiedCounter = temp;
+        if (!entity.getLocation().equals(idCollection.get(entity.getEntityId()))) {
+            int temp = EnemiesDestroiedCounter;
+            System.out.println(String.format("Update %s", entity.toString()));
+            removeEntity(entity);
+            addEntity(entity);
+            EnemiesDestroiedCounter = temp;
+        }
         // if (entity instanceof LogicEntity ) {
         //     UpdateLogicEntity((LogicEntity) entity);
         // }
