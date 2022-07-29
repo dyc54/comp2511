@@ -90,8 +90,8 @@ public class EntityFactory {
                 map.getPlayer().attach(mercenary);
                 return mercenary;
             case "swamp_tile":
-                factor = entity.getInt("factor");
-                return new SwampTile(type, x, y, factor);
+                int movement_factor = entity.getInt("movement_factor");
+                return new SwampTile(type, x, y, movement_factor);
             case "sun_stone":
                 return new SunStone(type, x, y);
             case "time_turner":

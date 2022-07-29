@@ -41,6 +41,7 @@ public class PersistenceTests {
         try {
             Files.walk(Paths.get("./src/test/resources/Archives"))
             .filter(Files::isRegularFile)
+            .filter(path -> path.getFileName().toString().indexOf(".json") != -1)
             .map(Path::toFile)
             .forEach(File::delete);
         } catch (IOException e) {
@@ -413,8 +414,8 @@ public class PersistenceTests {
         assertAllEntitiesEqual(DungonRes, Dungonload);
     }
 
-    // @Test
-    // @DisplayName("test persistance with time travel")
+    @Test
+    @DisplayName("test persistance with time travel")
     public void testTimeTravel(){
         clear();
         DungeonManiaController controller = new DungeonManiaController();

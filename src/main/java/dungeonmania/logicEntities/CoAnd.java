@@ -39,5 +39,8 @@ public class CoAnd extends LogicalEntitiesLogic{
         }
         return false;
     }
-    
+    @Override
+    public String logicType() {
+        return "co_and";
+    }
 }

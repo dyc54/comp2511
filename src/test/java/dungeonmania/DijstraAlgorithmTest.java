@@ -2,7 +2,7 @@ package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static dungeonmania.TestUtils.getInventory;
+import static dungeonmania.TestUtils.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,18 +12,25 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.helpers.DijstraAlgorithm;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
-/* public class DijstraAlgorithmTest {
+public class DijstraAlgorithmTest {
     @Test
     @DisplayName("Test the player can pick up wood in map")
     public void testPickUpWood() {
 
         DungeonManiaController dmc = new DungeonManiaController();
 
-        DungeonResponse res = dmc.newGame("d_testDijstraAlgorithm",
-                "c_collectTests");
+        DungeonResponse res = dmc.newGame("d_testDijstraAlgorithm","c_collectTests");
+
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
+        res = dmc.tick(Direction.UP);
+        assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
+        res = dmc.tick(Direction.LEFT);
+        assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
+        
        
-        DijstraAlgorithm da = dmc.testDijstraAlgorithm();
-        System.out.println(da.dijstra());
+        
     }
-} */
+}

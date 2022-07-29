@@ -9,4 +9,5 @@ public abstract class LogicalEntitiesLogic {
         this.adjacentEntities = adjacentEntities;
     }
     public abstract boolean isTrue();
+    public abstract String logicType();
 }

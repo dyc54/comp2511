@@ -1,4 +1,4 @@
-package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
+package dungeonmania.buildableEntities;
 
 import java.util.ArrayList;
 import java.util.Iterator;

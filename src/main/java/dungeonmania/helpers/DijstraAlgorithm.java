@@ -116,7 +116,7 @@ public class DijstraAlgorithm {
 
             if (entity instanceof SwampTile) {
                 SwampTile s = (SwampTile) entity;
-                buildMaze(entity.getLocation(), s.getMultiplyingFactor(), true);
+                buildMaze(entity.getLocation(), s.getMovementFactor(), true);
             }
         }
         /* Initialize blank position */

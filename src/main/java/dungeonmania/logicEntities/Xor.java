@@ -15,5 +15,9 @@ public class Xor extends LogicalEntitiesLogic{
         }
         return adjacentEntities.stream().filter(entity -> entity.isActivated()).count() == 1;
     }
+    @Override
+    public String logicType() {
+        return "xor";
+    }
     
 }

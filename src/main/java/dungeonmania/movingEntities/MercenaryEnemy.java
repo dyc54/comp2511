@@ -15,14 +15,14 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryEnemy extends Mercenary implements Enemy {
     public MercenaryEnemy(String type, Location location, double mercenary_attack, double mercenary_health,
-            int bribe_amount, int bribe_radius, int ally_attack, int ally_defence) {
+            int bribe_amount, int bribe_radius, double ally_attack, double ally_defence) {
         super("mercenary", location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
     }
 
     public MercenaryEnemy(MercenaryAlly mercenary) {
         super("mercenary", mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
-        }
+    }
 
 	@Override
 	public AttackStrategy getAttackStrayegy() {
@@ -46,6 +46,9 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         Location next = new Location();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         System.out.println("ENEMT MOVEMENT++++++++++++++++++++");
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (getMove() instanceof RandomMovement) {
             next = getMove().MoveOptions(choice).nextLocation(getLocation(), dungeonMap);
         } else {
@@ -53,6 +56,7 @@ public class MercenaryEnemy extends Mercenary implements Enemy {
         }
         System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
         setLocation(next);
+        dungeonMap.interactAll(this);
         dungeonMap.UpdateEntity(this);
         return false;
 

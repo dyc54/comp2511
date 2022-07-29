@@ -6,7 +6,7 @@ import java.util.List;
 public class WeaponableAttackStrategy implements AttackStrategy{
     private BaseAttackStrategy base;
     private List<BonusDamageMul> bonusdamages;
-    public WeaponableAttackStrategy(int base) {
+    public WeaponableAttackStrategy(double base) {
         this.base = new BaseAttackStrategy(base);
         bonusdamages = new ArrayList<>();
     }

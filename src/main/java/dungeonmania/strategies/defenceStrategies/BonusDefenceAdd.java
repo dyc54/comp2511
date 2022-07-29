@@ -1,6 +1,8 @@
 package dungeonmania.strategies.defenceStrategies;
 
-public interface BonusDefenceAdd {
+import dungeonmania.strategies.BonusStrategy;
+
+public interface BonusDefenceAdd extends BonusStrategy{
     public boolean equals(BonusDefenceAdd obj);
     public double defence();
 }

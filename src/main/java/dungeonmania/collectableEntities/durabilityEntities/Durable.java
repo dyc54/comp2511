@@ -1,3 +1,4 @@
+/* 
 package dungeonmania.collectableEntities.durabilityEntities;
 
 public interface Durable {
@@ -5,3 +6,4 @@ public interface Durable {
     public void setDuration();
     public boolean isExhausted();
 }
+*/

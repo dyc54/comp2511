@@ -1,5 +1,6 @@
 package dungeonmania.movingEntities;
 
+import dungeonmania.MovementFactor;
 import dungeonmania.battle.Enemy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
@@ -10,9 +11,9 @@ import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 
-public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
+public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy, MovementFactor{
     
-    public ZombieToast(String type, Location location, int zombie_attack, double zombie_health) {
+    public ZombieToast(String type, Location location, double zombie_attack, double zombie_health) {
         super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack), new RandomMovement());
     }
 
@@ -24,11 +25,16 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy {
 
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         System.out.println(choice);
-        Location next = getMove().MoveOptions(choice).nextLocation(getLocation(), dungeonMap);
+        Location next = getMove().MoveOptions(choice).nextLocation(getLocation(),dungeonMap);
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (next.equals(getLocation())) {
             return false;
         } else {
             setLocation(next);
+            dungeonMap.interactAll(this);
+
             dungeonMap.UpdateEntity(this);
             return true;
         }

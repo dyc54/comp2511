@@ -8,13 +8,15 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
+import dungeonmania.buildableEntities.MidnightArmour;
 import dungeonmania.collectableEntities.CollectableEntity;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
+import dungeonmania.strategies.battleStrategies.BattleStrategyWithEnemy;
+import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;
 import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
 
 public class Battle {
@@ -29,20 +31,20 @@ public class Battle {
         rounds = new ArrayList<>();
 
     }
-    private double playerDamage() {
-        AttackStrategy attackStrayegy = player.getAttackStrategy();
-        return attackStrayegy.attackDamage() / 5.0;
-    }
-    private double enemyDamage() {
-        AttackStrategy attackStrayegy = enemy.getAttackStrayegy();
-        DefenceStrategy defenceStrategy = player.getDefenceStrayegy();
-        double damage = attackStrayegy.attackDamage() - defenceStrategy.defenceDamage();
-        return (damage > 0 ? damage : 0) / 10.0;
-    }
-    private int increaseAmount() {
-        AttackStrategy attackStrategy = enemy.getAttackStrayegy();
-        return attackStrategy.getIncreaseAmount();
-    }
+    // private double playerDamage() {
+    //     AttackStrategy attackStrayegy = player.getAttackStrategy();
+    //     return attackStrayegy.attackDamage() / 5.0;
+    // }
+    // private double enemyDamage() {
+    //     AttackStrategy attackStrayegy = enemy.getAttackStrayegy();
+    //     DefenceStrategy defenceStrategy = player.getDefenceStrayegy();
+    //     double damage = attackStrayegy.attackDamage() - defenceStrategy.defenceDamage();
+    //     return (damage > 0 ? damage : 0) / 10.0;
+    // }
+    // private int increaseAmount() {
+    //     AttackStrategy attackStrategy = enemy.getAttackStrayegy();
+    //     return attackStrategy.getIncreaseAmount();
+    // }
     public Battle(Player player, Enemy enemy) {
         this();
         this.player = player;
@@ -67,52 +69,32 @@ public class Battle {
         System.out.println(String.format("Set Battle: \nPlayer HP:%f\nEnemy %s, HP:%f", initPlayerHealth, enemy.getEnemyType(), initEnemyHealth));
         return this;
     }
-    private double round(double num) {
-        if (num >= -0.0001 && num <= 0.0001) {
-            return 0.0;
-        }
-        return num;
-    }
+    
     /**
      * 
      * @return
      */
     private List<String> battle() {
-        double playerdamage = playerDamage();
-        double enemydamage = enemyDamage();
-        int increaseAmount = increaseAmount();
-        List<ItemResponse> items= player.getBattleUsage()
-                                    .stream().map(mapper -> (CollectableEntity) mapper)
-                                    .map(item -> item.getItemResponse()).collect(Collectors.toList());
-        if (player.hasEffect()) { 
-            items.add(player.getCurrentEffect().getItemResponse());
-        }               
-        System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, enemydamage, currPlayerHealth - enemydamage
-                                                                                        , currEnemyHealth, playerdamage, currEnemyHealth - playerdamage));
+        BattleStrategyWithPlayer enemy = (BattleStrategyWithPlayer) this.enemy;
+        BattleStrategyWithEnemy player = (BattleStrategyWithEnemy) this.player;
+        double deltaEnemy = enemy.battleDamageFrom(this.player);
+        double deletePlayer = player.battleDamageFrom(this.enemy);
         
-        currPlayerHealth -= enemydamage;
-        System.out.println("increase amount: "+increaseAmount);
-        if (increaseAmount != 0) {
-            currEnemyHealth += increaseAmount;
-        } else {
-            currEnemyHealth -= playerdamage;
+        System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, deletePlayer, currPlayerHealth - deletePlayer
+                                                                                        , currEnemyHealth, deltaEnemy, currEnemyHealth - deltaEnemy));
+        
+        rounds.add(new RoundResponse(deletePlayer * -1, deltaEnemy * -1, player.getBattleUsedItems()));
+        player.battleWith(this.enemy);
+        enemy.battleWith(this.player);
+        if (player.isAlive() && enemy.isAlive()) {
+            return Arrays.asList();
         }
-        rounds.add(new RoundResponse(enemydamage * -1, playerdamage * -1, items));
-
-        if (round(currPlayerHealth) <= 0 && round(currEnemyHealth) <= 0) {
-            player.setHealth(0);
-            return Arrays.asList(player.getEntityId(), enemy.getEnemyId());
-        }
-        if (round(currPlayerHealth) <= 0) {
-            enemy.setHealth(currEnemyHealth);
-            return Arrays.asList(player.getEntityId());
-        } else if (round(currEnemyHealth) <= 0) {
-            player.setHealth(round(currPlayerHealth));
-            return Arrays.asList(enemy.getEnemyId());
+        if (player.isAlive()) {
+            return Arrays.asList(this.enemy.getEnemyId());
+        } else if (enemy.isAlive()) {
+            return Arrays.asList(this.player.getEntityId());
         } else {
-            player.setHealth(round(currPlayerHealth));
-            enemy.setHealth(currEnemyHealth);
-            return new ArrayList<>();
+            return Arrays.asList(this.player.getEntityId(), this.enemy.getEnemyId());
         }
     }
     /**

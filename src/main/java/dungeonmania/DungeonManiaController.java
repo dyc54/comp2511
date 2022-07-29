@@ -1,7 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.bosses.Assassin;
-import dungeonmania.collectableEntities.durabilityEntities.Durability;
+// import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.goals.GoalsTree;
@@ -172,10 +172,10 @@ public class DungeonManiaController {
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
         System.out.println("************************ Tick itemUsedId********************");
         dotick(itemUsedId, false);
-        updateTimeTravelStatus();
-        runTick(tickCounter);
-        updateTimeTravelStatus();
-        deltaTickAfterTimeTraveling--;
+        // updateTimeTravelStatus();
+        // runTick(tickCounter);
+        // updateTimeTravelStatus();
+        // deltaTickAfterTimeTraveling--;
         return getDungeonResponse();
         // return 
     }
@@ -190,12 +190,16 @@ public class DungeonManiaController {
         if (timeTraveledPlayer) {
             player = dungeonMap.getPlayer();
         } else {
+            
             tickCounter++;
             Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
         }
-        timerAdd();
-        checkTimer(timer);
+        // timerAdd();
+        // checkTimer(timer);
+        // timerAdd();
+        // checkTimer(timer);
+        // player.CheckMovementFactor();
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
@@ -205,6 +209,12 @@ public class DungeonManiaController {
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
         dungeonMap.toString();
+        if (!timeTraveledPlayer) {
+            updateTimeTravelStatus();
+            runTick(tickCounter);
+            updateTimeTravelStatus();
+            deltaTickAfterTimeTraveling--;
+        }
         // tickCounter++;
         // return getDungeonResponse();
 
@@ -214,11 +224,11 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         dotick(movementDirection, false);
-        updateTimeTravelStatus();
-        runTick(tickCounter);
-        // tickCounter++;
-        updateTimeTravelStatus();
-        deltaTickAfterTimeTraveling--;
+        // updateTimeTravelStatus();
+        // runTick(tickCounter);
+        // // tickCounter++;
+        // updateTimeTravelStatus();
+        // deltaTickAfterTimeTraveling--;
         
         return getDungeonResponse();
     }
@@ -240,8 +250,6 @@ public class DungeonManiaController {
         player.movement(movementDirection.getOffset());
         player.updatePotionDuration();
         player.updateSceptreRound();
-        timerAdd();
-        checkTimer(timer);
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
@@ -249,8 +257,16 @@ public class DungeonManiaController {
         if (!timeTraveledPlayer && dungeonMap.isTimeTravelPortal(player.getLocation())) {
             // fileSaver.saveAction("mark", false, "c");
             doRewind(30, 2);
-            player.setLocation(player.getPreviousLocation());
+            // player.setLocation(player.getPreviousLocation());
             fileSaver.saveAction("playerMove", false, Location.inverseDirection(movementDirection), "MOVE ELDER_SELF ONLY");
+        } else if (!timeTraveledPlayer) {
+            timerAdd();
+            checkTimer(timer);
+            updateTimeTravelStatus();
+            runTick(tickCounter);
+            // tickCounter++;
+            updateTimeTravelStatus();
+            deltaTickAfterTimeTraveling--;
         }
     }
     /**
