@@ -344,9 +344,9 @@ public class DungeonMap implements Iterable<Entity> {
     }
 
 
-    // public TreeMap<Location, HashSet<Entity>> gMap(){
-    //     return map;
-    // }
+    public TreeMap<Location, HashSet<Entity>> gMap(){
+        return map;
+    }
 
     /**
      * Update Entity position

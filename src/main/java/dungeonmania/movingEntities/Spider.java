@@ -30,6 +30,9 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
         Location current = getLocation();
         MovementStrategy strategy = super.getMove();
         Location next = strategy.nextLocation(current, dungeonMap);
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (checkhasBoulder(dungeonMap, next)) {
             Location temp = strategy.MoveOptions("CHANGE_DIRECTION").nextLocation(current, dungeonMap);
             if (checkhasBoulder(dungeonMap, temp)) {

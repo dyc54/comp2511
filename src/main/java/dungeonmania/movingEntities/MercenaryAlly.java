@@ -59,6 +59,9 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         if (getMove() instanceof RandomMovement) {
             next = getMove().MoveOptions(options).nextLocation(getLocation(), dungeonMap);
         }
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (p.getLocation().equals(next)) {
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 
