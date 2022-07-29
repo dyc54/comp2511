@@ -438,6 +438,7 @@ public class M3CollectAndBuildTest {
             playerPosition = getEntities(res, "player").get(0).getPosition();
             res = dmc.tick(Direction.DOWN);
             assertEquals(playerPosition, getEntities(res, "mercenary").get(0).getPosition());
+            assertEquals(1, getInventory(res, "sceptre").size());
             
         });
     }

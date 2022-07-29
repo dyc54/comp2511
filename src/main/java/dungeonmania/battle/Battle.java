@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
+import dungeonmania.buildableEntities.MidnightArmour;
 import dungeonmania.collectableEntities.CollectableEntity;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.ItemResponse;

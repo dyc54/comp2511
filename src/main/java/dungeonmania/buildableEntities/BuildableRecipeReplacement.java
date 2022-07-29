@@ -1,4 +1,4 @@
-package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
+package dungeonmania.buildableEntities;
 
 import com.google.gson.internal.bind.MapTypeAdapterFactory;
 

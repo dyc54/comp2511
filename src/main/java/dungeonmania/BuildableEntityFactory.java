@@ -1,13 +1,13 @@
 package dungeonmania;
 
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Bow;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildablePrerequisite;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipeReplacement;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipematerial;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Shield;
+import dungeonmania.buildableEntities.Bow;
+import dungeonmania.buildableEntities.BuildablePrerequisite;
+import dungeonmania.buildableEntities.BuildableRecipe;
+import dungeonmania.buildableEntities.BuildableRecipeReplacement;
+import dungeonmania.buildableEntities.BuildableRecipematerial;
+import dungeonmania.buildableEntities.MidnightArmour;
+import dungeonmania.buildableEntities.Sceptre;
+import dungeonmania.buildableEntities.Shield;
 import dungeonmania.helpers.Config;
 import dungeonmania.movingEntities.ZombieToast;
 

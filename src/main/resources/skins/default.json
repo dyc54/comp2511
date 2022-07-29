@@ -39,6 +39,18 @@
         "zombie_toast_spawner": "images/tileset/entities/zombie_spawner.png",
         "zombie_toast": "images/tileset/entities/zombie.png",
         "boulders": "images/tileset/entities/boulder_00.png",
-        "enemies": "images/tileset/items/sword_silver.png"
+        "enemies": "images/tileset/items/sword_silver.png",
+        "time_travelling_portal": "images/tileset/entities/portal_04.png",
+        "time_turner":"images/tileset/entities/time_turner.png",
+        "hydra":"images/tileset/entities/hydra.png",
+        "assassin": "images/tileset/entities/assassin.png",
+        "wire": "images/tileset/entities/wire.png",
+        "swamp_tile": "images/tileset/entities/swamp_tile.png",
+        "sun_stone": "images/tileset/entities/sun_stone.png",
+        "sceptre": "images/tileset/entities/sceptre.png",
+        "lightbulb": "images/tileset/entities/lightbulb.png",
+        "lightbulboff": "images/tileset/entities/lightbulboff.png",
+        "midnight_armour": "images/tileset/entities/midnight_armour.png",
+        "switch_door":"images/tileset/walls/wooden/door_locked_silver.png"
     }
 }

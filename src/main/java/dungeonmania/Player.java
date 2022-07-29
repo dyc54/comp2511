@@ -9,14 +9,14 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import dungeonmania.battle.Enemy;
+import dungeonmania.buildableEntities.BuildableRecipe;
+import dungeonmania.buildableEntities.MidnightArmour;
+import dungeonmania.buildableEntities.Sceptre;
 import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.collectableEntities.Useable;
-import dungeonmania.collectableEntities.durabilityEntities.Durability;
-import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+// import dungeonmania.collectableEntities.durabilityEntities.Durability;
+// import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
 import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.BuildableRecipe;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.MidnightArmour;
-import dungeonmania.collectableEntities.durabilityEntities.buildableEntities.Sceptre;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.BonusStrategy;
@@ -49,7 +49,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private List<PotionEffectObserver> observers;
     private List<Sceptre> sceptres;
     private List<SceptreEffectObserver> SceptreObservers;
-    private Durability durabilities;
+    // private Durability durabilities;
     private int buildCounter;
     public Player(String type, int x, int y, double attack, double health, DungeonMap map) {
         super(type, x, y);
@@ -97,8 +97,8 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     public void setBattleUsedDuration() {
         inventory.getAllInventory().forEach( entity ->{
-            if (entity instanceof DurabilityEntity) {
-                ((DurabilityEntity) entity).setDurability();
+            if (entity instanceof Durability) {
+                ((Durability) entity).setDurability();
             }
         });
     }
@@ -107,7 +107,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         List<Entity> entities = new LinkedList<>();
         inventory.getAllInventory().forEach( entity ->{
             System.out.println(entity.getType());
-            if (entity instanceof DurabilityEntity && ((DurabilityEntity) entity).checkDurability()) {
+            if (entity instanceof Durability && ((Durability) entity).checkDurability()) {
                 entities.add(entity);
             }
         });
@@ -180,17 +180,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
         System.out.println(String.format("%s %s -> %s", getType(),previousLocation.toString(), getLocation().toString()));
     }
-    
-    // @Override
-    // public boolean CheckMovementFactor() {
-    //     System.out.println("----------------movementfactor--------------");
-    //     System.out.println(this.movementFactor);
-    //     if (this.movementFactor > 0) {
-    //         this.movementFactor -= 1;
-    //         return false;
-    //     }
-    //     return true;
-    // }
 
 
     public boolean pickup(Entity entity) {

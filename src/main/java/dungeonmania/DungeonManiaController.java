@@ -1,7 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.bosses.Assassin;
-import dungeonmania.collectableEntities.durabilityEntities.Durability;
+// import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.goals.GoalsTree;
@@ -285,6 +285,7 @@ public class DungeonManiaController {
         }
         System.out.println("Current Inventory: ");
         player.getInventory().print();
+
         player.build(buildable, dungeonConfig);
         fileSaver.saveAction("build", false, buildable);
         // goals = new GoalsTree("exit");
