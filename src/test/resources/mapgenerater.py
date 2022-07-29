@@ -178,6 +178,8 @@ def main():
             elif (arg[0] in ['switch_door']):
                 entity['logic'] = arg[3]
                 entity['key'] = int(arg[4])
+            elif (arg[0] in ['switch'] and len(arg[0]) == 4):
+                entity['logic'] = arg[3]
             entities.append(entity)
         except (ValueError, EOFError, KeyboardInterrupt):
             break

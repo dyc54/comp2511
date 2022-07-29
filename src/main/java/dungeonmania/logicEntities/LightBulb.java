@@ -67,6 +67,9 @@ public class LightBulb extends StaticEntity implements LogicObserver{
 
     @Override
     public boolean equals(LogicEntity entity) {
+        if (entity == null) {
+            return false;
+        }
         return Entity.equals(this, entity.getId());
     }
     @Override

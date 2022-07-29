@@ -236,19 +236,36 @@ public class DungeonMap implements Iterable<Entity> {
         if (!containsEntity(id)) {
             return;
         }
-        Location location = idCollection.get(id);
-        Collection<Entity> entities = getEntities(location);
+        // Location location = idCollection.get(id);
+        // Collection<Entity> entities = getEntities(location);
         Entity temp = getEntity(id);
-        if (temp instanceof Enemy) {
+        removeEntity(temp);
+        // if (temp instanceof Enemy) {
+        //     EnemiesDestroiedCounter += 1;
+
+        // }
+        
+        // System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
+        // entities.remove(temp);
+        // idCollection.remove(id);
+    }
+    public void removeEntity(Entity entity) {
+        if (!containsEntity(entity.getEntityId())) {
+            return;
+        }
+        Location location = idCollection.get(entity.getEntityId());
+        
+        Collection<Entity> entities = getEntities(location);
+        // Entity temp = getEntity(id);
+        if (entity instanceof Enemy) {
             EnemiesDestroiedCounter += 1;
 
         }
         
-        System.out.println(String.format("Entity %s %s has removed from Map", temp.getType(), temp.getEntityId()));
-        entities.remove(temp);
-        idCollection.remove(id);
+        System.out.println(String.format("Entity %s %s has removed from Map", entity.getType(), entity.getEntityId()));
+        idCollection.remove(entity.getEntityId());
+        entities.remove(entity);
     }
-
     /**
      * Return a Collection of entities that located at top, bottom, left and right
      * of given location
@@ -334,7 +351,7 @@ public class DungeonMap implements Iterable<Entity> {
     public void UpdateEntity(Entity entity) {
         int temp = EnemiesDestroiedCounter;
         System.out.println(String.format("Update %s", entity.toString()));
-        removeEntity(entity.getEntityId());
+        removeEntity(entity);
         addEntity(entity);
         EnemiesDestroiedCounter = temp;
         // if (entity instanceof LogicEntity ) {
@@ -342,7 +359,7 @@ public class DungeonMap implements Iterable<Entity> {
         // }
 
     }
-    public void UpdateLogicEntity(LogicEntity entity) {
+    private void UpdateLogicEntity(LogicEntity entity) {
         entity.init(this);
     }
     public int getDestoriedCounter() {

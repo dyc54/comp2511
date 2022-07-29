@@ -315,6 +315,23 @@ public class LogicEntitiesTest {
         
     } 
     
+    @Test
+    public void testActiveSwitchAndBombViaWire() {
+    //     [    ] [    ] [    ] bomb      [    ] 
+    //     player boulde switch switch_OR [    ] 
+    //     [    ] [    ] [    ]  wire   bomb
+    // testActiveSwitchAndBombViaWireZSSVG1659074852.9142034
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("testActiveSwitchAndBombViaWireZSSVG1659074852.9142034", "c_Battletest_PlayerStrong");
+        DungeonResponse res = controller.tick(Direction.RIGHT);
+        res = controller.tick(Direction.RIGHT);
+        res = controller.tick(Direction.UP);
+        res = controller.tick(Direction.RIGHT);
+        res = controller.tick(Direction.RIGHT);
+        
+        res = controller.tick(Direction.RIGHT);
 
+        
+    }
 
 }
