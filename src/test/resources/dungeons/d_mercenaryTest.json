@@ -16,6 +16,11 @@
             "type": "wall",
             "x": 1,
             "y": 2
+        },
+        {
+            "type": "wall",
+            "x": 3,
+            "y": 0
         },{
             "type": "treasure",
             "x": 1,

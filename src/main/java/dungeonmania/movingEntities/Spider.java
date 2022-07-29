@@ -18,7 +18,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
      * @param spider_attack
      * @param spider_health
      */
-    public Spider(String type, Location location, int spider_attack, int spider_health) {
+    public Spider(String type, Location location, double spider_attack, double spider_health) {
         super(type, location, spider_health, new BaseAttackStrategy(spider_attack), new CircleMovement(location));
     }
     private boolean checkhasBoulder(DungeonMap dungeonMap, Location next) {
@@ -29,9 +29,12 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
     public boolean movement(DungeonMap dungeonMap) {
         Location current = getLocation();
         MovementStrategy strategy = super.getMove();
-        Location next = strategy.nextLocation(current);
+        Location next = strategy.nextLocation(current, dungeonMap);
+        if (!CheckMovementFactor()) {
+            return false;
+        }
         if (checkhasBoulder(dungeonMap, next)) {
-            Location temp = strategy.MoveOptions("CHANGE_DIRECTION").nextLocation(current);
+            Location temp = strategy.MoveOptions("CHANGE_DIRECTION").nextLocation(current, dungeonMap);
             if (checkhasBoulder(dungeonMap, temp)) {
                 return false;
             } else {
@@ -40,6 +43,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
             }
         }
         setLocation(next);
+        dungeonMap.interactAll(this);
         dungeonMap.UpdateEntity(this);
         return true;
     }

@@ -15,5 +15,8 @@ public class And extends LogicalEntitiesLogic{
         }
         return adjacentEntities.stream().allMatch(entity -> entity.isActivated());
     }
-    
+    @Override
+    public String logicType() {
+        return "and";
+    }
 }

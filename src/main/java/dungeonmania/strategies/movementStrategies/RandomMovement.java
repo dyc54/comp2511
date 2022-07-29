@@ -2,6 +2,8 @@ package dungeonmania.strategies.movementStrategies;
 
 import java.util.List;
 import java.util.Random;
+
+import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class RandomMovement implements MovementStrategy{
@@ -13,7 +15,7 @@ public class RandomMovement implements MovementStrategy{
      * @param location current entity's location
      */
     @Override
-    public Location nextLocation(Location location) {
+    public Location nextLocation(Location location, DungeonMap dungeonMap) {
         
         List<Location> choices = MovementOptions.decodeLocationsArguments(location, possible);
         choices.stream().forEach(lo -> System.out.println(lo.toString()));

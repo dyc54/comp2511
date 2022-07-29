@@ -2,8 +2,10 @@ package dungeonmania.inventories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
@@ -14,7 +16,7 @@ import dungeonmania.strategies.attackStrategies.BonusDamageMul;
 import dungeonmania.strategies.attackStrategies.BonusDamageStrategy;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
-public class Inventory {
+public class Inventory implements Iterable<Entity> {
     private final HashMap<String, List<Entity>> inventory = new HashMap<>();
     private final IdCollection<String> idCollection = new IdCollection<>();
 
@@ -164,5 +166,13 @@ public class Inventory {
     }
     public InventoryViewer view() {
         return new InventoryViewer(this);
+    }
+    @Override
+    public Iterator<Entity> iterator() {
+        getAllInventory().iterator();
+        return null;
+    }
+    public Stream<Entity> stream() {
+        return getAllInventory().stream();
     }
 }

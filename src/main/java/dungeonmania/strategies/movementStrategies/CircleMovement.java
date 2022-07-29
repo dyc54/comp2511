@@ -1,5 +1,6 @@
 package dungeonmania.strategies.movementStrategies;
 
+import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class CircleMovement implements MovementStrategy {
@@ -17,7 +18,7 @@ public class CircleMovement implements MovementStrategy {
      * @param cure any locations
      */
     @Override
-    public Location nextLocation(Location curr) {
+    public Location nextLocation(Location curr, DungeonMap dungeonMap) {
         if (curr.equals(center)) {
             return center.getUp();
         }

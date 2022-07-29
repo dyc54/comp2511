@@ -10,12 +10,12 @@ import dungeonmania.movingEntities.ZombieToast;
 public class ZombieToastSpawner extends StaticEntity implements Interact {
     private int timer;
     private int zombieSpawnRate;
-    private int zombie_attack;
-    private int zombie_health;
+    private double zombie_attack;
+    private double zombie_health;
     private DungeonMap map;
     private int counter;
 
-    public ZombieToastSpawner(String type, int x, int y, int zombieSpawnRate, int zombie_attack, int zombie_health,
+    public ZombieToastSpawner(String type, int x, int y, int zombieSpawnRate, double zombie_attack, double zombie_health,
             DungeonMap map) {
         super(type, Location.AsLocation(x, y));
         this.zombieSpawnRate = zombieSpawnRate;

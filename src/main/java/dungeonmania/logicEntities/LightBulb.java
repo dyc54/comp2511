@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.security.auth.Subject;
 
+import org.json.JSONObject;
+
 import dungeonmania.Entity;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Timer;
@@ -65,6 +67,9 @@ public class LightBulb extends StaticEntity implements LogicObserver{
 
     @Override
     public boolean equals(LogicEntity entity) {
+        if (entity == null) {
+            return false;
+        }
         return Entity.equals(this, entity.getId());
     }
     @Override
@@ -83,6 +88,9 @@ public class LightBulb extends StaticEntity implements LogicObserver{
         // TODO Auto-generated method stub
         return getEntityId();
     }
-
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject().put("logic", logic.logicType());
+    }
     
 }

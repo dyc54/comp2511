@@ -4,23 +4,35 @@ import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.DungeonMapWirteDecorator;
 import dungeonmania.helpers.Location;
 
 public class Bomb extends CollectableEntity implements Useable{
 
     private int bomb_radius;
     private boolean hasPlaced;
+    private final DungeonMapWirteDecorator writer;
 
-    public Bomb(String type, int x, int y, int bomb_radius) {
+    public Bomb(String type, int x, int y, int bomb_radius, DungeonMapWirteDecorator decorator) {
         super(type, x, y);
         this.bomb_radius = bomb_radius;
         hasPlaced = false;
+        writer = decorator;
     }
 
     public int getBomb_radius() {
         return bomb_radius;
     }
-
+    public boolean hasPlaced() {
+        return hasPlaced;
+    }
+    public void place() {
+        hasPlaced = true;
+    }
+    public void boom() {
+        writer.remove(getLocation(), getBomb_radius());
+        writer.updateLogicalEntities();
+    }
     public void update(DungeonMap map) {
         map.getEntities(getLocation(), bomb_radius).stream().forEach(e -> {
             if (!(e instanceof Player)) {
@@ -52,7 +64,8 @@ public class Bomb extends CollectableEntity implements Useable{
             if (e instanceof FloorSwitch) {
                 FloorSwitch floorSwitch = (FloorSwitch) e;
                 if (floorSwitch.getTrigger()) {
-                    this.update(map);
+                    // this.update(map);
+                    boom();
                 } else {
                     floorSwitch.bombAttach(this);
                 }

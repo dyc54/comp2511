@@ -57,24 +57,30 @@ public class FileReader {
         File[] arr = file.listFiles();
         for (File f : arr) {
             String fileName = f.getName().replaceAll("\\[.*?\\].json", "");
-            list.add(fileName);
+            if (fileName.indexOf(".txt") == -1) {
+                list.add(fileName);
+            }
         }
         return new ArrayList<>(list);
     }
     public static void LoadGame(DungeonManiaController controller, String fileName, int branch) throws IOException {
-        String content = FileReader.LoadFile(String.format("%s[%d]", fileName, branch));
-        JSONObject json = new JSONObject(content);
-        String configName = json.getString("configName");
-        controller.newGame(String.format("%s[%s]", fileName, branch), configName);
-        controller.setDungeonId(json.getString("dungeonId"));
-        controller.setDungeonName(json.getString("dungeonName"));
-        JSONArray actions = json.getJSONArray("actions");
-        for (int i = 0; i < actions.length(); i++) {
-            JSONObject action = actions.getJSONObject(i);
-            doAction(controller, action, false, false);
-        }
-        // FileReader.LoadGame(controller, fileName, branch, 0);
+        // String content = FileReader.LoadFile(String.format("%s[%d]", fileName, branch));
+        // JSONObject json = new JSONObject(content);
+        // String configName = json.getString("configName");
+        // controller.newGame(String.format("%s[%s]", fileName, branch), configName);
+        // controller.setDungeonId(json.getString("dungeonId"));
+        // controller.setDungeonName(json.getString("dungeonName"));
+        // JSONArray actions = json.getJSONArray("actions");
+        // for (int i = 0; i < actions.length(); i++) {
+        //     JSONObject action = actions.getJSONObject(i);
+        //     doAction(controller, action, false, false);
+        // }
+        FileReader.LoadGame(controller, fileName, branch, 2);
     }
+    /**
+     * Load Game into controller, 
+     * @param deltaTick the number of tick loaded 
+     */
     public static void LoadGame(DungeonManiaController controller, String fileName, int branch, int deltaTick) throws IOException {
         String content = FileReader.LoadFile(String.format("%s[%d]", fileName, branch));
         JSONObject json = new JSONObject(content);
@@ -130,15 +136,6 @@ public class FileReader {
                 break;
             case "playerMove":
                 controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
-                // // if (argv.length() == 2 && argv.getString(1).equals("MOVE ELDER_SELF ONLY") ) {
-                //         if (hasTimeTraved && readComments) {
-                //             controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
-                //         } else if (!readComments) {
-                //             controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
-                //         }
-                //     } else {
-                //         controller.dotick(Direction.valueOf(argv.getString(0)), hasTimeTraved);
-                //     }
                 isTick = true;
                 break;   
             case "build":
@@ -155,6 +152,8 @@ public class FileReader {
                     e.printStackTrace();
                 }
                 break;
+            case "rewind":
+                controller.rewind(argv.getInt(0));
             default:
                 break;
         }

@@ -1,19 +1,18 @@
-package dungeonmania.collectableEntities.durabilityEntities.buildableEntities;
+package dungeonmania.buildableEntities;
 
 import dungeonmania.Entity;
-import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
-public class MidnightArmour extends DurabilityEntity implements BonusDamageAdd, BonusDefenceAdd{
+public class MidnightArmour extends buildableEntity implements BonusDamageAdd, BonusDefenceAdd{
 
-    private int attack;
-    private int defence;
-    public MidnightArmour(String type, int attack, int defence, String id) {
-        super(type, 99999);
+    private double attack;
+    private double defence;
+    public MidnightArmour(String type, double attack, double defence, String id) {
+        super(type, id);
         this.attack = attack;
         this.defence = defence;
-        setEntityId(id);
     }
 
     @Override
@@ -38,6 +37,10 @@ public class MidnightArmour extends DurabilityEntity implements BonusDamageAdd, 
     public boolean equals(BonusDamageAdd obj) {
         // TODO Auto-generated method stub
         return false;
+    }
+    @Override
+    public ItemResponse toItemResponse() {
+        return getItemResponse();
     }
     
 }

@@ -6,6 +6,7 @@ import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.Key;
 import dungeonmania.collectableEntities.SunStone;
+import dungeonmania.collectableEntities.openable;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.movingEntities.Spider;
 
@@ -36,34 +37,22 @@ public class Door extends StaticEntity {
         opened = true;
     }
 
+    public int getKey() {
+        return this.key;
+    }
+
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
         // DO nothing by defalut
         if (entity instanceof Player && !opened) {
             Player player = (Player) entity;
-            // If the player has a sunstone, open the door
-            Boolean canOpen = player.getInventoryList().stream().anyMatch(e -> {
-                if (e instanceof SunStone) {
-                    open();
-                    return true;
-                } 
-                return false;
-            });
-            // If no Sunstone, check if there is a key
-            if (!canOpen) {
-                canOpen = player.getInventoryList().stream().anyMatch(e -> {
-                if (e instanceof Key) {
-                    // Check if the key is for this door
-                    int keyKey = ((Key) e).getKey();
-                    if (keyKey == key) {
-                        open();
-                        player.getInventory().removeFromInventoryList(e);
-                        return true;
-                    }
+                Boolean canOpen = player.getInventoryList().stream().anyMatch(e -> {
+                if (e instanceof openable) {
+                    openable openEntity = (openable) e;
+                    return openEntity.open(this, player);
                 }
                 return false;
             });
-            }
             // If the door can be opened, move the player
             if (canOpen && DungeonMap.isaccessible(map, getLocation(), entity)) {
                 player.setLocation(getLocation());
