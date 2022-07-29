@@ -524,68 +524,6 @@ public class StaticEntityTests {
 	}
 
 	@Test
-	@DisplayName("Test player stuck on swamp tile")
-	public void TestSwampTileStuckOnSwamp() {
-		DungeonManiaController dmc;
-		dmc = new DungeonManiaController();
-		DungeonResponse res = dmc.newGame("d_SwampTileTest_player",
-						"c_collectTests");
-
-		// move to the swamp
-		res = dmc.tick(Direction.RIGHT);
-		assertEquals(new Position(2, 1), getEntities(res, "player").get(0).getPosition());
-
-		// stuck on the swamp
-		res = dmc.tick(Direction.RIGHT);
-		assertEquals(new Position(3, 1), getEntities(res, "player").get(0).getPosition());
-	}
-
-	// @Test
-	// @DisplayName("Test player can leave the swamp after the ticks of number of movement_factor")
-	// public void TestSwampTileLeaveSwamp() {
-	// 	DungeonManiaController dmc;
-	// 	dmc = new DungeonManiaController();
-	// 	DungeonResponse res = dmc.newGame("d_SwampTileTest_player",
-	// 					"c_collectTests");
-
-	// 	// move to the swamp
-	// 	res = dmc.tick(Direction.RIGHT);
-
-	// 	// stuck on the swamp
-	// 	res = dmc.tick(Direction.RIGHT);
-	// 	res = dmc.tick(Direction.RIGHT);
-	// 	assertEquals(new Position(2, 1), getEntities(res, "player").get(0).getPosition());
-
-	// 	// Leave the swamp
-	// 	res = dmc.tick(Direction.RIGHT);
-	// 	assertEquals(new Position(3, 1), getEntities(res, "player").get(0).getPosition());
-	// }
-
-	// @Test
-	// @DisplayName("Test using item on a swamp also counts into ticks of movement factor")
-	// public void TestSwampTileUsingItemOnIt() {
-	// 	DungeonManiaController dmc;
-	// 	dmc = new DungeonManiaController();
-	// 	DungeonResponse res = dmc.newGame("d_SwampTileTest_player",
-	// 					"c_collectTests");
-
-	// 	// move to the swamp
-	// 	res = dmc.tick(Direction.RIGHT);
-
-	// 	// Use a item
-	// 	String sceptreId = getInventory(res, "invincibility_potion").get(0).getId();
-    //     res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
-
-	// 	// Still stuck on the swamp as movement factor is 2
-	// 	res = dmc.tick(Direction.RIGHT);
-	// 	assertEquals(new Position(2, 1), getEntities(res, "player").get(0).getPosition());
-
-	// 	// Leave the swamp
-	// 	res = dmc.tick(Direction.RIGHT);
-	// 	assertEquals(new Position(3, 1), getEntities(res, "player").get(0).getPosition());
-	// }
-
-	@Test
 	@DisplayName("Test zombie will stuck on the swamp")
 	public void TestSwampWithZombie() {
 		DungeonManiaController dmc;
@@ -639,16 +577,60 @@ public class StaticEntityTests {
 
 		// spider walk on swamp
 		res = dmc.tick(Direction.DOWN);
-		assertEquals(new Position(5, 1), getEntities(res, "spider").get(0).getPosition());
+		assertEquals(new Position(5, 0), getEntities(res, "spider").get(0).getPosition());
 
 		// stuck on swamp
-		// res = dmc.tick(Direction.DOWN);
-		// res = dmc.tick(Direction.DOWN);
-		// assertEquals(new Position(4, 1), getEntities(res, "spider").get(0).getPosition());
+		 res = dmc.tick(Direction.DOWN);
+		 res = dmc.tick(Direction.DOWN);
+		assertEquals(new Position(5, 0), getEntities(res, "spider").get(0).getPosition());
 
-		// // Leave the swamp
-		// res = dmc.tick(Direction.DOWN);
-		// assertNotEquals(new Position(4, 1), getEntities(res, "spider").get(0).getPosition());
+		// Leave the swamp
+		res = dmc.tick(Direction.DOWN);
+		assertNotEquals(new Position(5, 0), getEntities(res, "spider").get(0).getPosition());
+	}
+
+	@Test
+	@DisplayName("Test assassin will stuck on the swamp")
+	public void TestSwampWithAssassin() {
+		DungeonManiaController dmc;
+		dmc = new DungeonManiaController();
+		DungeonResponse res = dmc.newGame("d_SwampTileTest_assassin",
+						"c_collectTests");
+
+		// mercenary walk on swamp
+		res = dmc.tick(Direction.LEFT);
+		assertEquals(new Position(4, 1), getEntities(res, "assassin").get(0).getPosition());
+
+		// stuck on swamp
+		res = dmc.tick(Direction.LEFT);
+		res = dmc.tick(Direction.LEFT);
+		assertEquals(new Position(4, 1), getEntities(res, "assassin").get(0).getPosition());
+
+		// Leave the swamp
+		res = dmc.tick(Direction.LEFT);
+		assertEquals(new Position(3, 1), getEntities(res, "assassin").get(0).getPosition());
+	}
+
+	@Test
+	@DisplayName("Test hydra will stuck on the swamp")
+	public void TestSwampWithHydra() {
+		DungeonManiaController dmc;
+		dmc = new DungeonManiaController();
+		DungeonResponse res = dmc.newGame("d_SwampTileTest_hydra",
+						"c_collectTests");
+
+		// mercenary walk on swamp
+		res = dmc.tick(Direction.LEFT);
+		assertEquals(new Position(4, 1), getEntities(res, "hydra").get(0).getPosition());
+
+		// stuck on swamp
+		res = dmc.tick(Direction.LEFT);
+		res = dmc.tick(Direction.LEFT);
+		assertEquals(new Position(4, 1), getEntities(res, "hydra").get(0).getPosition());
+
+		// Leave the swamp
+		res = dmc.tick(Direction.LEFT);
+		assertEquals(new Position(3, 1), getEntities(res, "hydra").get(0).getPosition());
 	}
 
 }
