@@ -29,5 +29,4 @@ public class SwampTile extends StaticEntity{
         // TODO Auto-generated method stub
         return true;
     }
-    
 }
