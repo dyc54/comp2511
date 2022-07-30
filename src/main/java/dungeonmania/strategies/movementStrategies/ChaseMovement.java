@@ -29,24 +29,9 @@ public class ChaseMovement implements MovementStrategy{
         }
         DijstraAlgorithm dijstraAlgorithm = new DijstraAlgorithm(location, dungeonMap, getLocation());
         next = dijstraAlgorithm.dijstra();
-        /* TreeMap<Integer, Location> ordered = new TreeMap<>();
-        List<Location> choices = MovementOptions.decodeLocationsArguments(this.location, possible);
-        choices.stream().forEach(choice -> System.out.println(choice));
-        choices.stream().forEach(ele -> {
-            int distance = location.distance(ele);
-            System.out.println("DISTANCE: ++++++"+distance);
-            ordered.put(Integer.valueOf(distance), ele);
-        });
-        System.out.println(ordered.keySet()+"**************");
-        for (Integer cloestDistance : ordered.keySet()) {
-            Location temp = ordered.get(cloestDistance);
-            if (choices.contains(temp)) {
-                next = temp;
-                break;
-            }
-        } */
         return next;
     }
+    
     /**
      * Passed in the location arguments which have the locations can be moved to.
      */

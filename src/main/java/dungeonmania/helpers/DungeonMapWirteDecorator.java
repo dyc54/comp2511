@@ -19,7 +19,6 @@ public class DungeonMapWirteDecorator extends DungeonMapDecorator{
         Collection<Entity> removed =  map.getEntities(location, radius);
         removed.removeIf(entity -> entity instanceof Player);
         removed.stream().forEach(entity -> remove(entity));
-        // map.UpdateAllEntities();
     }
 
     public void add(Entity entity) {

@@ -6,15 +6,15 @@ import dungeonmania.strategies.attackStrategies.BonusDamageMul;
 
 public class Bow extends BuildableEntity implements BonusDamageMul, Durability{
     private static final int attack = 2;
-    private int Bow_durability;
+    private int BowDurability;
 
-    public Bow(String type, int Bow_durability) {
+    public Bow(String type, int BowDurability) {
         super(type);
-        this.Bow_durability = Bow_durability;
+        this.BowDurability = BowDurability;
     }
-    public Bow(String id, String type, int Bow_durability) {
+    public Bow(String id, String type, int BowDurability) {
         super(type, id);
-        this.Bow_durability = Bow_durability;
+        this.BowDurability = BowDurability;
     }
 
     public static int getAttack() {
@@ -30,23 +30,19 @@ public class Bow extends BuildableEntity implements BonusDamageMul, Durability{
     public boolean equals(BonusDamageMul obj) {
         return obj == this;
     }
+
     @Override
     public ItemResponse toItemResponse() {
         return getItemResponse();
     }
+
     @Override
     public void setDurability() {
-        // TODO Auto-generated method stub
-        System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), Bow_durability, Bow_durability - 1));
-        this.Bow_durability -= 1;
+        this.BowDurability -= 1;
     }
+    
     @Override
     public boolean checkDurability() {
-        // TODO Auto-generated method stub
-        System.out.println(String.format("Item %s DUration %d ", getEntityId(), Bow_durability));
-        return Bow_durability == 0;
+        return BowDurability == 0;
     }
-
-
-
 }

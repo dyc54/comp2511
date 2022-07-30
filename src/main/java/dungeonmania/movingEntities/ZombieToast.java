@@ -13,16 +13,14 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy, MovementFactor{
     
-    public ZombieToast(String type, Location location, double zombie_attack, double zombie_health) {
-        super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack), new RandomMovement());
+    public ZombieToast(String type, Location location, double zombieAttack, double zombieHealth) {
+        super(type, location, zombieHealth, new BaseAttackStrategy(zombieAttack), new RandomMovement());
     }
 
-    
     @Override
     public boolean movement(DungeonMap dungeonMap) {
 
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
-        System.out.println(choice);
         Location next = getMove().MoveOptions(choice).nextLocation(getLocation(),dungeonMap);
         if (!CheckMovementFactor()) {
             return false;

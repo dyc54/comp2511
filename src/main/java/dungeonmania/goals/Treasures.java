@@ -11,9 +11,9 @@ public class Treasures implements GoalComponent{
         TargetNum = 0;
         GoldNum = 0;
     }
+
     @Override
     public boolean hasAchieved() {
-        System.out.println(String.format("Gold %d/%d", GoldNum, TargetNum));
         return GoldNum >= TargetNum;
     }
 
@@ -27,6 +27,7 @@ public class Treasures implements GoalComponent{
         TargetNum = config.treasureGoal;
         return this;
     }
+
     @Override
     public String toString() {
         if (!hasAchieved()) {
@@ -35,6 +36,7 @@ public class Treasures implements GoalComponent{
             return "";
         }
     }
+
     @Override
     public GoalComponent getPlayerData(Player player) {
         GoldNum = player.getInventory().getItems("treasure").size() + player.getInventory().getItems("sun_stone").size();

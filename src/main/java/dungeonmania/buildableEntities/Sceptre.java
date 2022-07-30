@@ -69,10 +69,7 @@ public class Sceptre extends BuildableEntity implements Useable, Effect{
 
     @Override
     public String applyEffect() {
-        // TODO Auto-generated method stub
         return null;
     }
-    
-
     
 }

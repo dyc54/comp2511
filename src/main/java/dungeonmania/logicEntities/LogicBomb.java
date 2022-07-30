@@ -23,23 +23,19 @@ public class LogicBomb extends Bomb implements LogicObserver {
     }
     @Override
     public void active() {
-        // TODO Auto-generated method stub
         boom();
         
     }
     @Override
     public boolean isActivated() {
-        // TODO Auto-generated method stub
         return false;
     }
     @Override
     public void inactive() {
-        // TODO Auto-generated method stub
         
     }
     @Override
     public boolean equals(LogicEntity entity) {
-        // TODO Auto-generated method stub
         if (entity == null) {
             return false;
         }
@@ -47,27 +43,12 @@ public class LogicBomb extends Bomb implements LogicObserver {
     }
     @Override
     public void init(DungeonMap map) {
-        // TODO Auto-generated method stub
         LogicalEntitiesFactroy.init(this, map);
         
     }
     
     @Override
     public void use(DungeonMap map, Player player) {
-        // this.setLocation(player.getLocation());
-        // this.hasPlaced = true;
-        // map.addEntity(this);
-        // map.getPlayer().removeInventoryList(this);
-        // map.getFourNearEntities(player.getLocation()).stream().forEach(e -> {
-        //     if (e instanceof FloorSwitch) {
-        //         FloorSwitch floorSwitch = (FloorSwitch) e;
-        //         if (floorSwitch.getTrigger()) {
-        //             this.update(map);
-        //         } else {
-        //             floorSwitch.bombAttach(this);
-        //         }
-        //     }
-        // });
         this.setLocation(player.getLocation());
         map.addEntity(this);
         map.getPlayer().removeInventoryList(this);
@@ -79,16 +60,13 @@ public class LogicBomb extends Bomb implements LogicObserver {
     }
     @Override
     public String getId() {
-        // TODO Auto-generated method stub
         return getEntityId();
     }
     @Override
     public void update(LogicSubject subject) {
-        // TODO Auto-generated method stub
         if (!subjects.contains(subject)) {
             subjects.add(subject);
         }
-        System.out.println("bomb was notified");
         if (logic.isTrue() && hasPlaced()) {
             active();
         } 
@@ -96,7 +74,6 @@ public class LogicBomb extends Bomb implements LogicObserver {
     }
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
         subjects.clear();
     }
     @Override

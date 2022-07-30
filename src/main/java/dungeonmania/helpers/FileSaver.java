@@ -66,62 +66,25 @@ public class FileSaver {
         
     }
     public void save(String fileName) {
-        save(fileName, 0);
-        // FileWriter file;
-        // try {
-        //     file = new FileWriter(FileSaver.filePath(fileName, branch),false);
-        //     // file = new FileWriter(String.format("%s/%s[%s].json", SAVED_PATH, fileName, branch),false);
-        //     JSONObject jsonObject = new JSONObject();
-        //     jsonObject.put("dungeonId", dungeonId);
-        //     jsonObject.put("dungeonName", dungeonName);
-        //     jsonObject.put("configName", configName);
-        //     jsonObject.put("branch", branch);
-        //     jsonObject.put("entities", initmap);
-        //     jsonObject.put("actions", actions);
-        //     jsonObject.put("tickCounter", tickCounter);
-        //     jsonObject.put("goal-condition", goals);
-        //     file.write(jsonObject.toString());
-        //     file.close();
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-        
-        
+        save(fileName, 0);    
     }
-    // private JSONObject entityJSONObject(Entity entity) {
-    //     // JSONObject entityObject = new JSONObject();
-    //     // entityObject.put("type", entity.getType());
-    //     // entityObject.put("x", entity.getLocation().getX());
-    //     // entityObject.put("y", entity.getLocation().getY());
-    //     // entityObject.put("id", entity.getEntityId());
-    //     return entityObject;
-    // }
+
     public FileSaver saveMap(DungeonMap map) {
-        // JSONArray entitiesArray = new JSONArray();
         initmap.put(map.getPlayer().toJSONObject());
         for (Entity entity: map) {
             if (!(entity instanceof Player)) {
                 initmap.put(entity.toJSONObject());
             }
         }
-        // initmap.put("entities", entitiesArray);
         return this;
     }
-    // public FileSaver saveAction(String action, int x, int y) {
-    //     JSONObject jsonObject = new JSONObject();
-    //     jsonObject.put("action", action);
-    //     JSONArray args = new JSONArray();
-    //     args.put(x);
-    //     args.put(y);
-    //     jsonObject.put("argv", args);
-    //     actions.put(jsonObject);
-    //     return this;
-    // }
+
     public void attachGoal(String goal) {
         JSONObject goals = new JSONObject();
         goals.put("goal", goal);
         this.goals = goals;
     }
+
     public <T> FileSaver saveAction(String action, Boolean isTick, T... argvs) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("action", action);
@@ -136,9 +99,11 @@ public class FileSaver {
         }
         return this;
     }
+
     public void setDungeonName(String name) {
         this.dungeonName = name;
     }
+    
     public void setDungeonId(String id) {
         this.dungeonId = id;
     }

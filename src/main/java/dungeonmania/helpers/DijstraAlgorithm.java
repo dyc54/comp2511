@@ -77,13 +77,11 @@ public class DijstraAlgorithm {
 
     private void outPut(int x, int y) {
         if (maze[x][y].checkPre()) {
-            System.out.println(source.getX() + " , " + source.getY());
             return;
         } else if (maze[x][y].checkNextPre()) {
             next = maze[x][y].getRealLocation();
         }
         outPut(maze[x][y].getPreMazeX(), maze[x][y].getPreMazeY());
-        System.out.println(maze[x][y].getRealX() + " , " + maze[x][y].getRealY());
     }
 
     private void buildMaze(Location real, int cost, boolean reachable) {

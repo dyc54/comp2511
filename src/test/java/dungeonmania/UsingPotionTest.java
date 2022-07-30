@@ -38,15 +38,12 @@ public class UsingPotionTest {
         double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
         double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
         double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
-        // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
         assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
         assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
         enemyHealth += round.getDeltaEnemyHealth();
         playerHealth += round.getDeltaCharacterHealth();
-        // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
         assertTrue(enemyHealth <= 0);
@@ -64,16 +61,12 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
         double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
         double bowbonus = bow ? 2 : 1;
         double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
-        // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
         assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus) < 0 ?  0 : enemyAttack - shieldbonus)/ 10));
         assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus) / 5));
         enemyHealth += round.getDeltaEnemyHealth();
         playerHealth += round.getDeltaCharacterHealth();
-        // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
-
         if (enemyDies) {
         assertTrue(enemyHealth <= 0);
         } else {

@@ -11,6 +11,7 @@ public class RandomMovement implements MovementStrategy{
     public RandomMovement() {
         possible = "udlr";
     }
+    
     /**
      * @param location current entity's location
      */
@@ -18,15 +19,14 @@ public class RandomMovement implements MovementStrategy{
     public Location nextLocation(Location location, DungeonMap dungeonMap) {
         
         List<Location> choices = MovementOptions.decodeLocationsArguments(location, possible);
-        choices.stream().forEach(lo -> System.out.println(lo.toString()));
         if (choices.size() != 0) {
             Random randomchoicer = new Random(location.hashCode());
             Location next = choices.get(randomchoicer.nextInt(choices.size()));
-            System.out.println("NEXTLOCATION: "+next+"CHOICE: "+choices);
             return next;
         }
         return location;   
     }
+
     /**
      * Passed in the location arguments which have the locations can be moved to.
      */

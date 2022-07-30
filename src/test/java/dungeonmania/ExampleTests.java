@@ -203,9 +203,6 @@ public class ExampleTests {
         double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
 
         for (RoundResponse round : rounds) {
-            // System.out.println("TEST OUTPUT");
-            // System.out.println(round.getDeltaCharacterHealth());
-            // System.out.println(-(enemyAttack / 10));
             assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
             assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
             enemyHealth += round.getDeltaEnemyHealth();
@@ -245,12 +242,10 @@ public class ExampleTests {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("d_distorySpawner", "c_spiderTest_basicMovement");
-        System.out.println("****before" + getEntities(res, "zombie_toast_spawner").get(0).getPosition());
         res = dmc.tick(Direction.DOWN); // pick up sword
         assertEquals(1, getInventory(res, "sword").size());
         assertEquals(1, getEntities(res, "zombie_toast_spawner").size());
         String spawnerId = getEntities(res, "zombie_toast_spawner").get(0).getId();
-        System.out.println("*****after" + getEntities(res, "zombie_toast_spawner").get(0).getPosition());
         res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
         assertEquals(0, getEntities(res, "zombie_toast_spawner").size());
     }

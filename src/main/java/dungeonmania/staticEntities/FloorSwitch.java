@@ -36,9 +36,7 @@ public class FloorSwitch extends StaticEntity implements LogicSubject {
     }
 
     public void bombAttach(Bomb bomb) {
-        // if (!(bomb instanceof LogicEntity)) {
             bombs.add(bomb);
-        // }
     }
 
     public void notifyAllBombs() {
@@ -64,26 +62,22 @@ public class FloorSwitch extends StaticEntity implements LogicSubject {
 
     @Override
     public void active() {
-        // TODO Auto-generated method stub
         setTrigger(true);
     }
 
     @Override
     public boolean isActivated() {
-        // TODO Auto-generated method stub
         return trigger;
     }
 
     @Override
     public void inactive() {
-        // TODO Auto-generated method stub
         setTrigger(false);
         
     }
 
     @Override
     public boolean equals(LogicEntity entity) {
-        // TODO Auto-generated method stub
         if (entity == null) {
             return false;
         }
@@ -92,19 +86,15 @@ public class FloorSwitch extends StaticEntity implements LogicSubject {
 
     @Override
     public void init(DungeonMap map) {
-        // TODO Auto-generated method stub
-        // LogicalEntitiesFactroy.init(this, map);
     }
 
     @Override
     public String getId() {
-        // TODO Auto-generated method stub
         return getEntityId();
     }
 
     @Override
     public void attach(LogicObserver observer) {
-        // TODO Auto-generated method stub
         if (!observer.equals(this)) {
             observers.add(observer);
             observer.update(this);
@@ -113,23 +103,16 @@ public class FloorSwitch extends StaticEntity implements LogicSubject {
 
     @Override
     public void detach(LogicObserver observer) {
-        // TODO Auto-generated method stub
         observers.remove(observer);
         
     }
 
     @Override
     public void pull(LogicObserver observer) {
-        // TODO Auto-generated method stub
-        if (observer instanceof Bomb) {
-            
-        }
-        
     }
 
     @Override
     public void notifyLogicObserver() {
-        // TODO Auto-generated method stub
         observers.stream().forEach(observer -> {
             if (!observer.equals(temp)) {
                 observer.update(this);

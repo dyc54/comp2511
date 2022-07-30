@@ -22,24 +22,31 @@ public abstract class MovingEntity extends Entity implements BattleStrategyWithP
         this.health = health;
         this.movementFactor = 0;
     }
+
     public void setAttack(AttackStrategy attack) {
         this.attack = attack;
     }
+
     public AttackStrategy getAttack() {
         return attack;
     }
+
     public int getMovementFactor() {
         return this.movementFactor;
     }
+
     public void setMovementFactor(int movementFactor) {
         this.movementFactor = movementFactor;
     }
+
     public double getHealth() {
         return health;
     }
+
     public void setHealth(double health) {
         this.health = health;
     }
+
     @Override
     public boolean subHealth(double damage) {
         this.health = health - damage;
@@ -49,25 +56,31 @@ public abstract class MovingEntity extends Entity implements BattleStrategyWithP
         }
         return true;
     }
+
     public MovementStrategy getMove() {
         return move;
     }
+
     public void setMove(MovementStrategy move) {
         this.move = move;
     }
+
     public MovementStrategy setMove(String options) {
         this.move.MoveOptions(options);
         return move;
     }
+
     @Override
     public boolean battleWith(Player player) {
         return subHealth(battleDamageFrom(player));
     }
+
     @Override
     public double battleDamageFrom(Player player) {
         AttackStrategy attackStrayegy = player.getAttackStrategy();
         return attackStrayegy.attackDamage() / 5.0;
     }
+
     @Override
     public boolean isAlive() {
         return getHealth() > 0.0;
@@ -81,8 +94,6 @@ public abstract class MovingEntity extends Entity implements BattleStrategyWithP
 
     @Override
     public boolean CheckMovementFactor() {
-        System.out.println("----------------movementfactor zombie--------------");
-        System.out.println(this.movementFactor);
         if (this.movementFactor > 0) {
             this.movementFactor -= 1;
             return false;

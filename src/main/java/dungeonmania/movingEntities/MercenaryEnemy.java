@@ -13,14 +13,14 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
     
-    public MercenaryEnemy(String type, Location location, double mercenary_attack, double mercenary_health,
-            int bribe_amount, int bribe_radius, double ally_attack, double ally_defence) {
-        super(type, location, mercenary_attack, mercenary_health, bribe_amount, bribe_radius, ally_attack, ally_defence);
+    public MercenaryEnemy(String type, Location location, double mercenaryAttack, double mercenaryHealth,
+            int bribeAmount, int bribeRadius, double allyAttack, double allyDefence) {
+        super(type, location, mercenaryAttack, mercenaryHealth, bribeAmount, bribeRadius, allyAttack, allyDefence);
     }
 
     public MercenaryEnemy(MercenaryAlly mercenary) {
         super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
-                mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
+                mercenary.getBribeAmount(), mercenary.getBribeRadius(), mercenary.getAllyAttack(), mercenary.getAllyDefence());
     }
 
 
@@ -28,10 +28,12 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
 	public AttackStrategy getAttackStrayegy() {
 		return getAttack();
 	}
+
 	@Override
 	public String getEnemyId() {
 		return getEntityId();
 	}
+
 	@Override
 	public String getEnemyType() {
 		return getType();
@@ -45,7 +47,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
         playerLocation = p.getLocation();
         Location next = new Location();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
-        System.out.println("ENEMT MOVEMENT++++++++++++++++++++");
         if (!CheckMovementFactor()) {
             return false;
         }
@@ -54,7 +55,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
         } else {
             next = getMove().MoveOptions(choice).nextLocation(playerLocation, dungeonMap);
         }
-        System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
         setLocation(next);
         dungeonMap.interactAll(this);
         dungeonMap.UpdateEntity(this);
@@ -63,23 +63,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
     }
     @Override
     public boolean interact(Player player, DungeonMap dungeonMap) {
-        // player.getInventory().print();
-        // System.out.println(player.getInventory().countItem("treasure") >= super.getBribe_amount() );
-        // System.out.println(player.getLocation().distance(getLocation()) <= getBribe_radius());
-        // if (player.getInventory().countItem("treasure") >= super.getBribe_amount() 
-        //     && player.getLocation().distance(getLocation()) <= getBribe_radius()) {
-        //     MercenaryAlly ally = new MercenaryAlly(this);
-        //     ally.setEntityId(String.valueOf(getEntityId()));
-        //     dungeonMap.removeEntity(getEntityId());
-        //     dungeonMap.addEntity(ally);
-        //     System.out.println("pay for mercenary");
-            
-        //     player.getAttackStrategy().bonusDamage(ally);
-        //     player.getDefenceStrayegy().bonusDefence(ally);
-        //     player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount(), player);
-        //     player.attach(ally);
-        //     return true;
-        // }
         if (player.hasSceptre()) {
             return true;
         }
@@ -104,10 +87,7 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
         
     }
     public void update(Player player) {
-        System.out.println(player.hasEffect());
         if (player.hasEffect()) {
-            System.out.println(player.getCurrentEffect().applyEffect());
-            System.out.println(player.getCurrentEffect().applyEffect().equals("Invisibility"));
         }
         if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invisibility")) {
             setMove(new RandomMovement());

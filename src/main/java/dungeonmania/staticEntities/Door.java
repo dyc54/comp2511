@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.collectableEntities.openable;
+import dungeonmania.collectableEntities.Openable;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.movingEntities.Spider;
 
@@ -17,12 +17,15 @@ public class Door extends StaticEntity {
         this.key = key;
         opened = false;
     }
+
     public boolean isOpened() {
         return opened;
     }
+
     public void close() {
         opened = false;
     }
+
     @Override
     public boolean isAccessible(Entity entity) {
         if (entity instanceof Spider) {
@@ -45,8 +48,8 @@ public class Door extends StaticEntity {
         if (entity instanceof Player && !opened) {
             Player player = (Player) entity;
                 Boolean canOpen = player.getInventoryList().stream().anyMatch(e -> {
-                if (e instanceof openable) {
-                    openable openEntity = (openable) e;
+                if (e instanceof Openable) {
+                    Openable openEntity = (Openable) e;
                     return openEntity.open(this, player);
                 }
                 return false;
@@ -64,6 +67,7 @@ public class Door extends StaticEntity {
         // do nothing by defalut
         return DungeonMap.isaccessible(map, getLocation(), entity);
     }
+    
     @Override
     public JSONObject toJSONObject() {
         return super.toJSONObject().put("key", key);

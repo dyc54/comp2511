@@ -8,5 +8,4 @@ public interface Enemy {
     public void setHealth(double health);
     public String getEnemyId();
     public String getEnemyType();
-    // public 
 }

@@ -15,7 +15,6 @@ public abstract class Entity{
     private int count;
     private String newID(String type){
         return type + UUID.randomUUID();
-        // return type+Integer.valueOf(count).toString();
     }
     
     public Entity(String type, Location location) {
@@ -32,10 +31,6 @@ public abstract class Entity{
     public Entity(String type) {
         this(type, null);
     }
-    // public Entity(Entity entity) {
-    //     this(entity.type, entity.location.clone());
-    //     this.EntityId = entity.EntityId;
-    // }
 
     public Location getLocation() {
         return location;
@@ -44,13 +39,15 @@ public abstract class Entity{
     public String getEntityId() {
         return EntityId;
     }
+
     public void setLocation(Location location) {
-        System.out.println(location);
         this.location.setLocation(location);
     }
+
     public void setRandomId() {
         this.EntityId = newID(type);
     }
+
     public void setEntityId(String EntityId) {
         this.EntityId = EntityId;
     }
@@ -58,6 +55,7 @@ public abstract class Entity{
     public void setType(String type) {
         this.type = type;
     }
+
     public EntityResponse getEntityResponse() {
         return new EntityResponse(getEntityId(), getType(), new Position(getLocation().getX(), getLocation().getY()), false);
     }
@@ -83,6 +81,7 @@ public abstract class Entity{
         }
         return false;
     }
+
     public JSONObject toJSONObject() {
         JSONObject obj = new JSONObject();
         obj.put("type", type);
@@ -91,6 +90,7 @@ public abstract class Entity{
         obj.put("id", EntityId);
         return obj;
     }
+
     @Override
     public int hashCode() {
         return EntityId.hashCode();
@@ -101,4 +101,5 @@ public abstract class Entity{
     public static <T extends Entity> boolean equals(T entity1, String entity2) {
         return ((Entity) entity1).equals(entity2);
     }
+    
 }

@@ -20,28 +20,26 @@ import dungeonmania.movingEntities.ZombieToast;
 import dungeonmania.staticEntities.*;
 import dungeonmania.timeTravel.TimeTravellingPortal;
 import dungeonmania.timeTravel.TimeTurner;
+
 /**
  * create Entity
  */
 public class EntityFactory {
     public static Entity newEntity(JSONObject entity, Config config, DungeonMap map, boolean useId) {
-        // System.out.println(entity.toString());
         if (entity.has("id") && useId) {
-            // System.out.println("branch 1");
             Entity entity2 = newEntities(entity, config, map);
             entity2.setEntityId(entity.getString("id"));
             return entity2;
         } else {
-            // System.out.println("branch 2");
             return newEntities(entity, config, map);
         }
         
     }
+
     private static Entity newEntities(JSONObject entity, Config config, DungeonMap map) {
         String type = entity.getString("type");
         int x = entity.getInt("x");
         int y = entity.getInt("y");
-        System.out.println(String.format("new entity %s at <%d,%d>", type, x, y));
         int key = 0;
         int factor = 0;
         switch (type) {

@@ -425,7 +425,6 @@ public class PersistenceTests {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(1, getInventory(res, "treasure").size());
         String assassinId = getEntities(res, "assassin").get(0).getId();
-        System.out.println(getEntities(res, "assassin").get(0).getId());
         res = assertDoesNotThrow(()-> dmc.interact(assassinId));
         
         assertEquals(0, getInventory(res, "treasure").size());

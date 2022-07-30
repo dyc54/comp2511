@@ -45,7 +45,7 @@ public class testGenerateDungeon {
         assertEquals(1, getEntities(res, "player").size());
         assertEquals(new Position(0, 0), getEntities(res, "player").get(0).getPosition());
         assertEquals(new Position(1, 1), getEntities(res, "exit").get(0).getPosition());
-
+        
     }
     @Test
     public void testPlayerMovement() {

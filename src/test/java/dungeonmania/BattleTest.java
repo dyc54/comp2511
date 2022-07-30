@@ -41,15 +41,12 @@ public class BattleTest {
             double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
             double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
             double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
-            // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
             assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
-            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
             assertTrue(enemyHealth <= 0);
@@ -67,7 +64,6 @@ public class BattleTest {
             double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
             double bowbonus = bow ? 2 : 1;
             double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
-            // System.out.println(playerAttack);
         int i = 0;
         for (RoundResponse round : rounds) {
             if (i == expRound) {
@@ -78,9 +74,7 @@ public class BattleTest {
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
             i++;
-            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
     }
     private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies,
                 String configFilePath,boolean sword, boolean shield, boolean bow) {
@@ -92,15 +86,12 @@ public class BattleTest {
             double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
             double bowbonus = bow ? 2 : 1;
             double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
-            // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus) < 0 ?  0 : enemyAttack - shieldbonus)/ 10));
             assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus) / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
-            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
             assertTrue(enemyHealth <= 0);
@@ -121,15 +112,12 @@ public class BattleTest {
             double MidnightArmourAttackBonus = MidnightArmour ? Double.parseDouble(getValueFromConfigFile("midnight_armour_attack", configFilePath)) : 0;
             double MidnightArmourDefenceBonus = MidnightArmour ? Double.parseDouble(getValueFromConfigFile("midnight_armour_defence", configFilePath)) : 0;
             double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
-            // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus - MidnightArmourDefenceBonus) < 0 ?  0 : enemyAttack - shieldbonus - MidnightArmourDefenceBonus)/ 10));
             assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus + MidnightArmourAttackBonus) / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
-            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
             assertTrue(enemyHealth <= 0);
@@ -211,9 +199,6 @@ public class BattleTest {
             assertTrue(postBattleResponse.getBattles().size() == 1);
             assertEquals(getEntities(postBattleResponse, "spider").get(0).getPosition(), new Position(0,0));
         });
-        // DungeonResponse ; 
-        // });
-        // assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak");
     }
     
     @Test
@@ -232,8 +217,6 @@ public class BattleTest {
 
     @Test
     public void testBattleWithEnemyInvincibilityPotionLost() {
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
         assertDoesNotThrow( () -> {
             DungeonManiaController controller = new DungeonManiaController();
             DungeonResponse initialResponse = controller.newGame("d_potionWithZombie", "c_BattleTest_StrongEnemies");
@@ -258,7 +241,6 @@ public class BattleTest {
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);// DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         assertTrue(postBattleResponse.getBattles().size() == 0);
         assertTrue(getEntities(postBattleResponse, "spider").size() == 1);
-        //         "c_battleTests_basicMercenaryPlayerDies");
     }
     @Test
     public void testBattleWithEnemySwordWin() {
@@ -281,9 +263,6 @@ public class BattleTest {
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
         assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak", false, false, true);
-        
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
     }
 
     @Test

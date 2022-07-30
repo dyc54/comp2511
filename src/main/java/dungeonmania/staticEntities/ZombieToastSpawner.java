@@ -10,18 +10,18 @@ import dungeonmania.movingEntities.ZombieToast;
 public class ZombieToastSpawner extends StaticEntity implements Interact {
     private int timer;
     private int zombieSpawnRate;
-    private double zombie_attack;
-    private double zombie_health;
+    private double zombieAttack;
+    private double zombieHealth;
     private DungeonMap map;
     private int counter;
 
-    public ZombieToastSpawner(String type, int x, int y, int zombieSpawnRate, double zombie_attack, double zombie_health,
+    public ZombieToastSpawner(String type, int x, int y, int zombieSpawnRate, double zombieAttack, double zombieHealth,
             DungeonMap map) {
         super(type, Location.AsLocation(x, y));
         this.zombieSpawnRate = zombieSpawnRate;
         this.timer = 0;
-        this.zombie_attack = zombie_attack;
-        this.zombie_health = zombie_health;
+        this.zombieAttack = zombieAttack;
+        this.zombieHealth = zombieHealth;
         this.map = map;
         counter = 0;
     }
@@ -49,12 +49,11 @@ public class ZombieToastSpawner extends StaticEntity implements Interact {
                     .allMatch(e -> (!CheckOpenSpace(e.apply(getLocation()).getX(), e.apply(getLocation()).getY())))) {
                 return;
             } else {
-                ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombie_attack,
-                        zombie_health);
+                ZombieToast zombie = new ZombieToast("zombie_toast", getLocation().clone(), zombieAttack,
+                        zombieHealth);
                 zombie.setEntityId(String.format("%s_%s_%s_%d", "zombie_toast", getType(), getLocation().toString(), counter));
                 zombie.movement(map);
                 map.UpdateEntity(zombie);
-                System.out.println("PUT ZOMBIE TO MAP");
                 counter++;
                 setTimer(0);
             }

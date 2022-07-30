@@ -26,7 +26,6 @@ public class MovementTest {
 
         for (int i = 0; i <= 20; i++) {
             res = dmc.tick(Direction.DOWN);
-            System.out.println(getEntities(res, "zombie_toast").get(0).getPosition());
             assertNotEquals(new Position(5,4), getEntities(res, "zombie_toast").get(0).getPosition());
             assertNotEquals(new Position(5,6), getEntities(res, "zombie_toast").get(0).getPosition());
             assertNotEquals(new Position(6,5), getEntities(res, "zombie_toast").get(0).getPosition());
@@ -42,7 +41,6 @@ public class MovementTest {
 
         for (int i = 0; i <= 5; i++) {
             res = dmc.tick(Direction.DOWN);
-            System.out.println(getEntities(res, "zombie_toast").get(0).getPosition());
             assertEquals(new Position(0,0,0), getEntities(res, "zombie_toast").get(0).getPosition());
         }
         
@@ -130,7 +128,6 @@ public class MovementTest {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(1, getInventory(res, "treasure").size());
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
-        System.out.println(getEntities(res, "mercenary").get(0).getId());
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
         
         assertEquals(0, getInventory(res, "treasure").size());
@@ -196,11 +193,7 @@ public class MovementTest {
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
         assertEquals(0, getInventory(res, "treasure").size()); 
         
-        System.out.println("--------before"+getEntities(res, "player").get(0).getPosition());
-        System.out.println("--------before"+getEntities(res, "mercenary").get(0).getPosition());
         res = dmc.tick(Direction.LEFT); // 1,0
-        System.out.println("--------after"+getEntities(res, "player").get(0).getPosition());
-        System.out.println("--------after"+getEntities(res, "mercenary").get(0).getPosition());
         /* assertEquals(getEntities(res, "player").get(0).getPosition(), getEntities(res, "mercenary").get(0).getPosition()); */
         Position playerPosition = getEntities(res, "player").get(0).getPosition();
         res = dmc.tick(Direction.DOWN);//1,1

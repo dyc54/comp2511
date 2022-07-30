@@ -8,9 +8,9 @@ public class SwampTile extends StaticEntity{
 
     private int movementFactor;
 
-    public SwampTile(String type, int x, int y, int movement_factor) {
+    public SwampTile(String type, int x, int y, int movementFactor) {
         super(type, x, y);
-        this.movementFactor = movement_factor;
+        this.movementFactor = movementFactor;
     }
 
     @Override
@@ -25,7 +25,6 @@ public class SwampTile extends StaticEntity{
 
     @Override
     public boolean isAccessible(Entity entity) {
-        // TODO Auto-generated method stub
         return true;
     }
 

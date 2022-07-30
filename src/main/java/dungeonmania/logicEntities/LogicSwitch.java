@@ -18,7 +18,6 @@ public class LogicSwitch extends FloorSwitch implements LogicObserver {
 
     @Override
     public void update(LogicSubject subject) {
-        // TODO Auto-generated method stub
         if (!subjects.contains(subject)) {
             subjects.add(subject);
         } else {
@@ -39,7 +38,6 @@ public class LogicSwitch extends FloorSwitch implements LogicObserver {
     }
     @Override
     public void init(DungeonMap map) {
-        // TODO Auto-generated method stub
         LogicalEntitiesFactroy.init(this, map);
     }
     

@@ -18,35 +18,32 @@ import dungeonmania.strategies.movementStrategies.RandomMovement;
 
 public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd, SceptreEffectObserver, Interact{
     
-    private int ally_attack;
-    private int ally_defence;
-    private double assassin_bribe_fail_rate;
-    private int assassin_recon_radius;
+    private int allyAttack;
+    private int allyDefence;
+    private double assassinBribeFailRate;
+    private int assassinReconRadius;
     public MercenaryAlly(Mercenary mercenary) {
         super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
-                mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
-            System.out.println("NEW NEW NEW");
+                mercenary.getBribeAmount(), mercenary.getBribeRadius(), mercenary.getAllyAttack(), mercenary.getAllyDefence());
     }
 
-    public MercenaryAlly(Mercenary mercenary, double assassin_bribe_fail_rate, int assassin_recon_radius) {
+    public MercenaryAlly(Mercenary mercenary, double assassinBribeFailRate, int assassinReconRadius) {
         super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
-                mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
-            this.assassin_bribe_fail_rate = assassin_bribe_fail_rate;
-            this.assassin_recon_radius = assassin_recon_radius;
-            System.out.println("NEW NEW NEW");
+                mercenary.getBribeAmount(), mercenary.getBribeRadius(), mercenary.getAllyAttack(), mercenary.getAllyDefence());
+            this.assassinBribeFailRate = assassinBribeFailRate;
+            this.assassinReconRadius = assassinReconRadius;
     }
     
     public double getFailRate() {
-        return this.assassin_bribe_fail_rate;
+        return this.assassinBribeFailRate;
     }
 
     public int getReconRadius() {
-        return this.assassin_recon_radius;
+        return this.assassinReconRadius;
     }
 
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        System.out.println("Ally MOveing");
         Player p = dungeonMap.getPlayer();
         String options = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         if (!CheckMovementFactor()) {
@@ -65,7 +62,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         if (p.getLocation().equals(next)) {
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 
-        System.out.println(String.format("Movement: Mercenary %s -> %s", getLocation(), next));
 
         setLocation(next);
         dungeonMap.interactAll(this);
@@ -82,7 +78,7 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public double damage() {
-        return ally_attack;
+        return allyAttack;
     }
 
     @Override
@@ -92,7 +88,7 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public double defence() {
-        return ally_defence;
+        return allyDefence;
     }
 
     @Override
@@ -102,7 +98,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public void SceptreUpdate(SceptreEffectSubject subject, DungeonMap dungeonMap) {
-        System.out.println("------------------- change to enemy -------------------");
         Mercenary enemy;
         if (this.getType().equals("mercenary")) {
             enemy = new MercenaryEnemy(this);
@@ -111,8 +106,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         }
         enemy.setEntityId(String.valueOf(getEntityId()));
         dungeonMap.removeEntity(getEntityId());
-        System.out.println("ENEMY POSITION: "+enemy.getLocation());
-        System.out.println("ENEMY Type: "+ enemy.getType());
         dungeonMap.addEntity(enemy);
         Player player = dungeonMap.getPlayer();
         player.getAttackStrategy().removeBounus(this);
@@ -143,7 +136,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public ItemResponse toItemResponse() {
-        // TODO Auto-generated method stub
         return null;
     }
 }

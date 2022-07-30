@@ -23,7 +23,6 @@ public class LightBulb extends StaticEntity implements LogicObserver{
 
     @Override
     public boolean isAccessible(Entity entity) {
-        // TODO Auto-generated method stub
         return true;
     }
 
@@ -34,26 +33,21 @@ public class LightBulb extends StaticEntity implements LogicObserver{
 
     @Override
     public boolean isActivated() {
-        // TODO Auto-generated method stub
         return getType().equals("light_bulb_on");
     }
 
     @Override
     public void inactive() {
-        // TODO Auto-generated method stub
         setType("light_bulb_off");        
     }
 
     @Override
     public void update(LogicSubject subject) {
-        // TODO Auto-generated method stub
-        System.out.println("bulb was notified (update)");
         if (!subjects.contains(subject)) {
             subjects.add(subject);
         }
         if (logic.isTrue()) {
             active();
-            System.out.println("bulb active");
         } else {
             inactive();
         }
@@ -80,7 +74,6 @@ public class LightBulb extends StaticEntity implements LogicObserver{
 
     @Override
     public String getId() {
-        // TODO Auto-generated method stub
         return getEntityId();
     }
     @Override
