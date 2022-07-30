@@ -27,21 +27,19 @@ public class Shield extends buildableEntity implements BonusDefenceAdd, Durabili
     public boolean equals(BonusDefenceAdd obj) {
         return this == obj;
     }
+
     @Override
     public ItemResponse toItemResponse() {
         return getItemResponse();
     }
+
     @Override
     public void setDurability() {
-        // TODO Auto-generated method stub
-        System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), shield_durability, shield_durability - 1));
         this.shield_durability -= 1;
     }
+
     @Override
     public boolean checkDurability() {
-        // TODO Auto-generated method stub
-        System.out.println(String.format("Item %s DUration %d ", getEntityId(), shield_durability));
-        
         return shield_durability == 0;
     }
 

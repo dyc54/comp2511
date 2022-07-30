@@ -16,6 +16,7 @@ public class TimeTravellingPortal extends StaticEntity{
     public boolean isAccessible(Entity entity) {
         return true;
     }
+    
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
         // do nothing by defalut

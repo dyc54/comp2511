@@ -45,7 +45,6 @@ public class FileReader {
             }
         } else {
             if (file.getName().equals(search)) {
-                System.out.println("FILE FOUND\n->"+file.getAbsolutePath());
                 return file;
             }
         }
@@ -101,17 +100,13 @@ public class FileReader {
         JSONObject json = new JSONObject(content);
         JSONArray actions = json.getJSONArray("actions");
         int tickCounter = json.getInt("tickCounter");
-        // boolean timeTravel = json.getInt("branch") != 0;
         int currTick = 0;
-        // DungeonManiaController temp = new DungeonManiaController();
-        // temp.newGame(json.getString("dungeonName"), json.getString("configName"));
         for (int i = 0; i < actions.length(); i++) {
             JSONObject action = actions.getJSONObject(i);
             if (isTick(action)) {
                 currTick++;
             }
             if (currTick == tick) {
-                System.out.println(String.format("action %d/%d, %s", i, tickCounter, action.toString()));
                 doAction(controller, action, true, true);
             }
         }
@@ -124,7 +119,6 @@ public class FileReader {
         String func = action.getString("action");
         JSONArray argv = action.getJSONArray("argv");
         boolean isTick = false;
-        System.out.println("Play action:");
         switch (func) {
             case "useItem":
                 try {

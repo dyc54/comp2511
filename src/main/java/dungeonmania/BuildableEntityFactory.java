@@ -28,6 +28,7 @@ public class BuildableEntityFactory {
         }
         throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));
     }
+    
     public static BuildableRecipe newRecipe(String type) throws IllegalArgumentException {
         switch (type) {
             case "bow":

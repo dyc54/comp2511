@@ -10,6 +10,7 @@ public class WeaponableAttackStrategy implements AttackStrategy{
         this.base = new BaseAttackStrategy(base);
         bonusdamages = new ArrayList<>();
     }
+
     @Override
     public double attackDamage() {
         return base.attackDamage() * bonusdamages.stream()
@@ -17,26 +18,31 @@ public class WeaponableAttackStrategy implements AttackStrategy{
                                                 .mapToDouble(Double::doubleValue)
                                                 .reduce(1.0, (a, b) -> a * b);
     }
+
     @Override
     public void bonusDamage(BonusDamageAdd attack) {
         base.bonusDamage(attack);
         
     }
+
     @Override
     public void bonusDamage(BonusDamageMul attack) {
         bonusdamages.add(attack);
         
     }
+
     @Override
     public void removeBounus(BonusDamageAdd attack) {
         base.removeBounus(attack);
         
     }
+
     @Override
     public void removeBounus(BonusDamageMul attack) {
         bonusdamages.remove(attack);
         
     }
+    
     @Override
     public int getIncreaseAmount() {
         return 0;

@@ -13,7 +13,6 @@ public class FollowingMovement implements MovementStrategy{
      */
     @Override
     public Location nextLocation(Location location, DungeonMap dungeonMap) {
-        System.out.println(String.format("Player Current at %s Prev at %s", location.toString(), playerPrevLocation.toString()));
         return playerPrevLocation;
     }
 

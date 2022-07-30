@@ -50,7 +50,5 @@ public class Mercenary extends MovingEntity implements Movement, PotionEffectObs
     public boolean movement(DungeonMap dungeonMap) {
         return false;
     }
-
-    // public abstract boolean interact(Player player, DungeonMap dungeonMap);
    
 }

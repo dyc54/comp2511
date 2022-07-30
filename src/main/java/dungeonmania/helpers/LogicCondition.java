@@ -15,6 +15,7 @@ public class LogicCondition<T> {
             this.type = superLogic;
         }
     }
+
     public static <T> boolean compareTwo(String type, LogicContent<T> a, LogicContent<T> b) {
         switch (type) {
             case and:
@@ -25,6 +26,7 @@ public class LogicCondition<T> {
                 return false;
         }
     }
+
     public boolean isTrue(LogicContent<T> content) {
         if (type.equals(superLogic)) {
             return content.isTrue();
@@ -32,9 +34,11 @@ public class LogicCondition<T> {
             return LogicCondition.compareTwo(type, content.getSubContentA(), content.getSubContentB());
         }
     }
+
     public String getLogic() {
         return type;
     }
+    
     @Override
     public String toString() {
         return type;

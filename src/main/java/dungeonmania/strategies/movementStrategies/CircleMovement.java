@@ -9,11 +9,11 @@ public class CircleMovement implements MovementStrategy {
     private int direction;
     private final double speed = 45;
     public CircleMovement(Location center) {
-        System.out.println("Center at" + center.toString());
         this.center = center.clone();
         this.current = 90;
         this.direction = -1;
     }
+
     /**
      * @param cure any locations
      */
@@ -35,7 +35,6 @@ public class CircleMovement implements MovementStrategy {
                 break;
             default:
                 break;
-
         }
         return this;
     }

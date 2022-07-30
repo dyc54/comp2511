@@ -21,6 +21,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
     public Spider(String type, Location location, double spider_attack, double spider_health) {
         super(type, location, spider_health, new BaseAttackStrategy(spider_attack), new CircleMovement(location));
     }
+
     private boolean checkhasBoulder(DungeonMap dungeonMap, Location next) {
         return dungeonMap.getEntities(next).stream().anyMatch(entity -> entity.getType().equals("boulder"));
 
@@ -38,7 +39,6 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
             if (checkhasBoulder(dungeonMap, temp)) {
                 return false;
             } else {
-                System.out.println("reverse next");
                 next = temp;
             }
         }
@@ -47,7 +47,6 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
         dungeonMap.UpdateEntity(this);
         return true;
     }
-
 
     @Override
     public AttackStrategy getAttackStrayegy() {
@@ -63,6 +62,7 @@ public class Spider extends MovingEntity implements EnemyMovement, Enemy {
     public String getEnemyId() {
         return getEntityId();
     }
+
     @Override
     public String getEnemyType() {
         return getType();

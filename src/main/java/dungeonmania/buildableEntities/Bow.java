@@ -30,20 +30,19 @@ public class Bow extends buildableEntity implements BonusDamageMul, Durability{
     public boolean equals(BonusDamageMul obj) {
         return obj == this;
     }
+
     @Override
     public ItemResponse toItemResponse() {
         return getItemResponse();
     }
+
     @Override
     public void setDurability() {
-        // TODO Auto-generated method stub
-        System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), Bow_durability, Bow_durability - 1));
         this.Bow_durability -= 1;
     }
+    
     @Override
     public boolean checkDurability() {
-        // TODO Auto-generated method stub
-        System.out.println(String.format("Item %s DUration %d ", getEntityId(), Bow_durability));
         return Bow_durability == 0;
     }
 

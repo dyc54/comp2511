@@ -19,12 +19,15 @@ public class Door extends StaticEntity {
         this.key = key;
         opened = false;
     }
+
     public boolean isOpened() {
         return opened;
     }
+
     public void close() {
         opened = false;
     }
+
     @Override
     public boolean isAccessible(Entity entity) {
         if (entity instanceof Spider) {
@@ -66,6 +69,7 @@ public class Door extends StaticEntity {
         // do nothing by defalut
         return DungeonMap.isaccessible(map, getLocation(), entity);
     }
+    
     @Override
     public JSONObject toJSONObject() {
         return super.toJSONObject().put("key", key);

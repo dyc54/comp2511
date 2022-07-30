@@ -17,27 +17,24 @@ public class MidnightArmour extends buildableEntity implements BonusDamageAdd, B
 
     @Override
     public double damage() {
-        // TODO Auto-generated method stub
         return attack;
     }
 
     @Override
     public boolean equals(BonusDefenceAdd obj) {
-        // TODO Auto-generated method stub
         return obj == this;
     }
 
     @Override
     public double defence() {
-        // TODO Auto-generated method stub
         return defence;
     }
 
     @Override
     public boolean equals(BonusDamageAdd obj) {
-        // TODO Auto-generated method stub
         return false;
     }
+
     @Override
     public ItemResponse toItemResponse() {
         return getItemResponse();

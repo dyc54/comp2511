@@ -41,8 +41,6 @@ public class Portal extends StaticEntity {
                     .stream()
                     .filter(portal -> ((Portal) portal).getColour().equals(color) && !portal.equals(this))
                     .collect(Collectors.toList()).get(0).getLocation();
-            System.out
-                    .println(String.format("portal: tp %s ->  %s", entity.getLocation().toString(), target.toString()));
             Location entryLocation = entity.getLocation();
             Position p = Location.getMoveDir(entryLocation, getLocation());
             Location next = target.getLocation(p);
@@ -67,6 +65,7 @@ public class Portal extends StaticEntity {
     public boolean hasSideEffect(Entity entity, DungeonMap map) {
         return DungeonMap.isaccessible(map, getLocation(), entity);
     }
+    
     @Override
     public JSONObject toJSONObject() {
         return super.toJSONObject().put("colour", color);

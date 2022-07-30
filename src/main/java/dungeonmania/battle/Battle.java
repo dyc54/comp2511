@@ -66,7 +66,6 @@ public class Battle {
         this.initEnemyHealth = enemy.getHealth();
         currPlayerHealth = initPlayerHealth;
         currEnemyHealth = initEnemyHealth;
-        System.out.println(String.format("Set Battle: \nPlayer HP:%f\nEnemy %s, HP:%f", initPlayerHealth, enemy.getEnemyType(), initEnemyHealth));
         return this;
     }
     
@@ -81,9 +80,6 @@ public class Battle {
         BattleStrategyWithEnemy player = (BattleStrategyWithEnemy) this.player;
         double deltaEnemy = enemy.battleDamageFrom(this.player);
         double deletePlayer = player.battleDamageFrom(this.enemy);
-        System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, deletePlayer, currPlayerHealth - deletePlayer
-                                                                                        , currEnemyHealth, deltaEnemy, currEnemyHealth - deltaEnemy));
-        
         rounds.add(new RoundResponse(deletePlayer * -1, deltaEnemy * -1, player.getBattleUsedItems()));
         player.battleWith(this.enemy);
         enemy.battleWith(this.player);
@@ -112,7 +108,6 @@ public class Battle {
         if (removed_ids.size() > 0) {
             return removed_ids;
         } 
-        System.out.println(String.format("Current Battle effect : (%s)", effect));
         if (effect.equals("Invincibility")) {
             return new ArrayList<>();
         }

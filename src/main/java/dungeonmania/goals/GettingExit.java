@@ -14,6 +14,7 @@ public class GettingExit implements GoalComponent{
     public GettingExit() {
         playerLocation = new Location();
     }
+
     @Override
     public boolean hasAchieved() {
         // return true;
@@ -30,6 +31,7 @@ public class GettingExit implements GoalComponent{
     public GoalComponent getConfig(Config config) {
         return this;
     }
+    
     @Override
     public String toString() {
         if (!hasAchieved()) {

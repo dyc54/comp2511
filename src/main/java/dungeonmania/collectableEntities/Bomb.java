@@ -23,16 +23,20 @@ public class Bomb extends CollectableEntity implements Useable{
     public int getBomb_radius() {
         return bomb_radius;
     }
+
     public boolean hasPlaced() {
         return hasPlaced;
     }
+
     public void place() {
         hasPlaced = true;
     }
+
     public void boom() {
         writer.remove(getLocation(), getBomb_radius());
         writer.updateLogicalEntities();
     }
+
     public void update(DungeonMap map) {
         map.getEntities(getLocation(), bomb_radius).stream().forEach(e -> {
             if (!(e instanceof Player)) {
@@ -64,7 +68,6 @@ public class Bomb extends CollectableEntity implements Useable{
             if (e instanceof FloorSwitch) {
                 FloorSwitch floorSwitch = (FloorSwitch) e;
                 if (floorSwitch.getTrigger()) {
-                    // this.update(map);
                     boom();
                 } else {
                     floorSwitch.bombAttach(this);

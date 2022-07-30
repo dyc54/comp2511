@@ -25,7 +25,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
     public MercenaryAlly(Mercenary mercenary) {
         super(mercenary.getType(), mercenary.getLocation(), mercenary.getAttack().attackDamage(), mercenary.getHealth(), 
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
-            System.out.println("NEW NEW NEW");
     }
 
     public MercenaryAlly(Mercenary mercenary, double assassin_bribe_fail_rate, int assassin_recon_radius) {
@@ -33,7 +32,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
                 mercenary.getBribe_amount(), mercenary.getBribe_radius(), mercenary.getAlly_attack(), mercenary.getAlly_defence());
             this.assassin_bribe_fail_rate = assassin_bribe_fail_rate;
             this.assassin_recon_radius = assassin_recon_radius;
-            System.out.println("NEW NEW NEW");
     }
     
     public double getFailRate() {
@@ -46,7 +44,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public boolean movement(DungeonMap dungeonMap) {
-        System.out.println("Ally MOveing");
         Player p = dungeonMap.getPlayer();
         String options = MovementOptions.encodeLocationsArguments(dungeonMap, this);
         if (!CheckMovementFactor()) {
@@ -65,7 +62,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         if (p.getLocation().equals(next)) {
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 
-        System.out.println(String.format("Movement: Mercenary %s -> %s", getLocation(), next));
 
         setLocation(next);
         dungeonMap.interactAll(this);
@@ -102,7 +98,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public void SceptreUpdate(SceptreEffectSubject subject, DungeonMap dungeonMap) {
-        System.out.println("------------------- change to enemy -------------------");
         Mercenary enemy;
         if (this.getType().equals("mercenary")) {
             enemy = new MercenaryEnemy(this);
@@ -111,8 +106,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         }
         enemy.setEntityId(String.valueOf(getEntityId()));
         dungeonMap.removeEntity(getEntityId());
-        System.out.println("ENEMY POSITION: "+enemy.getLocation());
-        System.out.println("ENEMY Type: "+ enemy.getType());
         dungeonMap.addEntity(enemy);
         Player player = dungeonMap.getPlayer();
         player.getAttackStrategy().removeBounus(this);
@@ -143,7 +136,6 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
 
     @Override
     public ItemResponse toItemResponse() {
-        // TODO Auto-generated method stub
         return null;
     }
 }

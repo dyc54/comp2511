@@ -17,12 +17,10 @@ public class ZombieToast extends MovingEntity implements EnemyMovement, Enemy, M
         super(type, location, zombie_health, new BaseAttackStrategy(zombie_attack), new RandomMovement());
     }
 
-    
     @Override
     public boolean movement(DungeonMap dungeonMap) {
 
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
-        System.out.println(choice);
         Location next = getMove().MoveOptions(choice).nextLocation(getLocation(),dungeonMap);
         if (!CheckMovementFactor()) {
             return false;

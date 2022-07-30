@@ -39,18 +39,14 @@ public class Inventory implements Iterable<Entity> {
             itemList.add(item);
             inventory.put(item.getType(), itemList);
         }
-        System.out.println(String.format("Inventory: %s has been picked up", item.getType()));
         if (item instanceof BonusDamageAdd) {
             player.getAttackStrategy().bonusDamage((BonusDamageAdd) item);
-            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } 
         if (item instanceof BonusDamageMul) {
             player.getAttackStrategy().bonusDamage((BonusDamageMul) item);
-            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         } 
         if (item instanceof BonusDefenceAdd) {
             player.getDefenceStrayegy().bonusDefence((BonusDefenceAdd) item);
-            System.out.println(String.format("%s is used as weapon", item.getEntityId()));
         }
         return true;
     }
@@ -77,14 +73,12 @@ public class Inventory implements Iterable<Entity> {
             for(int i = 0; i < number; i++) {
                 idCollection.remove(items.get(0).getEntityId());
                 items.remove(0);
-                // removeFromInventoryList(items.get(0).getEntityId(), player);
             }
         }
-        // System.out.println(String.format("%s has remove %d from inventory", type, number));
         return true;
     }
-    public Entity getItem(String id) {
-        
+
+    public Entity getItem(String id) {    
         for (Entity entity: getAllInventory()) {
             if (entity.getEntityId().equals(id)) {
                 return entity;
@@ -92,6 +86,7 @@ public class Inventory implements Iterable<Entity> {
         }
         return null;
     }
+
     /**
      * remove Entity from InventoryList by Entity id
      * 
@@ -116,12 +111,12 @@ public class Inventory implements Iterable<Entity> {
                 }
             }
             inventory.get(type).remove(item);
-            System.out.println(String.format("%s has remove from inventory", type));
             
             return idCollection.remove(itemId);
         }
         return false;
     }
+
     /**
      * return Entity InventoryList
      * 
@@ -152,26 +147,30 @@ public class Inventory implements Iterable<Entity> {
     public List<Entity> getItems(String type) {
         inventory.keySet().stream().forEach(str -> System.out.println(str));
         List<Entity> items = inventory.get(type);
-        System.out.println(items == null);
         if (items == null) {
             return new LinkedList<>();
         }
         return items;
     } 
+
     public void print() {
         idCollection.Keys().stream().forEach(key -> System.out.println(key));
     }
+
     public HashMap<String, List<Entity>> getInventory() {
         return inventory;
     }
+
     public InventoryViewer view() {
         return new InventoryViewer(this);
     }
+
     @Override
     public Iterator<Entity> iterator() {
         getAllInventory().iterator();
         return null;
     }
+
     public Stream<Entity> stream() {
         return getAllInventory().stream();
     }

@@ -1,8 +1,5 @@
 package dungeonmania.movingEntities;
 
-import java.util.Collection;
-
-import dungeonmania.Entity;
 import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
@@ -10,7 +7,6 @@ import dungeonmania.battle.Enemy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
-import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
@@ -32,10 +28,12 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
 	public AttackStrategy getAttackStrayegy() {
 		return getAttack();
 	}
+
 	@Override
 	public String getEnemyId() {
 		return getEntityId();
 	}
+
 	@Override
 	public String getEnemyType() {
 		return getType();
@@ -49,7 +47,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
         playerLocation = p.getLocation();
         Location next = new Location();
         String choice = MovementOptions.encodeLocationsArguments(dungeonMap, this);
-        System.out.println("ENEMT MOVEMENT++++++++++++++++++++");
         if (!CheckMovementFactor()) {
             return false;
         }
@@ -58,7 +55,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
         } else {
             next = getMove().MoveOptions(choice).nextLocation(playerLocation, dungeonMap);
         }
-        System.out.println(String.format("Movement: E Mercenary %s -> %s", getLocation(), next));
         setLocation(next);
         dungeonMap.interactAll(this);
         dungeonMap.UpdateEntity(this);
@@ -67,23 +63,6 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
     }
     @Override
     public boolean interact(Player player, DungeonMap dungeonMap) {
-        // player.getInventory().print();
-        // System.out.println(player.getInventory().countItem("treasure") >= super.getBribe_amount() );
-        // System.out.println(player.getLocation().distance(getLocation()) <= getBribe_radius());
-        // if (player.getInventory().countItem("treasure") >= super.getBribe_amount() 
-        //     && player.getLocation().distance(getLocation()) <= getBribe_radius()) {
-        //     MercenaryAlly ally = new MercenaryAlly(this);
-        //     ally.setEntityId(String.valueOf(getEntityId()));
-        //     dungeonMap.removeEntity(getEntityId());
-        //     dungeonMap.addEntity(ally);
-        //     System.out.println("pay for mercenary");
-            
-        //     player.getAttackStrategy().bonusDamage(ally);
-        //     player.getDefenceStrayegy().bonusDefence(ally);
-        //     player.getInventory().removeFromInventoryList("treasure", super.getBribe_amount(), player);
-        //     player.attach(ally);
-        //     return true;
-        // }
         if (player.hasSceptre()) {
             return true;
         }
@@ -108,10 +87,7 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
         
     }
     public void update(Player player) {
-        System.out.println(player.hasEffect());
         if (player.hasEffect()) {
-            System.out.println(player.getCurrentEffect().applyEffect());
-            System.out.println(player.getCurrentEffect().applyEffect().equals("Invisibility"));
         }
         if (player.hasEffect() && player.getCurrentEffect().applyEffect().equals("Invisibility")) {
             setMove(new RandomMovement());

@@ -38,20 +38,19 @@ public class SwitchDoor extends Door implements LogicObserver{
         if (!subjects.contains(subject)) {
             subjects.add(subject);
         }
-        System.out.println("Switch Door was notified");
         if (logic.isTrue()) {
             active();
         } else {
             inactive();
         }
     }
+    
     @Override
     public boolean equals(LogicEntity entity) {
         if (entity == null) {
             return false;
         }
         return Entity.equals(this, entity.getId());
-        // return equals(entity);
     }
 
     @Override
@@ -67,7 +66,6 @@ public class SwitchDoor extends Door implements LogicObserver{
     }
     @Override
     public String getId() {
-        // TODO Auto-generated method stub
         return getEntityId();
     }
     @Override

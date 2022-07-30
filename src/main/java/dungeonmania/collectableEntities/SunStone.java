@@ -11,7 +11,6 @@ public class SunStone extends Treasure implements openable{
 
     @Override
     public boolean open(Door door, Player player) {
-        // TODO Auto-generated method stub
         door.open();
         return true;
     }

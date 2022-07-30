@@ -30,6 +30,7 @@ public abstract class PotionEntity extends CollectableEntity implements Effect, 
     public void setInUsing() {
         inUsing = true;
     }
+
     @Override
     public void use(DungeonMap map, Player player) {
         player.addeffect((PotionEntity) this);
@@ -41,14 +42,12 @@ public abstract class PotionEntity extends CollectableEntity implements Effect, 
     @Override
     public void setDurability() {
         if (inUsing) {
-            System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), durability, durability - 1));
             this.durability -= 1;
         }
     }
 
     @Override
     public boolean checkDurability(){
-        System.out.println(String.format("Item %s DUration %d ", getEntityId(), durability));
         
         return durability == 0;
     }

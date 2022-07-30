@@ -27,19 +27,17 @@ public class Sword extends CollectableEntity implements BonusDamageAdd, Durabili
     public boolean equals(BonusDamageAdd obj) {
         return false;
     }
+    
     @Override
     public ItemResponse toItemResponse() {
         return getItemResponse();
     }
 
     public void setDurability() {
-        System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), sword_durability, sword_durability - 1));
         this.sword_durability -= 1;
     }
 
     public boolean checkDurability(){
-        System.out.println(String.format("Item %s DUration %d ", getEntityId(), sword_durability));
-        
         return sword_durability == 0;
     }
     
