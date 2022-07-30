@@ -1,16 +1,13 @@
 package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static dungeonmania.TestUtils.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -419,6 +416,10 @@ public class M3CollectAndBuildTest {
             assertEquals(1, getInventory(res, "sun_stone").size());
             assertEquals(0, getInventory(res, "arrow").size());
 
+            //Interact with the mercenary
+            String MercenaryId = getEntities(res, "mercenary").get(0).getId();
+            dmc.interact(MercenaryId);
+
             //Use the sceptre
             String sceptreId = getInventory(res, "sceptre").get(0).getId();
             res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
@@ -428,7 +429,6 @@ public class M3CollectAndBuildTest {
             Position playerPosition = getEntities(res, "player").get(0).getPosition();
             res = dmc.tick(Direction.RIGHT);
             assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
-
 
             playerPosition = getEntities(res, "player").get(0).getPosition();
             res = dmc.tick(Direction.DOWN);

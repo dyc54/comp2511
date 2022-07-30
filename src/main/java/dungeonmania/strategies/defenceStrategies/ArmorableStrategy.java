@@ -10,16 +10,19 @@ public class ArmorableStrategy implements DefenceStrategy {
         this.base = base;
         bonusdefence = new ArrayList<>();
     }
+
     @Override
     public double defenceDamage() {
         return base + bonusdefence.stream()
                                     .map(bonus -> {return Double.valueOf(bonus.defence());})
                                     .mapToDouble(Double::doubleValue).sum();
     }
+
     @Override
     public void bonusDefence(BonusDefenceAdd defence) {
         bonusdefence.add(defence);
     }
+    
     @Override
     public void removeDefence(BonusDefenceAdd defence) {
         bonusdefence.remove(defence);

@@ -351,7 +351,6 @@ public class CollectAndBuildTest {
                     "c_collectTests");
 
             res = playerMoveController(dmc, Direction.RIGHT, 14);
-            List<String> buildables = new ArrayList<>();
             // pick up all item
             assertEquals(0, getInventory(res, "shield").size());
             assertEquals(0, getInventory(res, "bow").size());

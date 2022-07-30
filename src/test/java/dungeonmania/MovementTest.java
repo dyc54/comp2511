@@ -1,29 +1,19 @@
 package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static dungeonmania.TestUtils.getPlayer;
 import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.getInventory;
-import static dungeonmania.TestUtils.getGoals;
-import static dungeonmania.TestUtils.countEntityOfType;
-import static dungeonmania.TestUtils.getValueFromConfigFile;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
-import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 public class MovementTest {
@@ -36,7 +26,6 @@ public class MovementTest {
 
         for (int i = 0; i <= 20; i++) {
             res = dmc.tick(Direction.DOWN);
-            System.out.println(getEntities(res, "zombie_toast").get(0).getPosition());
             assertNotEquals(new Position(5,4), getEntities(res, "zombie_toast").get(0).getPosition());
             assertNotEquals(new Position(5,6), getEntities(res, "zombie_toast").get(0).getPosition());
             assertNotEquals(new Position(6,5), getEntities(res, "zombie_toast").get(0).getPosition());
@@ -52,7 +41,6 @@ public class MovementTest {
 
         for (int i = 0; i <= 5; i++) {
             res = dmc.tick(Direction.DOWN);
-            System.out.println(getEntities(res, "zombie_toast").get(0).getPosition());
             assertEquals(new Position(0,0,0), getEntities(res, "zombie_toast").get(0).getPosition());
         }
         
@@ -140,7 +128,6 @@ public class MovementTest {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(1, getInventory(res, "treasure").size());
         String mercenaryId = getEntities(res, "mercenary").get(0).getId();
-        System.out.println(getEntities(res, "mercenary").get(0).getId());
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
         
         assertEquals(0, getInventory(res, "treasure").size());
@@ -206,11 +193,7 @@ public class MovementTest {
         res = assertDoesNotThrow(()-> dmc.interact(mercenaryId));
         assertEquals(0, getInventory(res, "treasure").size()); 
         
-        System.out.println("--------before"+getEntities(res, "player").get(0).getPosition());
-        System.out.println("--------before"+getEntities(res, "mercenary").get(0).getPosition());
         res = dmc.tick(Direction.LEFT); // 1,0
-        System.out.println("--------after"+getEntities(res, "player").get(0).getPosition());
-        System.out.println("--------after"+getEntities(res, "mercenary").get(0).getPosition());
         /* assertEquals(getEntities(res, "player").get(0).getPosition(), getEntities(res, "mercenary").get(0).getPosition()); */
         Position playerPosition = getEntities(res, "player").get(0).getPosition();
         res = dmc.tick(Direction.DOWN);//1,1

@@ -1,19 +1,14 @@
 package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static dungeonmania.TestUtils.getPlayer;
 import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.getInventory;
-import static dungeonmania.TestUtils.getGoals;
-import static dungeonmania.TestUtils.countEntityOfType;
 import static dungeonmania.TestUtils.getValueFromConfigFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -44,15 +38,12 @@ public class UsingPotionTest {
         double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
         double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
         double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
-        // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
         assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
         assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
         enemyHealth += round.getDeltaEnemyHealth();
         playerHealth += round.getDeltaCharacterHealth();
-        // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
         assertTrue(enemyHealth <= 0);
@@ -70,16 +61,12 @@ private void assertBattleCalculations(String enemyType, BattleResponse battle, b
         double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
         double bowbonus = bow ? 2 : 1;
         double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
-        // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
         assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus) < 0 ?  0 : enemyAttack - shieldbonus)/ 10));
         assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus) / 5));
         enemyHealth += round.getDeltaEnemyHealth();
         playerHealth += round.getDeltaCharacterHealth();
-        // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
-
         if (enemyDies) {
         assertTrue(enemyHealth <= 0);
         } else {

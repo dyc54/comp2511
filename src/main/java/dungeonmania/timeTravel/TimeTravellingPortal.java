@@ -1,7 +1,6 @@
 package dungeonmania.timeTravel;
 
 import dungeonmania.Entity;
-import dungeonmania.Interactability;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.staticEntities.StaticEntity;
@@ -16,6 +15,7 @@ public class TimeTravellingPortal extends StaticEntity{
     public boolean isAccessible(Entity entity) {
         return true;
     }
+    
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
         // do nothing by defalut

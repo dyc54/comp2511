@@ -3,7 +3,6 @@ package dungeonmania.logicEntities;
 import java.util.HashSet;
 
 import dungeonmania.Entity;
-import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Timer;
 import dungeonmania.staticEntities.StaticEntity;
@@ -84,16 +83,8 @@ public class Wire extends StaticEntity implements LogicSubject, LogicObserver{
 
     @Override
     public void pull(LogicObserver observer) {
-        // * Pass observer but
-        // subjects.stream().forEach(subject -> subject.pull(observer));
-        // if (observer instanceof Bomb)  {
-        //     Bomb bomb = (Bomb) observer;
-        //     if (bomb.getLocation().distance(getLocation()) <= bomb.getBomb_radius()) {
-        //         subjects.stream().forEach(subject -> subject.detach(this));
-        //     }
-        // }
-        
     }
+
     @Override
     public boolean equals(LogicEntity entity) {
         if (entity == null) {
@@ -113,7 +104,6 @@ public class Wire extends StaticEntity implements LogicSubject, LogicObserver{
     }
     @Override
     public String getId() {
-        // TODO Auto-generated method stub
         return getEntityId();
     }
     

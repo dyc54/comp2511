@@ -26,7 +26,6 @@ public class MovementOptions {
                     break;
                 case 'l':
                     choices.add(location.getLeft());
-                    System.out.println(location.getLeft().toString());
                     break;
                 case 'r':
                     choices.add(location.getRight());
@@ -35,6 +34,7 @@ public class MovementOptions {
         }
         return choices;
     }
+    
     /**
      * Encode next possible location arguments
      * @param map

@@ -27,18 +27,23 @@ public class RandomMapGenerator implements Iterable<Location> {
             }
         }
     }
+
     public Location getStartLocation() {
         return new Location(startX, startY);
     }
+
     public Location getEndLocation() {
         return new Location(endX, endY);
     }
+
     public int getHeight() {
         return height;
     }
+
     public int getWidth() {
         return width;
     }
+
     private boolean isOutBound(Location location) {
         return isOutBound(location.getX(), location.getY());
     }
@@ -46,18 +51,22 @@ public class RandomMapGenerator implements Iterable<Location> {
     private boolean isOutBound(int x, int y) {
         return  !(0 <= x && x < width && 0 <= y && y < height);
     }
+
     private boolean isWall(Location location) {
         if (isOutBound(location)) {
             return false;
         }
         return !map[location.getY()][location.getX()];
     }
+
     private void makeWall(Location location) {
         makeWall(location.getX(),location.getY());
     } 
+
     private void makeWall(int x, int y) {
         map[y][x] = true;
     } 
+
     private Location randomChoice(ArrayList<Location> list) {
         if (list.size() == 0) {
             return null;
@@ -66,6 +75,7 @@ public class RandomMapGenerator implements Iterable<Location> {
         Location next = list.get(index.nextInt(100000) % (list.size()));
         return next;
     }
+
     private Location addPossibleSpace(int x, int y, ArrayList<Location> array) {
         HashSet<Location> possible = new HashSet<>(array);
         for (int i = 0; i < 4; i++) {
@@ -78,11 +88,12 @@ public class RandomMapGenerator implements Iterable<Location> {
         array.addAll(possible);
         return null;
     }
+
     private void connect(Location curr, Location next) {
         Location dir = curr.diff(next);
         makeWall(dir.getX() / 2 + curr.getX(), dir.getY() / 2 + curr.getY());
-
     }
+
     private void connect(Location curr) {
         ArrayList<Location> buffer = new ArrayList<>();
         makeWall(curr);
@@ -94,8 +105,8 @@ public class RandomMapGenerator implements Iterable<Location> {
         }
         Location next = randomChoice(buffer);
         connect(curr, next);
-        
     }
+
     public RandomMapGenerator start() {
         ArrayList<Location> bufferArray = new ArrayList<>();
         makeWall(0, 0);
@@ -107,8 +118,8 @@ public class RandomMapGenerator implements Iterable<Location> {
         }
         return this;
     }
+
     private void doGenerate(ArrayList<Location> bufferArray) {
-        
         Location next = randomChoice(bufferArray);
         if (next != null) {
             connect(next);
@@ -119,47 +130,6 @@ public class RandomMapGenerator implements Iterable<Location> {
 
     }
     
-    public void print(int x, int y, ArrayList<Location> bufferArray) {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                // location is in bufferarray
-                if (bufferArray.contains(Location.AsLocation(j, i))) {
-                    if (i == y && j == x) {
-                        System.out.print("[B] ");
-                    }  else {
-                        System.out.print("[P] ");
-                    }
-                } else {
-                    if (i == y && j == x) {
-                        System.out.print("[C] ");
-                    } else {
-                        System.out.print(String.format("[%s] ", map[i][j] ? " ": "W"));
-
-                    }
-                }
-            }
-            System.out.print(String.format("\n"));
-
-        }
-    }
-    
-    public static void main(String[] args) {
-        RandomMapGenerator walls = new RandomMapGenerator(0, 0, 1, 10);
-        walls.start().print();
-    }
-    public void print() {
-        for (int i = -1; i < height + 1; i++) {
-            for (int j = -1; j < width + 1; j++) {
-                if (isOutBound(j, i)) {
-                    System.out.print(String.format("[%s] ","W"));
-                } else {
-                    System.out.print(String.format("[%s] ", map[i][j] ? " ": "W"));
-                }
-            }
-            System.out.print(String.format("\n"));
-
-        }
-    }
     @Override
     public Iterator<Location> iterator() {
         ArrayList<Location> locations = new ArrayList<>();

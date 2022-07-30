@@ -28,6 +28,7 @@ public class GoalController {
         }
         return node;
     }
+
     /**
      * Create a GoalController object
      * @param path
@@ -40,10 +41,12 @@ public class GoalController {
         JSONObject json =  new JSONObject(content);
         root = loadNode(json.getJSONObject("goal-condition")).mapForAll(node -> node.getConfig(config));
     }
+
     public GoalController(GoalsTree tree, Config config) {
         root = tree;
         this.config = config;
     }
+
     /**
      * Return whether goal has achieved
      * @param map   Dungeon Map
@@ -54,6 +57,7 @@ public class GoalController {
         root.mapForAll(node -> node.getMapData(map).getPlayerData(player));
         return root.hasAchieved();
     }
+    
     /**
      * New a Goal by given type
      * @param str type
@@ -73,10 +77,10 @@ public class GoalController {
                 return null;
         }
     }
+
     @Override
     public String toString() {
         String goal = root.toStringAtRoot();
-        System.out.println(goal);
         return goal;
     }
   

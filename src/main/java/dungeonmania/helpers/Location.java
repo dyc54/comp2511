@@ -26,6 +26,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public Location() {
         this(0, 0);
     }
+
     /**
      * Get x
      * @return
@@ -33,6 +34,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public int getX() {
         return x;
     }
+
     /**
      * get Y
      * @return
@@ -57,6 +59,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         functions.add(location -> Location.getRight(location));
         return functions;
     }
+
     /**
      * Set X
      * @param x
@@ -66,6 +69,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         this.x = x;
         return this;
     }
+
     /**
      * Set Y
      * @param y
@@ -86,6 +90,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         this.y = location.getY();
         return this;
     }
+
     /**
      * Return the distance from given location
      * @param location
@@ -104,6 +109,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public Location getUp() {
         return this.add(0, -1);
     }
+
     /**
      * Get the location of the bottom of current location
      * @param location
@@ -112,6 +118,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public Location getDown() {
         return this.add(0, 1);
     }
+
     /**
      * Get the location of the left of current location
      * @param location
@@ -120,6 +127,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public Location getLeft() {
         return this.add(-1, 0);
     }
+
     /**
      * Get the location of the right of current location
      * @param location
@@ -149,19 +157,21 @@ public class Location implements Comparator<Location>, Comparable<Location>{
         return new Location(location.getX() - x, location.getY() - y);
     }
 
-
     public Location clone() {
         return new Location(x, y);
     }
+
     public Location getLocation(Position p) {
         return new Location(x + p.getX(), y + p.getY());
     }
+
     public static Location random(Location location, int min, int max) {
         Random random = new Random(location.hashCode());
         int x = location.getX() + random.nextInt(max - min + 1) + min;
         int y = location.getY() + random.nextInt(max - min + 1) + min;
         return Location.AsLocation(x, y);
     }
+
     /**
      * Get the location of the top of given location
      * @param location
@@ -170,6 +180,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public static Location getUp(Location location) {
         return location.getUp();
     }
+
     /**
      * Get the location of the bottom of given location
      * @param location
@@ -178,6 +189,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public static Location getDown(Location location) {
         return location.getDown();
     }
+
     /**
      * Get the location of the left of given location
      * @param location
@@ -186,6 +198,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public static Location getLeft(Location location) {
         return location.getLeft();
     }
+
     /**
      * Get the location of the right of given location
      * @param location
@@ -204,10 +217,12 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public static Location AsLocation(int x, int y) {
         return new Location(x, y);
     }
+
     public static Position getMoveDir(Location from, Location to) {
         Location temp = from.diff(to);
         return new Position(temp.getX(), temp.getY());
     }
+
     @Override
     public String toString() {
         return String.format("<%d, %d>", x, y);
@@ -223,6 +238,7 @@ public class Location implements Comparator<Location>, Comparable<Location>{
             return a.y - b.y;
         }
     }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Location)) {
@@ -236,11 +252,13 @@ public class Location implements Comparator<Location>, Comparable<Location>{
     public int compareTo(Location o) {
         return compare(this, o);
     }
+
     @Override
     public int hashCode() {
         // TODO: CHANGE THIS IF ANY VALUE IS OVERFLOW 
         return ((31 * x + 13 * y) ^ 3  % (7919 * 1637) - (19 * y + 21 - x ^ 4) ^ 2) * (x - y) ^ 2 + 1;
     }
+    
     public static String inverseDirection(Direction dir) {
         switch (dir.name()) {
             case "LEFT":

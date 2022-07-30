@@ -16,12 +16,14 @@ public class GoalsTree implements LogicContent<GoalComponent> {
         left = null;
         right = null;
     }
+
     public GoalsTree(String type) {
         condition = new LogicCondition<>(type);
         goal = null;
         left = null;
         right = null;
     }
+
     /**
      * Return one of its subgoal
      * @return
@@ -29,6 +31,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public GoalsTree toGoalA() {
         return left;
     }
+
     /**
      * Return another subgoal
      * @return
@@ -36,6 +39,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public GoalsTree toGoalB() {
         return right;
     }
+
     /**
      * Return whether the node of tree has achieved
      * @return
@@ -47,6 +51,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
             return condition.isTrue(this);
         }
     }
+
     /**
      * get the Goal of given tree node
      * @return
@@ -54,6 +59,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public GoalComponent getGoal() {
         return goal;
     }
+
     /**
      * Attach given goal to tree's subgoal
      * @param goal
@@ -61,6 +67,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public void attachGoalA(GoalsTree goal) {
         this.left = goal;
     }
+
     /**
      * Attach given goal to another tree's subgoal
      * @param goal
@@ -68,6 +75,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public void attachGoalB(GoalsTree goal) {
         this.right = goal;
     }
+
     /**
      * Return a new GoalTree node
      * @param type
@@ -77,6 +85,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public static GoalsTree AsGoalsTreeNode(String type, GoalComponent goal) {
         return new GoalsTree(type, goal);
     }
+
     /**
      * Set the goal of given tree node.
      * @param goal
@@ -84,6 +93,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public void setGoal(GoalComponent goal) {
         this.goal = goal;
     }
+
     /**
      * Map a function for all Goal 
      * @param func
@@ -101,6 +111,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
         }
         return this;
     }
+
     public String toStringAtRoot() {
         if (hasAchieved()) {
             return "";
@@ -111,6 +122,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
             return toString(false);
         }
     }
+
     public String toString(boolean bracket) {
         String left = toGoalA().toString();
         String right = toGoalB().toString();
@@ -126,6 +138,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
         return String.format(format, output);
 
     }
+
     @Override
     public String toString() {
         if (hasAchieved()) {
@@ -137,6 +150,7 @@ public class GoalsTree implements LogicContent<GoalComponent> {
             return toString(true);
         }
     }
+
     @Override
     public GoalComponent getContent() {
         return getGoal();
@@ -146,10 +160,12 @@ public class GoalsTree implements LogicContent<GoalComponent> {
     public boolean isTrue() {
         return hasAchieved();
     }
+
     @Override
     public LogicContent<GoalComponent> getSubContentA() {
         return toGoalA();
     }
+    
     @Override
     public LogicContent<GoalComponent> getSubContentB() {
         return toGoalB();

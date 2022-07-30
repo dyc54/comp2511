@@ -3,21 +3,12 @@ package dungeonmania.battle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.buildableEntities.MidnightArmour;
-import dungeonmania.collectableEntities.CollectableEntity;
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
-import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
-import dungeonmania.strategies.attackStrategies.AttackStrategy;
 import dungeonmania.strategies.battleStrategies.BattleStrategyWithEnemy;
 import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;
-import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
 
 public class Battle {
     private Player player;
@@ -31,20 +22,7 @@ public class Battle {
         rounds = new ArrayList<>();
 
     }
-    // private double playerDamage() {
-    //     AttackStrategy attackStrayegy = player.getAttackStrategy();
-    //     return attackStrayegy.attackDamage() / 5.0;
-    // }
-    // private double enemyDamage() {
-    //     AttackStrategy attackStrayegy = enemy.getAttackStrayegy();
-    //     DefenceStrategy defenceStrategy = player.getDefenceStrayegy();
-    //     double damage = attackStrayegy.attackDamage() - defenceStrategy.defenceDamage();
-    //     return (damage > 0 ? damage : 0) / 10.0;
-    // }
-    // private int increaseAmount() {
-    //     AttackStrategy attackStrategy = enemy.getAttackStrayegy();
-    //     return attackStrategy.getIncreaseAmount();
-    // }
+    
     public Battle(Player player, Enemy enemy) {
         this();
         this.player = player;
@@ -66,7 +44,6 @@ public class Battle {
         this.initEnemyHealth = enemy.getHealth();
         currPlayerHealth = initPlayerHealth;
         currEnemyHealth = initEnemyHealth;
-        System.out.println(String.format("Set Battle: \nPlayer HP:%f\nEnemy %s, HP:%f", initPlayerHealth, enemy.getEnemyType(), initEnemyHealth));
         return this;
     }
     
@@ -75,14 +52,12 @@ public class Battle {
      * @return
      */
     private List<String> battle() {
+        currPlayerHealth = player.getHealth();
+        currEnemyHealth = enemy.getHealth();
         BattleStrategyWithPlayer enemy = (BattleStrategyWithPlayer) this.enemy;
         BattleStrategyWithEnemy player = (BattleStrategyWithEnemy) this.player;
         double deltaEnemy = enemy.battleDamageFrom(this.player);
         double deletePlayer = player.battleDamageFrom(this.enemy);
-        
-        System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, deletePlayer, currPlayerHealth - deletePlayer
-                                                                                        , currEnemyHealth, deltaEnemy, currEnemyHealth - deltaEnemy));
-        
         rounds.add(new RoundResponse(deletePlayer * -1, deltaEnemy * -1, player.getBattleUsedItems()));
         player.battleWith(this.enemy);
         enemy.battleWith(this.player);
@@ -106,19 +81,18 @@ public class Battle {
         if (player.hasEffect()) {
             effect = player.getCurrentEffect().applyEffect();
         }
-        List<String> removed_ids = battle();
+        List<String> removedIds = battle();
         player.setBattleUsedDuration();
-        if (removed_ids.size() > 0) {
-            return removed_ids;
+        if (removedIds.size() > 0) {
+            return removedIds;
         } 
-        System.out.println(String.format("Current Battle effect : (%s)", effect));
         if (effect.equals("Invincibility")) {
             return new ArrayList<>();
         }
-        while (removed_ids.size() == 0) {
-            removed_ids = battle();
+        while (removedIds.size() == 0) {
+            removedIds = battle();
         }
-        return removed_ids;
+        return removedIds;
 
     }
     public BattleResponse toResponse() {

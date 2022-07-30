@@ -7,13 +7,13 @@ import dungeonmania.helpers.Timer;
 public class CoAnd extends LogicalEntitiesLogic{
     Timer time;
     private int tick;
-    private long actived_num;
+    private long activedNum;
     private long prev;
     public CoAnd(HashSet<LogicSubject> adjacentEntities, Timer time) {
         super(adjacentEntities);
         this.time = time;
         tick = 0;
-        actived_num = 0;
+        activedNum = 0;
         prev = 0;
     }
 
@@ -25,14 +25,13 @@ public class CoAnd extends LogicalEntitiesLogic{
         long count = 0;
         if (time.getTime() != tick) {
             tick = time.getTime();
-            prev = actived_num;
-            actived_num = adjacentEntities.stream().filter(entity -> entity.isActivated()).count();
-            count = actived_num - prev;
+            prev = activedNum;
+            activedNum = adjacentEntities.stream().filter(entity -> entity.isActivated()).count();
+            count = activedNum - prev;
         } else {
             long temp = adjacentEntities.stream().filter(entity -> entity.isActivated()).count();
-            actived_num = temp > actived_num ? temp : actived_num;
-            count = actived_num - prev;
-            
+            activedNum = temp > activedNum ? temp : activedNum;
+            count = activedNum - prev;
         }
         if (count >= 2) {
             return true;

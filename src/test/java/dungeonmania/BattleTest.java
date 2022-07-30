@@ -8,17 +8,13 @@ import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.getInventory;
 import static dungeonmania.TestUtils.getValueFromConfigFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import dungeonmania.buildableEntities.MidnightArmour;
-import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
@@ -45,20 +41,39 @@ public class BattleTest {
             double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
             double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
             double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
-            // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
             assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
-            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
             assertTrue(enemyHealth <= 0);
         } else {
             assertTrue(playerHealth <= 0);
+        }
+    }
+    private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies,
+                String configFilePath,boolean sword, boolean shield, boolean bow, int expRound) {
+            List<RoundResponse> rounds = battle.getRounds();
+            double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
+            double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
+            double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
+            double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
+            double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
+            double bowbonus = bow ? 2 : 1;
+            double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
+        int i = 0;
+        for (RoundResponse round : rounds) {
+            if (i == expRound) {
+                break;
+            }
+            assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus) < 0 ?  0 : enemyAttack - shieldbonus)/ 10));
+            assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus) / 5));
+            enemyHealth += round.getDeltaEnemyHealth();
+            playerHealth += round.getDeltaCharacterHealth();
+            i++;
         }
     }
     private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies,
@@ -71,15 +86,12 @@ public class BattleTest {
             double swordbonus = sword ? Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath)) : 0;
             double bowbonus = bow ? 2 : 1;
             double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
-            // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus) < 0 ?  0 : enemyAttack - shieldbonus)/ 10));
             assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus) / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
-            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
             assertTrue(enemyHealth <= 0);
@@ -100,15 +112,12 @@ public class BattleTest {
             double MidnightArmourAttackBonus = MidnightArmour ? Double.parseDouble(getValueFromConfigFile("midnight_armour_attack", configFilePath)) : 0;
             double MidnightArmourDefenceBonus = MidnightArmour ? Double.parseDouble(getValueFromConfigFile("midnight_armour_defence", configFilePath)) : 0;
             double shieldbonus = shield ? Double.parseDouble(getValueFromConfigFile("shield_defence", configFilePath)): 0;
-            // System.out.println(playerAttack);
         for (RoundResponse round : rounds) {
             assertEquals(round.getDeltaCharacterHealth(), -(((enemyAttack - shieldbonus - MidnightArmourDefenceBonus) < 0 ?  0 : enemyAttack - shieldbonus - MidnightArmourDefenceBonus)/ 10));
             assertEquals(round.getDeltaEnemyHealth(), -(bowbonus * (playerAttack + swordbonus + MidnightArmourAttackBonus) / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();
-            // System.out.println(String.format("%f %f", enemyHealth, playerHealth));
         }
-        // System.out.println(enemyHealth);
 
         if (enemyDies) {
             assertTrue(enemyHealth <= 0);
@@ -116,6 +125,16 @@ public class BattleTest {
             assertTrue(playerHealth <= 0);
         }
     }
+    @Test
+    @DisplayName("Test battles three enemies consecutively and defeats them")
+    public void testBattleConsecutively() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("battleConsecutivelyMMDXC1659143561.666144", "c_Battletest_PlayerStrong");
+        DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
+        assertEquals(3, postBattleResponse.getBattles().size());
+        assertEquals(0, getEntities(postBattleResponse, "player").size());
+    }
+
     @Test
     @DisplayName("Test the player can win battle with spider")
     public void testBattleWithSpiderWin() {
@@ -180,9 +199,6 @@ public class BattleTest {
             assertTrue(postBattleResponse.getBattles().size() == 1);
             assertEquals(getEntities(postBattleResponse, "spider").get(0).getPosition(), new Position(0,0));
         });
-        // DungeonResponse ; 
-        // });
-        // assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak");
     }
     
     @Test
@@ -201,8 +217,6 @@ public class BattleTest {
 
     @Test
     public void testBattleWithEnemyInvincibilityPotionLost() {
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
         assertDoesNotThrow( () -> {
             DungeonManiaController controller = new DungeonManiaController();
             DungeonResponse initialResponse = controller.newGame("d_potionWithZombie", "c_BattleTest_StrongEnemies");
@@ -227,7 +241,6 @@ public class BattleTest {
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);// DungeonResponse postBattleResponse = genericMercenarySequence(controller,
         assertTrue(postBattleResponse.getBattles().size() == 0);
         assertTrue(getEntities(postBattleResponse, "spider").size() == 1);
-        //         "c_battleTests_basicMercenaryPlayerDies");
     }
     @Test
     public void testBattleWithEnemySwordWin() {
@@ -250,9 +263,6 @@ public class BattleTest {
         DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
         BattleResponse battle = postBattleResponse.getBattles().get(0);
         assertBattleCalculations("spider", battle, true, "c_BattleTest_playerweak", false, false, true);
-        
-        // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-        //         "c_battleTests_basicMercenaryPlayerDies");
     }
 
     @Test
@@ -382,6 +392,92 @@ public class BattleTest {
         List<ItemResponse> inv = getInventory(next, "bow");
         assertEquals(0, inv.size());
 
+    }
+    @Test 
+    @DisplayName("Test buildables durability")
+    public void testBuildablesDurability() {
+    //     [    ]  wall  [    ] 
+    //     wall  [___ 1]  door
+    //    [    ]  wall  [___ 2]
+    //    1: player, sword, wood, wood, wood, key, arrow, arrow, arrow, sun stone, invincibility_potion, invisibility_potion, invisibility_potion, invincibility_potion
+    //    2: mercenary, mercenary, mercenary, mercenary
+    // testDurabilityED1KO1659145404.9214625
+    DungeonManiaController controller = new DungeonManiaController();
+    DungeonResponse initialResponse = controller.newGame("testDurabilityED1KO1659145404.9214625", "testDurability");
+    assertDoesNotThrow( () -> {
+        controller.build("bow");
+        controller.build("shield");
+    });
+    DungeonResponse next = controller.tick(Direction.RIGHT);
+    // BattleResponse battle = next.getBattles().get(0);
+    assertBattleCalculations("mercenary", next.getBattles().get(0), true, "testDurability", true, true, true);
+    assertBattleCalculations("mercenary", next.getBattles().get(1), true, "testDurability", true, true, false);
+    assertBattleCalculations("mercenary", next.getBattles().get(2), true, "testDurability", true, false, false);
+    assertBattleCalculations("mercenary", next.getBattles().get(3), true, "testDurability", false, false, false);
+
+    }
+    @Test 
+    @DisplayName("Test potions durability")
+    public void testPotionsDurability() {
+    //     [    ]  wall  [    ] 
+    //     wall  [___ 1]  door
+    //    [    ]  wall  [___ 2]
+    //    1: player, sword, wood, wood, wood, key, arrow, arrow, arrow, sun stone, invincibility_potion, invisibility_potion, invisibility_potion, invincibility_potion
+    //    2: mercenary, mercenary, mercenary, mercenary
+    // testDurabilityED1KO1659145404.9214625
+    DungeonManiaController controller = new DungeonManiaController();
+    DungeonResponse initialResponse = controller.newGame("testDurabilityED1KO1659145404.9214625", "testDurability");
+    assertDoesNotThrow( () -> {
+        controller.tick(getInventory(initialResponse, "invincibility_potion").get(0).getId());
+    });
+    DungeonResponse next = controller.tick(Direction.RIGHT);
+    // BattleResponse battle = next.getBattles().get(0);
+    assertBattleCalculations("mercenary", next.getBattles().get(0), false, "testDurability", true, false, false, 1);
+    assertBattleCalculations("mercenary", next.getBattles().get(1), false, "testDurability", true, false, false, 1);
+    assertBattleCalculations("mercenary", next.getBattles().get(2), false, "testDurability", true, false, false, 1);
+    assertBattleCalculations("mercenary", next.getBattles().get(3), false, "testDurability", false, false, false, 1);
+
+    next = controller.tick(Direction.LEFT);
+    assertBattleCalculations("mercenary", next.getBattles().get(0 + 4), false, "testDurability", false, false, false, 10000000);
+    assertBattleCalculations("mercenary", next.getBattles().get(1 + 4), false, "testDurability", false, false, false, 10000000);
+    assertBattleCalculations("mercenary", next.getBattles().get(2 + 4), false, "testDurability", false, false, false, 10000000);
+    assertBattleCalculations("mercenary", next.getBattles().get(3 + 4), false, "testDurability", false, false, false, 10000000);
+
+    }
+    @Test 
+    @DisplayName("Test potions durability")
+    public void testPotionsDurabilityQueued() {
+        // [    ]  wall   wall  [    ] [    ] 
+        //  wall  [___ 1]  door  wall
+        // [    ]  wall  [___ 2] wall
+        // [    ] [    ]  wall  [    ] [    ]
+        // 1: player, sword, wood, wood, wood, sunstone, arrow, arrow, arrow, key, invincibility_potion, invisibility_potion, invisibility_potion, invincibility_potion
+        // 2: mercenary, mercenary, mercenary
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse initialResponse = controller.newGame("testDurabilityED1KO1659145404.9214625", "TestPotionQueue");
+        assertDoesNotThrow( () -> {
+            controller.tick(getInventory(initialResponse, "invincibility_potion").get(0).getId());  // tick 0
+            controller.tick(getInventory(initialResponse, "invisibility_potion").get(0).getId());   // tick 1
+        });
+        // Effect was queue
+        DungeonResponse next = controller.tick(Direction.RIGHT); // tick 2 invincibility_potion effect end at the end of tick 2 
+        assertEquals(4, next.getBattles().size());
+
+        assertBattleCalculations("mercenary", next.getBattles().get(0), false, "TestPotionQueue", true, false, false, 1);
+        assertBattleCalculations("mercenary", next.getBattles().get(1), false, "TestPotionQueue", true, false, false, 1);
+        assertBattleCalculations("mercenary", next.getBattles().get(2), false, "TestPotionQueue", true, false, false, 1);
+        assertBattleCalculations("mercenary", next.getBattles().get(3), false, "TestPotionQueue", false, false, false, 1);
+
+        next = controller.tick(Direction.LEFT);
+        assertEquals(4, next.getBattles().size());
+        next = controller.tick(Direction.RIGHT);
+        assertEquals(4, next.getBattles().size());
+        next = controller.tick(Direction.RIGHT);
+        assertEquals(4, next.getBattles().size());
+        next = controller.tick(Direction.DOWN);
+        assertEquals(4, next.getBattles().size());
+        next = controller.tick(Direction.UP);
+        assertEquals(4, next.getBattles().size());
     }
 
 }

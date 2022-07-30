@@ -10,6 +10,7 @@ import java.util.Set;
  */
 public class IdCollection <T> {
     HashMap<String, T> Ids = new HashMap<>();
+    
     public void put(String id, T t) {
         Ids.put(id, t);
     }
@@ -28,9 +29,11 @@ public class IdCollection <T> {
     public void replace(String id, T t) {
         Ids.replace(id, t);
     }
+
     public Collection<T> Values() {
         return Ids.values();
     }
+
     public Set<String> Keys() {
         return Ids.keySet();
     }

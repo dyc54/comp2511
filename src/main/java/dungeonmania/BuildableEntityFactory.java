@@ -16,18 +16,19 @@ public class BuildableEntityFactory {
     public static Entity newEntity(String type, Config config, String id) {
         switch (type) {
             case "bow":
-                return new Bow(id, type, config.bow_durability);
+                return new Bow(id, type, config.bowDurability);
             case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability, id);
+                return new Shield(type, config.shieldDefence, config.shieldDurability, id);
             case "midnight_armour":
-                return new MidnightArmour(type, config.midnight_armour_attack, config.midnight_armour_defence, id);
+                return new MidnightArmour(type, config.midnightArmourAttack, config.midnightArmourDefence, id);
             case "sceptre":
-                return new Sceptre(type, config.mind_control_duration, id);
+                return new Sceptre(type, config.mindControlDuration, id);
             default:
                 break;
         }
         throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));
     }
+    
     public static BuildableRecipe newRecipe(String type) throws IllegalArgumentException {
         switch (type) {
             case "bow":
@@ -49,7 +50,6 @@ public class BuildableEntityFactory {
                 BuildableRecipe pair2 = new BuildableRecipe("pair2");
                 pair2.addOr("key", 1).addOr("treasure", 1);
                 require2.setReplacement(new BuildableRecipeReplacement(pair2, true));
-                // pair2.setReplacement(new BuildableRecipeReplacement("sun_stone", 1, false));
                 return sceptre.addAnd(pair1).addAnd("sun_stone", 1).addAnd(require2);
             default:
                 throw new IllegalArgumentException(String.format("buildable (%s) is not one of bow, shield", type));

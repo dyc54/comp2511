@@ -1,17 +1,14 @@
 package dungeonmania.buildableEntities;
 
-import java.util.List;
-
-import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.collectableEntities.Effect;
 import dungeonmania.collectableEntities.Useable;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.MercenaryAlly;
-import dungeonmania.movingEntities.MercenaryEnemy;
 
-public class Sceptre extends buildableEntity implements Useable, Effect{
+
+public class Sceptre extends BuildableEntity implements Useable, Effect{
 
     private int Duration;
     private int timer;
@@ -72,10 +69,7 @@ public class Sceptre extends buildableEntity implements Useable, Effect{
 
     @Override
     public String applyEffect() {
-        // TODO Auto-generated method stub
         return null;
     }
-    
-
     
 }

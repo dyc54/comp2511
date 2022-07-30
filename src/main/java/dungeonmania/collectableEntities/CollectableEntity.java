@@ -19,7 +19,6 @@ public abstract class CollectableEntity extends Entity implements Interactabilit
         return new ItemResponse(getEntityId(),getType());
     }
     
-
     @Override
     public boolean interact(Entity entity, DungeonMap map) {
         if (entity instanceof Player) {
@@ -33,6 +32,7 @@ public abstract class CollectableEntity extends Entity implements Interactabilit
         }
         return false;
     }
+
     @Override
     public boolean hasSideEffect(Entity entity, DungeonMap  map) {
         return DungeonMap.isaccessible(map, getLocation(), entity);

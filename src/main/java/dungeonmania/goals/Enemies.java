@@ -11,9 +11,9 @@ public class Enemies implements GoalComponent {
     public Enemies() {
         TargetNum = 0;
     }
+    
     @Override
     public boolean hasAchieved() {
-        System.out.println(String.format("enemies %d/%d, spawner count: %d", destroyed, TargetNum, spawners));
         return destroyed >= TargetNum && spawners == 0;
     }
 
@@ -26,9 +26,10 @@ public class Enemies implements GoalComponent {
 
     @Override
     public GoalComponent getConfig(Config config) {
-        TargetNum = config.enemy_goal;
+        TargetNum = config.enemyGoal;
         return this;
     }
+
     @Override
     public String toString() {
         if (!hasAchieved()) {
@@ -37,6 +38,7 @@ public class Enemies implements GoalComponent {
             return "";
         }
     }
+
     @Override
     public GoalComponent getPlayerData(Player player) {
         return null;

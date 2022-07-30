@@ -1,12 +1,10 @@
 package dungeonmania.helpers;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -21,9 +19,7 @@ import dungeonmania.util.Direction;
  * Read file at path ./src/test
  */
 public class FileReader {
-    // public static String LoadFile(String FileName, int branch) throws IOException {
-    //     return FileReader.LoadFile(String.format("%s[%s]", FileName, branch));
-    // }
+    
     public static String LoadFile(String FileName) throws IOException {
         try {
             File test = searchFile(new File("./src/test"), FileName+".json");
@@ -45,7 +41,6 @@ public class FileReader {
             }
         } else {
             if (file.getName().equals(search)) {
-                System.out.println("FILE FOUND\n->"+file.getAbsolutePath());
                 return file;
             }
         }
@@ -64,17 +59,6 @@ public class FileReader {
         return new ArrayList<>(list);
     }
     public static void LoadGame(DungeonManiaController controller, String fileName, int branch) throws IOException {
-        // String content = FileReader.LoadFile(String.format("%s[%d]", fileName, branch));
-        // JSONObject json = new JSONObject(content);
-        // String configName = json.getString("configName");
-        // controller.newGame(String.format("%s[%s]", fileName, branch), configName);
-        // controller.setDungeonId(json.getString("dungeonId"));
-        // controller.setDungeonName(json.getString("dungeonName"));
-        // JSONArray actions = json.getJSONArray("actions");
-        // for (int i = 0; i < actions.length(); i++) {
-        //     JSONObject action = actions.getJSONObject(i);
-        //     doAction(controller, action, false, false);
-        // }
         FileReader.LoadGame(controller, fileName, branch, 2);
     }
     /**
@@ -101,17 +85,13 @@ public class FileReader {
         JSONObject json = new JSONObject(content);
         JSONArray actions = json.getJSONArray("actions");
         int tickCounter = json.getInt("tickCounter");
-        // boolean timeTravel = json.getInt("branch") != 0;
         int currTick = 0;
-        // DungeonManiaController temp = new DungeonManiaController();
-        // temp.newGame(json.getString("dungeonName"), json.getString("configName"));
         for (int i = 0; i < actions.length(); i++) {
             JSONObject action = actions.getJSONObject(i);
             if (isTick(action)) {
                 currTick++;
             }
             if (currTick == tick) {
-                System.out.println(String.format("action %d/%d, %s", i, tickCounter, action.toString()));
                 doAction(controller, action, true, true);
             }
         }
@@ -124,7 +104,6 @@ public class FileReader {
         String func = action.getString("action");
         JSONArray argv = action.getJSONArray("argv");
         boolean isTick = false;
-        System.out.println("Play action:");
         switch (func) {
             case "useItem":
                 try {
