@@ -7,7 +7,6 @@ import dungeonmania.helpers.Location;
 import dungeonmania.strategies.EnemyMovement;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
 import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
-import dungeonmania.strategies.attackStrategies.ChanceAttackStrategy;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
