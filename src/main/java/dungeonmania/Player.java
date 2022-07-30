@@ -72,6 +72,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     }
 
     public void addeffect(PotionEntity e) {
+        System.out.println("Potion is been used.");
         effects.add(e);
     }
 
@@ -97,7 +98,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
 
     public void setBattleUsedDuration() {
         inventory.getAllInventory().forEach( entity ->{
-            if (entity instanceof Durability) {
+            if (entity instanceof Durability && !(entity instanceof PotionEntity)) {
                 ((Durability) entity).setDurability();
             }
         });
@@ -107,17 +108,18 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         List<Entity> entities = new LinkedList<>();
         inventory.getAllInventory().forEach( entity ->{
             System.out.println(entity.getType());
-            if (entity instanceof Durability && ((Durability) entity).checkDurability()) {
+            if (entity instanceof Durability &&
+                ((Durability) entity).checkDurability()) {
                 entities.add(entity);
             }
         });
         entities.stream().forEach(entity -> inventory.removeFromInventoryList(entity.getEntityId(), this));
-        if (hasEffect() && getCurrentEffect().checkDurability()) {
-            effects.poll();
-            notifyPotionEffectObserver();
-        } else if (hasEffect()) {
-            getCurrentEffect().setDurability();
-        }
+        // if (hasEffect() && getCurrentEffect().checkDurability()) {
+        //     effects.poll();
+        //     notifyPotionEffectObserver();
+        // } else if (hasEffect()) {
+        //     getCurrentEffect().setDurability();
+        // }
 
     }
     public void removeInventoryList(Entity item) {
@@ -227,15 +229,22 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     }
 
     public void updatePotionDuration() {
-        Queue<PotionEntity> queue = new LinkedList<>(effects);
-        for(PotionEntity effect : queue){
-            if(effect.checkDurability()){
-                effects.remove(effect);
+        // Queue<PotionEntity> queue = new LinkedList<>(effects);
+        if (hasEffect()) {
+            getCurrentEffect().setDurability();
+            if (getCurrentEffect().checkDurability()) {
+                effects.poll();
                 notifyPotionEffectObserver();
-            }else{
-                effect.setDurability();
             }
         }
+        // for(PotionEntity effect : queue){
+        //     if(effect.checkDurability()){
+        //         effects.remove(effect);
+        //         notifyPotionEffectObserver();
+        //     }else{
+        //         effect.setDurability();
+        //     }
+        // }
     }
 
     public void updateSceptreRound() {

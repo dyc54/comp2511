@@ -75,11 +75,12 @@ public class Battle {
      * @return
      */
     private List<String> battle() {
+        currPlayerHealth = player.getHealth();
+        currEnemyHealth = enemy.getHealth();
         BattleStrategyWithPlayer enemy = (BattleStrategyWithPlayer) this.enemy;
         BattleStrategyWithEnemy player = (BattleStrategyWithEnemy) this.player;
         double deltaEnemy = enemy.battleDamageFrom(this.player);
         double deletePlayer = player.battleDamageFrom(this.enemy);
-        
         System.out.println(String.format("Round P:%f - %f=%f\nE:%f - %f=%f", currPlayerHealth, deletePlayer, currPlayerHealth - deletePlayer
                                                                                         , currEnemyHealth, deltaEnemy, currEnemyHealth - deltaEnemy));
         

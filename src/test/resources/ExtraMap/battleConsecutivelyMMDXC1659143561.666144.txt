@@ -1,0 +1,5 @@
+player,0,0
+mercenary,1,1
+mercenary,1,1
+mercenary,1,1
+g,exit
