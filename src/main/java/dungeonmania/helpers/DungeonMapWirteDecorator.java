@@ -2,8 +2,6 @@ package dungeonmania.helpers;
 
 import java.util.Collection;
 
-import javax.swing.text.PlainDocument;
-
 import dungeonmania.Entity;
 import dungeonmania.Player;
 

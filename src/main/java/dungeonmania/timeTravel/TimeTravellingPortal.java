@@ -1,7 +1,6 @@
 package dungeonmania.timeTravel;
 
 import dungeonmania.Entity;
-import dungeonmania.Interactability;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.staticEntities.StaticEntity;

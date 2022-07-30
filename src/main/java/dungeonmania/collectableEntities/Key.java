@@ -2,7 +2,6 @@ package dungeonmania.collectableEntities;
 
 import org.json.JSONObject;
 
-import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.staticEntities.Door;
 

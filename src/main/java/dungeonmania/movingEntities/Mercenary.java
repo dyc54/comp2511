@@ -1,10 +1,7 @@
 package dungeonmania.movingEntities;
 
-import dungeonmania.Player;
 import dungeonmania.PotionEffectObserver;
 import dungeonmania.PotionEffectSubject;
-import dungeonmania.SceptreEffectObserver;
-import dungeonmania.SceptreEffectSubject;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.Movement;

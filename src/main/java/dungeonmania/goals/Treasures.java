@@ -24,7 +24,7 @@ public class Treasures implements GoalComponent{
 
     @Override
     public GoalComponent getConfig(Config config) {
-        TargetNum = config.treasure_goal;
+        TargetNum = config.treasureGoal;
         return this;
     }
     @Override

@@ -1,10 +1,5 @@
 package dungeonmania.strategies.movementStrategies;
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-
 import dungeonmania.helpers.DijstraAlgorithm;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;

@@ -3,7 +3,6 @@ package dungeonmania.movingEntities;
 import dungeonmania.Entity;
 import dungeonmania.Player;
 import dungeonmania.MovementFactor;
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
 import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;

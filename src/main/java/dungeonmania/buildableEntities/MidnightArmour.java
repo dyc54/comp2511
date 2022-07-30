@@ -1,11 +1,10 @@
 package dungeonmania.buildableEntities;
 
-import dungeonmania.Entity;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
-public class MidnightArmour extends buildableEntity implements BonusDamageAdd, BonusDefenceAdd{
+public class MidnightArmour extends BuildableEntity implements BonusDamageAdd, BonusDefenceAdd{
 
     private double attack;
     private double defence;

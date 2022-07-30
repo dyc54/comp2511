@@ -3,17 +3,17 @@ package dungeonmania.buildableEntities;
 import dungeonmania.Entity;
 import dungeonmania.response.models.ItemResponse;
 
-public abstract class buildableEntity extends Entity{
+public abstract class BuildableEntity extends Entity{
 
-    public buildableEntity(String type) {
+    public BuildableEntity(String type) {
         super(type);
     }
 
-    public buildableEntity(String type, int x, int y) {
+    public BuildableEntity(String type, int x, int y) {
         super(type, x, y);
     }
 
-    public buildableEntity(String type, String id) {
+    public BuildableEntity(String type, String id) {
         super(type);
         setEntityId(id);
     }

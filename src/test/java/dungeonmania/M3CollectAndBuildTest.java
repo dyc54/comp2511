@@ -1,16 +1,13 @@
 package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static dungeonmania.TestUtils.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntities.MercenaryEnemy;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;

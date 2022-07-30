@@ -3,21 +3,12 @@ package dungeonmania.battle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.buildableEntities.MidnightArmour;
-import dungeonmania.collectableEntities.CollectableEntity;
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.response.models.BattleResponse;
-import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
-import dungeonmania.strategies.attackStrategies.AttackStrategy;
 import dungeonmania.strategies.battleStrategies.BattleStrategyWithEnemy;
 import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;
-import dungeonmania.strategies.defenceStrategies.DefenceStrategy;
 
 public class Battle {
     private Player player;

@@ -3,7 +3,6 @@ package dungeonmania.logicEntities;
 import java.util.HashSet;
 
 import dungeonmania.Entity;
-import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Timer;
 import dungeonmania.staticEntities.StaticEntity;

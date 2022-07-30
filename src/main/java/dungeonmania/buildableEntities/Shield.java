@@ -4,7 +4,7 @@ import dungeonmania.Durability;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.defenceStrategies.BonusDefenceAdd;
 
-public class Shield extends buildableEntity implements BonusDefenceAdd, Durability {
+public class Shield extends BuildableEntity implements BonusDefenceAdd, Durability {
     private  final double shield_defence;
     private int shield_durability;
 

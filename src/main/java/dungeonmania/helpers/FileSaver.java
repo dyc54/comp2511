@@ -2,8 +2,6 @@ package dungeonmania.helpers;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

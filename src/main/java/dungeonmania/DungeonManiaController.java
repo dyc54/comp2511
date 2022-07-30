@@ -1,35 +1,22 @@
 package dungeonmania;
 
-import dungeonmania.bosses.Assassin;
-// import dungeonmania.collectableEntities.durabilityEntities.Durability;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.goals.GoalsTree;
 import dungeonmania.helpers.Config;
-import dungeonmania.helpers.DijstraAlgorithm;
-import dungeonmania.helpers.DungeonMap;
-import dungeonmania.helpers.FileReader;
-import dungeonmania.helpers.FileSaver;
-import dungeonmania.helpers.Location;
-import dungeonmania.helpers.RandomMapGenerator;
-import dungeonmania.helpers.Timer;
+import dungeonmania.helpers.*;
 import dungeonmania.inventories.Inventory;
-import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
-import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
-import dungeonmania.util.Position;
 import dungeonmania.response.models.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -144,22 +131,22 @@ public class DungeonManiaController {
 
     private void checkTimer(int t) {
         // boolean spawn = (Ticktimer.getTime() % dungeonConfig.spider_spawn_rate) == 0;
-        if (dungeonConfig.spider_spawn_rate != 0 
-            && (Ticktimer.getTime() % dungeonConfig.spider_spawn_rate) == 0) {
+        if (dungeonConfig.spiderSpawnRate != 0 
+            && (Ticktimer.getTime() % dungeonConfig.spiderSpawnRate) == 0) {
             createSpider();
         }
     }
 
     private Location randomLocation() {
         Random random = new Random(Ticktimer.getTime());
-        int x = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getX() + 30));
-        int y = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getY() + 30));
+        int x = random.nextInt(60) + dungeonMap.getPlayer().getLocation().getX() - 30;
+        int y = random.nextInt(60) + dungeonMap.getPlayer().getLocation().getY() - 30;
         return Location.AsLocation(x, y);
     }
 
     public void createSpider() {
         // dungeonMap.addEntity(EntityFactory.)
-        Spider spider = new Spider("spider", randomLocation(), dungeonConfig.spider_attack, dungeonConfig.spider_health);
+        Spider spider = new Spider("spider", randomLocation(), dungeonConfig.spiderAttack, dungeonConfig.spiderHealth);
         spider.setEntityId(String.format("%s_%s_%d_generated", "spider", spider.getLocation().toString(), counter));
         dungeonMap.addEntity(spider);
     }

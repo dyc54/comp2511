@@ -4,8 +4,6 @@ import org.json.JSONObject;
 
 import dungeonmania.Entity;
 import dungeonmania.Player;
-import dungeonmania.collectableEntities.Key;
-import dungeonmania.collectableEntities.SunStone;
 import dungeonmania.collectableEntities.openable;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.movingEntities.Spider;

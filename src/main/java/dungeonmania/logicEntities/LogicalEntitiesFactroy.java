@@ -1,8 +1,6 @@
 package dungeonmania.logicEntities;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Timer;

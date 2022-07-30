@@ -26,7 +26,7 @@ public class Enemies implements GoalComponent {
 
     @Override
     public GoalComponent getConfig(Config config) {
-        TargetNum = config.enemy_goal;
+        TargetNum = config.enemyGoal;
         return this;
     }
     @Override

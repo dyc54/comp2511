@@ -1,7 +1,5 @@
 package dungeonmania.buildableEntities;
 
-import com.google.gson.internal.bind.MapTypeAdapterFactory;
-
 import dungeonmania.inventories.Inventory;
 import dungeonmania.inventories.InventoryViewer;
 

@@ -4,7 +4,7 @@ import dungeonmania.Durability;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.attackStrategies.BonusDamageMul;
 
-public class Bow extends buildableEntity implements BonusDamageMul, Durability{
+public class Bow extends BuildableEntity implements BonusDamageMul, Durability{
     private static final int attack = 2;
     private int Bow_durability;
 

@@ -5,7 +5,6 @@ import dungeonmania.Player;
 import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.DungeonMapWirteDecorator;
-import dungeonmania.helpers.Location;
 
 public class Bomb extends CollectableEntity implements Useable{
 

@@ -3,11 +3,8 @@ package dungeonmania.bosses;
 import java.util.Random;
 
 import dungeonmania.Player;
-import dungeonmania.battle.Enemy;
-import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.movingEntities.ZombieToast;
-import dungeonmania.strategies.attackStrategies.BaseAttackStrategy;
 
 
 public class Hydra extends ZombieToast {

@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.json.*;
-
 import dungeonmania.Accessibility;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
@@ -95,7 +94,7 @@ public class DungeonMap implements Iterable<Entity> {
         while (wallLocation.hasNext()) {
             addEntity(new Wall("wall", wallLocation.next()));
         }
-        addEntity(new Player("player", map.getStartLocation().getX(), map.getStartLocation().getY(), config.player_attack, config.player_health, this));
+        addEntity(new Player("player", map.getStartLocation().getX(), map.getStartLocation().getY(), config.playerAttack, config.playerHealth, this));
         addEntity(new Exit("exit", map.getEndLocation().getX(), map.getEndLocation().getY()));
         return this;
     }

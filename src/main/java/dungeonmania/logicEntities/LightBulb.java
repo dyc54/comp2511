@@ -1,11 +1,6 @@
 package dungeonmania.logicEntities;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-
-import javax.security.auth.Subject;
-
 import org.json.JSONObject;
 
 import dungeonmania.Entity;

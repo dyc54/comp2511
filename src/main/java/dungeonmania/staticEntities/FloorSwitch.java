@@ -10,7 +10,6 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.logicEntities.LogicEntity;
 import dungeonmania.logicEntities.LogicObserver;
 import dungeonmania.logicEntities.LogicSubject;
-import dungeonmania.logicEntities.LogicalEntitiesFactroy;
 
 public class FloorSwitch extends StaticEntity implements LogicSubject {
     private List<Bomb> bombs;

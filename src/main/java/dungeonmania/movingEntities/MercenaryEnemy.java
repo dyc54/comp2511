@@ -1,8 +1,5 @@
 package dungeonmania.movingEntities;
 
-import java.util.Collection;
-
-import dungeonmania.Entity;
 import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
@@ -10,7 +7,6 @@ import dungeonmania.battle.Enemy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.strategies.attackStrategies.AttackStrategy;
-import dungeonmania.strategies.battleStrategies.BattleStrategyWithPlayer;
 import dungeonmania.strategies.movementStrategies.ChaseMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;

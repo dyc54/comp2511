@@ -10,9 +10,7 @@ import java.util.stream.Collectors;
 
 import dungeonmania.battle.Enemy;
 import dungeonmania.buildableEntities.BuildableRecipe;
-import dungeonmania.buildableEntities.MidnightArmour;
 import dungeonmania.buildableEntities.Sceptre;
-import dungeonmania.collectableEntities.Bomb;
 import dungeonmania.collectableEntities.PotionEntity;
 import dungeonmania.collectableEntities.Useable;
 import dungeonmania.exceptions.InvalidActionException;

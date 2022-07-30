@@ -16,13 +16,13 @@ public class BuildableEntityFactory {
     public static Entity newEntity(String type, Config config, String id) {
         switch (type) {
             case "bow":
-                return new Bow(id, type, config.bow_durability);
+                return new Bow(id, type, config.bowDurability);
             case "shield":
-                return new Shield(type, config.shield_defence, config.shield_durability, id);
+                return new Shield(type, config.shieldDefence, config.shieldDurability, id);
             case "midnight_armour":
-                return new MidnightArmour(type, config.midnight_armour_attack, config.midnight_armour_defence, id);
+                return new MidnightArmour(type, config.midnightArmourAttack, config.midnightArmourDefence, id);
             case "sceptre":
-                return new Sceptre(type, config.mind_control_duration, id);
+                return new Sceptre(type, config.mindControlDuration, id);
             default:
                 break;
         }

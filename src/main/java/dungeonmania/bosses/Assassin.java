@@ -4,10 +4,8 @@ import java.util.Random;
 
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
-import dungeonmania.battle.Enemy;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
-import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.MercenaryAlly;
 import dungeonmania.movingEntities.MercenaryEnemy;
 ;

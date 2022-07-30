@@ -2,7 +2,6 @@ package dungeonmania.staticEntities;
 
 import dungeonmania.Entity;
 import dungeonmania.MovementFactor;
-import dungeonmania.Player;
 import dungeonmania.helpers.DungeonMap;
 
 public class SwampTile extends StaticEntity{

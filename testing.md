@@ -105,3 +105,56 @@ Sub-goals can still be changed to unrealized after they are achieved, or goals c
 ## Hydra
 - Having a certain rate to increase the health when battle with player
 - Having the same movement strategy with zombie
+
+
+## Persistence 
+- Can read and write files
+- Can list all games
+- Player inventory can be saved and load.
+- Battle can be saved
+- Randomly generated spiders can also be read correctly
+- Test item durability
+- direction of enemy movement
+## Time Travel
+- The older-self appear when player is time travelling
+- New players can fight against old players
+- The older-self can correctly appear and disappear where they should be.
+## Dungeon Builder 
+- There is a player at the starting location
+- There is an exit at the end location
+- the size of the border
+- Generation of minimap, e.g. <0,0> -> <1,1>
+- If the width is even, there must be a way to go from the beginning to the end
+## Logic Switches
+- Logical entities can be activated correctly
+- Entities can be activated by wires
+- Entities in the M2 section cannot be activated by wires
+# Integration testing
+- Game after Time travelling can be saved and read correctly after time transfer
+- Randomly generated maps can be saved
+- Logical entities can be saved
+- Activate logical entity after time transfer
+
+# Swamp Tiles
+-  Limit the actions of moving entities other than the player based on the movement factor of the swamp
+
+# Pathfinding
+-  Test mercenary moves towards the player following the shortest path
+-  Test mercenary moves towards the player using portals
+-  Test mercenary moves towards the player using swamp tiles
+
+# Building Midnight Armour
+- Building Midnight Armour (No Zombies)
+- Building Midnight Armour (with zombies)
+- Building Midnight Armour Fail (insufficient material missing sword)
+- Building Midnight Armour Fail (insufficient material missing sun_stone)
+
+# Building Sceptre
+- Use 1 wood + 1 key + 1 sun_stone Building Sceptre
+- Use 1 wood + 1 treasure + 1 sun_stone Building Sceptre
+- Use 2 arrows + 1 key + 1 sun_stone Building Sceptre
+- Use 2 arrows + 1 treasure + 1 sun_stone Building Sceptre
+- Use 1 wood + 1 sun_stone + 1 sun_stone,sun_stone keeps one
+- Use 2 arrows + 1 sun_stone + 1 sun_stone,sun_stone keeps one
+- building Sceptre fail (insufficient materials missing wood, arrows)
+- Building Sceptre fail (insufficient material missing sun_stone)
