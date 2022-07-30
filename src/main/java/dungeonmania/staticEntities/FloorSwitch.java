@@ -10,19 +10,24 @@ import dungeonmania.helpers.DungeonMap;
 import dungeonmania.logicEntities.LogicEntity;
 import dungeonmania.logicEntities.LogicObserver;
 import dungeonmania.logicEntities.LogicSubject;
+import dungeonmania.logicEntities.LogicalEntitiesFactroy;
 
-public class FloorSwitch extends StaticEntity implements LogicSubject  {
+public class FloorSwitch extends StaticEntity implements LogicSubject {
     private List<Bomb> bombs;
     private boolean trigger;
     private final HashSet<LogicObserver> observers;
+    private LogicEntity temp;
 
     public FloorSwitch(String type, int x, int y) {
         super(type, x, y);
         this.trigger = false;
         this.bombs = new ArrayList<Bomb>();
         observers = new HashSet<>();
+        temp = null;
     }
-
+    public void setNotiSender(LogicEntity entity) {
+        temp = entity;
+    }
     public boolean getTrigger() {
         return this.trigger;
     }
@@ -32,11 +37,13 @@ public class FloorSwitch extends StaticEntity implements LogicSubject  {
     }
 
     public void bombAttach(Bomb bomb) {
-        bombs.add(bomb);
+        // if (!(bomb instanceof LogicEntity)) {
+            bombs.add(bomb);
+        // }
     }
 
-    public void notifyAllBombs(DungeonMap map) {
-        bombs.stream().forEach(e -> e.update(map));
+    public void notifyAllBombs() {
+        bombs.stream().forEach(e -> e.boom());
     }
 
     @Override
@@ -48,7 +55,7 @@ public class FloorSwitch extends StaticEntity implements LogicSubject  {
     public boolean interact(Entity entity, DungeonMap map) {
         if (entity instanceof Boulder) {
             setTrigger(true);
-            notifyAllBombs(map);
+            notifyAllBombs();
         } else {
             setTrigger(false);
         }
@@ -78,13 +85,16 @@ public class FloorSwitch extends StaticEntity implements LogicSubject  {
     @Override
     public boolean equals(LogicEntity entity) {
         // TODO Auto-generated method stub
-        return false;
+        if (entity == null) {
+            return false;
+        }
+        return Entity.equals(this, entity.getId());
     }
 
     @Override
     public void init(DungeonMap map) {
         // TODO Auto-generated method stub
-        
+        // LogicalEntitiesFactroy.init(this, map);
     }
 
     @Override
@@ -112,13 +122,20 @@ public class FloorSwitch extends StaticEntity implements LogicSubject  {
     @Override
     public void pull(LogicObserver observer) {
         // TODO Auto-generated method stub
+        if (observer instanceof Bomb) {
+            
+        }
         
     }
 
     @Override
     public void notifyLogicObserver() {
         // TODO Auto-generated method stub
-        observers.stream().forEach(observer -> observer.update(this));
+        observers.stream().forEach(observer -> {
+            if (!observer.equals(temp)) {
+                observer.update(this);
+            }
+        });
         
     }
 

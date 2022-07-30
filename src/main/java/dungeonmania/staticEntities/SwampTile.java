@@ -29,4 +29,9 @@ public class SwampTile extends StaticEntity{
         // TODO Auto-generated method stub
         return true;
     }
+
+    public int getMovementFactor() {
+        return movementFactor;
+    }
+    
 }

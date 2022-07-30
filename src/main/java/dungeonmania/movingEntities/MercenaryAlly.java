@@ -1,5 +1,6 @@
 package dungeonmania.movingEntities;
 
+import dungeonmania.Interact;
 import dungeonmania.Player;
 import dungeonmania.PotionEffectSubject;
 import dungeonmania.SceptreEffectObserver;
@@ -15,7 +16,7 @@ import dungeonmania.strategies.movementStrategies.FollowingMovement;
 import dungeonmania.strategies.movementStrategies.MovementOptions;
 import dungeonmania.strategies.movementStrategies.RandomMovement;
 
-public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd, SceptreEffectObserver{
+public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDefenceAdd, SceptreEffectObserver, Interact{
     
     private int ally_attack;
     private int ally_defence;
@@ -54,9 +55,12 @@ public class MercenaryAlly extends Mercenary implements BonusDamageAdd, BonusDef
         if (p.getLocation().equals(getLocation())) {
             setMove(new FollowingMovement(p.getPreviousLocation()));
         } 
-        Location next = getMove().MoveOptions(options).nextLocation(p.getLocation());
+        Location next = getMove().MoveOptions(options).nextLocation(p.getLocation(), dungeonMap);
         if (getMove() instanceof RandomMovement) {
-            next = getMove().MoveOptions(options).nextLocation(getLocation());
+            next = getMove().MoveOptions(options).nextLocation(getLocation(), dungeonMap);
+        }
+        if (!CheckMovementFactor()) {
+            return false;
         }
         if (p.getLocation().equals(next)) {
             setMove(new FollowingMovement(p.getPreviousLocation()));

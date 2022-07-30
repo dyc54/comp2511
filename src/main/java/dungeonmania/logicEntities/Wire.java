@@ -85,17 +85,20 @@ public class Wire extends StaticEntity implements LogicSubject, LogicObserver{
     @Override
     public void pull(LogicObserver observer) {
         // * Pass observer but
-        subjects.stream().forEach(subject -> subject.pull(observer));
-        if (observer instanceof Bomb)  {
-            Bomb bomb = (Bomb) observer;
-            if (bomb.getLocation().distance(getLocation()) <= bomb.getBomb_radius()) {
-                subjects.stream().forEach(subject -> subject.detach(this));
-            }
-        }
+        // subjects.stream().forEach(subject -> subject.pull(observer));
+        // if (observer instanceof Bomb)  {
+        //     Bomb bomb = (Bomb) observer;
+        //     if (bomb.getLocation().distance(getLocation()) <= bomb.getBomb_radius()) {
+        //         subjects.stream().forEach(subject -> subject.detach(this));
+        //     }
+        // }
         
     }
     @Override
     public boolean equals(LogicEntity entity) {
+        if (entity == null) {
+            return false;
+        }
         return Entity.equals(this, entity.getId());
     }
 

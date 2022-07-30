@@ -1,5 +1,6 @@
 package dungeonmania.strategies.movementStrategies;
 
+import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 
 public class FollowingMovement implements MovementStrategy{
@@ -11,7 +12,7 @@ public class FollowingMovement implements MovementStrategy{
      * @param location any location does't matter
      */
     @Override
-    public Location nextLocation(Location location) {
+    public Location nextLocation(Location location, DungeonMap dungeonMap) {
         System.out.println(String.format("Player Current at %s Prev at %s", location.toString(), playerPrevLocation.toString()));
         return playerPrevLocation;
     }

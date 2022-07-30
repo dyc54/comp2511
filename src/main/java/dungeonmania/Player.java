@@ -33,6 +33,7 @@ import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
+import dungeonmania.movingEntities.Mercenary;
 
 public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject, BattleStrategyWithEnemy, BattleStrategyWithPlayer {
 // public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject, MovementFactor {
@@ -51,6 +52,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     private List<SceptreEffectObserver> SceptreObservers;
     // private Durability durabilities;
     private int buildCounter;
+
     public Player(String type, int x, int y, double attack, double health, DungeonMap map) {
         super(type, x, y);
         this.attack = new WeaponableAttackStrategy(attack);
@@ -301,7 +303,6 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
     public String toString() {
         String sec1 = String.format("%s(%s)  %s -*-*->%s\t", getType(), getEntityId(), previousLocation.toString(), getLocation().toString());
         String sec2 = String.format("    H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage());
-        // System.out.println(String.format("   H: %f, A:%f D: %f", health, attack.attackDamage(), defence.defenceDamage()));
         return sec1 + sec2;
     }
     public void print() {
@@ -322,7 +323,16 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
         }
         return true;
     }
-    //
+    
+    public boolean canBribe(Mercenary mercenary) {
+        if (getInventory().countItem("treasure") >= mercenary.getBribe_amount()
+        && getLocation().distance(mercenary.getLocation()) <= mercenary.getBribe_radius()) {
+            getInventory().removeFromInventoryList("treasure", mercenary.getBribe_amount(), this);
+            return true;
+
+        }
+        return false;
+    }
 
     @Override
     public AttackStrategy getAttackStrayegy() {

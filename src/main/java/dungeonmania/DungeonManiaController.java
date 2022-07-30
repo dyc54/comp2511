@@ -6,6 +6,7 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.GoalController;
 import dungeonmania.goals.GoalsTree;
 import dungeonmania.helpers.Config;
+import dungeonmania.helpers.DijstraAlgorithm;
 import dungeonmania.helpers.DungeonMap;
 import dungeonmania.helpers.FileReader;
 import dungeonmania.helpers.FileSaver;
@@ -21,11 +22,14 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
 import dungeonmania.response.models.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -144,8 +148,8 @@ public class DungeonManiaController {
 
     private Location randomLocation() {
         Random random = new Random(timer);
-        int x = random.nextInt(dungeonMap.getPlayer().getLocation().getX() + 30);
-        int y = random.nextInt(dungeonMap.getPlayer().getLocation().getY() + 30);
+        int x = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getX() + 30));
+        int y = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getY() + 30));
         return Location.AsLocation(x, y);
     }
 
@@ -191,16 +195,12 @@ public class DungeonManiaController {
             Ticktimer.addTime();
             fileSaver.saveAction("useItem", true, itemUsedId);
         }
-        // timerAdd();
-        // checkTimer(timer);
-        // timerAdd();
-        // checkTimer(timer);
-        // player.CheckMovementFactor();
+        timerAdd();
+        checkTimer(timer);
         player.updateSceptreRound();
         player.useItem(itemUsedId);
         player.updatePotionDuration();
-        timerAdd();
-        checkTimer(timer);
+        
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
         dungeonMap.battleAll(battles, player);
@@ -285,6 +285,7 @@ public class DungeonManiaController {
         }
         System.out.println("Current Inventory: ");
         player.getInventory().print();
+
         player.build(buildable, dungeonConfig);
         fileSaver.saveAction("build", false, buildable);
         // goals = new GoalsTree("exit");
@@ -315,23 +316,10 @@ public class DungeonManiaController {
         if (entity == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
-        System.out.println("TYPE: "+entity.getType());
-        if (entity.getType().equals("zombie_toast_spawner")) {
-            ZombieToastSpawner zombieToastSpawner = (ZombieToastSpawner) entity;
-            if (!zombieToastSpawner.interact(player, dungeonMap)) {
-                throw new InvalidActionException("Invaild action");
-            }
-        }
-        if (entity.getType().equals("mercenary")) {
-            Mercenary mercenary = (Mercenary) entity;
-            if (!mercenary.interact(player, dungeonMap)) {
-                throw new InvalidActionException("Invaild action");
-            }
-        }
-        if (entity.getType().equals("assassin")) {
-            System.out.println("ASSASSIN");
-            Assassin assassin = (Assassin) entity;
-            if (!assassin.interact(player, dungeonMap)) {
+        
+        if (entity instanceof Interact) {
+            Interact interactEntity = (Interact) entity;
+            if (!interactEntity.interact(player, dungeonMap)) {
                 throw new InvalidActionException("Invaid action");
             }
         }
@@ -383,7 +371,9 @@ public class DungeonManiaController {
     private List<String> getBuildables(Inventory inventory) {
         // TODO: ADD MORE BUILDABLES
         return Arrays.asList(BuildableEntityFactory.newRecipe("bow"),
-                    BuildableEntityFactory.newRecipe("shield"),BuildableEntityFactory.newRecipe("midnight_armour"),BuildableEntityFactory.newRecipe("sceptre")).stream()
+                    BuildableEntityFactory.newRecipe("shield"),
+                    BuildableEntityFactory.newRecipe("midnight_armour"),
+                    BuildableEntityFactory.newRecipe("sceptre")).stream()
                     .filter(recipe -> recipe.CountItem(inventory.view()).isSatisfied() 
                                     && recipe.getPrerequisite().allMatch(dungeonMap.iterator()).isSatisfied())
                     .map(recipe -> recipe.getRecipeName())
@@ -434,6 +424,9 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse rewind(int ticks) {
+        if (ticks <= 0 || ticks > Ticktimer.getTime()) {
+            throw new IllegalArgumentException("ticks must be either 1 or 5");
+        }
         doRewind(ticks, 1);
         fileSaver.saveAction("rewind", false, ticks);
         return getDungeonResponse();
@@ -477,6 +470,17 @@ public class DungeonManiaController {
         }
         
     }
+
+    /* public DijstraAlgorithm testDijstraAlgorithm(){
+        Entity enemy = null;
+        for(Entity e : dungeonMap.getAllEntities() ){
+            if(e instanceof Mercenary){
+                enemy = e;
+            }
+        }
+        DijstraAlgorithm da = new DijstraAlgorithm(player, dungeonMap, enemy);
+        return  da;
+    } */
     
 
 }

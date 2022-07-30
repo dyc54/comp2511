@@ -57,7 +57,9 @@ public class FileReader {
         File[] arr = file.listFiles();
         for (File f : arr) {
             String fileName = f.getName().replaceAll("\\[.*?\\].json", "");
-            list.add(fileName);
+            if (fileName.indexOf(".txt") == -1) {
+                list.add(fileName);
+            }
         }
         return new ArrayList<>(list);
     }
@@ -73,7 +75,7 @@ public class FileReader {
         //     JSONObject action = actions.getJSONObject(i);
         //     doAction(controller, action, false, false);
         // }
-        FileReader.LoadGame(controller, fileName, branch, 1);
+        FileReader.LoadGame(controller, fileName, branch, 2);
     }
     /**
      * Load Game into controller, 

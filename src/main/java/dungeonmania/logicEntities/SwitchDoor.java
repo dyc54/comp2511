@@ -47,6 +47,9 @@ public class SwitchDoor extends Door implements LogicObserver{
     }
     @Override
     public boolean equals(LogicEntity entity) {
+        if (entity == null) {
+            return false;
+        }
         return Entity.equals(this, entity.getId());
         // return equals(entity);
     }

@@ -10,8 +10,11 @@ import dungeonmania.collectableEntities.durabilityEntities.InvisibilityPotion;
 import dungeonmania.collectableEntities.durabilityEntities.Sword;
 import dungeonmania.helpers.Config;
 import dungeonmania.helpers.DungeonMap;
+import dungeonmania.helpers.DungeonMapWirteDecorator;
 import dungeonmania.helpers.Location;
 import dungeonmania.logicEntities.LightBulb;
+import dungeonmania.logicEntities.LogicBomb;
+import dungeonmania.logicEntities.LogicSwitch;
 import dungeonmania.logicEntities.SwitchDoor;
 import dungeonmania.logicEntities.Wire;
 import dungeonmania.movingEntities.MercenaryEnemy;
@@ -43,6 +46,7 @@ public class EntityFactory {
         int y = entity.getInt("y");
         System.out.println(String.format("new entity %s at <%d,%d>", type, x, y));
         int key = 0;
+        int factor = 0;
         switch (type) {
             case "player":
                 return new Player(type, x, y, config.player_attack, config.player_health, map);
@@ -57,6 +61,9 @@ public class EntityFactory {
                 String colour = entity.getString("colour");
                 return new Portal(type, x, y, colour);
             case "switch":
+                if (entity.has("logic")) {
+                    return new LogicSwitch(type, x, y, map.getTimer(), entity.getString("logic"));
+                }
                 return new FloorSwitch(type, x, y);
             case "zombie_toast_spawner":
                 return new ZombieToastSpawner(type, x, y, config.zombie_spawn_rat, config.zombie_attack,
@@ -71,7 +78,11 @@ public class EntityFactory {
             case "arrow":
                 return new Arrows(type, x, y);
             case "bomb":
-                return new Bomb(type, x, y, config.bomb_radius);
+                if (entity.has("logic")) {
+                    return new LogicBomb(type, x, y, config.bomb_radius, map.getTimer(),
+                                        entity.getString("logic"), new DungeonMapWirteDecorator(map));
+                }
+                return new Bomb(type, x, y, config.bomb_radius, new DungeonMapWirteDecorator(map));
             case "invincibility_potion":
                 return new InvincibilityPotion(type, config.invincibility_potion_duration, x, y);
             case "invisibility_potion":
@@ -109,8 +120,6 @@ public class EntityFactory {
                 return assassin;
             case "hydra":
                 return new Hydra(type, Location.AsLocation(x, y), config.hydra_health, config.hydra_attack, config.hydra_health_increase_rate, config.hydra_health_increase_amount);
-
-
         }
         return null;
     }

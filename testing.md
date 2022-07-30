@@ -76,7 +76,7 @@ Sub-goals can still be changed to unrealized after they are achieved, or goals c
 - Player can build Bow and shield with the correct materials.
 
 # muti object test
-# Battle
+## Battle
 - Enemies can be defeated
 - The enemy defeats the player
 - Fighting with enemies in cases without weapons and potions
@@ -86,10 +86,22 @@ Sub-goals can still be changed to unrealized after they are achieved, or goals c
 - Use weapons to defeat enemies
 - Bribing mercenaries to defeat the enemy
 
-# Goals
+## Goals
 - Completion of individual goals
 - Complete OR as a connected target
 - Complete AND as a connected target
 - Completing the complex goal
 - Some goals are completed and then become uncompleted
 - After a subgoal have been achieved, it can still be disachieved. i.e. boulder, exit. OR goal can be achieved. zombie spwaner needs to be destoryed to achieve enemies goal.
+
+
+
+## Assassin
+- Assassin chase the player
+- player bribes assassin will fail in ceratin rate
+- When player uses invisibility potion, the assassin can see the player in certain radius and continue move to player
+- If out of recon radios, the assassin should random movement
+
+## Hydra
+- Having a certain rate to increase the health when battle with player
+- Having the same movement strategy with zombie
