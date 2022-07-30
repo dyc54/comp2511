@@ -105,3 +105,21 @@ Sub-goals can still be changed to unrealized after they are achieved, or goals c
 ## Hydra
 - Having a certain rate to increase the health when battle with player
 - Having the same movement strategy with zombie
+
+## Sceptre
+- Can be used to mindcontrol mercenary and assassin
+- Free allies after the duration of sceptre
+- retain after used
+
+## midnight_armour
+- Adding right amount of damage and defence to player
+
+## Swamp
+- Can trap enemies
+- Enemies can leave after a given movement_factor
+- Won't trap player
+
+## SunStone
+- Can be used to open the door (has higher priority than key)
+- Can be count as treasure when calculating treasure goal
+
