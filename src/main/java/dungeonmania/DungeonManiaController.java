@@ -150,8 +150,8 @@ public class DungeonManiaController {
 
     private Location randomLocation() {
         Random random = new Random(Ticktimer.getTime());
-        int x = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getX() + 30));
-        int y = random.nextInt(Math.abs(dungeonMap.getPlayer().getLocation().getY() + 30));
+        int x = random.nextInt(60) + dungeonMap.getPlayer().getLocation().getX() - 30;
+        int y = random.nextInt(60) + dungeonMap.getPlayer().getLocation().getY() - 30;
         return Location.AsLocation(x, y);
     }
 
