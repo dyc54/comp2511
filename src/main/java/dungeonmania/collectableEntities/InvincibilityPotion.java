@@ -1,4 +1,4 @@
-package dungeonmania.collectableEntities.durabilityEntities;
+package dungeonmania.collectableEntities;
 
 public class InvincibilityPotion extends PotionEntity{
 

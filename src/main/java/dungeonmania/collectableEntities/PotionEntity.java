@@ -1,10 +1,7 @@
-package dungeonmania.collectableEntities.durabilityEntities;
+package dungeonmania.collectableEntities;
 
 import dungeonmania.Durability;
 import dungeonmania.Player;
-import dungeonmania.collectableEntities.CollectableEntity;
-import dungeonmania.collectableEntities.Effect;
-import dungeonmania.collectableEntities.Useable;
 import dungeonmania.helpers.DungeonMap;
 
 public abstract class PotionEntity extends CollectableEntity implements Effect, Useable, Durability {

@@ -419,6 +419,10 @@ public class M3CollectAndBuildTest {
             assertEquals(1, getInventory(res, "sun_stone").size());
             assertEquals(0, getInventory(res, "arrow").size());
 
+            //Interact with the mercenary
+            String MercenaryId = getEntities(res, "mercenary").get(0).getId();
+            dmc.interact(MercenaryId);
+
             //Use the sceptre
             String sceptreId = getInventory(res, "sceptre").get(0).getId();
             res = assertDoesNotThrow(() -> dmc.tick(sceptreId));
@@ -428,7 +432,6 @@ public class M3CollectAndBuildTest {
             Position playerPosition = getEntities(res, "player").get(0).getPosition();
             res = dmc.tick(Direction.RIGHT);
             assertEquals(new Position(1,1), getEntities(res, "mercenary").get(0).getPosition());
-
 
             playerPosition = getEntities(res, "player").get(0).getPosition();
             res = dmc.tick(Direction.DOWN);

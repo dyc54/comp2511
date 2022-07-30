@@ -13,10 +13,8 @@ import dungeonmania.buildableEntities.BuildableRecipe;
 import dungeonmania.buildableEntities.MidnightArmour;
 import dungeonmania.buildableEntities.Sceptre;
 import dungeonmania.collectableEntities.Bomb;
+import dungeonmania.collectableEntities.PotionEntity;
 import dungeonmania.collectableEntities.Useable;
-// import dungeonmania.collectableEntities.durabilityEntities.Durability;
-// import dungeonmania.collectableEntities.durabilityEntities.DurabilityEntity;
-import dungeonmania.collectableEntities.durabilityEntities.PotionEntity;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.BonusStrategy;
@@ -219,7 +217,7 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             notifyPotionEffectObserver();
         } else {
             throw new IllegalArgumentException(
-                    "itemUsed is not a bomb, invincibility_potion, or an invisibility_potion");
+                    "itemUsed is not a bomb, sceptre, invincibility_potion, or an invisibility_potion");
         }
 
     }
@@ -330,6 +328,13 @@ public class Player extends Entity implements PlayerMovementStrategy, PotionEffe
             getInventory().removeFromInventoryList("treasure", mercenary.getBribe_amount(), this);
             return true;
 
+        }
+        return false;
+    }
+
+    public boolean hasSceptre() {
+        if (getInventory().countItem("sceptre") > 0) {
+            return true;
         }
         return false;
     }

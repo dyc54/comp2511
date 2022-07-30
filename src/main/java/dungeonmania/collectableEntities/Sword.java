@@ -1,7 +1,6 @@
-package dungeonmania.collectableEntities.durabilityEntities;
+package dungeonmania.collectableEntities;
 
 import dungeonmania.Durability;
-import dungeonmania.collectableEntities.CollectableEntity;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.strategies.attackStrategies.BonusDamageAdd;
 

@@ -83,6 +83,9 @@ public class MercenaryEnemy extends Mercenary implements Enemy, Interact {
         //     player.attach(ally);
         //     return true;
         // }
+        if (player.hasSceptre()) {
+            return true;
+        }
         if (player.canBribe(this)) {
             MercenaryAlly ally = new MercenaryAlly(this);
             ally.setEntityId(String.valueOf(getEntityId()));
