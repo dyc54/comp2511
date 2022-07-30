@@ -53,6 +53,8 @@ public class DungeonManiaController {
     private int currbranch;
     private Timer Ticktimer;
     // TODO:
+    // ! zombie spawner funcnality during time travel.
+
     // public boolean TIMETRAVEL_FUNCA
     public String getSkin() {
         return "default";
@@ -201,7 +203,6 @@ public class DungeonManiaController {
         // checkTimer(timer);
         player.updateSceptreRound();
         player.useItem(itemUsedId);
-        player.updatePotionDuration();
         
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
@@ -212,7 +213,8 @@ public class DungeonManiaController {
             runTick(Ticktimer.getTime());
             updateTimeTravelStatus();
             deltaTickAfterTimeTraveling--;
-        }
+            this.player.updatePotionDuration();
+        } 
         // tickCounter++;
         // return getDungeonResponse();
 
@@ -247,7 +249,7 @@ public class DungeonManiaController {
             fileSaver.saveAction("playerMove", true, movementDirection.name());
         }
         player.movement(movementDirection.getOffset());
-        player.updatePotionDuration();
+        // player.updatePotionDuration();
         player.updateSceptreRound();
         dungeonMap.UpdateAllEntities();
         dungeonMap.moveAllEntities();
@@ -259,14 +261,13 @@ public class DungeonManiaController {
             // player.setLocation(player.getPreviousLocation());
             fileSaver.saveAction("playerMove", false, Location.inverseDirection(movementDirection), "MOVE ELDER_SELF ONLY");
         } else if (!timeTraveledPlayer) {
-            // timerAdd();
-            // checkTimer(timer);
             updateTimeTravelStatus();
             runTick(Ticktimer.getTime());
-            // tickCounter++;
             updateTimeTravelStatus();
             deltaTickAfterTimeTraveling--;
-        }
+            this.player.updatePotionDuration();
+            // player.updatePotionDuration();
+        } 
     }
     /**
      * /game/build

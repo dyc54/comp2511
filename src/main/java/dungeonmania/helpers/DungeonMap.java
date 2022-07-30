@@ -451,9 +451,9 @@ public class DungeonMap implements Iterable<Entity> {
                         }
                     }
                     battles.add(battle.toResponse());
+                    player.cleardisusableItem();
                 }
             }
-            player.cleardisusableItem();
             removed.stream().forEach(id -> this.removeEntity(id));
             movements.stream().forEach(ent -> ent.movement(this));
             

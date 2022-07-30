@@ -36,14 +36,17 @@ public abstract class PotionEntity extends CollectableEntity implements Effect, 
     @Override
     public void use(DungeonMap map, Player player) {
         player.addeffect((PotionEntity) this);
-        player.notifyPotionEffectObserver();
+        setInUsing();
+        // player.notifyPotionEffectObserver();
         player.getInventory().removeFromInventoryList(this);
     }
 
     @Override
     public void setDurability() {
-        System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), durability, durability - 1));
-        this.durability -= 1;
+        if (inUsing) {
+            System.out.println(String.format("Item %s DUration %d -> %d", getEntityId(), durability, durability - 1));
+            this.durability -= 1;
+        }
     }
 
     @Override
