@@ -31,7 +31,11 @@ import dungeonmania.helpers.Location;
 import dungeonmania.inventories.Inventory;
 import dungeonmania.movingEntities.Mercenary;
 
-public class Player extends Entity implements PlayerMovementStrategy, PotionEffectSubject, Enemy, SceptreEffectSubject, BattleStrategyWithEnemy, BattleStrategyWithPlayer {
+public class Player extends Entity implements PlayerMovementStrategy, try {
+    PotionEffectSubject
+} catch (Exception e) {
+    // TODO: handle exception
+}, Enemy, SceptreEffectSubject, BattleStrategyWithEnemy, BattleStrategyWithPlayer {
 
     private AttackStrategy attack;
     private DefenceStrategy defence;
